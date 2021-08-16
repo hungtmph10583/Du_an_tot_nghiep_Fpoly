@@ -43,6 +43,19 @@ class RouteServiceProvider extends ServiceProvider
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 
+            /**
+             * hungtmph10583
+             * 10:45 - 16/08/21
+             * start
+             */
+            Route::prefix('admin')
+                //->middleware('web', 'auth')
+                ->middleware('web')
+                ->namespace($this->namespace)
+                ->group(base_path('routes/admin.php'));
+            /**
+             * end
+             */
             Route::middleware('web')
                 ->namespace($this->namespace)
                 ->group(base_path('routes/web.php'));

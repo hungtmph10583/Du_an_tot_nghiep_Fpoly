@@ -1,6 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+// hungtmph10583 (16/08/21) start
+use App\Http\Controllers\AuthController;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
+// hungtmph10583 (16/08/21) end
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +21,13 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+// hungtmph10583 (16/08/21) start
+Route::get('login', [LoginController::class, 'loginForm'])->name('login');
+Route::post('login', [LoginController::class, 'postLogin']);
+Route::get('registration', [LoginController::class, 'registrationForm'])->name('registration');
+Route::post('registration', [LoginController::class, 'postRegistration']);
+Route::any('logout', function(){
+    Auth::logout();
+    return redirect(route('login'));
+})->name('logout');
+// hungtmph10583 (16/08/21) end

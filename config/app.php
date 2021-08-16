@@ -66,9 +66,15 @@ return [
     | ahead and set this to a sensible default for you out of the box.
     |
     */
-
-    'timezone' => 'UTC',
-
+    /**
+     * hungtmph10583
+     * 10:45 - 16/08/21
+     * start
+     */
+    'timezone' => 'Asia/Ho_Chi_Minh',
+    /**
+     * end
+     */
     /*
     |--------------------------------------------------------------------------
     | Application Locale Configuration
