@@ -46,7 +46,7 @@ Route::prefix('san-pham')->group(function () {
 Route::prefix('tai-khoan')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
     Route::get('xoa/{id}', [UserController::class, 'remove'])->middleware('auth')->name('user.remove');
-    Route::get('tao-moi', [UserController::class, 'addForm'])->middleware('auth')->name('user.add');
+    Route::get('tao-moi', [UserController::class, 'addForm'])->name('user.add');
     Route::post('tao-moi', [UserController::class, 'saveAdd']);
     Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->middleware('auth')->name('user.edit');
     Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit']);
