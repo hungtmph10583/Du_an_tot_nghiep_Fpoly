@@ -4,7 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-use App\Http\Controllers\Admin\HomeController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ProductController;
@@ -19,7 +19,19 @@ use App\Http\Controllers\Admin\ProductController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
+Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+Route::prefix('tai-khoan')->group(function () {
+    Route::get('/', [UserController::class, 'index'])->name('user.index');
+    Route::get('xoa/{id}', [UserController::class, 'remove'])->middleware('auth')->name('user.remove');
+    Route::get('tao-moi', [UserController::class, 'addForm'])->name('user.add');
+    Route::post('tao-moi', [UserController::class, 'saveAdd']);
+    Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->middleware('auth')->name('user.edit');
+    Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit']);
+    Route::get('ho-so', [UserController::class, 'proFile'])->middleware('auth')->name('user.profile');
+    Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->middleware('auth')->name('user.changeP');
+    Route::post('doi-mat-khau/{id}', [UserController::class, 'saveChangeP']);
+});
 
 Route::prefix('danh-muc')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('category.index');
@@ -41,17 +53,6 @@ Route::prefix('san-pham')->group(function () {
         Route::get('cap-nhat/{id}', [ProductController::class, 'editForm'])->name('product.edit');
         Route::post('cap-nhat/{id}', [ProductController::class, 'saveEdit']);
     });
-});
-
-Route::prefix('tai-khoan')->group(function () {
-    Route::get('/', [UserController::class, 'index'])->name('user.index');
-    Route::get('xoa/{id}', [UserController::class, 'remove'])->middleware('auth')->name('user.remove');
-    Route::get('tao-moi', [UserController::class, 'addForm'])->name('user.add');
-    Route::post('tao-moi', [UserController::class, 'saveAdd']);
-    Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->middleware('auth')->name('user.edit');
-    Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit']);
-    Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->middleware('auth')->name('user.changeP');
-    Route::post('doi-mat-khau/{id}', [UserController::class, 'saveChangeP']);
 });
 
 ?>

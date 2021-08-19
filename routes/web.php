@@ -19,13 +19,13 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('layouts/admin/main');
 });
 // hungtmph10583 (16/08/21) start
-Route::get('login', [LoginController::class, 'loginForm'])->name('login');
-Route::post('login', [LoginController::class, 'postLogin']);
-Route::get('registration', [LoginController::class, 'registrationForm'])->name('registration');
-Route::post('registration', [LoginController::class, 'postRegistration']);
+Route::get('login', [AuthController::class, 'loginForm'])->name('login');
+Route::post('login', [AuthController::class, 'postLogin']);
+Route::get('registration', [AuthController::class, 'registrationForm'])->name('registration');
+Route::post('registration', [AuthController::class, 'postRegistration']);
 Route::any('logout', function(){
     Auth::logout();
     return redirect(route('login'));

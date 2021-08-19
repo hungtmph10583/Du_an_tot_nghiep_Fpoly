@@ -1,61 +1,68 @@
-<div class="m-grid__item m-grid__item--fluid m-grid m-grid--ver-desktop m-grid--desktop m-body">
-    <!-- BEGIN: Left Aside -->
-    <button class="m-aside-left-close  m-aside-left-close--skin-dark " id="m_aside_left_close_btn"><i class="la la-close"></i></button>
-    <div id="m_aside_left" class="m-grid__item	m-aside-left  m-aside-left--skin-dark ">
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+        <img src="{{ asset('admin-theme/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <span class="brand-text font-weight-light">AdminLTE 3</span>
+    </a>
 
-        <!-- BEGIN: Aside Menu -->
-        <div id="m_ver_menu" class="m-aside-menu  m-aside-menu--skin-dark m-aside-menu--submenu-skin-dark " m-menu-vertical="1" m-menu-scrollable="0" m-menu-dropdown-timeout="500">
-            <ul class="m-menu__nav ">
-                <li class="m-menu__section m-menu__section--first">
-                    <h4 class="m-menu__section-text">Departments</h4>
-                    <i class="m-menu__section-icon flaticon-more-v2"></i>
-                </li>
-                <li class="m-menu__item  m-menu__item--active" aria-haspopup="true">
-                    <a href="index.html" class="m-menu__link ">
-                        <span class="m-menu__item-here"></span>
-                        <i class="m-menu__link-icon flaticon-line-graph"></i>
-                        <span class="m-menu__link-text">Dashboard</span>
-                    </a>
-                </li>
-                <li class="m-menu__item  m-menu__item--submenu" aria-haspopup="true" m-menu-submenu-toggle="hover">
-                    <a href="javascript:;" class="m-menu__link m-menu__toggle">
-                        <span class="m-menu__item-here"></span>
-                        <i class="m-menu__link-icon flaticon-layers"></i>
-                        <span class="m-menu__link-text">Tài khoản</span>
-                        <i class="m-menu__ver-arrow la la-angle-right"></i>
-                    </a>
-                    <div class="m-menu__submenu "><span class="m-menu__arrow"></span>
-                        <ul class="m-menu__subnav">
-                            <li class="m-menu__item  m-menu__item--parent" aria-haspopup="true">
-                                <span class="m-menu__link">
-                                    <span class="m-menu__item-here"></span>
-                                    <span class="m-menu__link-text">Resources</span>
-                                </span>
-                            </li>
-                            <li class="m-menu__item " aria-haspopup="true">
-                                <a href="{{route('user.index')}}" class="m-menu__link ">
-                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span>
-                                    </i>
-                                    <span class="m-menu__link-text">Danh sách tài khoản</span>
-                                </a>
-                            </li>
-                            <li class="m-menu__item " aria-haspopup="true" m-menu-link-redirect="1">
-                                <a href="{{route('user.add')}}" class="m-menu__link ">
-                                    <i class="m-menu__link-bullet m-menu__link-bullet--dot"><span></span></i>
-                                    <span class="m-menu__link-text">Thêm tài khoản</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-            </ul>
+    <!-- Sidebar -->
+    <div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+            @if(Auth::check())
+                <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" class="img-circle elevation-2" alt="User Image" width="70" />
+            @else
+                <img src="{{ asset('admin-theme/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+            @endif
+            </div>
+            <div class="info">
+            <a href="#" class="d-block">{{Auth::user()->name}}</a>
+            </div>
         </div>
 
-        <!-- END: Aside Menu -->
+        <!-- SidebarSearch Form -->
+        <div class="form-inline">
+            <div class="input-group" data-widget="sidebar-search">
+            <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
+            <div class="input-group-append">
+                <button class="btn btn-sidebar">
+                <i class="fas fa-search fa-fw"></i>
+                </button>
+            </div>
+            </div>
+        </div>
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <!-- Add icons to the links using the .nav-icon class
+                    with font-awesome or any other icon font library -->
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <p>
+                            Tài khoản
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="pages/charts/chartjs.html" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('user.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm tài khoản</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    <!-- /.sidebar-menu -->
     </div>
-
-    <!-- END: Left Aside -->
-    <div class="m-grid__item m-grid__item--fluid m-wrapper">
-        @yield('content')
-    </div>
-</div>
+    <!-- /.sidebar -->
+</aside>
