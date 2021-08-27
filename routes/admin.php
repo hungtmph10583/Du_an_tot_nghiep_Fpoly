@@ -28,7 +28,7 @@ Route::prefix('tai-khoan')->group(function () {
     Route::post('tao-moi', [UserController::class, 'saveAdd']);
     Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->middleware('auth')->name('user.edit');
     Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit']);
-    Route::get('ho-so', [UserController::class, 'proFile'])->middleware('auth')->name('user.profile');
+    Route::get('ho-so/{id}', [UserController::class, 'proFile'])->middleware('auth')->name('user.profile');
     Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->middleware('auth')->name('user.changeP');
     Route::post('doi-mat-khau/{id}', [UserController::class, 'saveChangeP']);
 });

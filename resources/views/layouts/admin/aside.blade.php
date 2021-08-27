@@ -17,7 +17,11 @@
             @endif
             </div>
             <div class="info">
-            <a href="#" class="d-block">{{Auth::user()->name}}</a>
+            @if(Auth::check())
+            <a href="{{route('user.profile', ['id' => Auth::user()->id])}}" class="d-block">{{Auth::user()->name}}</a>
+            @else
+            <a href="">Chua dang nhap</a>
+            @endif
             </div>
         </div>
 
@@ -47,7 +51,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="pages/charts/chartjs.html" class="nav-link">
+                            <a href="{{route('user.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>

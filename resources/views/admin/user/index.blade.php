@@ -54,8 +54,9 @@
                                     <td><img src="{{asset( 'storage/' . $u->avatar)}}" width="70" /></td>
                                     <td>{{$u->email}}</td>
                                     <td>{{$u->phone}}</td>
-                                    <td><i class="{{ $u->active == 1 ? 'fas fa-eye text-success' : 'fas fa-eye-slash text-danger' }} pl-3"></i></td>
+                                    <td><i class="{{ $u->active == 1 ? 'fa fa-check text-success' : 'fa fa-times text-danger' }} pl-3"></i></td>
                                     <td>
+                                        <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
                                         <a href="{{route('user.edit', ['id' => $u->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
                                         <a href="{{route('user.remove', ['id' => $u->id])}}" class="btn btn-danger" onclick="alert('Bạn có chắc muốn xóa tài khoản này?')">
                                             <i class="far fa-trash-alt"></i>

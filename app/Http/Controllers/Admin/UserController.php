@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\PersonalInformation;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserFormRequest;
 
@@ -53,7 +54,14 @@ class UserController extends Controller
         return redirect(route('user.index'));
     }
 
-    public function proFile(){
-        return view('admin.user.pro-file');
+    public function proFile($id){
+        $user = User::find($id);
+        $user->load('personal_information');
+
+        $psInfor = PersonalInformation::all();
+        return view('admin.user.pro-file', [
+            'user' => $user,
+            'psInfor' => $psInfor
+        ]);
     }
 }

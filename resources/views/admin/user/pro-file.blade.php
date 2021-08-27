@@ -1,4 +1,4 @@
-@section('title', 'Danh sách tài khoản')
+@section('title', 'Thông tin tài khoản')
 @extends('layouts.admin.main')
 @section('content')
 <!-- Content Header (Page header) -->
@@ -24,12 +24,12 @@
 				<div class="card card-success card-outline">
 					<div class="card-body box-profile">
 						<div class="text-center">
-							<img class="profile-user-img img-fluid img-circle" src="{{asset( 'storage/' . Auth::user()->avatar)}}" alt="User profile picture">
+							<img class="profile-user-img img-fluid img-circle" src="{{asset( 'storage/' . $user->avatar)}}" alt="User profile picture">
 						</div>
 
-						<h3 class="profile-username text-center">{{Auth::user()->name}}</h3>
+						<h3 class="profile-username text-center">{{$user->name}}</h3>
 
-						<p class="text-muted text-center">Software Engineer</p>
+						<p class="text-muted text-center">Designer</p>
 
 						<ul class="list-group list-group-unbordered mb-3">
 						<li class="list-group-item">
@@ -59,32 +59,48 @@
 						<strong><i class="fab fa-facebook-square"></i> Facebook</strong>
 
 						<p class="text-muted">
-						B.S. in Computer Science from the University of Tennessee at Knoxville
+						@foreach($psInfor as $pf)
+							@if($pf->user_id === $user->id)
+								<a href="{{$pf->facebook_url}}">{{$pf->facebook_url}}</a>
+							@endif
+						@endforeach
 						</p>
 
 						<hr>
 
 						<strong><i class="fab fa-instagram-square"></i> Instagram</strong>
 
-						<p class="text-muted">Malibu, California</p>
+						<p class="text-muted">
+							@foreach($psInfor as $pf)
+								@if($pf->user_id === $user->id)
+									{{$pf->mail_url}}
+								@endif
+							@endforeach
+						</p>
 
 						<hr>
 
 						<strong><i class="fab fa-twitter-square"></i> Twitter</strong>
 
 						<p class="text-muted">
-						<span class="tag tag-danger">UI Design</span>
-						<span class="tag tag-success">Coding</span>
-						<span class="tag tag-info">Javascript</span>
-						<span class="tag tag-warning">PHP</span>
-						<span class="tag tag-primary">Node.js</span>
+							@foreach($psInfor as $pf)
+								@if($pf->user_id === $user->id)
+									{{$pf->mail_url}}
+								@endif
+							@endforeach
 						</p>
 
 						<hr>
 
 						<strong><i class="fas fa-envelope"></i> Email</strong>
 
-						<p class="text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+						<p class="text-muted">
+							@foreach($psInfor as $pf)
+								@if($pf->user_id === $user->id)
+									{{$pf->mail_url}}
+								@endif
+							@endforeach
+						</p>
 					</div>
 				</div>
 				<!-- /.card -->

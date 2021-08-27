@@ -26,9 +26,11 @@ class AuthController extends Controller
                 'password.required' => "Hãy nhập mật khẩu"
             ]
         );
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
-            
-            return redirect(route('product.index'));
+
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])){    
+            return redirect(route('dashboard.index'));
+        }else{
+            return redirect()->back()->with('msg', "Tài khoản của bạn đang bị khóa, liên hệ Dog Yellor để mở");
         }
 
         return redirect()->back()->with('msg', "Sai thông tin đăng nhập");
