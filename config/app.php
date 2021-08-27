@@ -169,6 +169,20 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         /*
+         * Phan quyen
+         * HungTM
+         * @date: 2021-08-27
+         * Start
+         */
+        Spatie\Permission\PermissionServiceProvider::class,
+        /*
+         * Phan quyen
+         * HungTM
+         * @date: 2021-08-27
+         * End
+         */
+
+        /*
          * Package Service Providers...
          */
 

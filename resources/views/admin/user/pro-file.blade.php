@@ -33,13 +33,17 @@
 
 						<ul class="list-group list-group-unbordered mb-3">
 						<li class="list-group-item">
-							<b>Followers</b> <a class="float-right">1,322</a>
+							<b>Quyền hạn</b> <b class="float-right text-danger">Admin</b>
 						</li>
 						<li class="list-group-item">
-							<b>Following</b> <a class="float-right">543</a>
+							<b>Trạng thái</b>
+							<i class="{{ $user->active == 1 ? 'fa fa-check text-success' : 'fa fa-times text-danger' }} float-right pr-3"></i>
 						</li>
 						<li class="list-group-item">
-							<b>Friends</b> <a class="float-right">13,287</a>
+							<b>
+								<i class="fa fa-mobile" aria-hidden="true"></i> Phone
+							</b>
+							<p class="float-right">{{$user->phone}}</p>
 						</li>
 						</ul>
 

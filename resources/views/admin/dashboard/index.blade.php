@@ -1,25 +1,30 @@
 @section('title', 'Dashboard')
 @extends('layouts.admin.main')
 @section('content')
-<!-- Content Header (Page header) -->
-<div class="content-header">
-	<div class="container-fluid">
-		<div class="row mb-2">
-			<div class="col-sm-6">
-				<h1 class="m-0">Dashboard</h1>
-			</div><!-- /.col -->
-			<div class="col-sm-6">
-				<ol class="breadcrumb float-sm-right">
-				<li class="breadcrumb-item"><a href="#">Home</a></li>
-				<li class="breadcrumb-item active">Dashboard v1</li>
-				</ol>
-			</div><!-- /.col -->
-		</div><!-- /.row -->
-	</div><!-- /.container-fluid -->
-</div>
-<!-- /.content-header -->
+	<!-- Content Header (Page header) -->
+	<div class="content-header">
+		<div class="container-fluid">
+			<div class="card card-secondary my-0">
+				<div class="card-header">
+					<ol class="breadcrumb float-sm-left ">
+						<li class="breadcrumb-item card-title">Dashboard</li>
+					</ol>
+				</div>
+			</div><!-- /.row -->
+		</div><!-- /.container-fluid -->
+	</div>
+	<!-- /.content-header -->
 
 	<!-- Main content -->
-	<p>huy oc cho</p>
+	<section class="content">
+		<div class="container-fluid pd-1">
+			<div class="card card-success card-outline">
+				<div class="card-header">
+					Huy oc
+				</div>
+				
+			</div>
+		</div>
+	</section>
 	<!-- /.content -->
 @endsection
