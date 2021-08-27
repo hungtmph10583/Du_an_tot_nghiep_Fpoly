@@ -21,19 +21,18 @@ class AuthController extends Controller
                 'password' => 'required'
             ],
             [
-                'email.required' => "Hãy nhập tài khoản",
-                'email.email' => "Không đúng định dạng email",
-                'password.required' => "Hãy nhập mật khẩu"
+                'email.required' => "Hãy nhập vào Email!",
+                'email.email' => "Email không đúng định dạng!",
+                'password.required' => "Hãy nhập vào mật khẩu!"
             ]
         );
 
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])){    
             return redirect(route('dashboard.index'));
         }else{
-            return redirect()->back()->with('msg', "Tài khoản của bạn đang bị khóa, liên hệ Dog Yellor để mở");
+            return redirect()->back()->with('msg', "Tài khoản của bạn đang bị khóa, liên hệ Huy Phan để mở!");
         }
-
-        return redirect()->back()->with('msg', "Sai thông tin đăng nhập");
+        return redirect()->back()->with('msg', "Email hoặc mật khẩu không chính xác!");
     }
 
     public function registrationForm(Request $request){

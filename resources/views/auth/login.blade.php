@@ -39,7 +39,7 @@
                             <i class="bx bxs-lock-alt"></i>
                             <input type="password" placeholder="Confirm password" name="cfpassword"/>
                         </div>
-                        <button type="submit">Sign up</button>
+                        <button type="submit" disabled>Sign up</button>
                         <span>Already have an account?</span>
                         <b id="sign-up">Sign in here</b>
                     </form>
@@ -69,7 +69,7 @@
                 <div class="form-wrapper align-center">
                     <form class="form sign-in" method="POST">
                     @if(session('msg') != null)
-                    <p style="color: red">{{session('msg')}}</p>
+                    <p class="alert-top">{{session('msg')}}</p>
                     @endif
                     @csrf
                         <div class="input-group">
@@ -77,14 +77,18 @@
                             <input type="text" placeholder="Email" name="email" value="{{old('email')}}">
                         </div>
                         @error('email')
+                        <p class="alert">
                             {{ $message }}
+                        </p>
                         @enderror
                         <div class="input-group">
                             <i class="bx bxs-lock-alt"></i>
                             <input type="password" placeholder="Password" name="password">
                         </div>
-                        @error('email')
+                        @error('password')
+                        <p class="alert">
                             {{ $message }}
+                        </p>
                         @enderror
                         <button type="submit">Sign In</button>
                         <p>
