@@ -41,6 +41,13 @@
                                     @enderror
                                 </div>
                                 <div class="form-group">
+                                    <label for="">Số điện thoại</label>
+                                    <input type="text" name="phone" class="form-control" value="{{old('phone')}}" placeholder="Nhập vào số điện thoại">
+                                    @error('phone')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror   
+                                </div>
+                                <div class="form-group">
                                     <label for="">Password</label>
                                     <input type="password" name="password" class="form-control" value="{{old('password')}}" placeholder="Mật khẩu">
                                     @error('password')
@@ -56,17 +63,9 @@
                                 </div>
                             </div>
                             <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Số điện thoại</label>
-                                    <input type="text" name="phone" class="form-control" value="{{old('phone')}}" placeholder="Nhập vào số điện thoại">
-                                    @error('phone')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror   
-                                </div>
-									
-								<div id="cc" style="display: none">
+								<!-- <div id="cc" style="display: none">
 									<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
-								</div>
+								</div> -->
                                 <div class="form-group">
                                     <label for="">Ảnh đại diện</label>
                                     <input type="file" name="uploadfile" id="imgInp" class="form-control">
@@ -74,6 +73,29 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
+                                @hasrole('admin')
+                                <div class="form-group">
+                                    <label for="">Trạng thái</label>
+                                    <div class="form-control">
+                                        <label class="pr-1">
+                                            <input type="radio" name="active" value="1" checked> Hiển thị
+                                        </label>
+                                        <label class="pl-1">
+                                            <input type="radio" name="active" value="0"> Ẩn
+                                        </label>
+                                    </div>
+                                </div>
+                                @endhasrole
+                                @hasrole('admin')
+                                <div class="form-group">
+                                    <label for="">Quyền hạn</label>
+                                    <select name="role_id" class="form-control">
+                                        @foreach($roles as $r)
+                                        <option value="{{$r->id}}" @if($r->id == old('role_id')) selected @endif>{{$r->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @endhasrole
                             </div>
                             <div class="text-right pl-2">
                                 <button type="submit" class="btn btn-success">Lưu</button>
@@ -88,28 +110,27 @@
 @endsection
 @section('pagejs')
     <script>
-		var a = '';
-        function readURL(input) {
+		// var a = '';
+        // function readURL(input) {
 
-			if (input.files && input.files[0]) {
-				var reader = new FileReader();
-					// $('#cc').append(`
-					// 	<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
-					// `);
-					document.getElementById("cc").style.display = 'block';
+		// 	if (input.files && input.files[0]) {
+		// 		var reader = new FileReader();
+		// 			// $('#cc').append(`
+		// 			// 	<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
+		// 			// `);
+		// 			document.getElementById("cc").style.display = 'block';
 				
 
-				reader.onload = function(e) {
-					$('#blah').attr('src', e.target.result);
-				}
-				reader.readAsDataURL(input.files[0]);
-				}
-			}
+		// 		reader.onload = function(e) {
+		// 			$('#blah').attr('src', e.target.result);
+		// 		}
+		// 		reader.readAsDataURL(input.files[0]);
+		// 		}
+		// 	}
 
-			$("#imgInp").change(function() {
-				readURL(this);
+		// 	$("#imgInp").change(function() {
+		// 		readURL(this);
 			
-		});
-		
+		// });
     </script>
 @endsection

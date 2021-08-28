@@ -33,7 +33,14 @@
 
 						<ul class="list-group list-group-unbordered mb-3">
 						<li class="list-group-item">
-							<b>Quyền hạn</b> <b class="float-right text-danger">Admin</b>
+							<b>Quyền hạn</b>
+							@foreach($mdh_role as $mdhr)
+								@if($mdhr->model_id === $user->id)
+								<b class="float-right {{ ($mdhr->model_id === 1 ? 'text-danger' : ($mdhr->model_id === 2 ? 'text-warning' : 'text-primary')) }}">
+									{{$mdhr->role->name}}
+								</b>
+								@endif
+							@endforeach
 						</li>
 						<li class="list-group-item">
 							<b>Trạng thái</b>

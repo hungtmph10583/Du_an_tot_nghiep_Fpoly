@@ -160,7 +160,7 @@ body {
     margin: 0 0.5rem;
     padding: 0.7rem;
     cursor: pointer;
-    border: 1px solid var(--gray-2);
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
     border-radius: 5px;
     transform: scale(0);
     transition: 0.5s ease-in-out;
@@ -383,7 +383,7 @@ b#sign-up {
     .form,
     .social-list {
         box-shadow: none;
-        margin: 0;
+        margin: 0 0 15px 0;
         padding: 0;
     }
     .text {

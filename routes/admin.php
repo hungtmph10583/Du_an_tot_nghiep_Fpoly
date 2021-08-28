@@ -23,23 +23,23 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::prefix('tai-khoan')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
-    Route::get('xoa/{id}', [UserController::class, 'remove'])->middleware('auth')->name('user.remove');
+    Route::get('xoa/{id}', [UserController::class, 'remove'])->name('user.remove');
     Route::get('tao-moi', [UserController::class, 'addForm'])->name('user.add');
     Route::post('tao-moi', [UserController::class, 'saveAdd']);
-    Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->middleware('auth')->name('user.edit');
+    Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->name('user.edit');
     Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit']);
-    Route::get('ho-so/{id}', [UserController::class, 'proFile'])->middleware('auth')->name('user.profile');
-    Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->middleware('auth')->name('user.changeP');
+    Route::get('ho-so/{id}', [UserController::class, 'proFile'])->name('user.profile');
+    Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->name('user.changeP');
     Route::post('doi-mat-khau/{id}', [UserController::class, 'saveChangeP']);
 });
 
 Route::prefix('danh-muc')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('category.index');
     Route::get('detail/{id}', [CategoryController::class, 'detail'])->name('category.detail');
-    Route::get('xoa/{id}', [CategoryController::class, 'remove'])->middleware('auth')->name('category.remove');
-    Route::get('tao-moi', [CategoryController::class, 'addForm'])->middleware('auth')->name('category.add');
+    Route::get('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
+    Route::get('tao-moi', [CategoryController::class, 'addForm'])->name('category.add');
     Route::post('tao-moi', [CategoryController::class, 'saveAdd']);
-    Route::get('cap-nhat/{id}', [CategoryController::class, 'editForm'])->middleware('auth')->name('category.edit');
+    Route::get('cap-nhat/{id}', [CategoryController::class, 'editForm'])->name('category.edit');
     Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit']);
 });
 

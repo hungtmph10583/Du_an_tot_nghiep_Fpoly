@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 27, 2021 lúc 01:06 PM
+-- Thời gian đã tạo: Th8 28, 2021 lúc 06:27 AM
 -- Phiên bản máy phục vụ: 10.4.13-MariaDB
 -- Phiên bản PHP: 7.4.7
 
@@ -191,7 +191,40 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (10, '2021_08_19_154718_create_table_book_genres', 1),
 (11, '2021_08_19_154732_create_table_genres', 1),
 (12, '2021_08_19_160806_create_table_book_author', 1),
-(13, '2021_08_19_161159_create_table_personal_information', 1);
+(13, '2021_08_19_161159_create_table_personal_information', 1),
+(14, '2021_08_27_220537_create_permission_tables', 2);
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `model_has_permissions`
+--
+
+CREATE TABLE `model_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `model_has_roles`
+--
+
+CREATE TABLE `model_has_roles` (
+  `role_id` bigint(20) UNSIGNED NOT NULL,
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `model_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `model_has_roles`
+--
+
+INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
+(1, 'App\\Models\\User', 2),
+(2, 'App\\Models\\User', 1);
 
 -- --------------------------------------------------------
 
@@ -204,6 +237,28 @@ CREATE TABLE `password_resets` (
   `token` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `permissions`
+--
+
+CREATE TABLE `permissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `permissions`
+--
+
+INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(1, 'add product', 'web', '2021-08-27 15:22:52', '2021-08-27 15:22:52'),
+(2, 'remove product', 'web', '2021-08-27 15:23:33', '2021-08-27 15:23:33');
 
 -- --------------------------------------------------------
 
@@ -254,6 +309,50 @@ CREATE TABLE `products` (
 -- --------------------------------------------------------
 
 --
+-- Cấu trúc bảng cho bảng `roles`
+--
+
+CREATE TABLE `roles` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `guard_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `roles`
+--
+
+INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'web', '2021-08-27 15:21:35', '2021-08-27 15:21:35'),
+(2, 'editor', 'web', '2021-08-27 15:21:35', '2021-08-27 15:21:35'),
+(3, 'moderator', 'web', '2021-08-27 15:22:06', '2021-08-27 15:22:06');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `role_has_permissions`
+--
+
+CREATE TABLE `role_has_permissions` (
+  `permission_id` bigint(20) UNSIGNED NOT NULL,
+  `role_id` bigint(20) UNSIGNED NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `role_has_permissions`
+--
+
+INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
+(1, 1),
+(1, 2),
+(2, 1),
+(2, 3);
+
+-- --------------------------------------------------------
+
+--
 -- Cấu trúc bảng cho bảng `users`
 --
 
@@ -276,8 +375,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `avatar`, `password`, `phone`, `active`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Big Boss', 'hungtmph10583@gmail.com', '2021-08-19 10:24:47', 'uploads/users/610bda9a02e99-user1.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '0336126726', 1, 'xpobimjsOShHjNQG0WVHSyMiSxLv1s9LmWNSd5jAEESGtodwvHAxiwCV2bTE', '2021-08-19 10:24:47', '2021-08-19 10:24:47'),
-(2, 'Huy Phan', 'phanquochuy292001@gmail.com', '2021-08-19 13:52:36', 'uploads/users/610c05b073b2b-user2.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '', 1, 'IMQt4KgVPT', '2021-08-19 13:52:36', '2021-08-19 13:52:36'),
+(1, 'Big Boss', 'hungtmph10583@gmail.com', '2021-08-19 10:24:47', 'uploads/users/610bda9a02e99-user1.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '0336126726', 1, 'M96JDZwzwnFSZNherKeWLI3dPpyALPnvLtOiP5nCaizMRoBhsaB5y7o5rGM2', '2021-08-19 10:24:47', '2021-08-19 10:24:47'),
+(2, 'Huy Phan', 'phanquochuy292001@gmail.com', '2021-08-19 13:52:36', 'uploads/users/610c05b073b2b-user2.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '', 1, 'zaHUdTWNxx28hjQu6SIcZ3OpfkOMq7QdbMnn0dJG4EOTMz6emRHZYVdT31yH', '2021-08-19 13:52:36', '2021-08-19 13:52:36'),
 (5, 'Khanh Ngoc', 'khanhngoc2791@gmail.com', '2021-08-19 13:58:16', 'uploads/users/610bd7134161d-user3.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '', 0, 'WDZ4piFF02', '2021-08-19 13:57:28', '2021-08-19 13:57:28');
 
 --
@@ -348,10 +447,31 @@ ALTER TABLE `migrations`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Chỉ mục cho bảng `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_permissions_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
+-- Chỉ mục cho bảng `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD PRIMARY KEY (`role_id`,`model_id`,`model_type`),
+  ADD KEY `model_has_roles_model_id_model_type_index` (`model_id`,`model_type`);
+
+--
 -- Chỉ mục cho bảng `password_resets`
 --
 ALTER TABLE `password_resets`
   ADD KEY `password_resets_email_index` (`email`);
+
+--
+-- Chỉ mục cho bảng `permissions`
+--
+ALTER TABLE `permissions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `permissions_name_guard_name_unique` (`name`,`guard_name`);
 
 --
 -- Chỉ mục cho bảng `personal_information`
@@ -364,6 +484,20 @@ ALTER TABLE `personal_information`
 --
 ALTER TABLE `products`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Chỉ mục cho bảng `roles`
+--
+ALTER TABLE `roles`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `roles_name_guard_name_unique` (`name`,`guard_name`);
+
+--
+-- Chỉ mục cho bảng `role_has_permissions`
+--
+ALTER TABLE `role_has_permissions`
+  ADD PRIMARY KEY (`permission_id`,`role_id`),
+  ADD KEY `role_has_permissions_role_id_foreign` (`role_id`);
 
 --
 -- Chỉ mục cho bảng `users`
@@ -434,7 +568,13 @@ ALTER TABLE `genres`
 -- AUTO_INCREMENT cho bảng `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+
+--
+-- AUTO_INCREMENT cho bảng `permissions`
+--
+ALTER TABLE `permissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_information`
@@ -449,10 +589,39 @@ ALTER TABLE `products`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT cho bảng `roles`
+--
+ALTER TABLE `roles`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- Các ràng buộc cho các bảng đã đổ
+--
+
+--
+-- Các ràng buộc cho bảng `model_has_permissions`
+--
+ALTER TABLE `model_has_permissions`
+  ADD CONSTRAINT `model_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `model_has_roles`
+--
+ALTER TABLE `model_has_roles`
+  ADD CONSTRAINT `model_has_roles_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
+
+--
+-- Các ràng buộc cho bảng `role_has_permissions`
+--
+ALTER TABLE `role_has_permissions`
+  ADD CONSTRAINT `role_has_permissions_permission_id_foreign` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `role_has_permissions_role_id_foreign` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

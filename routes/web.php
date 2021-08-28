@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Route::get('/', function () {
-    return view('layouts/admin/main');
+    return view('welcome');
 });
 // hungtmph10583 (16/08/21) start
 Route::get('login', [AuthController::class, 'loginForm'])->name('login');

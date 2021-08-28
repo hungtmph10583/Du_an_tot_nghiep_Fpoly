@@ -27,12 +27,13 @@ class AuthController extends Controller
             ]
         );
 
-        if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])){    
-            return redirect(route('dashboard.index'));
-        }else{
+        if(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'active' => 0])){    
             return redirect()->back()->with('msg', "Tài khoản của bạn đang bị khóa, liên hệ Huy Phan để mở!");
+        }elseif(Auth::attempt(['email' => $request->email, 'password' => $request->password, 'active' => 1])) {
+            return redirect(route('dashboard.index'));
+        } else {
+            return redirect()->back()->with('msg', "Email hoặc mật khẩu không chính xác!");
         }
-        return redirect()->back()->with('msg', "Email hoặc mật khẩu không chính xác!");
     }
 
     public function registrationForm(Request $request){

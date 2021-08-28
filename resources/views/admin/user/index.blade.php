@@ -50,11 +50,20 @@
                                 @foreach($users as $u)
                                 <tr>
                                     <td>{{(($users->currentPage()-1)*20) + $loop->iteration}}</td>
-                                    <td>{{$u->name}}</td>
+                                    <td>{{$u->name}}
+                                        @foreach($mdh_role as $mdhr)
+                                            @if($mdhr->model_id === $u->id)
+                                            <b class="{{ ($mdhr->model_id === 1 ? 'text-danger' : ($mdhr->model_id === 2 ? 'text-warning' : 'text-info')) }}">
+                                                ({{$mdhr->role->name}})
+                                            </b>
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    
                                     <td><img src="{{asset( 'storage/' . $u->avatar)}}" width="70" /></td>
                                     <td>{{$u->email}}</td>
                                     <td>{{$u->phone}}</td>
-                                    <td><i class="{{ $u->active == 1 ? 'fa fa-check text-success' : 'fa fa-times text-danger' }} pl-3"></i></td>
+                                    <td><i class="{{ $u->active == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} pl-3"></i></td>
                                     <td>
                                         <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
                                         <a href="{{route('user.edit', ['id' => $u->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>

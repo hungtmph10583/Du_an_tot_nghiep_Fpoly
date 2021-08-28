@@ -42,6 +42,14 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
+                    <a href="dashboard.index" class="nav-link">
+                        <i class="fa fa-home"></i>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-users"></i>
                         <p>
@@ -56,7 +64,7 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
-                        @hasanyrole('admin|editor')
+                        @hasanyrole('admin')
                         <li class="nav-item">
                             <a href="{{route('user.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
