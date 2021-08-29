@@ -42,7 +42,7 @@
                 <!-- Add icons to the links using the .nav-icon class
                     with font-awesome or any other icon font library -->
                 <li class="nav-item">
-                    <a href="dashboard.index" class="nav-link">
+                    <a href="{{route('dashboard.index')}}" class="nav-link">
                         <i class="fa fa-home"></i>
                         <p>
                             Dashboard

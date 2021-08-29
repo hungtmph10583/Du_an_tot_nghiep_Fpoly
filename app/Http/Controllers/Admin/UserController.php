@@ -55,13 +55,37 @@ class UserController extends Controller
         $model = new User();
 
         $model->fill($request->all());
+
         // upload ảnh
         if($request->hasFile('uploadfile')){
             $model->avatar = $request->file('uploadfile')->storeAs('uploads/users', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
-        //$model->password = bcrypt($request->password);
+
+        /**
+         * HungTM
+         * Tao token
+         * Start
+         */
+            $token = "";
+            $codeAlphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            $codeAlphabet.= "abcdefghijklmnopqrstuvwxyz";
+            $codeAlphabet.= "0123456789";
+            $max = strlen($codeAlphabet);
+
+            for ($i=0; $i <= 10; $i++) {
+                $token .= $codeAlphabet[rand(0, $max-1)];
+            }
+        /**
+         * HungTM
+         * Tao token
+         * End
+         */
+
         $model->password = Hash::make($request->password);
+        $model->remember_token = $token;
         $model->save();
+
+        // save quyen 
         if($request->has('role_id')){
             $model_has_roles = new ModelHasRole();
             $model_has_roles->role_id = $request->role_id;
