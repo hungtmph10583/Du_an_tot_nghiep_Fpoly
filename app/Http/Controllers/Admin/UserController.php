@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\ModelHasRole;
+use Illuminate\Support\Facades\DB;
 use App\Models\PersonalInformation;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserFormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -114,21 +116,23 @@ class UserController extends Controller
         if(!$model){
             return redirect()->back();
         }
+
+        if($id === 1 ||  Auth::user()->id != 1){
+            return redirect()->back()->with('msg', "Đã bảo là đéo đủ tuổi r còn cố :))");
+        }
         
         $request->validate(
             [
                 'name' => 'required|min:3|max:32',
                 'email' => 'required|email',
-                'phone' => 'required|min:10|max:10',
+                'phone' => 'max:10',
                 'uploadfile' => 'mimes:jpg,bmp,png,jpeg',
             ],
             [
                 'name.required' => "Hãy nhập vào tên",
                 'email.required' => "Hãy nhập email",
                 'email.email' => "Không đúng định dạng email",
-                'phone.required' => "Hãy nhập số điện thoại",
                 'phone.numeric' => "Số điện thoại không đúng định dạng",
-                'phone.min' => "Số điện thoại phải đủ 10 chữ số",
                 'phone.max' => "Số điện thoại chỉ có 10 chữ số",
                 'uploadfile.mimes' => 'File ảnh đại diện không đúng định dạng (jpg, bmp, png, jpeg)',
             ]
@@ -140,12 +144,13 @@ class UserController extends Controller
             $model->avatar = $request->file('uploadfile')->storeAs('uploads/users', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
         $model->save();
+
         if($request->has('role_id')){
-            $model_has_roles = new ModelHasRole();
+            $model_has_roles = DB::table('model_has_roles')->where('model_id', $id);
             $model_has_roles->role_id = $request->role_id;
-            $model_has_roles->model_id = $model->id;
             $model_has_roles->save();
         }
+        
         return redirect(route('user.index'));
     }
 

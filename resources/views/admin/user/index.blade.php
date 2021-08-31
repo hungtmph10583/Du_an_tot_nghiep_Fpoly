@@ -22,7 +22,9 @@
 				<div class="card-header">
 					<form action="" method="get">
                         <div class="row">
-							<div class="col-9"></div>
+							<div class="col-9">
+
+                            </div>
                             <div class="col-3">
 								<div class="input-group input-group-sm">
 									<input class="form-control" type="text" name="keyword" @isset($searchData['keyword']) value="{{$searchData['keyword']}}" @endisset placeholder="Search">
@@ -41,33 +43,84 @@
                                 <th>STT</th>
                                 <th>Name</th>
                                 <th>Avatar</th>
+                                <th>Role</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>Active</th>
-                                <th><a href="{{route('user.add')}}" class="btn btn-primary">Tạo mới</a></th>
+                                <th>
+                                    @hasanyrole('admin|manage')
+                                        <a href="{{route('user.add')}}" class="btn btn-primary">Thêm tài khoản</a>
+                                    @else
+                                        <a href="#" onclick="alert('Bạn không được cấp quyền để tạo tài khoản?')" class="btn btn-primary">Thêm tài khoản</a>
+                                    @endhasrole
+                                </th>
                             </thead>
                             <tbody>
                                 @foreach($users as $u)
                                 <tr>
-                                    <td>{{(($users->currentPage()-1)*20) + $loop->iteration}}</td>
-                                    <td>{{$u->name}}
+                                    <td>{{(($users->currentPage()-1)*5) + $loop->iteration}}</td>
+                                    <td>{{$u->name}}</td>
+                                    <td><img src="{{asset( 'storage/' . $u->avatar)}}" width="70" /></td>
+                                    <td>
                                         @foreach($mdh_role as $mdhr)
                                             @if($mdhr->model_id === $u->id)
-                                            <b class="{{ ($mdhr->model_id === 1 ? 'text-danger' : ($mdhr->model_id === 2 ? 'text-warning' : 'text-info')) }}">
-                                                ({{$mdhr->role->name}})
+                                            <b class="{{ ($mdhr->role_id === 1 ? 'text-danger' : ($mdhr->role_id === 2 ? 'text-success' : 'text-info')) }}">
+                                                {{ucfirst($mdhr->role->name)}}
                                             </b>
                                             @endif
                                         @endforeach
                                     </td>
-                                    
-                                    <td><img src="{{asset( 'storage/' . $u->avatar)}}" width="70" /></td>
                                     <td>{{$u->email}}</td>
                                     <td>{{$u->phone}}</td>
                                     <td><i class="{{ $u->active == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} pl-3"></i></td>
                                     <td>
                                         <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href="{{route('user.edit', ['id' => $u->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="{{route('user.remove', ['id' => $u->id])}}" class="btn btn-danger" onclick="alert('Bạn có chắc muốn xóa tài khoản này?')">
+                                        <a href=" 
+                                            @if($u->id === 1)
+                                                @hasrole('admin')
+                                                    {{route('user.edit', ['id' => $u->id])}}
+                                                @else
+                                                    #
+                                                @endhasrole
+                                            @else
+                                                @hasanyrole('admin|manage')
+                                                    {{route('user.edit', ['id' => $u->id])}}
+                                                @else
+                                                    @if(Auth::user()->id === $u->id)
+                                                        {{route('user.edit', ['id' => $u->id])}}
+                                                    @else
+                                                    #
+                                                    @endif
+                                                @endhasanyrole
+                                            @endif
+                                            " class="btn btn-success"
+                                                @if(Auth::user()->id === $u->id)
+                                                    {{route('user.edit', ['id' => $u->id])}}
+                                                @elseif(Auth::user()->id > 1 && $u->id == 1)
+                                                    onclick="alert('Bạn éo có tủi mà đòi sửa thông tin của mình nhóe :))')"
+                                                @else
+                                                    @hasanyrole('admin|manage')
+                                                        
+                                                    @else
+                                                        onclick="alert('Bạn không được cấp quyền để sửa tài khoản?')"
+                                                    @endhasanyrole
+                                                @endif
+                                            >
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <a href="
+                                            @hasrole('admin')
+                                                {{route('user.remove', ['id' => $u->id])}}
+                                            @else
+                                                #
+                                            @endhasrole
+                                        " class="btn btn-danger"
+                                            @hasrole('admin')
+                                                onclick="confirm('Bạn có chắc muốn xóa tài khoản này?')"
+                                            @else
+                                                onclick="alert('Bạn không được cấp quyền để xóa tài khoản?')"
+                                            @endhasrole
+                                        >
                                             <i class="far fa-trash-alt"></i>
                                         </a>
                                     </td>

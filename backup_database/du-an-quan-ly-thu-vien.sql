@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Máy chủ: 127.0.0.1
--- Thời gian đã tạo: Th8 28, 2021 lúc 06:27 AM
+-- Thời gian đã tạo: Th8 31, 2021 lúc 05:59 AM
 -- Phiên bản máy phục vụ: 10.4.13-MariaDB
 -- Phiên bản PHP: 7.4.7
 
@@ -192,7 +192,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (11, '2021_08_19_154732_create_table_genres', 1),
 (12, '2021_08_19_160806_create_table_book_author', 1),
 (13, '2021_08_19_161159_create_table_personal_information', 1),
-(14, '2021_08_27_220537_create_permission_tables', 2);
+(14, '2021_08_27_220537_create_permission_tables', 1);
 
 -- --------------------------------------------------------
 
@@ -214,17 +214,20 @@ CREATE TABLE `model_has_permissions` (
 
 CREATE TABLE `model_has_roles` (
   `role_id` bigint(20) UNSIGNED NOT NULL,
-  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `model_id` bigint(20) UNSIGNED NOT NULL
+  `model_type` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'App\\Models\\User',
+  `model_id` bigint(20) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Đang đổ dữ liệu cho bảng `model_has_roles`
 --
 
-INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`) VALUES
-(1, 'App\\Models\\User', 2),
-(2, 'App\\Models\\User', 1);
+INSERT INTO `model_has_roles` (`role_id`, `model_type`, `model_id`, `created_at`, `updated_at`) VALUES
+(1, 'App\\Models\\User', 1, '2021-08-29 12:20:09', '2021-08-29 12:20:13'),
+(2, 'App\\Models\\User', 2, '2021-08-29 12:20:18', '2021-08-29 12:20:15'),
+(2, 'App\\Models\\User', 3, '2021-08-29 12:20:22', '2021-08-29 12:20:22');
 
 -- --------------------------------------------------------
 
@@ -257,8 +260,9 @@ CREATE TABLE `permissions` (
 --
 
 INSERT INTO `permissions` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'add product', 'web', '2021-08-27 15:22:52', '2021-08-27 15:22:52'),
-(2, 'remove product', 'web', '2021-08-27 15:23:33', '2021-08-27 15:23:33');
+(1, 'add user', 'web', '2021-08-29 11:50:52', '2021-08-29 11:50:52'),
+(2, 'edit user', 'web', '2021-08-29 11:50:52', '2021-08-29 11:50:52'),
+(3, 'delete user', 'web', '2021-08-29 11:51:24', '2021-08-29 11:51:24');
 
 -- --------------------------------------------------------
 
@@ -270,7 +274,7 @@ CREATE TABLE `personal_information` (
   `id` bigint(20) UNSIGNED NOT NULL,
   `user_id` int(11) NOT NULL,
   `facebook_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `instagram_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `intagram_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `twitter_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `mail_url` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
@@ -281,10 +285,8 @@ CREATE TABLE `personal_information` (
 -- Đang đổ dữ liệu cho bảng `personal_information`
 --
 
-INSERT INTO `personal_information` (`id`, `user_id`, `facebook_url`, `instagram_url`, `twitter_url`, `mail_url`, `created_at`, `updated_at`) VALUES
-(1, 1, 'https://www.facebook.com/tr.ma.h.90125092/', 'https://www.facebook.com/tr.ma.h.90125092/', 'https://www.facebook.com/tr.ma.h.90125092/', 'https://www.facebook.com/tr.ma.h.90125092/', '2021-08-19 11:19:05', '2021-08-19 11:19:14'),
-(2, 2, 'https://www.facebook.com/huyphan291001', 'https://www.facebook.com/huyphan291001', 'https://www.facebook.com/huyphan291001', 'https://www.facebook.com/huyphan291001', '2021-08-27 11:04:47', '2021-08-27 11:04:47'),
-(3, 0, 'https://www.facebook.com/profile.php?id=100028000741542', 'https://www.facebook.com/profile.php?id=100028000741542', 'https://www.facebook.com/profile.php?id=100028000741542', 'https://www.facebook.com/profile.php?id=100028000741542', '2021-08-27 11:05:05', '2021-08-27 11:05:05');
+INSERT INTO `personal_information` (`id`, `user_id`, `facebook_url`, `intagram_url`, `twitter_url`, `mail_url`, `created_at`, `updated_at`) VALUES
+(1, 1, 'https://www.facebook.com/tr.ma.h.90125092/', 'https://www.facebook.com/tr.ma.h.90125092/', 'https://www.facebook.com/tr.ma.h.90125092/', 'https://www.facebook.com/tr.ma.h.90125092/', '2021-08-29 12:10:30', '2021-08-29 12:10:30');
 
 -- --------------------------------------------------------
 
@@ -325,9 +327,9 @@ CREATE TABLE `roles` (
 --
 
 INSERT INTO `roles` (`id`, `name`, `guard_name`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'web', '2021-08-27 15:21:35', '2021-08-27 15:21:35'),
-(2, 'editor', 'web', '2021-08-27 15:21:35', '2021-08-27 15:21:35'),
-(3, 'moderator', 'web', '2021-08-27 15:22:06', '2021-08-27 15:22:06');
+(1, 'admin', 'web', '2021-08-29 11:48:48', '2021-08-29 11:48:48'),
+(2, 'manage', 'web', '2021-08-29 11:48:48', '2021-08-29 11:48:48'),
+(3, 'employee', 'web', '2021-08-29 11:49:17', '2021-08-29 11:49:17');
 
 -- --------------------------------------------------------
 
@@ -348,7 +350,8 @@ INSERT INTO `role_has_permissions` (`permission_id`, `role_id`) VALUES
 (1, 1),
 (1, 2),
 (2, 1),
-(2, 3);
+(2, 2),
+(3, 1);
 
 -- --------------------------------------------------------
 
@@ -375,9 +378,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `avatar`, `password`, `phone`, `active`, `remember_token`, `created_at`, `updated_at`) VALUES
-(1, 'Big Boss', 'hungtmph10583@gmail.com', '2021-08-19 10:24:47', 'uploads/users/610bda9a02e99-user1.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '0336126726', 1, 'M96JDZwzwnFSZNherKeWLI3dPpyALPnvLtOiP5nCaizMRoBhsaB5y7o5rGM2', '2021-08-19 10:24:47', '2021-08-19 10:24:47'),
-(2, 'Huy Phan', 'phanquochuy292001@gmail.com', '2021-08-19 13:52:36', 'uploads/users/610c05b073b2b-user2.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '', 1, 'zaHUdTWNxx28hjQu6SIcZ3OpfkOMq7QdbMnn0dJG4EOTMz6emRHZYVdT31yH', '2021-08-19 13:52:36', '2021-08-19 13:52:36'),
-(5, 'Khanh Ngoc', 'khanhngoc2791@gmail.com', '2021-08-19 13:58:16', 'uploads/users/610bd7134161d-user3.jpg', '$2y$10$wnCaFgx3T4iRCP1ba7GzWOLNcKIjNt4WOg6147C6Jdi3RrbbOBToK', '', 0, 'WDZ4piFF02', '2021-08-19 13:57:28', '2021-08-19 13:57:28');
+(1, 'Big Boss', 'hungtmph10583@gmail.com', NULL, 'uploads/users/612b71ebbd61d-Big-boss.png', '$2y$10$JwTX3V4bp3vcXd/0XWm1/O4AIuYjFFz64j0jIzCdIRibKnsWtC7qi', '0336126725', 1, 'RRGzPFEY8X5IW4tPYz8VmF9318fBZLtSRlPdgsiFZiy6G2Ofz5tC9UHhTDSy', '2021-08-29 11:39:23', '2021-08-29 11:39:23'),
+(2, 'Huy Phan', 'phanquochuy292001@gmail.com', NULL, 'uploads/users/612b7aa55cca8-100_8.jpg', '$2y$10$VXHLw7G9P8.7xT9FoTbKO.scMg9GOy3C0i7ZRLxKtXv9x.E7S/h2S', '0336126213', 1, 'oXOKouW45N8', '2021-08-29 12:16:37', '2021-08-29 12:16:37'),
+(3, 'Khanh Ngoc', 'khanhngoc2791@gmail.com', NULL, 'uploads/users/612b7b2447c7d-300_4.jpg', '$2y$10$tzs6/TJQT2Ii6jRJAa2Nn.DhIkdZ.qznskN.bitufMqv7WT1EgguW', '0336126787', 0, 'YnT6f7j4mPR', '2021-08-29 12:18:44', '2021-08-29 15:39:24');
 
 --
 -- Chỉ mục cho các bảng đã đổ
@@ -574,13 +577,13 @@ ALTER TABLE `migrations`
 -- AUTO_INCREMENT cho bảng `permissions`
 --
 ALTER TABLE `permissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT cho bảng `personal_information`
 --
 ALTER TABLE `personal_information`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT cho bảng `products`
@@ -598,7 +601,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Các ràng buộc cho các bảng đã đổ

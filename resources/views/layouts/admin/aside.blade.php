@@ -64,7 +64,7 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
-                        @hasanyrole('admin')
+                        @hasanyrole('admin|manage')
                         <li class="nav-item">
                             <a href="{{route('user.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>

@@ -90,6 +90,10 @@
                             {{ $message }}
                         </p>
                         @enderror
+                        <div class="remember-group">
+                            <input type="checkbox" class="remember" id="remember" disabled>
+                            <label for="remember" class="rmbtk">Remember Me</label>
+                        </div>
                         <button type="submit">Sign In</button>
                         <p>
                             <b>Forgot password</b>

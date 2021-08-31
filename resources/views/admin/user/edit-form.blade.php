@@ -30,30 +30,35 @@
 							</div>
 
 							<h3 class="profile-username text-center">{{$model->name}}</h3>
-
-							<p class="text-muted text-center">Designer</p>
+							@foreach($mdh_role as $mdhr)
+								@if($mdhr->model_id === $model->id)
+								<p class="text-muted text-center">
+									{{ucfirst($mdhr->role->name)}}
+								</p>
+								@endif
+							@endforeach
 
 							<ul class="list-group list-group-unbordered mb-3">
-							<li class="list-group-item">
-								<b>Quyền hạn</b>
-								@foreach($mdh_role as $mdhr)
-									@if($mdhr->model_id === $model->id)
-									<b class="float-right {{ ($mdhr->model_id === 1 ? 'text-danger' : ($mdhr->model_id === 2 ? 'text-warning' : 'text-primary')) }}">
-										{{$mdhr->role->name}}
+								<li class="list-group-item">
+									<b>Vai trò</b>
+									@foreach($mdh_role as $mdhr)
+										@if($mdhr->model_id === $model->id)
+										<b class="float-right {{ ($mdhr->role_id === 1 ? 'text-danger' : ($mdhr->role_id === 2 ? 'text-success' : 'text-info')) }}">
+											{{ucfirst($mdhr->role->name)}}
+										</b>
+										@endif
+									@endforeach
+								</li>
+								<li class="list-group-item">
+									<b>Trạng thái</b>
+									<i class="{{ $model->active == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} float-right pr-3"></i>
+								</li>
+								<li class="list-group-item">
+									<b>
+										<i class="fa fa-mobile" aria-hidden="true"></i> Phone
 									</b>
-									@endif
-								@endforeach
-							</li>
-							<li class="list-group-item">
-								<b>Trạng thái</b>
-								<i class="{{ $model->active == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} float-right pr-3"></i>
-							</li>
-							<li class="list-group-item">
-								<b>
-									<i class="fa fa-mobile" aria-hidden="true"></i> Phone
-								</b>
-								<p class="float-right">{{$model->phone}}</p>
-							</li>
+									<p class="float-right">{{$model->phone}}</p>
+								</li>
 							</ul>
 						</div>
 						<!-- /.card-body -->
@@ -67,6 +72,9 @@
 							<h5>Personal information</h5>
 						</div>
 						<div class="card-body">
+							@if(session('msg') != null)
+								<b class="text-left text-danger">{{session('msg')}}</b>
+							@endif
 							<form action="" method="POST" enctype="multipart/form-data">
 							@csrf
 							<div class="row">
@@ -101,7 +109,7 @@
 									</div>
 								</div>
 								<div class="col-6">
-									@hasrole('admin')
+									@hasanyrole('admin|manage')
 									<div class="form-group">
                                         <label for="">Trạng thái</label>
                                         <div class="form-control">
@@ -113,10 +121,32 @@
                                             </label>
                                         </div>
                                     </div>
+									@endhasanyrole
+									@hasrole('admin')
+									<div class="form-group">
+										<label for="">Vai trò</label>
+										<div class="form-control">
+										@foreach($role as $r)
+											<label class="pr-1">
+                                                <input type="radio" name="role_id" value="{{$r->id}}"	
+												@foreach($mdh_role as $mdh)
+												 	@if($r->id == $mdh->role_id)
+														checked
+													@endif
+												@endforeach
+												> {{$r->name}}
+                                            </label>
+										@endforeach
+										</div>
+									</div>
 									@endhasrole
 								</div>
 								<div class="text-right pl-2">
-									<button type="submit" class="btn btn-success">Lưu</button>
+									
+										<button type="submit" class="btn btn-success">Lưu</button>
+								
+									
+										
 									<a href="{{route('user.index')}}" class="btn btn-danger">Hủy</a>
 								</div>
 							</div>

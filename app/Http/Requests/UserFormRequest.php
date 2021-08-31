@@ -33,7 +33,7 @@ class UserFormRequest extends FormRequest
             'uploadfile' => 'required',
             'password' => 'required|min:6|max:32',
             'cfpassword' => 'required|same:password|',
-            'phone' => 'required|numeric|min:10'
+            'phone' => 'required|numeric'
         ];
         if($this->id == null){
             $ruleArr['uploadfile'] = 'required|mimes:jpg,bmp,png,jpeg';
@@ -57,8 +57,7 @@ class UserFormRequest extends FormRequest
             'cfpassword.required' => "Hãy nhập xác nhận mật khẩu",
             'cfpassword.same' => "Mật khẩu xác nhận không giống mật khẩu",
             'phone.required' => "Hãy nhập số điện thoại",
-            'phone.numeric' => "Số điện thoại không đúng định dạng",
-            'phone.min' => "Số điện thoại phải đủ 10 chữ số"
+            'phone.numeric' => "Số điện thoại không đúng định dạng"
         ];
     }
 }

@@ -405,6 +405,30 @@ b#sign-up {
     }
 }
 
+
+/* customer remember token */
+
+.remember-group {
+    position: relative;
+    width: 100%;
+    margin: 1rem 0;
+}
+
+input.remember {
+    float: left;
+    margin: 0 0 10px 5px;
+}
+
+label.rmbtk {
+    position: absolute;
+    left: 22px;
+    top: -2px;
+    font-size: 14px;
+}
+
+
+/* Alert */
+
 p.alert {
     color: var(--google-color);
     text-align: left;
