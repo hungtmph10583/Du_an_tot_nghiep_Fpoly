@@ -117,8 +117,10 @@ class UserController extends Controller
             return redirect()->back();
         }
 
-        if($id === 1 ||  Auth::user()->id != 1){
-            return redirect()->back()->with('msg', "Đã bảo là đéo đủ tuổi r còn cố :))");
+        if($id == 1){
+            if(Auth::user()->id != '1'){
+                return redirect()->back()->with('msg', "Đã bảo là đéo đủ tuổi r còn cố :))");
+            }
         }
         
         $request->validate(
@@ -145,11 +147,11 @@ class UserController extends Controller
         }
         $model->save();
 
-        if($request->has('role_id')){
-            $model_has_roles = DB::table('model_has_roles')->where('model_id', $id);
-            $model_has_roles->role_id = $request->role_id;
-            $model_has_roles->save();
-        }
+        // if($request->has('role_id')){
+        //     $model_has_roles = DB::table('model_has_roles')->where('model_id', $id);
+        //     $model_has_roles->role_id = $request->role_id;
+        //     $model_has_roles->save();
+        // }
         
         return redirect(route('user.index'));
     }

@@ -142,11 +142,7 @@
 									@endhasrole
 								</div>
 								<div class="text-right pl-2">
-									
 										<button type="submit" class="btn btn-success">Lưu</button>
-								
-									
-										
 									<a href="{{route('user.index')}}" class="btn btn-danger">Hủy</a>
 								</div>
 							</div>
