@@ -130,8 +130,10 @@
 											<label class="pr-1">
                                                 <input type="radio" name="role_id" value="{{$r->id}}"	
 												@foreach($mdh_role as $mdh)
-												 	@if($r->id == $mdh->role_id)
+												 	@if($model->id == $mdh->model_id)
+													 	@if($r->id == $mdh->role_id)
 														checked
+														@endif
 													@endif
 												@endforeach
 												> {{$r->name}}

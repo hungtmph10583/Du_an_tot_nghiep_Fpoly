@@ -52,4 +52,41 @@ class User extends Authenticatable
     public function model_has_role(){
         return $this->hasMany(ModelHasRole::class, 'model_id');
     }
+
+    public function role(){
+        return $this->bolongsTo(Role::class);
+    }
+
+    /**
+     * 21-08-31
+     * HungTM
+     * Start
+     */
+    // public function roles(){
+    //     return $this->hasOne('App\Role');
+    // }
+
+    // public function hasRole($role){
+    //     if (is_string($role)) {
+    //         return $this->roles->contains('name', $role);
+    //     }
+
+    //     return (bool) $role->intersect($this->roles)->count();
+    // }
+
+    // public function assignRole($role)
+    // {
+    //     if (is_string($role)) {
+    //         return $this->roles()->save(
+    //             Role::whereName($role)->firstOrFail()
+    //         );
+    //     }
+
+    //     return $this->roles()->save($role);
+    // }
+    /**
+     * 21-08-31
+     * HungTM
+     * End
+     */
 }

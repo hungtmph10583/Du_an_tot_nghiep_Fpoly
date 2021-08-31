@@ -89,10 +89,7 @@ class UserController extends Controller
 
         // save quyen 
         if($request->has('role_id')){
-            $model_has_roles = new ModelHasRole();
-            $model_has_roles->role_id = $request->role_id;
-            $model_has_roles->model_id = $model->id;
-            $model_has_roles->save();
+            $model->assignRole($request->role_id);
         }
         return redirect(route('user.index'));
     }
@@ -147,11 +144,10 @@ class UserController extends Controller
         }
         $model->save();
 
-        // if($request->has('role_id')){
-        //     $model_has_roles = DB::table('model_has_roles')->where('model_id', $id);
-        //     $model_has_roles->role_id = $request->role_id;
-        //     $model_has_roles->save();
-        // }
+        if($request->has('role_id')){
+            DB::table('model_has_roles')->where('model_id',$id)->delete();
+            $model->assignRole($request->role_id);
+        }
         
         return redirect(route('user.index'));
     }

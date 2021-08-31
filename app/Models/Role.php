@@ -14,8 +14,28 @@ class Role extends Model
         return $this->hasMany(ModelHasRole::class, 'role_id');
     }
 
+    /**
+     * 31/8
+     * HungTM
+     * start
+     */
+    public function users()
+    {
+        return $this->belongsToMany('App\User');
+    }
+
     public function permissions()
     {
-        return $this->belongsToMany('App\Models\Permission');
+        return $this->belongsToMany(Permission::class, 'role_has_permissions');
     }
+
+    public function assign(Permission $permission) //Gives permission to a role.
+    {
+        return $this->permissions()->save($permission);
+    }
+    /**
+     * 31/8
+     * HungTM
+     * end
+     */
 }
