@@ -17,7 +17,8 @@ class CreateTableAuthors extends Migration
             $table->id();
             $table->string('name');
             $table->string('image')->nullable();
-            $table->integer('country_id');
+            $table->unsignedBigInteger('country_id');
+            $table->foreign('country_id')->references('id')->on('countries');
             $table->integer('status')->default(1);
             $table->text('detail')->nullable();
             $table->timestamps();

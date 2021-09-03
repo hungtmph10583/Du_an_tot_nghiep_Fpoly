@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Admin\BookController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\ProductController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::prefix('tai-khoan')->group(function () {
@@ -43,16 +44,25 @@ Route::prefix('danh-muc')->group(function () {
     Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit']);
 });
 
+Route::prefix('sach')->group(function () {
+    Route::get('/', [BookController::class, 'index'])->name('book.index');
+    Route::get('xoa/{id}', [BookController::class, 'remove'])->name('book.remove');
+    Route::get('tao-moi', [BookController::class, 'addForm'])->name('book.add');
+    Route::post('tao-moi', [BookController::class, 'saveAdd']);
+    Route::get('cap-nhat/{id}', [BookController::class, 'editForm'])->name('book.edit');
+    Route::post('cap-nhat/{id}', [BookController::class, 'saveEdit']);
+    Route::get('chi-tiet/{id}', [BookController::class, 'detail'])->name('book.detail');
+    Route::post('upload', [BookController::class, 'upload'])->name('book.upload');
+});
+
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.index');
     Route::get('xoa/{id}', [ProductController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
 
-    Route::middleware('permission:add product')->group(function(){
+    Route::middleware('permission:add product')->group(function () {
         Route::get('tao-moi', [ProductController::class, 'addForm'])->name('product.add');
         Route::post('tao-moi', [ProductController::class, 'saveAdd']);
         Route::get('cap-nhat/{id}', [ProductController::class, 'editForm'])->name('product.edit');
         Route::post('cap-nhat/{id}', [ProductController::class, 'saveEdit']);
     });
 });
-
-?>
