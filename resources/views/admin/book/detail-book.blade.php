@@ -1,7 +1,7 @@
 @section('title', 'Chi tiết sách')
 @extends('layouts.admin.main')
 @section('content')
-<main class="container-fluid" style="height: 1000px;">
+<main class="container-fluid" style="height: auto;">
     <div class="container">
         <div class="sp" style="display: grid;
     grid-template-columns: 1fr 1fr;">

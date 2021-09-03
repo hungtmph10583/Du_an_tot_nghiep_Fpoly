@@ -127,7 +127,6 @@ class BookController extends Controller
 
     public function saveEdit($id, BookRequest $request)
     {
-        dd(1);
         $model = Book::find($id);
 
         if (!$model) {
@@ -184,6 +183,8 @@ class BookController extends Controller
         }
 
         if ($request->genres) {
+            $mod = BookGenres::where('book_id', $request->id);
+            $mod->delete();
             foreach ($request->genres as $i => $g) {
                 $mod = new BookGenres();
                 $mod->order_no = $i + 1;
@@ -195,6 +196,7 @@ class BookController extends Controller
             $mod = BookGenres::where('book_id', $request->id);
             $mod->delete();
         }
+        return Redirect::to("admin/sach");
     }
     public function remove($id)
     {

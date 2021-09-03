@@ -36,7 +36,7 @@ class BookRequest extends FormRequest
             'quantity' => 'required|numeric',
             'genres' => 'required',
             'author' => 'required',
-            'galleries' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
+            'galleries.*' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
         ];
         if ($this->id == null) {
             $ruleArr['image'] = 'required|mimes:jpg,bmp,png,jpeg|max:2048';
