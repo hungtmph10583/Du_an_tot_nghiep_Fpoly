@@ -53,6 +53,7 @@ Route::prefix('sach')->group(function () {
     Route::post('cap-nhat/{id}', [BookController::class, 'saveEdit']);
     Route::get('chi-tiet/{id}', [BookController::class, 'detail'])->name('book.detail');
     Route::post('upload', [BookController::class, 'upload'])->name('book.upload');
+    Route::get('dataBook', [BookController::class, 'getData'])->name('book.filter');
 });
 
 Route::prefix('san-pham')->group(function () {
