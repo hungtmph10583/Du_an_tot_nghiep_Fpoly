@@ -24,20 +24,8 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="">
-                                <label for="">Tên sách</label>
-                                <div class="input-group input-group-sm" style="height: 38px;">
-                                    <input class="form-control" type="text" name="keyword" style="height: 38px;"
-                                        @isset($searchData['keyword']) value="{{$searchData['keyword']}}" @endisset
-                                        placeholder="Search">
-                                    <div class="input-group-append">
-                                        <button type="submit" class="btn btn-primary"><i
-                                                class="fas fa-search"></i></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="">
                                 <label for="">Danh mục</label>
-                                <select class="form-control" name="cate" id="">
+                                <select class="form-control" name="cate" id="cate">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($category as $c)
                                     <option @if(isset($searchData['cate']) && $c->id == $searchData['cate']) selected
@@ -48,7 +36,7 @@
                             </div>
                             <div class="">
                                 <label for="">Thể loại</label>
-                                <select class="form-control" name="genres" id="">
+                                <select class="form-control" name="genres" id="genres">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($genres as $g)
                                     <option @if(isset($searchData['genres']) && $g->id == $searchData['genres'])
@@ -61,18 +49,8 @@
                         </div>
                         <div class="col-6">
                             <div class="">
-                                <label for="">Sắp xếp</label>
-                                <select class="form-control" name="order_by" id="">
-                                    <option value="0">Mặc định</option>
-                                    @foreach($orderArray as $key => $o)
-                                    <option @if(isset($searchData['order_by']) && $searchData['order_by']==$o['id'])
-                                        selected @endif value="{{$o['id']}}">{{$o['name']}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="">
                                 <label for="">Quốc gia</label>
-                                <select class="form-control" name="country" id="">
+                                <select class="form-control" name="country" id="country">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($country as $c)
                                     <option @if(isset($searchData['country']) && $c->id == $searchData['country'])
@@ -84,7 +62,7 @@
                             </div>
                             <div class="">
                                 <label for="">Trạng thái</label>
-                                <select class="form-control" name="status" id="">
+                                <select class="form-control" name="status" id="status">
                                     <option value="">Chọn trạng thái</option>
                                     <option @if(isset($searchData['status']) && 1==$searchData['status']) selected
                                         @endif value="1">Còn hàng</option>
@@ -94,7 +72,7 @@
                             </div>
                             <div class="">
                                 <label for="">Thể loại</label>
-                                <select class="form-control" name="author" id="">
+                                <select class="form-control" name="author" id="author">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($author as $a)
                                     <option @if(isset($searchData['author']) && $a->id == $searchData['author'])
@@ -110,23 +88,27 @@
             </div>
             <div class="card-body">
                 <div class="row">
-                    <table class="table table-bordered data-table" style="width:100%">
-                        <thead>
-                            <th>STT</th>
-                            <th>Name</th>
-                            <th>Image</th>
-                            <th>Category</th>
-                            <th>Country</th>
-                            <th>Price</th>
-                            <th>Status</th>
-                            <th>Quantity</th>
-                            <th>
-                                <a href="{{route('book.add')}}" class="btn btn-primary">Thêm tài khoản</a>
-                            </th>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
+                    <div style="width: 100%;">
+                        <div class="table-responsive">
+                            <table class="table table-bordered data-table" style="width:100%">
+                                <thead>
+                                    <th>STT</th>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                    <th>Category</th>
+                                    <th>Country</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
+                                    <th>Quantity</th>
+                                    <th>
+                                        <a href="{{route('book.add')}}" class="btn btn-primary">Thêm tài khoản</a>
+                                    </th>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -137,14 +119,9 @@
 @section('pagejs')
 
 <script>
-var id = $('input[type="search"]');
-id.attr('id', 'search');
-$('#search').change(function() {
-    console.log($('#search').val());
-});
-
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
+        responsive: true,
         processing: true,
         serverSide: true,
         ajax: {
@@ -152,6 +129,9 @@ $(document).ready(function() {
             data: function(d) {
                 d.cate = $('#cate').val();
                 d.status = $('#status').val();
+                d.country = $('#country').val();
+                d.author = $('#author').val();
+                d.genres = $('#genres').val();
                 d.search = $('input[type="search"]').val();
             }
         },
@@ -165,24 +145,28 @@ $(document).ready(function() {
                 name: 'name'
             },
             {
-                data: 'price',
-                name: 'price'
+                data: 'image',
+                name: 'image'
             },
             {
                 data: 'cate_id',
                 name: 'cate_id'
             },
             {
-                data: 'code_sale',
-                name: 'code_sale'
+                data: 'country',
+                name: 'country'
             },
             {
-                data: 'amount',
-                name: 'amount'
+                data: 'price',
+                name: 'price'
             },
             {
                 data: 'status',
                 name: 'status'
+            },
+            {
+                data: 'quantity',
+                name: 'quantity'
             },
             {
                 data: 'action',
@@ -201,6 +185,19 @@ $(document).ready(function() {
     $('#cate').change(function() {
         table.draw();
     });
+
+    $('#country').change(function() {
+        table.draw();
+    });
+
+    $('#genres').change(function() {
+        table.draw();
+    });
+
+    $('#author').change(function() {
+        table.draw();
+    });
+
 
 });
 </script>

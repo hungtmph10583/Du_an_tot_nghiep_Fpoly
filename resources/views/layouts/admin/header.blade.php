@@ -24,7 +24,7 @@
                 <i class="fas fa-search"></i>
             </a>
             <div class="navbar-search-block">
-                <form class="form-inline">
+                <!-- <form class="form-inline">
                     <div class="input-group input-group-sm">
                         <input class="form-control form-control-navbar" type="search" placeholder="Search"
                             aria-label="Search">
@@ -37,7 +37,7 @@
                             </button>
                         </div>
                     </div>
-                </form>
+                </form> -->
             </div>
         </li>
 

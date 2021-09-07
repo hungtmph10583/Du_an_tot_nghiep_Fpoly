@@ -15,6 +15,8 @@ use App\Models\Genres;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Yajra\Datatables\Datatables;
 
 class BookController extends Controller
@@ -119,7 +121,7 @@ class BookController extends Controller
         }
         return view('admin.book.index', compact('books', 'category', 'author', 'country', 'genres', 'searchData', 'orderArray'));
     }
-    public function getData()
+    public function getData(Request $request)
     {
         $book = Book::select('*');
         return dataTables::of($book)
@@ -138,6 +140,17 @@ class BookController extends Controller
                     }
                 }
             })
+            ->addColumn('country', function ($row) use ($request) {
+                $country = Country::get();
+                foreach ($country as $c) {
+                    if ($row->country_id == $c->id) {
+                        return $c->name;
+                    }
+                }
+            })
+            ->addColumn('image', function ($row) {
+                return '<img width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
+            })
             ->addColumn('status', function ($row) {
                 if ($row->status == 1) {
                     return '<span class="badge badge-primary">Active</span>';
@@ -147,16 +160,42 @@ class BookController extends Controller
                     return '<span class="badge badge-danger">Sắp ra mắt</span>';
                 }
             })
-            ->addColumn('action', function ($row) use ($request) {
-                return $request->get('search');
+            // lấy ra tất cả thể loại sách
+            // ->addColumn('genres', function (Book $row) {
+            //     return $row->genres->map(function ($blog) {
+            //         return $blog->name;
+            //     })->implode(',', ",");
+            // })
+            // lấy ra tất cả tác giả sách
+            // ->addColumn('author', function (Book $row) {
+            //     return $row->authors->map(function ($blog) {
+            //         return $blog->name;
+            //     })->implode(',', ",");
+            // })
+            ->addColumn('action', function ($row) {
+                return '<a class="btn btn-primary" href="' . route("book.detail", ["id" => $row->id]) . '" role="button">Xem chi tiết</a>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
+                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '2') {
                     $instance->where('status', $request->get('status'));
                 }
 
                 if ($request->get('cate') != '') {
                     $instance->where('cate_id', $request->get('cate'));
+                }
+
+                if ($request->get('country') != '') {
+                    $instance->where('country_id', $request->get('country'));
+                }
+
+                if ($request->get('genres') != '') {
+                    $instance->join('book_genres', 'book_genres.book_id', '=', 'books.id')
+                        ->where('book_genres.genre_id', $request->genres);
+                }
+
+                if ($request->get('author') != '') {
+                    $instance->join('book_author', 'book_author.book_id', '=', 'books.id')
+                        ->where('book_author.book_id', $request->author);
                 }
 
                 if (!empty($request->get('search'))) {
@@ -167,7 +206,7 @@ class BookController extends Controller
                     });
                 }
             })
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['status', 'action', 'genres', 'image'])
             ->make(true);
     }
     public function detail($id)
@@ -192,50 +231,90 @@ class BookController extends Controller
         return view('admin.book.add-form', compact('category', 'country', 'author', 'genres'));
     }
 
-    public function saveAdd(BookRequest $request)
+    public function saveAdd(Request $request)
     {
-        $model = new Book();
-        $model->fill($request->all());
-        if ($request->image != '') {
-            $path = $request->file('image')->storeAs('uploads/images', uniqid() . '-' . $request->image->getClientOriginalName());
-            $model->image = $path;
-        }
-        $model->save();
-        if ($request->has('galleries')) {
-            foreach ($request->galleries as $i => $item) {
-                $galleryObj = new BookGallery();
-                $galleryObj->book_id = $model->id;
-                $galleryObj->order_no = $i + 1;
-                $galleryObj->url = $item->storeAs(
-                    'uploads/gallery/' . $model->id,
-                    uniqid() . '-' . $item->getClientOriginalName()
-                );
-                $galleryObj->save();
+        $message = [
+            'name.required' => "Hãy nhập vào tên sách",
+            'name.unique' => "Tên sách đã tồn tại",
+            'cate_id.required' => "Hãy chọn danh mục",
+            'country_id.required' => "Hãy chọn quốc gia",
+            'image.required' => 'Hãy chọn ảnh sách',
+            'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'image.max' => 'File ảnh không được quá 2MB',
+            'price.required' => "Hãy nhập giá sách",
+            'price.numeric' => "Giá sách phải là số",
+            'quantity.required' => "Hãy nhập số lượng sách",
+            'quantity.numeric' => "Số lượng sách phải là số",
+            'status.required' => "Hãy chọn trạng thái sách",
+            'genres.required' => "Hãy chọn thể loại sách",
+            'author.required' => "Hãy chọn tác giả sách",
+            'galleries.required' => "Hãy chọn thư viện ảnh cho sách",
+            'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'galleries.*.max' => 'File ảnh không được quá 2MB',
+        ];
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => 'required',
+                'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048',
+                'cate_id' => 'required',
+                'country_id' => 'required',
+                'price' => 'required|numeric',
+                'status' => 'required',
+                'quantity' => 'required|numeric',
+                'genres' => 'required',
+                'author' => 'required',
+                'galleries' => 'required',
+                'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048'
+            ],
+            $message
+        );
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()]);
+        } else {
+            $model = new Book();
+            $model->fill($request->all());
+            if ($request->image != '') {
+                $path = $request->file('image')->storeAs('uploads/images', uniqid() . '-' . $request->image->getClientOriginalName());
+                $model->image = $path;
             }
-        }
-
-        if ($request->author) {
-            foreach ($request->author as $i => $a) {
-                $mod = new BookAuthor();
-                $mod->order_no = $i + 1;
-                $mod->book_id = $model->id;
-                $mod->author_id = $a;
-                $mod->save();
+            $model->save();
+            if ($request->has('galleries')) {
+                foreach ($request->galleries as $i => $item) {
+                    $galleryObj = new BookGallery();
+                    $galleryObj->book_id = $model->id;
+                    $galleryObj->order_no = $i + 1;
+                    $galleryObj->url = $item->storeAs(
+                        'uploads/gallery/' . $model->id,
+                        uniqid() . '-' . $item->getClientOriginalName()
+                    );
+                    $galleryObj->save();
+                }
             }
-        }
 
-        if ($request->genres) {
-            foreach ($request->genres as $i => $g) {
-                $mod = new BookGenres();
-                $mod->order_no = $i + 1;
-                $mod->book_id = $model->id;
-                $mod->genre_id = $g;
-                $mod->save();
+            if ($request->author) {
+                foreach ($request->author as $i => $a) {
+                    $mod = new BookAuthor();
+                    $mod->order_no = $i + 1;
+                    $mod->book_id = $model->id;
+                    $mod->author_id = $a;
+                    $mod->save();
+                }
             }
+
+            if ($request->genres) {
+                foreach ($request->genres as $i => $g) {
+                    $mod = new BookGenres();
+                    $mod->order_no = $i + 1;
+                    $mod->book_id = $model->id;
+                    $mod->genre_id = $g;
+                    $mod->save();
+                }
+            }
+
+            return response()->json(['success' => 'lú', 'url' => asset('admin/sach')]);
         }
-
-
-        return Redirect::to("admin/sach");
     }
 
     public function editForm($id)
@@ -305,9 +384,6 @@ class BookController extends Controller
                 $mod->author_id = $a;
                 $mod->save();
             }
-        } else {
-            $mod = BookAuthor::where('book_id', $request->id);
-            $mod->delete();
         }
 
         if ($request->genres) {
@@ -320,10 +396,14 @@ class BookController extends Controller
                 $mod->genre_id = $g;
                 $mod->save();
             }
-        } else {
-            $mod = BookGenres::where('book_id', $request->id);
-            $mod->delete();
         }
+
+        // if ($request->genres) {
+        //     foreach ($request->genres as $g) {
+        //         $model->genres()->updateExistingPivot($model->id, ['genre_id' => $g]);
+        //     }
+        // }
+
         return Redirect::to("admin/sach");
     }
     public function remove($id)

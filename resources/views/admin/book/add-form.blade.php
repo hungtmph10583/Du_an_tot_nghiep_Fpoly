@@ -145,7 +145,7 @@
                                     <th>File</th>
                                     <th>Thumbnail</th>
                                     <th>
-                                        <button class="btn btn-success add-img" type="button">Thêm ảnh</button>
+                                        <button class="btn btn-primary add-img" type="button">Thêm ảnh</button>
                                     </th>
                                 </thead>
                                 <tbody id="gallery">
@@ -264,5 +264,27 @@ function loadFiles(event, el_rowId) {
 function removeImg(el) {
     $(el).parent().parent().remove();
 }
+
+$(".btn-success").click(function(e) {
+    e.preventDefault();
+    var formData = new FormData($('form')[0]);
+    $.ajax({
+        url: "{{ route('book.saveAdd') }}",
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        cache: false,
+        contentType: false,
+        processData: false,
+        success: (data) => {
+            console.log(data);
+            if (data.success) {
+                window.location.href = data.url;
+            } else {
+                console.log('dẻk');
+            }
+        },
+    });
+});
 </script>
 @endsection
