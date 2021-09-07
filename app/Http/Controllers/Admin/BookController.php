@@ -49,77 +49,17 @@ class BookController extends Controller
                 "name" => "Số lượng giảm dần",
             ],
         ];
-        $pagesize = 5;
-        $searchData = $request->except('page');
+
         $category = Category::get();
         $author = Author::get();
         $country = Country::get();
         $genres = Genres::get();
 
-        if (count($request->all()) == 0) {
-            // Lấy ra danh sách sản phẩm & phân trang cho nó
-            $books = Book::paginate($pagesize);
-        } else {
-            $bookQuery = Book::where('name', 'like', "%" . $request->keyword . "%");
 
-            if ($request->country != '') {
-                $bookQuery = $bookQuery
-                    ->where('country_id', $request->country);
-            }
+        // Lấy ra danh sách sản phẩm & phân trang cho nó
+        $books = Book::get();
 
-            if ($request->status != '') {
-                $bookQuery = $bookQuery
-                    ->where('status', $request->status);
-            }
-
-            if ($request->cate != '') {
-                $bookQuery = $bookQuery
-                    ->where('cate_id', $request->cate);
-            }
-
-            if ($request->genres != '') {
-                $bookQuery = $bookQuery
-                    ->join('book_genres', 'book_genres.book_id', '=', 'books.id')
-                    ->join('book_author', 'book_author.book_id', '=', 'books.id')
-                    ->where('book_genres.genre_id', $request->genres);
-            } elseif ($request->author != '') {
-                $bookQuery = $bookQuery
-                    ->join('book_genres', 'book_genres.book_id', '=', 'books.id')
-                    ->join('book_author', 'book_author.book_id', '=', 'books.id')
-                    ->where('book_author.book_id', $request->author);
-            } else if ($request->genres != '' && $request->author != '') {
-                $bookQuery = $bookQuery
-                    ->join('book_genres', 'book_genres.book_id', '=', 'books.id')
-                    ->join('book_author', 'book_author.book_id', '=', 'books.id')
-                    ->where('book_genres.genre_id', $request->genres)
-                    ->where('book_author.book_id', $request->author);
-            };
-
-            if ($request->has('order_by') && $request->order_by > 0) {
-                switch ($request->order_by) {
-                    case '1':
-                        $bookQuery = $bookQuery->orderBy('name');
-                        break;
-                    case '2':
-                        $bookQuery = $bookQuery->orderByDesc('name');
-                        break;
-                    case '3':
-                        $bookQuery = $bookQuery->orderBy('price');
-                        break;
-                    case '4':
-                        $bookQuery = $bookQuery->orderByDesc('price');
-                        break;
-                    case '5':
-                        $bookQuery = $bookQuery->orderBy('quantity');
-                        break;
-                    case '6':
-                        $bookQuery = $bookQuery->orderByDesc('quantity');
-                        break;
-                }
-            }
-            $books = $bookQuery->paginate($pagesize)->appends($searchData);
-        }
-        return view('admin.book.index', compact('books', 'category', 'author', 'country', 'genres', 'searchData', 'orderArray'));
+        return view('admin.book.index', compact('books', 'category', 'author', 'country', 'genres', 'orderArray'));
     }
     public function getData(Request $request)
     {
