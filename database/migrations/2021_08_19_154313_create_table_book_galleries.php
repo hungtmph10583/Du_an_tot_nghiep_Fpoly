@@ -17,8 +17,7 @@ class CreateTableBookGalleries extends Migration
             $table->id();
             $table->string('url')->nullable();
             $table->integer('order_no');
-            $table->unsignedBigInteger('book_id');
-            $table->foreign('book_id')->references('id')->on('books');
+            $table->integer('book_id');
             $table->timestamps();
         });
     }

@@ -117,7 +117,19 @@
 <!-- /.content -->
 @endsection
 @section('pagejs')
+<style>
+.select2-selection__rendered {
+    line-height: 31px !important;
+}
 
+.select2-container .select2-selection--single {
+    height: 40px !important;
+}
+
+.select2-selection__arrow {
+    height: 40px !important;
+}
+</style>
 <script>
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
@@ -197,8 +209,26 @@ $(document).ready(function() {
     $('#author').change(function() {
         table.draw();
     });
+});
 
+$('#genres').select2({
+    selectOnClose: true,
+});
 
+$('#status').select2({
+    selectOnClose: true
+});
+
+$('#cate').select2({
+    selectOnClose: true
+});
+
+$('#country').select2({
+    selectOnClose: true
+});
+
+$('#author').select2({
+    selectOnClose: true
 });
 </script>
 @endsection

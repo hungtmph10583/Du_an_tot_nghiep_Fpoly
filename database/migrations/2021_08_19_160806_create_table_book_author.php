@@ -16,10 +16,8 @@ class CreateTableBookAuthor extends Migration
         Schema::create('book_author', function (Blueprint $table) {
             $table->id();
             $table->integer('order_no');
-            $table->unsignedBigInteger('author_id');
-            $table->foreign('author_id')->references('id')->on('authors');
-            $table->unsignedBigInteger('book_id');
-            $table->foreign('book_id')->references('id')->on('books');
+            $table->integer('author_id');
+            $table->integer('book_id');
             $table->timestamps();
         });
     }

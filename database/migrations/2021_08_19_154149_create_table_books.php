@@ -16,10 +16,8 @@ class CreateTableBooks extends Migration
         Schema::create('books', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('cate_id');
-            $table->foreign('cate_id')->references('id')->on('categories');
-            $table->unsignedBigInteger('country_id');
-            $table->foreign('country_id')->references('id')->on('countries');
+            $table->integer('cate_id');
+            $table->integer('country_id');
             $table->string('image')->nullable();
             $table->integer('price')->default(0);
             $table->integer('status')->default(1);
