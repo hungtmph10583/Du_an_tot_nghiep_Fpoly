@@ -23,43 +23,15 @@ class BookController extends Controller
 {
     public function index(Request $request)
     {
-        $orderArray = [
-            0 => [
-                "id" => 1,
-                "name" => "Tên alphabeta",
-            ],
-            1 => [
-                "id" => 2,
-                "name" => "Tên tăng dần alphabeta",
-            ],
-            2 => [
-                "id" => 3,
-                "name" => "Giá tăng dần",
-            ],
-            3 => [
-                "id" => 4,
-                "name" => "Giá giảm dần",
-            ],
-            4 => [
-                "id" => 5,
-                "name" => "Số lượng tăng dần",
-            ],
-            5 => [
-                "id" => 6,
-                "name" => "Số lượng giảm dần",
-            ],
-        ];
 
         $category = Category::get();
         $author = Author::get();
         $country = Country::get();
         $genres = Genres::get();
 
-
-        // Lấy ra danh sách sản phẩm & phân trang cho nó
         $books = Book::get();
 
-        return view('admin.book.index', compact('books', 'category', 'author', 'country', 'genres', 'orderArray'));
+        return view('admin.book.index', compact('books', 'category', 'author', 'country', 'genres'));
     }
     public function getData(Request $request)
     {
@@ -211,7 +183,7 @@ class BookController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors()]);
         } else {
             $model = new Book();
             $model->fill($request->all());
@@ -253,7 +225,7 @@ class BookController extends Controller
                 }
             }
 
-            return response()->json(['success' => 'lú', 'url' => asset('admin/sach')]);
+            return response()->json(['status' => 1, 'success' => 'lú', 'url' => asset('admin/sach')]);
         }
     }
 
@@ -262,89 +234,119 @@ class BookController extends Controller
         $category = Category::get();
         $country = Country::get();
         $author = Author::get();
-        $genres = Genres::get();
+        $genre = Genres::get();
         $model = Book::find($id);
-
+        $model->load('genres', 'authors');
         if (!$model) {
             return redirect()->back();
         }
 
-        return view('admin.book.edit-form', compact('category', 'country', 'author', 'genres', 'model'));
+        return view('admin.book.edit-form', compact('category', 'country', 'author', 'genre', 'model'));
     }
 
-    public function saveEdit($id, BookRequest $request)
+    public function saveEdit($id, Request $request)
     {
+        $message = [
+            'name.required' => "Hãy nhập vào tên sách",
+            'name.unique' => "Tên sách đã tồn tại",
+            'cate_id.required' => "Hãy chọn danh mục",
+            'country_id.required' => "Hãy chọn quốc gia",
+            'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'image.max' => 'File ảnh không được quá 2MB',
+            'price.required' => "Hãy nhập giá sách",
+            'price.numeric' => "Giá sách phải là số",
+            'quantity.required' => "Hãy nhập số lượng sách",
+            'quantity.numeric' => "Số lượng sách phải là số",
+            'status.required' => "Hãy chọn trạng thái sách",
+            'genres.required' => "Hãy chọn thể loại sách",
+            'author.required' => "Hãy chọn tác giả sách",
+            'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'galleries.*.max' => 'File ảnh không được quá 2MB',
+        ];
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => [
+                    'required',
+                    Rule::unique('books')->ignore($id)
+                ],
+                'image' => 'mimes:jpg,bmp,png,jpeg|max:2048',
+                'cate_id' => 'required',
+                'country_id' => 'required',
+                'price' => 'required|numeric',
+                'status' => 'required',
+                'quantity' => 'required|numeric',
+                'genres' => 'required',
+                'author' => 'required',
+                'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048'
+            ],
+            $message
+        );
         $model = Book::find($id);
 
         if (!$model) {
             return redirect()->back();
         }
+        if ($validator->fails()) {
+            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+        } else {
+            $model->fill($request->all());
+            if ($request->image != '') {
+                $path = $request->file('image')->storeAs('uploads/images', uniqid() . '-' . $request->image->getClientOriginalName());
+                $model->image = $path;
+            }
+            $model->save();
 
-        $model->fill($request->all());
-        if ($request->image != '') {
-            $path = $request->file('image')->storeAs('uploads/images', uniqid() . '-' . $request->image->getClientOriginalName());
-            $model->image = $path;
-        }
-        $model->save();
+            if ($request->has('removeGalleryIds')) {
+                $strIds = rtrim($request->removeGalleryIds, '|');
+                $lstIds = explode('|', $strIds);
+                // xóa các ảnh vật lý
+                $removeList = BookGallery::whereIn('id', $lstIds)->get();
+                foreach ($removeList as $gl) {
+                    Storage::delete($gl->url);
+                }
 
-        if ($request->has('removeGalleryIds')) {
-            $strIds = rtrim($request->removeGalleryIds, '|');
-            $lstIds = explode('|', $strIds);
-            // xóa các ảnh vật lý
-            $removeList = BookGallery::whereIn('id', $lstIds)->get();
-            foreach ($removeList as $gl) {
-                Storage::delete($gl->url);
+                BookGallery::destroy($lstIds);
             }
 
-            BookGallery::destroy($lstIds);
-        }
-
-        if ($request->has('galleries')) {
-            $mod = BookGallery::where('book_id', $request->id);
-            $mod->delete();
-            foreach ($request->galleries as $i => $item) {
-                $galleryObj = new BookGallery();
-                $galleryObj->book_id = $model->id;
-                $galleryObj->order_no = $i + 1;
-                $galleryObj->url = $item->storeAs(
-                    'uploads/gallery/' . $model->id,
-                    uniqid() . '-' . $item->getClientOriginalName()
-                );
-                $galleryObj->save();
+            if ($request->has('galleries')) {
+                foreach ($request->galleries as $i => $item) {
+                    $galleryObj = new BookGallery();
+                    $galleryObj->book_id = $model->id;
+                    $galleryObj->order_no = $i + 1;
+                    $galleryObj->url = $item->storeAs(
+                        'uploads/gallery/' . $model->id,
+                        uniqid() . '-' . $item->getClientOriginalName()
+                    );
+                    $galleryObj->save();
+                }
             }
-        }
 
-        if ($request->author) {
-            $mod = BookAuthor::where('book_id', $request->id);
-            $mod->delete();
-            foreach ($request->author as $i => $a) {
-                $mod = new BookAuthor();
-                $mod->order_no = $i + 1;
-                $mod->book_id = $model->id;
-                $mod->author_id = $a;
-                $mod->save();
+            if ($request->author) {
+                $mod = BookAuthor::where('book_id', $request->id);
+                $mod->delete();
+                foreach ($request->author as $i => $a) {
+                    $mod = new BookAuthor();
+                    $mod->order_no = $i + 1;
+                    $mod->book_id = $model->id;
+                    $mod->author_id = $a;
+                    $mod->save();
+                }
             }
-        }
 
-        if ($request->genres) {
-            $mod = BookGenres::where('book_id', $request->id);
-            $mod->delete();
-            foreach ($request->genres as $i => $g) {
-                $mod = new BookGenres();
-                $mod->order_no = $i + 1;
-                $mod->book_id = $model->id;
-                $mod->genre_id = $g;
-                $mod->save();
+            if ($request->genres) {
+                $mod = BookGenres::where('book_id', $request->id);
+                $mod->delete();
+                foreach ($request->genres as $i => $g) {
+                    $mod = new BookGenres();
+                    $mod->order_no = $i + 1;
+                    $mod->book_id = $model->id;
+                    $mod->genre_id = $g;
+                    $mod->save();
+                }
             }
+            return response()->json(['status' => 1, 'success' => 'lú', 'url' => asset('admin/sach')]);
         }
-
-        // if ($request->genres) {
-        //     foreach ($request->genres as $g) {
-        //         $model->genres()->updateExistingPivot($model->id, ['genre_id' => $g]);
-        //     }
-        // }
-
-        return Redirect::to("admin/sach");
     }
     public function remove($id)
     {

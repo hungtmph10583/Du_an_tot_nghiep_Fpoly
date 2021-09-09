@@ -28,118 +28,94 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="">Name</label>
-                                <input type="text" name="name" class="form-control" value="{{old('name')}}"
-                                    placeholder="Tên sách">
-                                @error('name')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <input type="text" name="name" class="form-control" placeholder="Tên sách">
+                                <span class="text-danger error_text name_error"></span>
                             </div>
-                            <div class="form-row">
-                                <div class="col">
-                                    <label>Danh mục</label>
-                                    <select class="custom-select" name="cate_id" id="cate_id">
-                                        <option value="">Chọn danh mục</option>
-                                        @foreach($category as $c)
-                                        <option value="{{$c->id}}" {{ old('cate_id') == $c->id ? 'selected' : '' }}>
-                                            {{$c->name}}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('cate_id')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="">
+                                        <label>Danh mục</label>
+                                        <select class="form-control" name="cate_id" id="cate">
+                                            <option value="">Chọn danh mục</option>
+                                            @foreach($category as $c)
+                                            <option value="{{$c->id}}">
+                                                {{$c->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        <span class="text-danger error_text cate_id_error"></span>
+                                    </div>
                                 </div>
-                                <div class="col">
-                                    <label>Quốc gia</label>
-                                    <select class="custom-select" name="country_id" id="country_id">
-                                        <option value="">Chọn quốc gia</option>
-                                        @foreach($country as $c)
-                                        <option value="{{$c->id}}" {{ old('country_id') == $c->id ? 'selected' : '' }}>
-                                            {{$c->name}}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                    @error('country_id')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                                <div class="col-6">
+                                    <div class="">
+                                        <label>Quốc gia</label>
+                                        <select class="form-control" name="country_id" id="country">
+                                            <option value="">Chọn quốc gia</option>
+                                            @foreach($country as $c)
+                                            <option value="{{$c->id}}">
+                                                {{$c->name}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                        <span class="text-danger error_text country_id_error"></span>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="col">
                                     <label for="">Thể loại</label>
-                                    @foreach($genres as $g)
-                                    <div class="form-check" style="margin-left:5px;">
-                                        <input type="checkbox" name="genres[]" value="{{$g->id}}"
-                                            @if(is_array(old('genres')) && in_array($g->id, old('genres'))) checked
-                                        @endif
-                                        id="genres" class="form-check-input">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            {{$g->name}}
-                                        </label>
-                                    </div>
-                                    @endforeach
-                                    @error('genres')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                                    <select class="form-control" name="genres[]" id="genres" multiple>
+                                        @foreach($genres as $g)
+                                        <option value="{{$g->id}}">{{$g->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger error_text genres_error"></span>
                                 </div>
                                 <div class="col">
                                     <label for="">Tác giả</label>
-                                    @foreach($author as $a)
-                                    <div class="form-check" style="margin-left:5px;">
-                                        <input type="checkbox" name="author[]" value="{{$a->id}}"
-                                            @if(is_array(old('author')) && in_array($a->id, old('author'))) checked
-                                        @endif id="author" class="form-check-input">
-                                        <label class="form-check-label" for="flexCheckDefault">
-                                            {{$a->name}}
-                                        </label>
-                                    </div>
-                                    @endforeach
-                                    @error('author')
-                                    <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                                    <select class="form-control" name="author[]" id="author" multiple>
+                                        @foreach($author as $a)
+                                        <option value="{{$a->id}}">{{$a->name}}</option>
+                                        @endforeach
+                                    </select>
+                                    <span class="text-danger error_text author_error"></span>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <!-- <div id="cc" style="display: none">
-									<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
-								</div> -->
-                            <div class="form-group">
-                                <label for="">Ảnh đại diện</label>
-                                <input type="file" name="image" id="imgInp" class="form-control">
-                                @error('image')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="">Giá</label>
-                                <input type="number" name="price" class="form-control" value="{{old('price')}}">
-                                @error('price')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="">Số lượng</label>
-                                <input type="number" name="quantity" class="form-control" value="{{old('quantity')}}">
-                                @error('quantity')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
                             </div>
                             <div class="form-group">
                                 <label>Trạng thái</label>
-                                <select class="custom-select" name="status" id="status">
-                                    <option value="" {{ old('status') == '' ? 'selected' : '' }}>Chọn trạng thái
-                                    </option>
-                                    <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Hết hàng</option>
-                                    <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Còn hàng</option>
-                                    <option value="3" {{ old('status') == '3' ? 'selected' : '' }}>Sắp ra mắt</option>
+                                <select class="form-control" name="status" id="status">
+                                    <option value="">Chọn trạng thái</option>
+                                    <option value="0">Hết hàng</option>
+                                    <option value="1">Còn hàng</option>
+                                    <option value="3">Sắp ra mắt</option>
                                 </select>
-                                @error('status')
-                                <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <span class="text-danger error_text status_error"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Ảnh đại diện</label>
+                                <input type="file" name="image" id="imgInp" class="form-control"
+                                    onchange="loadFile(event)">
+                                <span class="text-danger error_text image_error"></span>
+                            </div>
+                            <div class="form-group col-md-6" id="image-show">
+                                <img id="images" width="70" alt="">
+                            </div>
+                            <div class="form-group">
+                                <label for="">Giá</label>
+                                <input type="number" name="price" placeholder="Giá sách" class="form-control">
+                                <span class="text-danger error_text price_error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Số lượng</label>
+                                <input type="number" name="quantity" placeholder="Số lượng sách" class="form-control">
+                                <span class="text-danger error_text quantity_error"></span>
                             </div>
                         </div>
                         <div class="col-md-12">
+                            <input type="hidden" name="removeGalleryIds" value="">
                             <table class="table table-stripped">
                                 <thead>
                                     <th>File</th>
@@ -152,17 +128,15 @@
 
                                 </tbody>
                             </table>
-                            @error('galleries')
-                            <span class="text-danger">{{$message}}</span>
-                            @enderror
+                            <span class="text-danger error_text galleries_error"></span>
                             <div class="form-group">
                                 <label>Chi tiết</label>
-                                <textarea class="form-control" id="detail" name="detail">{{old('detail')}}</textarea>
+                                <textarea class="form-control" name="detail"></textarea>
                             </div>
                         </div>
                         <div class="text-right pl-2">
                             <button type="submit" class="btn btn-success">Lưu</button>
-                            <a href="{{route('user.index')}}" class="btn btn-danger">Hủy</a>
+                            <a href="{{route('book.index')}}" class="btn btn-danger">Hủy</a>
                         </div>
                     </div>
                 </form>
@@ -172,8 +146,22 @@
 </section>
 @endsection
 @section('pagejs')
+<style>
+.select2-selection__rendered {
+    line-height: 31px !important;
+}
+
+.select2-container .select2-selection--single {
+    height: 40px !important;
+}
+
+.select2-selection__arrow {
+    height: 40px !important;
+}
+</style>
 <script>
 $(document).ready(function() {
+
     tinymce.init({
         selector: 'textarea', // change this value according to your HTML
         setup: function(editor) {
@@ -276,15 +264,42 @@ $(".btn-success").click(function(e) {
         cache: false,
         contentType: false,
         processData: false,
-        success: (data) => {
+        beforeSend: function(data) {
+            $(document).find('span.error_text').text('');
+        },
+        success: function(data) {
             console.log(data);
-            if (data.success) {
-                window.location.href = data.url;
+            if (data.status == 0) {
+                $.each(data.error, function(key, value) {
+                    $('span.' + key + '_error').text(value[0]);
+                });
+
             } else {
-                console.log('dẻk');
+                window.location.href = data.url;
             }
         },
     });
+});
+
+$('#genres').select2({
+    selectOnClose: true,
+    placeholder: "Please select"
+});
+$('#author').select2({
+    selectOnClose: true,
+    placeholder: "Please select"
+});
+$('#cate').select2({
+    selectOnClose: true,
+    placeholder: "Please select"
+});
+$('#country').select2({
+    selectOnClose: true,
+    placeholder: "Please select"
+});
+$('#status').select2({
+    selectOnClose: true,
+    placeholder: "Please select"
 });
 </script>
 @endsection

@@ -28,9 +28,7 @@
                                 <select class="form-control" name="cate" id="cate">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($category as $c)
-                                    <option @if(isset($searchData['cate']) && $c->id == $searchData['cate']) selected
-                                        @endif
-                                        value="{{$c->id}}">{{$c->name}}</option>
+                                    <option value="{{$c->id}}">{{$c->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -39,10 +37,7 @@
                                 <select class="form-control" name="genres" id="genres">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($genres as $g)
-                                    <option @if(isset($searchData['genres']) && $g->id == $searchData['genres'])
-                                        selected
-                                        @endif
-                                        value="{{$g->id}}">{{$g->name}}</option>
+                                    <option value="{{$g->id}}">{{$g->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -53,10 +48,7 @@
                                 <select class="form-control" name="country" id="country">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($country as $c)
-                                    <option @if(isset($searchData['country']) && $c->id == $searchData['country'])
-                                        selected
-                                        @endif
-                                        value="{{$c->id}}">{{$c->name}}</option>
+                                    <option value="{{$c->id}}">{{$c->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -64,10 +56,8 @@
                                 <label for="">Trạng thái</label>
                                 <select class="form-control" name="status" id="status">
                                     <option value="">Chọn trạng thái</option>
-                                    <option @if(isset($searchData['status']) && 1==$searchData['status']) selected
-                                        @endif value="1">Còn hàng</option>
-                                    <option @if(isset($searchData['status']) && 2==$searchData['status']) selected
-                                        @endif value="2">Hết hàng</option>
+                                    <option value="1">Còn hàng</option>
+                                    <option value="2">Hết hàng</option>
                                 </select>
                             </div>
                             <div class="">
@@ -75,10 +65,7 @@
                                 <select class="form-control" name="author" id="author">
                                     <option value="">Lấy tất cả</option>
                                     @foreach($author as $a)
-                                    <option @if(isset($searchData['author']) && $a->id == $searchData['author'])
-                                        selected
-                                        @endif
-                                        value="{{$a->id}}">{{$a->name}}</option>
+                                    <option value="{{$a->id}}">{{$a->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
