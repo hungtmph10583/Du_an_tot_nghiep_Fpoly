@@ -46,7 +46,7 @@ Route::prefix('danh-muc')->group(function () {
 
 Route::prefix('sach')->group(function () {
     Route::get('/', [BookController::class, 'index'])->name('book.index');
-    Route::get('xoa/{id}', [BookController::class, 'remove'])->name('book.remove');
+    Route::delete('xoa/{id}', [BookController::class, 'remove'])->name('book.remove');
     Route::get('tao-moi', [BookController::class, 'addForm'])->name('book.add');
     Route::post('tao-moi', [BookController::class, 'saveAdd'])->name('book.saveAdd');
     Route::get('cap-nhat/{id}', [BookController::class, 'editForm'])->name('book.edit');

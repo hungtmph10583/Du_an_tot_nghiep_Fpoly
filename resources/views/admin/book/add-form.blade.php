@@ -115,7 +115,6 @@
                             </div>
                         </div>
                         <div class="col-md-12">
-                            <input type="hidden" name="removeGalleryIds" value="">
                             <table class="table table-stripped">
                                 <thead>
                                     <th>File</th>

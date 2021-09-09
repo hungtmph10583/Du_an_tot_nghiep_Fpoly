@@ -37,6 +37,9 @@ class BookController extends Controller
     {
         $book = Book::select('*');
         return dataTables::of($book)
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
             ->addIndexColumn()
             ->orderColumn('cate_id', function ($row, $order) {
                 return $row->orderBy('cate_id', $order);
@@ -85,7 +88,9 @@ class BookController extends Controller
             //     })->implode(',', ",");
             // })
             ->addColumn('action', function ($row) {
-                return '<a class="btn btn-primary" href="' . route("book.detail", ["id" => $row->id]) . '" role="button">Xem chi tiết</a>';
+                return '<a  class="btn btn-success" href="' . route('book.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteBook(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+<a class="btn btn-primary" href="' . route("book.detail", ["id" => $row->id]) . '"><i class="far fa-eye"></i></a>';
             })
             ->filter(function ($instance) use ($request) {
                 if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '2') {
@@ -363,6 +368,6 @@ class BookController extends Controller
         $bookGenres = BookGenres::where('book_id', $id)->delete();
 
         $model->delete();
-        return Redirect::to("admin/sach");
+        return response()->json(['success' => 'Xóa sách thành công !']);
     }
 }

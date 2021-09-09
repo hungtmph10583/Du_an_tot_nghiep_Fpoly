@@ -16,6 +16,9 @@
 <!-- /.content-header -->
 
 <!-- Main content -->
+<div class="alert alert-success" role="alert" style="display: none;">
+</div>
+
 <section class="content">
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
@@ -74,6 +77,7 @@
                 </form>
             </div>
             <div class="card-body">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
                         <div class="table-responsive">
@@ -118,10 +122,29 @@
 }
 </style>
 <script>
+function deleteBook(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa cuốn sách này ?')) {
+        $.ajax({
+            url: 'sach/xoa/' + id,
+            type: 'DELETE',
+            data: {
+                _token: $("input[name=_token]").val()
+            },
+            success: function(data) {
+                $('div.alert-success').text(data.success);
+                $('div.alert-success').css('display', 'block');
+                $('#' + id).remove();
+            },
+        });
+    }
+}
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
         responsive: true,
         processing: true,
+        language: {
+            processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
+        },
         serverSide: true,
         ajax: {
             url: "{{ route('book.filter') }}",
