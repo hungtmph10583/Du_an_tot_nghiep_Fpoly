@@ -35,7 +35,7 @@ class BookController extends Controller
     }
     public function getData(Request $request)
     {
-        $book = Book::select('*');
+        $book = Book::select('books.*');
         return dataTables::of($book)
             ->setRowId(function ($row) {
                 return $row->id;
@@ -47,6 +47,20 @@ class BookController extends Controller
             ->orderColumn('status', function ($row, $order) {
                 return $row->orderBy('status', $order);
             })
+            //sắp xếp sách có nhiều hoặc ít thể loại nhất
+            // ->orderColumn('genres', function ($row, $order) {
+            //     //trong database tạo 1 bảng dữ liệu trong genres 
+            //     //để trống phần name sau đó nhập liệu cho bảng
+            //     //book_genres nhập các bảng chưa có thể loại
+            //     //ở books với book_id của id books chưa có thể loại
+            //     //sau đó genre_id sẽ nhập vào với id của bảng genres
+            //     //có cột dữ liệu name trống
+            //     return $row
+            //         ->join('book_genres', 'book_genres.book_id', '=', 'books.id')
+            //         ->join('genres', 'genres.id', '=', 'book_genres.genre_id')
+            //         ->groupBy('books.id')
+            //         ->orderByRaw("count(book_genres.order_no)$order");
+            // })
             ->addColumn('cate_id', function ($row) use ($request) {
                 $category = Category::get();
                 foreach ($category as $cate) {
@@ -75,7 +89,7 @@ class BookController extends Controller
                     return '<span class="badge badge-danger">Sắp ra mắt</span>';
                 }
             })
-            // lấy ra tất cả thể loại sách
+            //lấy ra tất cả thể loại sách
             // ->addColumn('genres', function (Book $row) {
             //     return $row->genres->map(function ($blog) {
             //         return $blog->name;
@@ -148,7 +162,7 @@ class BookController extends Controller
         return view('admin.book.add-form', compact('category', 'country', 'author', 'genres'));
     }
 
-    public function saveAdd(Request $request)
+    public function saveAdd($id = null, Request $request)
     {
         $message = [
             'name.required' => "Hãy nhập vào tên sách",
@@ -172,7 +186,10 @@ class BookController extends Controller
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => 'required',
+                'name' => [
+                    'required',
+                    Rule::unique('books')->ignore($id)
+                ],
                 'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048',
                 'cate_id' => 'required',
                 'country_id' => 'required',

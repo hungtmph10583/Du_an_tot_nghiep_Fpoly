@@ -92,7 +92,7 @@
                                     <th>Status</th>
                                     <th>Quantity</th>
                                     <th>
-                                        <a href="{{route('book.add')}}" class="btn btn-primary">Thêm tài khoản</a>
+                                        <a href="{{route('book.add')}}" class="btn btn-primary">Thêm sách</a>
                                     </th>
                                 </thead>
                                 <tbody>
@@ -142,6 +142,7 @@ $(document).ready(function() {
     var table = $('.data-table').DataTable({
         responsive: true,
         processing: true,
+        buttons: ['csv', 'excel', 'pdf', 'print', 'reset', 'reload'],
         language: {
             processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },

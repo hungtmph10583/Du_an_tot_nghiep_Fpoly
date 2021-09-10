@@ -42,6 +42,7 @@ Route::prefix('danh-muc')->group(function () {
     Route::post('tao-moi', [CategoryController::class, 'saveAdd']);
     Route::get('cap-nhat/{id}', [CategoryController::class, 'editForm'])->name('category.edit');
     Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit']);
+    Route::get('dataCate', [CategoryController::class, 'getData'])->name('cate.filter');
 });
 
 Route::prefix('sach')->group(function () {

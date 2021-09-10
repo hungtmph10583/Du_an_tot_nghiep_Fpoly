@@ -97,7 +97,7 @@
                         <li class="nav-item">
                             <a href="{{route('book.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm tài sách</p>
+                                <p>Thêm sách</p>
                             </a>
                         </li>
                         @endhasanyrole
