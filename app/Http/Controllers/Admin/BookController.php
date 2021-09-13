@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\BookRequest;
+use App\Imports\BookImport;
 use App\Models\Author;
 use App\Models\Book;
 use App\Models\BookAuthor;
@@ -17,6 +18,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\Datatables\Datatables;
 
 class BookController extends Controller
@@ -380,5 +382,7 @@ class BookController extends Controller
     public function store(Request $request)
     {
         $file = $request->file('file');
+        Excel::import(new BookImport, $file);
+        return back()->with('congratulation!');
     }
 }

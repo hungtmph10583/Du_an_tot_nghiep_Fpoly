@@ -23,7 +23,7 @@
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
             <div class="card-header">
-                <form action="book.import" method="post" enctype="multipart/form-data">
+                <form action="{{route('book.import')}}" method="post" enctype="multipart/form-data">
                     @csrf
                     <div class="form-group">
                         <input type="file" name="file" />
