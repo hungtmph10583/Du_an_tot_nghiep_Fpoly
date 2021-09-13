@@ -55,6 +55,7 @@ Route::prefix('sach')->group(function () {
     Route::get('chi-tiet/{id}', [BookController::class, 'detail'])->name('book.detail');
     Route::post('upload', [BookController::class, 'upload'])->name('book.upload');
     Route::get('dataBook', [BookController::class, 'getData'])->name('book.filter');
+    Route::post('import', [BookController::class, 'store'])->name('book.import');
 });
 
 Route::prefix('san-pham')->group(function () {

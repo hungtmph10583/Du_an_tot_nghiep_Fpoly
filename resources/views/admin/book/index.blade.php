@@ -23,58 +23,64 @@
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
             <div class="card-header">
-                <form action="" method="get">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="">
-                                <label for="">Danh mục</label>
-                                <select class="form-control" name="cate" id="cate">
-                                    <option value="">Lấy tất cả</option>
-                                    @foreach($category as $c)
-                                    <option value="{{$c->id}}">{{$c->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="">
-                                <label for="">Thể loại</label>
-                                <select class="form-control" name="genres" id="genres">
-                                    <option value="">Lấy tất cả</option>
-                                    @foreach($genres as $g)
-                                    <option value="{{$g->id}}">{{$g->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="">
-                                <label for="">Quốc gia</label>
-                                <select class="form-control" name="country" id="country">
-                                    <option value="">Lấy tất cả</option>
-                                    @foreach($country as $c)
-                                    <option value="{{$c->id}}">{{$c->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="">
-                                <label for="">Trạng thái</label>
-                                <select class="form-control" name="status" id="status">
-                                    <option value="">Chọn trạng thái</option>
-                                    <option value="1">Còn hàng</option>
-                                    <option value="2">Hết hàng</option>
-                                </select>
-                            </div>
-                            <div class="">
-                                <label for="">Thể loại</label>
-                                <select class="form-control" name="author" id="author">
-                                    <option value="">Lấy tất cả</option>
-                                    @foreach($author as $a)
-                                    <option value="{{$a->id}}">{{$a->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                <form action="book.import" method="post" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group">
+                        <input type="file" name="file" />
+
+                        <button type="submit" class="btn btn-primary">Import</button>
                     </div>
                 </form>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="">
+                            <label for="">Danh mục</label>
+                            <select class="form-control" name="cate" id="cate">
+                                <option value="">Lấy tất cả</option>
+                                @foreach($category as $c)
+                                <option value="{{$c->id}}">{{$c->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="">
+                            <label for="">Thể loại</label>
+                            <select class="form-control" name="genres" id="genres">
+                                <option value="">Lấy tất cả</option>
+                                @foreach($genres as $g)
+                                <option value="{{$g->id}}">{{$g->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="">
+                            <label for="">Quốc gia</label>
+                            <select class="form-control" name="country" id="country">
+                                <option value="">Lấy tất cả</option>
+                                @foreach($country as $c)
+                                <option value="{{$c->id}}">{{$c->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="">
+                            <label for="">Trạng thái</label>
+                            <select class="form-control" name="status" id="status">
+                                <option value="">Chọn trạng thái</option>
+                                <option value="1">Còn hàng</option>
+                                <option value="2">Hết hàng</option>
+                            </select>
+                        </div>
+                        <div class="">
+                            <label for="">Thể loại</label>
+                            <select class="form-control" name="author" id="author">
+                                <option value="">Lấy tất cả</option>
+                                @foreach($author as $a)
+                                <option value="{{$a->id}}">{{$a->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -108,41 +114,58 @@
 <!-- /.content -->
 @endsection
 @section('pagejs')
-<style>
-.select2-selection__rendered {
-    line-height: 31px !important;
-}
-
-.select2-container .select2-selection--single {
-    height: 40px !important;
-}
-
-.select2-selection__arrow {
-    height: 40px !important;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('custom-css/custom.css')}}">
+<script src="{{ asset('custom-css/custom.js')}}"></script>
 <script>
-function deleteBook(id) {
-    if (confirm('Bạn có chắc chắn muốn xóa cuốn sách này ?')) {
-        $.ajax({
-            url: 'sach/xoa/' + id,
-            type: 'DELETE',
-            data: {
-                _token: $("input[name=_token]").val()
-            },
-            success: function(data) {
-                $('div.alert-success').text(data.success);
-                $('div.alert-success').css('display', 'block');
-                $('#' + id).remove();
-            },
-        });
-    }
-}
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
         responsive: true,
         processing: true,
-        buttons: ['csv', 'excel', 'pdf', 'print', 'reset', 'reload'],
+        responsive: true,
+        lengthChange: false,
+        autoWidth: false,
+        dom: 'Bfrtip',
+        buttons: [{
+                extend: 'copyHtml5',
+                exportOptions: {
+                    stripHtml: false,
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'csvHtml5',
+                exportOptions: {
+                    stripHtml: false,
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'excelHtml5',
+                exportOptions: {
+                    stripHtml: false,
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'pdfHtml5',
+                exportOptions: {
+                    stripHtml: false,
+                    columns: ':visible'
+                }
+            },
+            {
+                extend: 'print',
+                exportOptions: {
+                    stripHtml: false,
+                    columns: ':visible'
+                }
+            },
+            "colvis"
+        ],
+        columnDefs: [{
+            targets: 0,
+            visible: true
+        }],
         language: {
             processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },
@@ -161,35 +184,35 @@ $(document).ready(function() {
         columns: [{
                 data: 'DT_RowIndex',
                 orderable: false,
-                searchable: false
+                searchable: false,
             },
             {
                 data: 'name',
-                name: 'name'
+                name: 'name',
             },
             {
                 data: 'image',
-                name: 'image'
+                name: 'image',
             },
             {
                 data: 'cate_id',
-                name: 'cate_id'
+                name: 'cate_id',
             },
             {
                 data: 'country',
-                name: 'country'
+                name: 'country',
             },
             {
                 data: 'price',
-                name: 'price'
+                name: 'price',
             },
             {
                 data: 'status',
-                name: 'status'
+                name: 'status',
             },
             {
                 data: 'quantity',
-                name: 'quantity'
+                name: 'quantity',
             },
             {
                 data: 'action',
@@ -200,46 +223,18 @@ $(document).ready(function() {
         ]
 
     });
-
-    $('#status').change(function() {
-        table.draw();
-    });
-
-    $('#cate').change(function() {
-        table.draw();
-    });
-
-    $('#country').change(function() {
-        table.draw();
-    });
-
-    $('#genres').change(function() {
-        table.draw();
-    });
-
-    $('#author').change(function() {
-        table.draw();
-    });
-});
-
-$('#genres').select2({
-    selectOnClose: true,
-});
-
-$('#status').select2({
-    selectOnClose: true
-});
-
-$('#cate').select2({
-    selectOnClose: true
-});
-
-$('#country').select2({
-    selectOnClose: true
-});
-
-$('#author').select2({
-    selectOnClose: true
+    let column = table.column(0); // here is the index of the column, starts with 0
+    column.visible(false); // this should be either true or false
+    table.buttons().container().appendTo('.row .col-md-6:eq(0)');
+    $('select').map(function(i, dom) {
+        var idSelect = $(dom).attr('id');
+        $('#' + idSelect).change(function() {
+            table.draw();
+        });
+        $('#' + idSelect).select2({
+            selectOnClose: true,
+        });
+    })
 });
 </script>
 @endsection

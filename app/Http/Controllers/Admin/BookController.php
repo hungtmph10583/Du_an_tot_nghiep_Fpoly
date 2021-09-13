@@ -62,23 +62,13 @@ class BookController extends Controller
             //         ->orderByRaw("count(book_genres.order_no)$order");
             // })
             ->addColumn('cate_id', function ($row) use ($request) {
-                $category = Category::get();
-                foreach ($category as $cate) {
-                    if ($row->cate_id == $cate->id) {
-                        return $cate->name;
-                    }
-                }
+                return $row->categories->name;
             })
             ->addColumn('country', function ($row) use ($request) {
-                $country = Country::get();
-                foreach ($country as $c) {
-                    if ($row->country_id == $c->id) {
-                        return $c->name;
-                    }
-                }
+                return $row->countries->name;
             })
             ->addColumn('image', function ($row) {
-                return '<img width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
+                return '<img id="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
             })
             ->addColumn('status', function ($row) {
                 if ($row->status == 1) {
@@ -386,5 +376,9 @@ class BookController extends Controller
 
         $model->delete();
         return response()->json(['success' => 'Xóa sách thành công !']);
+    }
+    public function store(Request $request)
+    {
+        $file = $request->file('file');
     }
 }

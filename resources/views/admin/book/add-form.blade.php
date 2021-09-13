@@ -145,19 +145,8 @@
 </section>
 @endsection
 @section('pagejs')
-<style>
-.select2-selection__rendered {
-    line-height: 31px !important;
-}
-
-.select2-container .select2-selection--single {
-    height: 40px !important;
-}
-
-.select2-selection__arrow {
-    height: 40px !important;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('custom-css/custom.css')}}">
+<script src="{{ asset('custom-css/custom.js')}}"></script>
 <script>
 $(document).ready(function() {
 
@@ -234,23 +223,7 @@ $(document).ready(function() {
     })
 });
 
-function loadFiles(event, el_rowId) {
-    var reader = new FileReader();
-    var output = document.querySelector(`img[row_id="${el_rowId}"]`);
-    reader.onload = function() {
-        output.src = reader.result;
-    };
-    if (event.target.files[0] == undefined) {
-        output.src = "";
-        return false;
-    } else {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-};
 
-function removeImg(el) {
-    $(el).parent().parent().remove();
-}
 
 $(".btn-success").click(function(e) {
     e.preventDefault();
@@ -279,26 +252,11 @@ $(".btn-success").click(function(e) {
         },
     });
 });
-
-$('#genres').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#author').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#cate').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#country').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#status').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
+$('select').map(function(i, dom) {
+    var idSelect = $(dom).attr('id');
+    $('#' + idSelect).select2({
+        selectOnClose: true,
+    });
+})
 </script>
 @endsection

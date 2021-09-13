@@ -28,7 +28,7 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="">Name</label>
-                                <input type="text" name="name" class="form-control" value="{{old('name',$model->name)}}"
+                                <input type="text" name="name" class="form-control" value="{{$model->name}}"
                                     placeholder="Tên sách">
                                 <span class="text-danger error_text name_error"></span>
                             </div>
@@ -112,14 +112,12 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Giá</label>
-                                <input type="number" name="price" class="form-control"
-                                    value="{{old('price',$model->price)}}">
+                                <input type="number" name="price" class="form-control" value="{{$model->price}}">
                                 <span class="text-danger error_text price_error"></span>
                             </div>
                             <div class="form-group">
                                 <label for="">Số lượng</label>
-                                <input type="number" name="quantity" class="form-control"
-                                    value="{{old('quantity',$model->quantity)}}">
+                                <input type="number" name="quantity" class="form-control" value="{{$model->quantity}}">
                                 <span class="text-danger error_text quantity_error"></span>
                             </div>
                         </div>
@@ -151,8 +149,7 @@
                             <span class="text-danger error_text galleries_error"></span>
                             <div class="form-group">
                                 <label>Chi tiết</label>
-                                <textarea class="form-control" id="detail"
-                                    name="detail">{{old('detail',$model->detail)}}</textarea>
+                                <textarea class="form-control" id="detail" name="detail">{{$model->detail}}</textarea>
                             </div>
                         </div>
                         <div class="text-right pl-2">
@@ -167,33 +164,9 @@
 </section>
 @endsection
 @section('pagejs')
-<style>
-.select2-selection__rendered {
-    line-height: 31px !important;
-}
-
-.select2-container .select2-selection--single {
-    height: 40px !important;
-}
-
-.select2-selection__arrow {
-    height: 40px !important;
-}
-</style>
+<link rel="stylesheet" href="{{ asset('custom-css/custom.css')}}">
+<script type="text/javascript" src="{{ asset('custom-css/custom.js')}}"></script>
 <script>
-function loadFile(event) {
-    var reader = new FileReader();
-    var output = document.getElementById('imagess');
-    reader.onload = function() {
-        output.src = reader.result;
-    };
-    if (event.target.files[0] == undefined) {
-        output.src = "";
-    } else {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-
-};
 $(document).ready(function() {
     tinymce.init({
         selector: 'textarea', // change this value according to your HTML
@@ -267,35 +240,11 @@ $(document).ready(function() {
                 `);
     })
 });
-
-function removeGalleryImg(el, galleryId = 0) {
-    $(el).parent().parent().remove();
-    if (galleryId != 0) {
-        let removeIds = $(`[name="removeGalleryIds"]`).val();
-        removeIds += `${galleryId}|`
-        $(`[name="removeGalleryIds"]`).val(removeIds);
-    }
-}
-
-function loadFiles(event, el_rowId) {
-    var reader = new FileReader();
-    var output = document.querySelector(`img[row_id="${el_rowId}"]`);
-    reader.onload = function() {
-        output.src = reader.result;
-    };
-    if (event.target.files[0] == undefined) {
-        output.src = "";
-        return false;
-    } else {
-        reader.readAsDataURL(event.target.files[0]);
-    }
-};
-
 $(".btn-success").click(function(e) {
     e.preventDefault();
     var formData = new FormData($('form')[0]);
     $.ajax({
-        url: "{{ route('book.saveEdit',['id'=>$model->id]) }}",
+        url: "{{ route('book.saveEdit', ['id'=> $model -> id]) }}",
         type: 'POST',
         data: formData,
         dataType: 'json',
@@ -306,7 +255,6 @@ $(".btn-success").click(function(e) {
             $(document).find('span.error_text').text('');
         },
         success: function(data) {
-            console.log(data);
             if (data.status == 0) {
                 $.each(data.error, function(key, value) {
                     $('span.' + key + '_error').text(value[0]);
@@ -318,26 +266,11 @@ $(".btn-success").click(function(e) {
         },
     });
 });
-
-$('#genres').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#author').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#cate').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#country').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
-$('#status').select2({
-    selectOnClose: true,
-    placeholder: "Please select"
-});
+$('select').map(function(i, dom) {
+    var idSelect = $(dom).attr('id');
+    $('#' + idSelect).select2({
+        selectOnClose: true,
+    });
+})
 </script>
 @endsection

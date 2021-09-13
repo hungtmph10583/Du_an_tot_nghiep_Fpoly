@@ -44,5 +44,14 @@ $.widget.bridge('uibutton', $.ui.button)
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/min/dropzone.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js"></script>
+<script src="{{ asset('admin-theme/plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/pdfmake/vfs_fonts.js')}}"></script>
+
+
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>
