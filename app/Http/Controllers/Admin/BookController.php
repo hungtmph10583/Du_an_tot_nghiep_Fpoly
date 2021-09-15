@@ -14,6 +14,7 @@ use App\Models\Category;
 use App\Models\Country;
 use App\Models\Genres;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -99,7 +100,7 @@ class BookController extends Controller
 <a class="btn btn-primary" href="' . route("book.detail", ["id" => $row->id]) . '"><i class="far fa-eye"></i></a>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '2') {
+                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
                     $instance->where('status', $request->get('status'));
                 }
 
@@ -381,7 +382,7 @@ class BookController extends Controller
     }
     public function store(Request $request)
     {
-        $file = $request->file('file');
+        $file = $request->file('file')->store('public/excel');
         Excel::import(new BookImport, $file);
         return back()->with('congratulation!');
     }
