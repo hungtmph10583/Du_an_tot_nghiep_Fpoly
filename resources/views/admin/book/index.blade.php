@@ -148,12 +148,31 @@ $(document).ready(function() {
             },
             {
                 extend: 'pdfHtml5',
+                orientation: 'portrait',
+                pageSize: 'LEGAL',
+                orientation: 'landscape',
+                customize: function(doc) {
+                    if (table.rows({
+                            selected: true
+                        }).count() == 0) {
+                        // nothing selected, so do your current code
+                    } else {
+                        var arr2 = $('tr .img-fluid').map(function() {
+                            return this.src;
+                        }).get();
+                        for (var i = 0, c = 1; i < arr2.length; i++, c++) {
+                            doc.content[1].table.body[c][0] = {
+                                image: arr2[i],
+                                width: 100
+                            }
+                        }
+                    }
+                },
                 exportOptions: {
                     stripHtml: false,
                     columns: ':visible'
                 }
-            },
-            {
+            }, {
                 extend: 'print',
                 exportOptions: {
                     stripHtml: false,

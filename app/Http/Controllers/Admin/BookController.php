@@ -71,7 +71,7 @@ class BookController extends Controller
                 return $row->countries->name;
             })
             ->addColumn('image', function ($row) {
-                return '<img id="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
+                return '<img class="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
             })
             ->addColumn('status', function ($row) {
                 if ($row->status == 1) {
