@@ -3,6 +3,14 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+/**
+ * hungtm
+ * @date: 28/09/21
+ */
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\View;
+use App\Models\User;
+use Illuminate\Pagination\Paginator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -23,6 +31,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        /**
+         * hungtm
+         * @date: 28/09/21
+         */
+        Schema::defaultStringLength(191);
+        Paginator::useBootstrap();
     }
 }
