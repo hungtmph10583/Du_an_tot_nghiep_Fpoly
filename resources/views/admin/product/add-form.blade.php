@@ -1,6 +1,5 @@
 @extends('layouts.admin.main')
 @section('content')
-<div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -21,42 +20,16 @@
         <div class="container-fluid pb-1">
             <div class="card">
                 <div class="card-body">
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form action="" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Tên sản phẩm</label>
-                                    <input type="text" name="name" class="form-control" value="{{old('name')}}">
+                                    <input type="text" name="name" class="form-control" value="{{old('name')}}" placeholder="Tên sản phẩm">
                                     @error('name')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Danh mục</label>
-                                    <select name="cate_id" class="form-control">
-                                        @foreach($cates as $c)
-                                        <option value="{{$c->id}}" @if($c->id == old('cate_id')) selected @endif>{{$c->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Hãng xe</label>
-                                    <select name="comp_id" class="form-control">
-                                        @foreach($comp as $cp)
-                                        <option value="{{$cp->id}}" @if($c->id == old('comp_id')) selected @endif>{{$cp->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Phụ kiện</label><br>
-                                    <div class="form-control">
-                                        @foreach($tags as $tg)
-                                            <input type="checkbox" name="tag_id[]" id="{{$tg->id}}" value="{{$tg->id}}">
-                                            <label class="pr-2" for="{{$tg->id}}">{{$tg->name}}</label>
-                                        @endforeach
-                                    </div><br>
-                                    <input class="form-control" type="number" name="additional_price" value="{{old('additional_price')}}" placeholder="Giá bổ sung">
                                 </div>
                             </div>
                             <div class="col-6">
@@ -67,22 +40,91 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3"> 
                                 <div class="form-group">
-                                    <label for="">Giá</label>
-                                    <input type="text" name="price" class="form-control" value="{{old('price')}}">
-                                    @error('price')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                                    <label for="">Danh mục</label>
+                                    <select name="category_id" class="form-control">
+                                        @foreach($category as $c)
+                                        <option value="{{$c->id}}" @if($c->id == old('cate_id')) selected @endif>{{$c->name}}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
+                            </div>
+                            <div class="col-3"> 
+                                <div class="form-group">
+                                    <label for="">Giống loài</label>
+                                    <select name="breed_id" class="form-control">
+                                        @foreach($breed as $br)
+                                        <option value="{{$br->id}}" @if($c->id == old('br_id')) selected @endif>{{$br->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="">Trạng thái</label>
+                                    <div class="form-control">
+                                        <input type="radio" name="status" value="1" id="stt1" checked>
+                                        <label for="stt1" class="mr-5">Hoạt động</label>
+                                        <input type="radio" name="status" value="0" id="stt0">
+                                        <label for="stt0">Không hoạt động</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
                                 <div class="form-group">
                                     <label for="">Số lượng</label>
-                                    <input type="text" name="quantity" class="form-control" value="{{old('quantity')}}">
+                                    <input type="text" name="quantity" class="form-control" value="{{old('quantity')}}" placeholder="Số lượng sản phẩm">
                                     @error('quantity')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                        </div>
+                        <div class="row">
+                            <div class="col-sm"> 
+                                <div class="form-group">
+                                    <label for="">Giá</label>
+                                    <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá sản phẩm">
+                                    @error('price')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="">Giới tính</label>
+                                    <div class="form-control">
+                                        @foreach($gender as $gd)
+                                        <input type="radio" name="gender_id" id="{{$gd->id}}" value="{{$gd->id}}" @if($c->id == old('gd_id')) checked @endif checked>
+                                        <label for="{{$gd->id}}" class="pr-4">{{$gd->gender}}</label>
+                                        @endforeach
+                                    </div>
+                                    @error('gender')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="">Cân nặng</label>
+                                    <input type="text" name="weight" class="form-control" value="{{old('weight')}}" placeholder="Cân nặng của thú cưng">
+                                    @error('weight')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- <div class="col-md-12">
                                 <table class="table table-stripped">
                                     <thead>
                                         <th>File</th>
@@ -95,7 +137,7 @@
                                         
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> -->
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="">Chi tiết sản phẩm:</label>
@@ -103,7 +145,7 @@
                                 </div>
                             </div>
                             <div class="text-right">
-                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="submit" class="btn btn-success ml-2">Lưu</button>
                                 <a href="{{route('product.index')}}" class="btn btn-danger">Hủy</a>
                             </div>
                         </div>
@@ -113,10 +155,9 @@
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-</div>
 @endsection
 @section('pagejs')
-    <script>
+    <!-- <script>
         $(document).ready(function(){
             $('.add-img').click(function(){
                 var rowId = Date.now();
@@ -153,5 +194,5 @@
         function removeTag(el){
             $(el).parent().parent().remove();
         }
-    </script>
+    </script> -->
 @endsection

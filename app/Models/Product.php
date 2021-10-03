@@ -10,11 +10,30 @@ class Product extends Model
     use HasFactory;
     protected $table = 'products';
     protected $fillable = [
-        'name','slug','image','weight','creator','price','status','quantity','description'
+        'name',
+        'category_id',
+        'breed_id',
+        'slug',
+        'image',
+        'weight',
+        'gender_id',
+        'creator',
+        'price',
+        'status',
+        'quantity',
+        'detail'
     ];
 
     public function category(){
-        return $this->belongsTo(Category::class, 'cate_id');
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function breed(){
+        return $this->belongsTo(Breed::class, 'breed_id');
+    }
+
+    public function gender(){
+        return $this->belongsTo(Gender::class, 'gender_id');
     }
 
     // public function company(){

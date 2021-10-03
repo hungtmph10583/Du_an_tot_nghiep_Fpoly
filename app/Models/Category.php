@@ -10,7 +10,7 @@ class Category extends Model
     use HasFactory;
     protected $table = "categories";
     protected $fillable = [
-        'name', 'slug', 'status'
+        'name', 'slug', 'status', 'genre_type'
     ];
     // Quan hệ category -> product
     public function products()

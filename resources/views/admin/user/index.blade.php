@@ -94,17 +94,7 @@
                                                 @endhasanyrole
                                             @endif
                                             " class="btn btn-success"
-                                                @if(Auth::user()->id === $u->id)
-                                                    {{route('user.edit', ['id' => $u->id])}}
-                                                @elseif(Auth::user()->id > 1 && $u->id == 1)
-                                                    onclick="alert('Bạn éo có tủi mà đòi sửa thông tin của mình nhóe :))')"
-                                                @else
-                                                    @hasanyrole('admin|manage')
-                                                        
-                                                    @else
-                                                        onclick="alert('Bạn không được cấp quyền để sửa tài khoản?')"
-                                                    @endhasanyrole
-                                                @endif
+                                                
                                             >
                                             <i class="far fa-edit"></i>
                                         </a>

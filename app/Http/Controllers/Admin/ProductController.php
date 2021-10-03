@@ -7,11 +7,10 @@ use App\Http\Requests\ProductFormRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Tag;
-use App\Models\ProductTag;
 use App\Models\Category;
-use App\Models\Company;
-use App\Models\ProductGallery;
+use App\Models\Breed;
+use App\Models\Gender;
+// use App\Models\ProductGallery;
 
 class ProductController extends Controller
 {
@@ -24,11 +23,8 @@ class ProductController extends Controller
             $products = Product::paginate($pagesize);
         }else{
             $productQuery = Product::where('name', 'like', "%" .$request->keyword . "%");
-            if($request->has('cate_id') && $request->cate_id != ""){
-                $productQuery = $productQuery->where('cate_id', $request->cate_id);
-            }
-            if($request->has('comp_id') && $request->comp_id != ""){
-                $productQuery = $productQuery->where('comp_id', $request->comp_id);
+            if($request->has('category_id') && $request->category_id != ""){
+                $productQuery = $productQuery->where('category_id', $request->category_id);
             }
 
             if($request->has('order_by') && $request->order_by > 0){
@@ -44,67 +40,94 @@ class ProductController extends Controller
             }
             $products = $productQuery->paginate($pagesize)->appends($searchData);
         }
-        $products->load('category', 'tags', 'company', 'galleries', 'product_tag');
+        //$products->load('category', 'tags', 'company', 'galleries', 'product_tag');
+        $products->load('category', 'breed', 'gender');
         
-        $cates = Category::all();
-        $tag = Tag::all();
-        $productT = ProductTag::all();
-        $productG = ProductGallery::all();
-        $comp = Company::all();
+        $categories = Category::all();
+        $gender = Gender::all();
+        $breed = Breed::all();
         
         // trả về cho người dùng 1 giao diện + dữ liệu products vừa lấy đc 
         return view('admin.product.index', [
-            'data_product' => $products, 
-            'cates' => $cates,
-            'comp' => $comp,
-            'productG' => $productG,
+            'product' => $products,
+            'category' => $categories,
+            'gender' => $gender,
+            'breed' => $breed,
             'searchData' => $searchData
         ]);
     }
 
-    public function remove($id){
-        $product = Product::find($id);
-        $product->product_tag()->delete();
-        $product->delete();
-        return redirect()->back();
-    }
-
     public function addForm(){
-        $cates = Category::all();
-        $comp = Company::all();
-        $tags = Tag::all();
-        return view('admin.product.add-form', compact('cates', 'comp', 'tags'));
+        $category = Category::all();
+        $breed = Breed::all();
+        $gender = Gender::all();
+        return view('admin.product.add-form', compact('category', 'breed', 'gender'));
     }
 
-    public function saveAdd(ProductFormRequest $request){
+    public function saveAdd(Request $request){
         $model = new Product(); 
         
         $model->fill($request->all());
-        // upload ảnh
+        /**
+         * @note: upload ảnh lên bảng phụ
+         * @date: 03/10/21
+         * @name: hungtm
+         */
         if($request->hasFile('uploadfile')){
             $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
 
-        $model->save();
-        if($request->has('tag_id')){
-            foreach($request->tag_id as $tg => $item){
-                $productTagObj = new ProductTag();
-                $productTagObj->product_id = $model->id;
-                $productTagObj->tag_id = $item;
-                $productTagObj->save();
-            }
+        
+        /**
+         * @note: huyen doi ky tu chu thanh slug
+         * @date: 28/09/21
+         * @name: hungtm
+         */
+        $slug = $request->name;
+        $unicode = array(
+            'a'=>'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ',
+            'd'=>'đ',
+            'e'=>'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ',
+            'i'=>'í|ì|ỉ|ĩ|ị',
+            'o'=>'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
+            'u'=>'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
+            'y'=>'ý|ỳ|ỷ|ỹ|ỵ',
+            'A'=>'Á|À|Ả|Ã|Ạ|Ă|Ắ|Ặ|Ằ|Ẳ|Ẵ|Â|Ấ|Ầ|Ẩ|Ẫ|Ậ',
+            'D'=>'Đ',
+            'E'=>'É|È|Ẻ|Ẽ|Ẹ|Ê|Ế|Ề|Ể|Ễ|Ệ',
+            'I'=>'Í|Ì|Ỉ|Ĩ|Ị',
+            'O'=>'Ó|Ò|Ỏ|Õ|Ọ|Ô|Ố|Ồ|Ổ|Ỗ|Ộ|Ơ|Ớ|Ờ|Ở|Ỡ|Ợ',
+            'U'=>'Ú|Ù|Ủ|Ũ|Ụ|Ư|Ứ|Ừ|Ử|Ữ|Ự',
+            'Y'=>'Ý|Ỳ|Ỷ|Ỹ|Ỵ',
+        );
+        foreach($unicode as $key=>$value){
+            $slug = preg_replace("/($value)/i", $key, $slug);
         }
+        $slug = str_replace(' ','-',$slug);
+        $model->slug = strtolower($slug);
 
-        if($request->has('galleries')){
-            foreach($request->galleries as $i => $item){
-                $galleryObj = new ProductGallery();
-                $galleryObj->product_id = $model->id;
-                $galleryObj->order_no = $i+1;
-                $galleryObj->url = $item->storeAs('uploads/products/galleries/' . $model->id , 
-                                        uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-                $galleryObj->save();
-            }
-        }
+
+        //dd($request);
+        $model->save();
+        // if($request->has('breed')){
+        //     foreach($request->tag_id as $tg => $item){
+        //         $productTagObj = new ProductTag();
+        //         $productTagObj->product_id = $model->id;
+        //         $productTagObj->tag_id = $item;
+        //         $productTagObj->save();
+        //     }
+        // }
+
+        // if($request->has('galleries')){
+        //     foreach($request->galleries as $i => $item){
+        //         $galleryObj = new ProductGallery();
+        //         $galleryObj->product_id = $model->id;
+        //         $galleryObj->order_no = $i+1;
+        //         $galleryObj->url = $item->storeAs('uploads/products/galleries/' . $model->id , 
+        //                                 uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+        //         $galleryObj->save();
+        //     }
+        // }
         return redirect(route('product.index'));
     }
 
@@ -178,5 +201,12 @@ class ProductController extends Controller
             }
         }
         return redirect(route('product.index'));
+    }
+
+    public function remove($id){
+        $product = Product::find($id);
+        $product->product_tag()->delete();
+        $product->delete();
+        return redirect()->back();
     }
 }

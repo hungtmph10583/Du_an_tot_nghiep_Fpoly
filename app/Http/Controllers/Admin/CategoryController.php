@@ -40,8 +40,8 @@ class CategoryController extends Controller
     public function saveAdd(CategoryFormRequest $request){
         $model = new Category();
         $model->fill($request->all());
+        $name = $request->name;
         $slug = $request->name;
-
         /**
          * Chuyen doi ky tu chu thanh slug
          * @date: 28/09/21
@@ -69,6 +69,7 @@ class CategoryController extends Controller
         }
         $slug = str_replace(' ','-',$slug);
         $model->slug = strtolower($slug);
+        $model->name = ucwords($name);
         /**
          * End
          */
@@ -90,6 +91,7 @@ class CategoryController extends Controller
             return redirect()->back();
         }
         $model->fill($request->all());
+        $name = $request->name;
         $slug = $request->name;
         /**
          * Chuyen doi ky tu chu thanh slug
@@ -121,6 +123,7 @@ class CategoryController extends Controller
         /**
          * End
          */
+        $model->name = ucwords($name);
         $model->save();
         return redirect(route('category.index'));
     }

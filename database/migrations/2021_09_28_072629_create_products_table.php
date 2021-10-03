@@ -22,13 +22,13 @@ class CreateProductsTable extends Migration
             $table->string('image');
             $table->string('weight');
             $table->integer('age_id'); // Bang chinh ( Tuoi )
-            $table->integer('product_color_id'); // Bang chinh ( Tuoi )
+            $table->integer('color_id'); // Bang chinh ( Tuoi )
             $table->integer('gender_id'); // Bang chinh ( Giới tính )
             $table->integer('creator'); // Bang chính ( users )
             $table->integer('price')->default(0);
             $table->integer('status')->default(1);
             $table->integer('quantity')->default(0);
-            $table->text('description');
+            $table->text('detail');
             $table->timestamps();
         });
     }

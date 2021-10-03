@@ -28,14 +28,14 @@ Route::get('login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('login', [AuthController::class, 'postLogin']);
 
 // ------------------------------- Register -------------------------------
-Route::get('registration', [AuthController::class, 'registrationForm'])->name('registration');
-Route::post('registration', [AuthController::class, 'postRegistration']);
+// Route::get('registration', [AuthController::class, 'registrationForm'])->name('registration');
+// Route::post('registration', [AuthController::class, 'postRegistration']);
 
 //------------------------------- Logout -------------------------------
-Route::any('logout', function(){
-    Auth::logout();
-    return redirect(route('login'));
-})->name('logout');
+// Route::any('logout', function(){
+//     Auth::logout();
+//     return redirect(route('login'));
+// })->name('logout');
 
 // ------------------------------- Forget password -------------------------------
 // Route::get('forget-password', 'App\Http\Controllers\Auth\ForgotPasswordController@getEmail')->name('forget-password');

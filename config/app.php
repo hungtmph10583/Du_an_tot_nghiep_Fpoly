@@ -175,6 +175,12 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /**
+         * @note: add spatie permission lib
+         * @date: 03/10/2021
+         * @name: hungtmph
+         */
+        Spatie\Permission\PermissionServiceProvider::class,
     ],
 
     /*
