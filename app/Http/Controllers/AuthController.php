@@ -32,9 +32,9 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
 
-        if(Auth::attempt(['email' => $email, 'password' => $password, 'active' => 0])){    
+        if(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 0])){    
             return redirect()->back()->with('msg', "Tài khoản của bạn đang bị khóa, liên hệ Huy Phan để mở!");
-        }elseif(Auth::attempt(['email' => $email, 'password' => $password, 'active' => 1])) {
+        }elseif(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1])) {
             return redirect(route('dashboard.index'));
         } else {
             return redirect()->back()->with('msg', "Email hoặc mật khẩu không chính xác!");

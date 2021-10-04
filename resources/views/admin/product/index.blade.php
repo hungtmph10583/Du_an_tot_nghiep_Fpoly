@@ -83,7 +83,7 @@
                                 <th>Số lượng</th>
                                 <th>Giá sản phẩm</th>
                                 <th>Giảm giá</th>
-                                <th><a href="{{route('product.add')}}" class="btn btn-info">Tạo mới</a></th>
+                                <th><a href="{{route('product.add')}}" class="btn btn-info">Thêm sản phẩm</a></th>
                             </thead>
                             <tbody>
                                 @foreach($product as $p)
@@ -104,8 +104,9 @@
                                         @endisset
                                     </td>
                                     <td>
+                                        <a href="{{route('product.detail', ['id' => $p->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
                                         <a href="{{route('product.edit', ['id' => $p->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="{{route('product.remove', ['id' => $p->id])}}" class="btn btn-danger" onclick="alert('Bạn có chắc muốn xóa sản phẩm này?')"><i class="far fa-trash-alt"></i></a>
+                                        <a href="{{route('product.remove', ['id' => $p->id])}}" class="btn btn-danger" onclick="confirm('Bạn có chắc muốn xóa sản phẩm này?')"><i class="far fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach

@@ -51,7 +51,7 @@
 								</li>
 								<li class="list-group-item">
 									<b>Trạng thái</b>
-									<i class="{{ $model->active == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} float-right pr-3"></i>
+									<i class="{{ $model->status == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} float-right pr-3"></i>
 								</li>
 								<li class="list-group-item">
 									<b>
@@ -114,34 +114,37 @@
                                         <label for="">Trạng thái</label>
                                         <div class="form-control">
                                             <label class="pr-1">
-                                                <input type="radio" name="active" value="1" @if($model->active == 1) checked @endif> Hiển thị
+                                                <input type="radio" name="status" value="1" @if($model->status == 1) checked @endif> Hiển thị
                                             </label>
                                             <label class="pl-1">
-                                                <input type="radio" name="active" value="0" @if($model->active == 0) checked @endif> Ẩn
+                                                <input type="radio" name="status" value="0" @if($model->status == 0) checked @endif> Ẩn
                                             </label>
                                         </div>
                                     </div>
 									@endhasanyrole
-									@hasrole('admin')
-									<div class="form-group">
-										<label for="">Vai trò</label>
-										<div class="form-control">
-										@foreach($role as $r)
-											<label class="pr-1">
-                                                <input type="radio" name="role_id" value="{{$r->id}}"	
-												@foreach($mdh_role as $mdh)
-												 	@if($model->id == $mdh->model_id)
-													 	@if($r->id == $mdh->role_id)
-														checked
+
+									@if($model->id != 1)
+										@hasrole('admin')
+										<div class="form-group">
+											<label for="">Vai trò</label>
+											<div class="form-control">
+											@foreach($role as $r)
+												<label class="pr-1">
+													<input type="radio" name="role_id" value="{{$r->id}}"	
+													@foreach($mdh_role as $mdh)
+														@if($model->id == $mdh->model_id)
+															@if($r->id == $mdh->role_id)
+															checked
+															@endif
 														@endif
-													@endif
-												@endforeach
-												> {{$r->name}}
-                                            </label>
-										@endforeach
+													@endforeach
+													> {{$r->name}}
+												</label>
+											@endforeach
+											</div>
 										</div>
-									</div>
-									@endhasrole
+										@endhasrole
+									@endif
 								</div>
 								<div class="text-right pl-2">
 										<button type="submit" class="btn btn-success">Lưu</button>

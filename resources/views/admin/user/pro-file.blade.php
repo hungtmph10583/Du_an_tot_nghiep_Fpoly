@@ -108,11 +108,7 @@
 						<strong><i class="fab fa-facebook-square"></i> Facebook</strong>
 
 						<p class="text-muted">
-						@foreach($psInfor as $pf)
-							@if($pf->user_id === $user->id)
-								<a href="{{$pf->facebook_url}}">{{$pf->facebook_url}}</a>
-							@endif
-						@endforeach
+						
 						</p>
 
 						<hr>
@@ -120,11 +116,7 @@
 						<strong><i class="fab fa-instagram-square"></i> Instagram</strong>
 
 						<p class="text-muted">
-							@foreach($psInfor as $pf)
-								@if($pf->user_id === $user->id)
-									{{$pf->facebook_url}}
-								@endif
-							@endforeach
+							
 						</p>
 
 						<hr>

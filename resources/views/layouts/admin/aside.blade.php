@@ -103,6 +103,31 @@
                     <a href="#" class="nav-link">
                         <i class="fas fa-users"></i>
                         <p>
+                            Giống loài
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('breed.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        @hasanyrole('admin|manage')
+                        <li class="nav-item">
+                            <a href="{{route('breed.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm giống loài</p>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-users"></i>
+                        <p>
                             Sản phẩm
                             <i class="right fas fa-angle-left"></i>
                         </p>

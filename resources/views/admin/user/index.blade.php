@@ -46,7 +46,7 @@
                                 <th>Role</th>
                                 <th>Email</th>
                                 <th>Phone</th>
-                                <th>Active</th>
+                                <th>Status</th>
                                 <th>
                                     @hasanyrole('admin|manage')
                                         <a href="{{route('user.add')}}" class="btn btn-primary">Thêm tài khoản</a>
@@ -72,47 +72,11 @@
                                     </td>
                                     <td>{{$u->email}}</td>
                                     <td>{{$u->phone}}</td>
-                                    <td><i class="{{ $u->active == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} pl-3"></i></td>
+                                    <td><i class="{{ $u->status == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} pl-3"></i></td>
                                     <td>
                                         <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href=" 
-                                            @if($u->id === 1)
-                                                @hasrole('admin')
-                                                    {{route('user.edit', ['id' => $u->id])}}
-                                                @else
-                                                    #
-                                                @endhasrole
-                                            @else
-                                                @hasanyrole('admin|manage')
-                                                    {{route('user.edit', ['id' => $u->id])}}
-                                                @else
-                                                    @if(Auth::user()->id === $u->id)
-                                                        {{route('user.edit', ['id' => $u->id])}}
-                                                    @else
-                                                    #
-                                                    @endif
-                                                @endhasanyrole
-                                            @endif
-                                            " class="btn btn-success"
-                                                
-                                            >
-                                            <i class="far fa-edit"></i>
-                                        </a>
-                                        <a href="
-                                            @hasrole('admin')
-                                                {{route('user.remove', ['id' => $u->id])}}
-                                            @else
-                                                #
-                                            @endhasrole
-                                        " class="btn btn-danger"
-                                            @hasrole('admin')
-                                                onclick="confirm('Bạn có chắc muốn xóa tài khoản này?')"
-                                            @else
-                                                onclick="alert('Bạn không được cấp quyền để xóa tài khoản?')"
-                                            @endhasrole
-                                        >
-                                            <i class="far fa-trash-alt"></i>
-                                        </a>
+                                        <a href="{{route('user.edit', ['id' => $u->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
+                                        <a href="{{route('user.remove', ['id' => $u->id])}}" class="btn btn-danger" onclick="confirm('Bạn có chắc muốn xóa tài khoản này?')"><i class="far fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach

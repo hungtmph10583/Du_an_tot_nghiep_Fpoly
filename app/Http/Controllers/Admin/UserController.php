@@ -9,7 +9,7 @@ use App\Models\Role;
 use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 
-use App\Models\PersonalInformation;
+// use App\Models\PersonalInformation;
 
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\UserFormRequest;
@@ -116,11 +116,11 @@ class UserController extends Controller
             return redirect()->back();
         }
 
-        if($id == 1){
-            if(Auth::user()->id != '1'){
-                return redirect()->back()->with('msg', "Đã bảo là đéo đủ tuổi r còn cố :))");
-            }
-        }
+        // if($id == 1){
+        //     if(Auth::user()->id != '1'){
+        //         return redirect()->back()->with('msg', "Đã bảo là đéo đủ tuổi r còn cố :))");
+        //     }
+        // }
         
         $request->validate(
             [
@@ -156,15 +156,12 @@ class UserController extends Controller
 
     public function proFile($id){
         $user = User::find($id);
-        $user->load('personal_information');
         $user->load('model_has_role');
 
-        $psInfor = PersonalInformation::all();
         $mdh_role = ModelHasRole::all();
         $role = Role::all();
         return view('admin.user.pro-file', [
             'user' => $user,
-            'psInfor' => $psInfor,
             'mdh_role' => $mdh_role,
             'role' => $role
         ]);

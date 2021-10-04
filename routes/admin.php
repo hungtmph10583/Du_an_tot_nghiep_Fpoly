@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\BreedController;
 use App\Http\Controllers\Admin\ProductController;
 
 /*
@@ -45,6 +46,20 @@ Route::prefix('danh-muc')->group(function () {
     Route::get('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
 });
 
+Route::prefix('giong-loai')->group(function () {
+    Route::get('/', [BreedController::class, 'index'])->name('breed.index');
+
+    Route::get('tao-moi', [BreedController::class, 'addForm'])->name('breed.add');
+    Route::post('tao-moi', [BreedController::class, 'saveAdd']);
+
+    Route::get('cap-nhat/{id}', [BreedController::class, 'editForm'])->name('breed.edit');
+    Route::post('cap-nhat/{id}', [BreedController::class, 'saveEdit']);;
+
+    Route::get('chi-tiet/{id}', [BreedController::class, 'detail'])->name('breed.detail');
+
+    Route::get('xoa/{id}', [BreedController::class, 'remove'])->name('breed.remove');
+});
+
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.index');
 
@@ -53,6 +68,8 @@ Route::prefix('san-pham')->group(function () {
 
     Route::get('cap-nhat/{id}', [ProductController::class, 'editForm'])->name('product.edit');
     Route::post('cap-nhat/{id}', [ProductController::class, 'saveEdit']);
+
+    Route::get('chi-tiet/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
     Route::get('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
     // Route::get('xoa/{id}', [ProductController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
