@@ -53,7 +53,7 @@
                                 <th class="text-center">Số lượng sản phẩm</th>
                                 <th class="text-center">Trạng thái</th>
                                 <th class="text-center">Kiểu danh mục</th>
-                                <th><a href="{{route('category.add')}}" class="btn btn-info">Tạo mới</a></th>
+                                <th><a href="{{route('category.add')}}" class="btn btn-info">Thêm danh mục</a></th>
                             </thead>
                             <tbody>
                                 @foreach($cates as $c)
@@ -61,13 +61,18 @@
                                     <td>{{(($cates->currentPage()-1)*7) + $loop->iteration}}</td>
                                     <td>{{$c->name}}</td>
                                     <td class="text-center">{{count($c->products)}}</td>
-                                    <td class="text-center"><i class="{{ $c->status == 1 ? 'fas fa-eye text-success' : 'fas fa-eye-slash text-danger'  }}"></i></td>
+                                    <td class="text-center">
+                                        <span class="btn {{ $c->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
+                                            {{ $c->status == 1 ? 'active' : 'unactive'  }}
+                                        </span>
+                                    </td>
                                     <td class="text-center">
                                         <span class="btn {{ $c->genre_type == 0 ? 'btn-info' : 'btn-warning' }} btn-sm text-light">
                                             {{ $c->genre_type == 0 ? 'Thú cưng' : 'Phụ kiện' }}
                                         </span>
                                     </td>
                                     <td>
+                                        <a href="{{route('category.detail', ['id' => $c->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
                                         <a href="{{route('category.edit', ['id' => $c->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
                                         @if(count($c->products) > 0)
                                             <a class="btn btn-danger" href="{{route('category.remove', ['id' => $c->id])}}" onclick="return confirm('Danh mục này đang tồn tại sp')">

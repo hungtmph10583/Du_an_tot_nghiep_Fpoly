@@ -81,7 +81,7 @@
                                 <th>Danh mục</th>
                                 <th>Giống loài</th>
                                 <th>Số lượng</th>
-                                <th>Giá sản phẩm</th>
+                                <th>Giá bán</th>
                                 <th>Giảm giá</th>
                                 <th><a href="{{route('product.add')}}" class="btn btn-info">Thêm sản phẩm</a></th>
                             </thead>
@@ -94,7 +94,7 @@
                                     <td>{{$p->category->name}}</td>
                                     <td>{{$p->breed->name}}</td>
                                     <td>{{number_format($p->quantity)}}</td>
-                                    <td>{{number_format($p->price)}} <b>VND</b></td>
+                                    <td>{{number_format($p->price)}} <span>VND</span></td>
                                     <td>
                                         @isset($p->tags)
                                             @foreach($p->tags as $tg)

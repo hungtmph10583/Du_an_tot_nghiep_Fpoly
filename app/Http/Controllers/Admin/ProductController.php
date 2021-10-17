@@ -67,6 +67,12 @@ class ProductController extends Controller
     public function saveAdd(Request $request){
         $model = new Product(); 
         
+        if(!$model){
+            return redirect()->back();
+        }
+        
+        
+
         $model->fill($request->all());
         /**
          * @note: upload ảnh lên bảng phụ
@@ -137,13 +143,12 @@ class ProductController extends Controller
             return redirect()->back();
         }
 
-        $cates = Category::all();
-        $comp = Company::all();
-        $tags = Tag::all();
-        $product_tag = ProductTag::all();
+        $category = Category::all();
+        $breed = Breed::all();
+        $gender = Gender::all();
 
-        $model->load('galleries', 'product_tag', 'tags');
-        return view('admin.product.edit-form', compact('model', 'cates', 'comp', 'tags', 'product_tag'));
+        $model->load('category', 'breed', 'gender');
+        return view('admin.product.edit-form', compact('model', 'category', 'breed', 'gender'));
     }
 
     public function saveEdit($id, ProductFormRequest $request){

@@ -33,11 +33,22 @@
                                 </div>
                             </div>
                             <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Ảnh danh mục</label>
+                                    <input type="file" name="uploadfile" class="form-control">
+                                    @error('uploadfile')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
                                 <div class="row">
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="">Trạng thái</label>
-                                            <div class="mt-2">
+                                            <div class="form-control">
                                                 <label class="pr-2">
                                                     <input type="radio" name="status" value="1" checked> Hiển thị
                                                 </label>
@@ -50,7 +61,7 @@
                                     <div class="col">
                                         <div class="form-group">
                                             <label for="">Show menu</label>
-                                            <div class="mt-2">
+                                            <div class="form-control">
                                                 <label class="pr-2">
                                                     <input type="radio" name="show_menu" value="1" checked> Hiển thị
                                                 </label>
@@ -60,22 +71,20 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Loại danh mục</label>
-                                    <select name="genre_type" class="form-control">
-                                        <option value="0">Thú cưng</option>
-                                        <option value="1">Phụ kiện</option>
-                                    </select>
+                                    <div class="col">
+                                        <div class="form-group">
+                                            <label for="">Loại danh mục</label>
+                                            <select name="genre_type" class="form-control">
+                                                <option value="0">Thú cưng</option>
+                                                <option value="1">Phụ kiện</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="col-6 mt-2"><br>
                                 <div class="text-left">
-                                    <button type="submit" class="btn btn-primary">Lưu</button>
+                                    <button type="submit" class="btn btn-info">Lưu</button>
                                     <a href="{{route('category.index')}}" class="btn btn-danger">Hủy</a>
                                 </div>
                             </div>

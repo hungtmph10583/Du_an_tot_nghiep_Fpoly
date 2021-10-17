@@ -48,7 +48,7 @@
                                     <label for="">Danh mục</label>
                                     <select name="category_id" class="form-control">
                                         @foreach($category as $c)
-                                        <option value="{{$c->id}}" @if($c->id == old('cate_id')) selected @endif>{{$c->name}}</option>
+                                        <option value="{{$c->id}}" @if($c->id == old('category_id')) selected @endif>{{$c->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -58,7 +58,7 @@
                                     <label for="">Giống loài</label>
                                     <select name="breed_id" class="form-control">
                                         @foreach($breed as $br)
-                                        <option value="{{$br->id}}" @if($c->id == old('br_id')) selected @endif>{{$br->name}}</option>
+                                        <option value="{{$br->id}}" @if($br->id == old('breed_id')) selected @endif>{{$br->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -68,15 +68,15 @@
                                     <label for="">Trạng thái</label>
                                     <div class="form-control">
                                         <input type="radio" name="status" value="1" id="stt1" checked>
-                                        <label for="stt1" class="mr-5">Hoạt động</label>
+                                        <label for="stt1" class="mr-5">Còn hàng</label>
                                         <input type="radio" name="status" value="0" id="stt0">
-                                        <label for="stt0">Không hoạt động</label>
+                                        <label for="stt0">Hết hàng</label>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-3">
                                 <div class="form-group">
-                                    <label for="">Số lượng</label>
+                                    <label for="">Số lượng sản phẩm</label>
                                     <input type="text" name="quantity" class="form-control" value="{{old('quantity')}}" placeholder="Số lượng sản phẩm">
                                     @error('quantity')
                                         <span class="text-danger">{{$message}}</span>
@@ -87,7 +87,7 @@
                         <div class="row">
                             <div class="col-sm"> 
                                 <div class="form-group">
-                                    <label for="">Giá</label>
+                                    <label for="">Giá sản phẩm</label>
                                     <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá sản phẩm">
                                     @error('price')
                                         <span class="text-danger">{{$message}}</span>
@@ -99,7 +99,7 @@
                                     <label for="">Giới tính</label>
                                     <div class="form-control">
                                         @foreach($gender as $gd)
-                                        <input type="radio" name="gender_id" id="{{$gd->id}}" value="{{$gd->id}}" @if($c->id == old('gd_id')) checked @endif checked>
+                                        <input type="radio" name="gender_id" id="{{$gd->id}}" value="{{$gd->id}}" @if($gd->id == old('gender_id')) checked @endif>
                                         <label for="{{$gd->id}}" class="pr-4">{{$gd->gender}}</label>
                                         @endforeach
                                     </div>
@@ -119,8 +119,25 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-3">
-
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="">Chọn Tuổi có sẵn</label>
+                                    <select name="age" class="form-control">
+                                        <option value="">Chọn tuổi có sẵn</option>
+                                        <option value="">60 ngày - 1 tuổi</option>
+                                        <option value="">1 - 5 tháng tuổi</option>
+                                        <option value="">9 - 12 tháng tuổi</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="">Nhập nhập dữ liệu tuổi mới</label>
+                                    <input type="text" name="age" class="form-control" value="{{old('age')}}" placeholder="Tuổi hiện tại của thú cưng">
+                                    @error('age')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
                         <div class="row">

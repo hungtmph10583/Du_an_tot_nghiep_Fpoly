@@ -76,7 +76,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-users"></i>
+                    <i class="fas fa-swatchbook"></i>
                         <p>
                             Danh mục
                             <i class="right fas fa-angle-left"></i>
@@ -101,7 +101,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-users"></i>
+                    <i class="fas fa-balance-scale"></i>
                         <p>
                             Giống loài
                             <i class="right fas fa-angle-left"></i>
@@ -126,7 +126,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-users"></i>
+                    <i class="fas fa-paw"></i>
                         <p>
                             Sản phẩm
                             <i class="right fas fa-angle-left"></i>

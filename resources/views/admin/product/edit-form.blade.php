@@ -1,6 +1,5 @@
 @extends('layouts.admin.main')
 @section('content')
-<div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
@@ -21,66 +20,111 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-body">
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form action="" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Tên sản phẩm</label>
-                                    <input type="text" name="name" class="form-control" value="{{$model->name}}">
+                                    <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên sản phẩm">
                                     @error('name')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Danh mục</label>
-                                    <select name="cate_id" class="form-control">
-                                        @foreach($cates as $c)
-                                        <option value="{{$c->id}}" @if($c->id == $model->cate_id) selected @endif>{{$c->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Hãng xe</label>
-                                    <select name="comp_id" class="form-control">
-                                        @foreach($comp as $cp)
-                                        <option value="{{$cp->id}}" @if($c->id == old('comp_id')) selected @endif>{{$cp->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Giá</label>
-                                    <input type="number" name="price" class="form-control" value="{{$model->price}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Số lượng</label>
-                                    <input type="number" name="quantity" class="form-control" value="{{$model->quantity}}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Phụ kiện</label><br>
-                                    <div class="form-control">
-                                            @foreach ($tags as $tag)
-                                                <input type="checkbox" name="tag_id[]" id="{{$tag->id}}" value="{{$tag->id}}"
-                                                    @foreach ($model->product_tag as $prt)
-                                                    @if($prt->tag_id == $tag->id) checked @endif
-                                                    @endforeach
-                                                >
-                                                <label class="pr-2" for="{{$tag->id}}">{{$tag->name}}</label>
-                                            @endforeach
-                                    </div>
-                                </div>
                             </div>
                             <div class="col-6">
-                                <div class="add-product-preview-img">
-                                    <img src="{{asset('storage/' . $model->image)}}" class="img-thumbnail">
-                                </div>
                                 <div class="form-group">
                                     <label for="">Ảnh sản phẩm</label>
                                     <input type="file" name="uploadfile" class="form-control">
+                                    @error('uploadfile')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
                                 </div>
                             </div>
-                            <div class="col-md-12">
-                                <input type="hidden" name="removeGalleryIds" value="">
+                        </div>
+                        <div class="row">
+                            <div class="col-3"> 
+                                <div class="form-group">
+                                    <label for="">Danh mục</label>
+                                    <select name="category_id" class="form-control">
+                                        @foreach($category as $c)
+                                        <option value="{{$c->id}}" @if($c->id == old('cateory_id')) selected @endif>{{$c->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3"> 
+                                <div class="form-group">
+                                    <label for="">Giống loài</label>
+                                    <select name="breed_id" class="form-control">
+                                        @foreach($breed as $br)
+                                        <option value="{{$br->id}}" @if($c->id == old('breed_id')) selected @endif>{{$br->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="">Trạng thái</label>
+                                    <div class="form-control">
+                                        <input type="radio" name="status" value="1" id="stt1" checked>
+                                        <label for="stt1" class="mr-5">Hoạt động</label>
+                                        <input type="radio" name="status" value="0" id="stt0">
+                                        <label for="stt0">Không hoạt động</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="">Số lượng</label>
+                                    <input type="text" name="quantity" class="form-control" value="{{old('quantity')}}" placeholder="Số lượng sản phẩm">
+                                    @error('quantity')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm"> 
+                                <div class="form-group">
+                                    <label for="">Giá</label>
+                                    <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá sản phẩm">
+                                    @error('price')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="">Giới tính</label>
+                                    <div class="form-control">
+                                        @foreach($gender as $gd)
+                                        <input type="radio" name="gender_id" id="{{$gd->id}}" value="{{$gd->id}}" @if($c->id == old('gd_id')) checked @endif checked>
+                                        <label for="{{$gd->id}}" class="pr-4">{{$gd->gender}}</label>
+                                        @endforeach
+                                    </div>
+                                    @error('gender')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="">Cân nặng</label>
+                                    <input type="text" name="weight" class="form-control" value="{{old('weight')}}" placeholder="Cân nặng của thú cưng">
+                                    @error('weight')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-3">
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!-- <div class="col-md-12">
                                 <table class="table table-stripped">
                                     <thead>
                                         <th>File</th>
@@ -90,28 +134,18 @@
                                         </th>
                                     </thead>
                                     <tbody id="gallery">
-                                        @foreach ($model->galleries as $gl)
-                                        <tr id="{{$gl->id}}">
-                                            <td>{{$gl->url}}</td>
-                                            <td>
-                                                <img src="{{asset('storage/' . $gl->url)}}" width="80">
-                                            </td>
-                                            <td>
-                                                <button type="button" class="btn btn-danger" onclick="removeGalleryImg(this, {{$gl->id}})">Xóa</button>
-                                            </td>
-                                        </tr>
-                                        @endforeach
+                                        
                                     </tbody>
                                 </table>
-                            </div>
+                            </div> -->
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="">Chi tiết sản phẩm:</label>
-                                    <textarea name="detail" class=form-control  rows="10">{{$model->detail}}</textarea>
+                                    <textarea name="detail" class=form-control  rows="10"></textarea>
                                 </div>
                             </div>
                             <div class="text-right">
-                                <button type="submit" class="btn btn-primary">Lưu</button>
+                                <button type="submit" class="btn btn-success ml-2">Lưu</button>
                                 <a href="{{route('product.index')}}" class="btn btn-danger">Hủy</a>
                             </div>
                         </div>
@@ -121,7 +155,6 @@
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->
-</div>
 @endsection
 @section('pagejs')
 <script>

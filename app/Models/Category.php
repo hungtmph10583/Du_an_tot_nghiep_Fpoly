@@ -18,4 +18,16 @@ class Category extends Model
         return $this->hasMany(Product::class,'category_id');
         // quan he 
     }
+
+    public function imageCategory()
+    {
+        return $this->hasMany(Product::class,'category_id');
+        // quan he 
+    }
+
+    public function breeds()
+    {
+        return $this->hasMany(Breed::class,'category_id');
+        // quan he 
+    }
 }

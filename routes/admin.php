@@ -43,6 +43,8 @@ Route::prefix('danh-muc')->group(function () {
     Route::get('cap-nhat/{id}', [CategoryController::class, 'editForm'])->name('category.edit');
     Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit']);;
 
+    Route::get('chi-tiet/{id}', [CategoryController::class, 'detail'])->name('category.detail');
+
     Route::get('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
 });
 

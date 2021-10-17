@@ -4,9 +4,12 @@ namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CategoryFormRequest;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Breed;
+use App\Models\ImageCategory;
 
 class CategoryController extends Controller
 {
@@ -37,7 +40,7 @@ class CategoryController extends Controller
         return view('admin.category.add-form');
     }
     
-    public function saveAdd(CategoryFormRequest $request){
+    public function saveAdd(Request $request){
         $model = new Category();
         $model->fill($request->all());
         $name = $request->name;
@@ -73,6 +76,13 @@ class CategoryController extends Controller
         /**
          * End
          */
+        if($request->has('uploadfile')){
+            $imageCategory = new ImageCategory();
+            $imageCategory->category_id = $model->id;
+            $imageCategory->image =$request->file('uploadfile')->storeAs('uploads/categories/' . $model->id , 
+                                    uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+            $imageCategory->save();
+        }
         $model->save();
         return redirect(route('category.index'));
     }
@@ -85,7 +95,7 @@ class CategoryController extends Controller
         return view('admin.category.edit-form', compact('model'));
     }
 
-    public function saveEdit($id, CategoryFormRequest $request){
+    public function saveEdit($id, Request $request){
         $model = Category::find($id); 
         if(!$model){
             return redirect()->back();
@@ -124,15 +134,26 @@ class CategoryController extends Controller
          * End
          */
         $model->name = ucwords($name);
+        if($request->has('uploadfile')){
+            $imageCategory = new ImageCategory();
+            $imageCategory->category_id = $model->id;
+            $imageCategory->image =$request->file('uploadfile')->storeAs('uploads/categories/' . $model->id , 
+                                    uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+            $imageCategory->save();
+        }
         $model->save();
         return redirect(route('category.index'));
     }
 
     public function detail($id)
     {
-        $cate = Category::find($id);
-        $cate->load('products');
-        return view('admin.category.detail', ['cate' => $cate]);
+        $category = Category::find($id);
+        $category->load('products', 'breeds');
+
+        $product = Product::all();
+        $breed = Breed::all();
+
+        return view('admin.category.detail', compact('category', 'product', 'breed'));
     }
 
     public function remove($id){
