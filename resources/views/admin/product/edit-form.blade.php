@@ -23,7 +23,10 @@
                     <form action="" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col-3">
+                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                            </div>
+                            <div class="col-9">
                                 <div class="form-group">
                                     <label for="">Tên sản phẩm</label>
                                     <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên sản phẩm">
@@ -31,8 +34,6 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
-                            </div>
-                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Ảnh sản phẩm</label>
                                     <input type="file" name="uploadfile" class="form-control">
@@ -40,66 +41,82 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-3"> 
                                 <div class="form-group">
                                     <label for="">Danh mục</label>
                                     <select name="category_id" class="form-control">
                                         @foreach($category as $c)
-                                        <option value="{{$c->id}}" @if($c->id == old('cateory_id')) selected @endif>{{$c->name}}</option>
+                                        <option value="{{$c->id}}" @if($model->category_id == $c->id) selected @endif>{{$c->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
-                            </div>
-                            <div class="col-3"> 
                                 <div class="form-group">
                                     <label for="">Giống loài</label>
                                     <select name="breed_id" class="form-control">
                                         @foreach($breed as $br)
-                                        <option value="{{$br->id}}" @if($c->id == old('breed_id')) selected @endif>{{$br->name}}</option>
+                                        <option value="{{$br->id}}" @if($model->breed_id == $br->id) selected @endif>{{$br->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="">Trạng thái</label>
-                                    <div class="form-control">
-                                        <input type="radio" name="status" value="1" id="stt1" checked>
-                                        <label for="stt1" class="mr-5">Hoạt động</label>
-                                        <input type="radio" name="status" value="0" id="stt0">
-                                        <label for="stt0">Không hoạt động</label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-3">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Số lượng</label>
-                                    <input type="text" name="quantity" class="form-control" value="{{old('quantity')}}" placeholder="Số lượng sản phẩm">
+                                    <input type="text" name="quantity" class="form-control" value="{{$model->quantity}}" placeholder="Số lượng sản phẩm">
                                     @error('quantity')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
                             </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Cân nặng</label>
+                                    <input type="text" name="weight" class="form-control" value="{{$model->weight}} kg" placeholder="Cân nặng của thú cưng">
+                                    @error('weight')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm"> 
+                            <div class="col-6"> 
                                 <div class="form-group">
-                                    <label for="">Giá</label>
-                                    <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá sản phẩm">
+                                    <label for="">Giá bán</label>
+                                    <input type="text" name="price" class="form-control" value="{{$model->price}}" placeholder="Giá sản phẩm">
                                     @error('price')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-sm">
+                            <div class="col-6"> 
+                                <div class="form-group">
+                                    <label for="">Tuổi của thú cưng</label>
+                                    <input type="text" name="age_id" class="form-control" value="{{$model->age_id}}" placeholder="Tuổi hiện tại của thú cưng">
+                                    @error('age_id')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Trạng thái</label>
+                                    <div class="form-control">
+                                        <input type="radio" name="status" value="1" id="stt1" @if($model->status === 1) checked @endif>
+                                        <label for="stt1" class="mr-5">Còn hàng</label>
+                                        <input type="radio" name="status" value="0" id="stt0" @if($model->status === 0) checked @endif>
+                                        <label for="stt0">Hết hàng</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Giới tính</label>
                                     <div class="form-control">
                                         @foreach($gender as $gd)
-                                        <input type="radio" name="gender_id" id="{{$gd->id}}" value="{{$gd->id}}" @if($c->id == old('gd_id')) checked @endif checked>
+                                        <input type="radio" name="gender_id" id="{{$gd->id}}" value="{{$gd->id}}" @if($model->gender_id == $gd->id) checked @endif>
                                         <label for="{{$gd->id}}" class="pr-4">{{$gd->gender}}</label>
                                         @endforeach
                                     </div>
@@ -108,40 +125,26 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-sm">
-                                <div class="form-group">
-                                    <label for="">Cân nặng</label>
-                                    <input type="text" name="weight" class="form-control" value="{{old('weight')}}" placeholder="Cân nặng của thú cưng">
-                                    @error('weight')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-3">
-
-                            </div>
-                        </div>
-                        <div class="row">
-                            <!-- <div class="col-md-12">
+                            <div class="col-md-12">
                                 <table class="table table-stripped">
                                     <thead>
                                         <th>File</th>
                                         <th>Thumbnail</th>
                                         <th>
-                                            <button class="btn btn-success add-img" type="button">Thêm ảnh</button>
+                                            <button class="float-right btn btn-success add-img" type="button">Thêm ảnh</button>
                                         </th>
                                     </thead>
                                     <tbody id="gallery">
                                         
                                     </tbody>
                                 </table>
-                            </div> -->
+                            </div>
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="">Chi tiết sản phẩm:</label>
-                                    <textarea name="detail" class=form-control  rows="10"></textarea>
+                                    <textarea name="detail" class=form-control rows="10" placeholder="{{$model->detail}}">{{$model->detail}}</textarea>
                                 </div>
                             </div>
                             <div class="text-right">

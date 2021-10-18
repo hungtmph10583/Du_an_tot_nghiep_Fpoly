@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\Product;
 use App\Models\Breed;
-use App\Models\ImageCategory;
 
 class CategoryController extends Controller
 {
@@ -40,11 +39,12 @@ class CategoryController extends Controller
         return view('admin.category.add-form');
     }
     
-    public function saveAdd(Request $request){
+    public function saveAdd(CategoryFormRequest $request){
         $model = new Category();
         $model->fill($request->all());
         $name = $request->name;
         $slug = $request->name;
+        
         /**
          * Chuyen doi ky tu chu thanh slug
          * @date: 28/09/21
@@ -77,11 +77,9 @@ class CategoryController extends Controller
          * End
          */
         if($request->has('uploadfile')){
-            $imageCategory = new ImageCategory();
-            $imageCategory->category_id = $model->id;
-            $imageCategory->image =$request->file('uploadfile')->storeAs('uploads/categories/' . $model->id , 
+            $model->image =$request->file('uploadfile')->storeAs('uploads/categories/' . $model->id , 
                                     uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-            $imageCategory->save();
+            $model->save();
         }
         $model->save();
         return redirect(route('category.index'));
@@ -89,13 +87,14 @@ class CategoryController extends Controller
 
     public function editForm($id){
         $model = Category::find($id);
+       
         if(!$model){
             return redirect()->back();
         }
         return view('admin.category.edit-form', compact('model'));
     }
 
-    public function saveEdit($id, Request $request){
+    public function saveEdit($id, CategoryFormRequest $request){
         $model = Category::find($id); 
         if(!$model){
             return redirect()->back();
@@ -135,11 +134,9 @@ class CategoryController extends Controller
          */
         $model->name = ucwords($name);
         if($request->has('uploadfile')){
-            $imageCategory = new ImageCategory();
-            $imageCategory->category_id = $model->id;
-            $imageCategory->image =$request->file('uploadfile')->storeAs('uploads/categories/' . $model->id , 
+            $model->image =$request->file('uploadfile')->storeAs('uploads/categories/' . $model->id , 
                                     uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-            $imageCategory->save();
+            $model->save();
         }
         $model->save();
         return redirect(route('category.index'));

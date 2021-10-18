@@ -85,16 +85,25 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm"> 
+                            <div class="col-3"> 
                                 <div class="form-group">
-                                    <label for="">Giá sản phẩm</label>
-                                    <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá sản phẩm">
+                                    <label for="">Giá bán</label>
+                                    <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá bán">
                                     @error('price')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-sm">
+                            <div class="col-3">
+                                <div class="form-group">
+                                    <label for="">Cân nặng của thú cưng</label>
+                                    <input type="text" name="weight" class="form-control" value="{{old('weight')}}" placeholder="Kg">
+                                    @error('weight')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Giới tính</label>
                                     <div class="form-control">
@@ -108,33 +117,24 @@
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-sm">
-                                <div class="form-group">
-                                    <label for="">Cân nặng</label>
-                                    <input type="text" name="weight" class="form-control" value="{{old('weight')}}" placeholder="Cân nặng của thú cưng">
-                                    @error('weight')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
-                            </div>
                         </div>
                         <div class="row">
-                            <div class="col-sm">
+                            <!-- <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="">Chọn Tuổi có sẵn</label>
-                                    <select name="age" class="form-control">
-                                        <option value="">Chọn tuổi có sẵn</option>
-                                        <option value="">60 ngày - 1 tuổi</option>
-                                        <option value="">1 - 5 tháng tuổi</option>
-                                        <option value="">9 - 12 tháng tuổi</option>
+                                    <label for="">Tuổi</label>
+                                    <select name="age_id" class="form-control">
+                                        <option value="">Chọn tuổi có sẵn cho sản phẩm</option>
+                                        @foreach($age as $ag)
+                                        <option value="{{$ag->id}}" @if($ag->id == old('age_id')) selected @endif>{{$ag->age}}</option>
+                                        @endforeach
                                     </select>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-sm">
                                 <div class="form-group">
-                                    <label for="">Nhập nhập dữ liệu tuổi mới</label>
-                                    <input type="text" name="age" class="form-control" value="{{old('age')}}" placeholder="Tuổi hiện tại của thú cưng">
-                                    @error('age')
+                                    <label for="">Nhập nhập dữ liệu tuổi cho thú cưng</label>
+                                    <input type="text" name="age_id" class="form-control" value="{{old('age_id')}}" placeholder="Tuổi hiện tại của thú cưng">
+                                    @error('age_id')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>

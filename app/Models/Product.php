@@ -16,6 +16,7 @@ class Product extends Model
         'slug',
         'image',
         'weight',
+        'age_id',
         'gender_id',
         'creator',
         'price',
@@ -36,9 +37,9 @@ class Product extends Model
         return $this->belongsTo(Gender::class, 'gender_id');
     }
 
-    // public function company(){
-    //     return $this->belongsTo(Company::class, 'comp_id');
-    // }
+    public function age(){
+        return $this->belongsTo(Age::class, 'age_id');
+    }
 
     // public function galleries(){
     //     return $this->hasMany(ProductGallery::class, 'product_id');

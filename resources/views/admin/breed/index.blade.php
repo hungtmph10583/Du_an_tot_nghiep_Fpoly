@@ -65,7 +65,9 @@
                                     <td>{{$b->name}}</td>
                                     <td class="text-center">{{count($b->products)}}</td>
                                     <td class="text-center">
-                                        <i class="{{ $b->status == 1 ? 'fas fa-eye text-success' : 'fas fa-eye-slash text-danger'  }}"></i>
+                                    <span class="btn {{ $b->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
+                                            {{ $b->status == 1 ? 'Active' : 'Inactive'  }}
+                                        </span>
                                     </td>
                                     <td>
                                         <a href="{{route('breed.detail', ['id' => $b->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>

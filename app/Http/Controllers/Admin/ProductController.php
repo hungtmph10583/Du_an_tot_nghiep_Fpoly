@@ -10,6 +10,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Breed;
 use App\Models\Gender;
+use App\Models\Age;
 // use App\Models\ProductGallery;
 
 class ProductController extends Controller
@@ -61,29 +62,22 @@ class ProductController extends Controller
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
-        return view('admin.product.add-form', compact('category', 'breed', 'gender'));
+        $age = Age::all();
+        return view('admin.product.add-form', compact('category', 'breed', 'gender', 'age'));
     }
 
     public function saveAdd(Request $request){
         $model = new Product(); 
-        
         if(!$model){
             return redirect()->back();
         }
-        
-        
-
         $model->fill($request->all());
         /**
          * @note: upload ảnh lên bảng phụ
          * @date: 03/10/21
          * @name: hungtm
          */
-        if($request->hasFile('uploadfile')){
-            $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-        }
 
-        
         /**
          * @note: huyen doi ky tu chu thanh slug
          * @date: 28/09/21
@@ -112,17 +106,9 @@ class ProductController extends Controller
         $slug = str_replace(' ','-',$slug);
         $model->slug = strtolower($slug);
 
-
-        //dd($request);
-        $model->save();
-        // if($request->has('breed')){
-        //     foreach($request->tag_id as $tg => $item){
-        //         $productTagObj = new ProductTag();
-        //         $productTagObj->product_id = $model->id;
-        //         $productTagObj->tag_id = $item;
-        //         $productTagObj->save();
-        //     }
-        // }
+        if($request->hasFile('uploadfile')){
+            $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+        }
 
         // if($request->has('galleries')){
         //     foreach($request->galleries as $i => $item){
@@ -134,6 +120,19 @@ class ProductController extends Controller
         //         $galleryObj->save();
         //     }
         // }
+        
+        //dd($request);
+        // if ($request->has('ageInsert')) {
+        //     $age = new Age();
+        //     $age->age = $request->ageInsert;
+        //     $age->save();
+        //     $last = Age::all()->last();
+        //     $request->age_id = $last->id;
+        // }
+
+        
+
+        $model->save();
         return redirect(route('product.index'));
     }
 
@@ -163,25 +162,10 @@ class ProductController extends Controller
             $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
         $model->save();
-        if($request->has('tag_id')){
-            $removePrt = ProductTag::where("product_id", $id)->get();
-            foreach($removePrt as $rmv){
-                $rmv->delete();
-            }
-            foreach($request->tag_id as $tg => $item){
-                $productTagObj = new ProductTag();
-                $productTagObj->product_id = $model->id;
-                $productTagObj->tag_id = $item;
-                $productTagObj->save();
-            }
-        }else{
-            $removePrt = ProductTag::where("product_id", $id)->get();
-            foreach($removePrt as $rmv){
-                $rmv->delete();
-            }
-        }
-        // gallery
-        // xóa gallery đc mark là bị xóa đi
+
+        /* gallery
+         * xóa gallery đc mark là bị xóa đi
+        */
         if($request->has('removeGalleryIds')){
             $strIds = rtrim($request->removeGalleryIds, '|');
             $lstIds = explode('|', $strIds);
@@ -190,7 +174,6 @@ class ProductController extends Controller
             foreach ($removeList as $gl) {
                 Storage::delete($gl->url);
             }
-            
             ProductGallery::destroy($lstIds);
         }
 
@@ -205,7 +188,20 @@ class ProductController extends Controller
                 $galleryObj->save();
             }
         }
+
         return redirect(route('product.index'));
+    }
+
+    public function detail($id)
+    {
+        $model = Product::find($id);
+        $model->load('category', 'breed', 'gender');
+
+        $category = Category::all();
+        $breed = Breed::all();
+        $gender = Gender::all();
+
+        return view('admin.product.detail', compact('category', 'model', 'breed', 'gender'));
     }
 
     public function remove($id){

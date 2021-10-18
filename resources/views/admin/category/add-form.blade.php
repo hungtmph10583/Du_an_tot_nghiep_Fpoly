@@ -71,7 +71,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col">
+                                </div>
+                            </div>
+                            <div class="col">
                                         <div class="form-group">
                                             <label for="">Loại danh mục</label>
                                             <select name="genre_type" class="form-control">
@@ -80,9 +82,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-6 mt-2"><br>
+                            <div class="col mt-2"><br>
                                 <div class="text-left">
                                     <button type="submit" class="btn btn-info">Lưu</button>
                                     <a href="{{route('category.index')}}" class="btn btn-danger">Hủy</a>

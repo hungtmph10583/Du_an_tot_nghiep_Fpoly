@@ -31,12 +31,20 @@ class CategoryFormRequest extends FormRequest
             ]
         ];
         return $ruleArr;
+        if($this->id == null){
+            $ruleArr['uploadfile'] = 'required|mimes:jpg,bmp,png,jpeg';
+        }else{
+            $ruleArr['uploadfile'] = 'mimes:jpg,bmp,png,jpeg';
+        }
+        return $ruleArr;
     }
 
     public function messages(){
         return [
             'name.required' => 'Hãy nhập tên danh mục',
             'name.unique' => 'Tên danh mục đã tồn tại',
+            'uploadfile.required' => 'Hãy chọn ảnh danh mục',
+            'uploadfile.mimes' => 'File ảnh danh mục không đúng định dạng (jpg, bmp, png, jpeg)',
         ];
     }
 }

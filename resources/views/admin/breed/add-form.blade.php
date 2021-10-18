@@ -6,7 +6,7 @@
             <div class="card card-secondary my-0">
                 <div class="card-header">
                     <ol class="breadcrumb float-sm-left ">
-                        <li class="breadcrumb-item"><a class="card-title" href="{{route('category.index')}}">Danh sách giống loài</a></li>
+                        <li class="breadcrumb-item"><a class="card-title" href="{{route('breed.index')}}">Danh sách giống loài</a></li>
                         <li class="breadcrumb-item active">Tạo giống loài</li>
                     </ol>
                 </div>
@@ -67,14 +67,14 @@
                                 <div class="form-group">
                                     <label for="">Ảnh</label>
                                     <div class="form-control">
-                                        <input type="file" name="image" id="">
+                                        <input type="file" name="uploadfile" id="">
                                     </div>
                                 </div>
                             </div>
                             <div class="col sm mt-2"><br>
                                 <div class="text-left">
                                     <button type="submit" class="btn btn-primary">Lưu</button>
-                                    <a href="{{route('category.index')}}" class="btn btn-danger">Hủy</a>
+                                    <a href="{{route('breed.index')}}" class="btn btn-danger">Hủy</a>
                                 </div>
                             </div>
                             <div class="col sm"></div>

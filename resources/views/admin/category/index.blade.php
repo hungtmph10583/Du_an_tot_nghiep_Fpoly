@@ -63,7 +63,7 @@
                                     <td class="text-center">{{count($c->products)}}</td>
                                     <td class="text-center">
                                         <span class="btn {{ $c->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
-                                            {{ $c->status == 1 ? 'active' : 'unactive'  }}
+                                            {{ $c->status == 1 ? 'Active' : 'Inactive'  }}
                                         </span>
                                     </td>
                                     <td class="text-center">

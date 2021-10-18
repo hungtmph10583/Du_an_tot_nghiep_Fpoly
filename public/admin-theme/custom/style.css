@@ -9,3 +9,11 @@
     width: 100%;
     height: auto;
 }
+
+img.img-custom-edit {
+    width: 100%;
+    height: auto;
+    border: 0.1rem solid #ced4da;
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+}

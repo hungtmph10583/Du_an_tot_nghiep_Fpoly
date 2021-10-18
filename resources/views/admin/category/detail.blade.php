@@ -24,44 +24,21 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-6">
+                                <img style="margin: auto 0;" src="{{asset( 'storage/' . $category->image)}}" alt="Danh mục này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                            </div>
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Tên danh mục</label>
                                     <input type="text" class="form-control" value="{{$category->name}}" readonly>
                                 </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="">Trạng thái</label>
-                                            <div class="form-control">
-                                                <label class="pr-2">
-                                                    <input type="radio" {{ ($category->status == 1 ? 'checked' : '') }} readonly> Hiển thị
-                                                </label>
-                                                <label class="pl-2">
-                                                    <input type="radio" {{ ($category->status == 0 ? 'checked' : '') }} readonly> Ẩn
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="">Show menu</label>
-                                            <div class="form-control">
-                                                <label class="pr-2">
-                                                    <input type="radio" name="show_menu" value="1"  {{ ($category->show_menu == 1 ? 'checked' : '') }}> Hiển thị
-                                                </label>
-                                                <label class="pl-2">
-                                                    <input type="radio" name="show_menu" value="0" {{ ($category->show_menu == 0 ? 'checked' : '') }}> Ẩn
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="form-group">
+                                    <label for="">Trạng thái</label>
+                                    <input class="form-control" type="text" value="{{ ($category->status == 1 ? 'Active' : 'Inactive') }}" readonly>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Show menu</label>
+                                    <input class="form-control" type="text" value="{{ ($category->show_menu == 1 ? 'Hiển thị' : 'Ẩn') }}" readonly>
+                                </div>
                                 <div class="row">
                                     <div class="col sm">
                                         <div class="form-group">
@@ -71,15 +48,33 @@
                                     </div>
                                     <div class="col sm">
                                         <div class="form-group">
-                                            <label for="">Số lượng giống loại</label>
+                                            <label for="">Số lượng giống loài</label>
                                             <input type="text" class="form-control" value="{{count($category->breeds)}}" readonly>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- <div class="row">
+                                    <div class="col sm">
+                                        <div class="form-group">
+                                            <label for="">Số lượng sản phẩm</label>
+                                            <input type="text" class="form-control" value="{{count($category->products)}}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="col sm">
+                                        <div class="form-group">
+                                            <label for="">Số lượng giống loài</label>
+                                            <input type="text" class="form-control" value="{{count($category->breeds)}}" readonly>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
                             <div class="col-6 mt-2"><br>
                                 <div class="text-left">
-                                    <a href="{{route('category.index')}}" class="btn btn-warning">Quay lại</a>
+                                    <a href="{{route('category.index')}}" class="btn btn-warning text-light">Quay lại</a>
                                     <a href="{{route('category.edit', ['id' => $category->id])}}" class="btn btn-info">Sửa danh mục</a>
                                 </div>
                             </div>

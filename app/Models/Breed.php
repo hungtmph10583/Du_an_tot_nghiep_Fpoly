@@ -10,7 +10,7 @@ class Breed extends Model
     use HasFactory;
     protected $table = "breeds";
     protected $fillable = [
-        'name', 'slug', 'image', 'status'
+        'category_id', 'name', 'slug', 'image', 'status'
     ];
     public function products()
     {

@@ -29,41 +29,23 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Danh mục</label>
-                                    <select name="category_id" class="form-control">
-                                        @foreach($category as $c)
-                                            @if($c->genre_type == 0)
-                                            <option value="{{$c->id}}" @if($c->id == old('category_id')) selected @endif>{{$c->name}}</option>
-                                            @endif
-                                        @endforeach
-                                    </select>
+                                    <input class="form-control" type="text" value="{{$model->category->name}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Tên giống loài</label>
-                                    <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên giống loài">
-                                    @error('name')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
+                                    <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên giống loài" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Ảnh</label>
-                                    <div class="form-control">
-                                        <input type="file" name="image" id="">
-                                    </div>
+                                    <label for="">Số lượng sản phẩm</label>
+                                    <input type="text" class="form-control" value="{{count($model->products)}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Trạng thái</label>
-                                    <div class="form-control">
-                                        <label class="pr-2">
-                                        <input type="radio" name="status" value="1" {{ ($model->status == 1 ? 'checked' : '') }}> Hiển thị
-                                    </label>
-                                            <label class="pl-2">
-                                        <input type="radio" name="status" value="0" {{ ($model->status == 0 ? 'checked' : '') }}> Ẩn
-                                    </label>
-                                    </div>
+                                    <input class="form-control" type="text" value="{{ ($model->status == 1 ? 'Active' : 'Inactive') }}" readonly>
                                 </div><br>
                                 <div class="text-left">
-                                    <button type="submit" class="btn btn-info">Lưu</button>
-                                    <a href="{{route('breed.index')}}" class="btn btn-danger">Hủy</a>
+                                    <a href="{{route('breed.index')}}" class="btn btn-warning text-light">Quay lại</a>
+                                    <a href="{{route('breed.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa giống loài</a>
                                 </div>
                             </div>
                         </div>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryFormRequest;
 use Illuminate\Http\Request;
 use App\Models\Breed;
 use App\Models\Category;
@@ -27,7 +26,6 @@ class BreedController extends Controller
         }
         
         $breed->load('products', 'category');
-
         // trả về cho người dùng 1 giao diện + dữ liệu breed vừa lấy đc 
         return view('admin.breed.index', [
             'breed' => $breed,
@@ -40,8 +38,8 @@ class BreedController extends Controller
         return view('admin.breed.add-form', compact('category'));
     }
     
-    public function saveAdd(CategoryFormRequest $request){
-        $model = new Category();
+    public function saveAdd(Request $request){
+        $model = new Breed();
         $model->fill($request->all());
         $name = $request->name;
         $slug = $request->name;
@@ -76,20 +74,26 @@ class BreedController extends Controller
         /**
          * End
          */
+        if($request->has('uploadfile')){
+            $model->image =$request->file('uploadfile')->storeAs('uploads/breeds/' . $model->id , 
+                                    uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+            $model->save();
+        }
         $model->save();
-        return redirect(route('category.index'));
+        return redirect(route('breed.index'));
     }
 
     public function editForm($id){
-        $model = Category::find($id);
+        $model = Breed::find($id);
         if(!$model){
             return redirect()->back();
         }
-        return view('admin.category.edit-form', compact('model'));
+        $category = Category::all();
+        return view('admin.breed.edit-form', compact('model', 'category'));
     }
 
-    public function saveEdit($id, CategoryFormRequest $request){
-        $model = Category::find($id); 
+    public function saveEdit($id, Request $request){
+        $model = Breed::find($id); 
         if(!$model){
             return redirect()->back();
         }
@@ -126,15 +130,25 @@ class BreedController extends Controller
         /**
          * End
          */
+        
         $model->name = ucwords($name);
+        if($request->has('uploadfile')){
+            $model->image =$request->file('uploadfile')->storeAs('uploads/breeds/' . $model->id , 
+                                    uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+            $model->save();
+        }
         $model->save();
-        return redirect(route('category.index'));
+        return redirect(route('breed.index'));
     }
 
     public function detail($id){
-        $cate = Category::find($id);
-        $cate->load('products');
-        return view('admin.category.detail', ['cate' => $cate]);
+        $model = breed::find($id);
+        $model->load('products', 'category');
+
+        $product = Product::all();
+        $category = Category::all();
+
+        return view('admin.breed.detail', compact('category', 'product', 'model'));
     }
 
     public function remove($id){
