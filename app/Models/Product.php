@@ -41,9 +41,9 @@ class Product extends Model
         return $this->belongsTo(Age::class, 'age_id');
     }
 
-    // public function galleries(){
-    //     return $this->hasMany(ProductGallery::class, 'product_id');
-    // }
+    public function galleries(){
+        return $this->hasMany(ProductGallery::class, 'product_id');
+    }
 
     // public function product_tag(){
     //     return $this->hasMany(ProductTag::class, 'product_id');

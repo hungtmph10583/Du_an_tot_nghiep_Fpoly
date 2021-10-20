@@ -10,7 +10,7 @@
             <div class="card card-secondary my-0">
                 <div class="card-header">
                     <ol class="breadcrumb float-sm-left ">
-                        <li class="breadcrumb-item card-title">Danh sách sản phẩm</li>
+                        <li class="breadcrumb-item card-title">Danh sách phụ kiện</li>
                     </ol>
                 </div>
             </div><!-- /.row -->
@@ -25,15 +25,15 @@
                 <div class="card-body">
                     <form action="" method="get">
                         <div class="row">
-                            <div class="col">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="">Tên sản phẩm</label>
+                                    <label for="">Tên phụ kiện</label>
                                     <input class="form-control" placeholder="Search" type="text" name="keyword" @isset($searchData['keyword']) value="{{$searchData['keyword']}}" @endisset>
                                 </div>
                             </div>
-                            <div class="col">
+                            <div class="col-6">
                                 <div class="form-group">
-                                    <label for="">Danh mục sản phẩm</label>
+                                    <label for="">Danh mục phụ kiện</label>
                                     <select class="form-control" name="cate_id" >
                                         <option value="">Tất cả</option>
                                         @foreach($category as $c)
@@ -42,7 +42,9 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Sắp xếp theo</label>
                                     <select class="form-control" name="order_by" >
@@ -51,16 +53,6 @@
                                         <option @if(isset($searchData['order_by']) &&  $searchData['order_by'] == 2) selected @endif value="2">Tên giảm dần alphabet</option>
                                         <option @if(isset($searchData['order_by']) &&  $searchData['order_by'] == 3) selected @endif value="3">Giá tăng dần</option>
                                         <option @if(isset($searchData['order_by']) &&  $searchData['order_by'] == 4) selected @endif value="4">Giá giảm dần</option>
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Số lượng</label>
-                                    <select class="form-control" name="comp_id" >
-                                        <option value="">Tất cả</option>
                                     </select>
                                 </div>
                             </div>
@@ -76,39 +68,39 @@
                         <table class="table table-striped">
                             <thead>
                                 <th>STT</th>
-                                <th>Tên sản phẩm</th>
+                                <th>Tên phụ kiện</th>
                                 <th>Ảnh</th>
                                 <th>Danh mục</th>
                                 <th>Số lượng</th>
                                 <th>Giá bán</th>
-                                <th>Trạng thái</th>
-                                <th><a href="{{route('product.add')}}" class="btn btn-info">Thêm sản phẩm</a></th>
+                                <th>trạng thái</th>
+                                <th><a href="{{route('accessory.add')}}" class="btn btn-info">Thêm phụ kiện</a></th>
                             </thead>
                             <tbody>
-                                @foreach($product as $p)
+                                @foreach($accessory as $p)
                                 <tr>
-                                    <td>{{(($product->currentPage()-1)*5) + $loop->iteration}}</td>
+                                    <td>{{(($accessory->currentPage()-1)*5) + $loop->iteration}}</td>
                                     <td>{{$p->name}}</td>
                                     <td><img src="{{asset( 'storage/' . $p->image)}}" width="70" /></td>
                                     <td>{{$p->category->name}}</td>
                                     <td>{{number_format($p->quantity)}}</td>
                                     <td>{{number_format($p->price)}} <span>VND</span></td>
                                     <td>
-                                        <span class="btn {{ $p->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
-                                            {{ $p->status == 1 ? 'Active' : 'Inactive'  }}
+                                        <span class="btn {{ $c->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
+                                            {{ $c->status == 1 ? 'Còn hàng' : 'Hết hàng'  }}
                                         </span>
                                     </td>
                                     <td>
-                                        <a href="{{route('product.detail', ['id' => $p->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href="{{route('product.edit', ['id' => $p->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="{{route('product.remove', ['id' => $p->id])}}" class="btn btn-danger" onclick="confirm('Bạn có chắc muốn xóa sản phẩm này?')"><i class="far fa-trash-alt"></i></a>
+                                        <a href="{{route('accessory.detail', ['id' => $p->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
+                                        <a href="{{route('accessory.edit', ['id' => $p->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
+                                        <a href="{{route('accessory.remove', ['id' => $p->id])}}" class="btn btn-danger" onclick="confirm('Bạn có chắc muốn xóa phụ kiện này?')"><i class="far fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-end">
-                            {{$product->links()}}
+                            {{$accessory->links()}}
                         </div>
                     </div>
                 </div>

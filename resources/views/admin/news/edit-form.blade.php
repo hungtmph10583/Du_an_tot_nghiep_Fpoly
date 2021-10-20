@@ -24,13 +24,10 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label for="">Ảnh danh mục</label>
-                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Danh mục này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                            </div>
+                        <div class="col-6">
+                            <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Danh mục này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                         </div>
-                        <div class="col-9">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label for="">Tên danh mục</label>
                                 <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên danh mục">
@@ -83,7 +80,7 @@
                     <div class="row">
                         <div class="col-6"></div>
                         <div class="col-6 mt-2"><br>
-                            <div class="text-right">
+                            <div class="text-left">
                                 <button type="submit" class="btn btn-info">Lưu</button>
                                 <a href="{{route('category.index')}}" class="btn btn-danger">Hủy</a>
                             </div>

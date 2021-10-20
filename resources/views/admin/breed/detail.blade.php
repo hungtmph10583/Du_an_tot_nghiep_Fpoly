@@ -23,17 +23,20 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-6">
-                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Giống loài này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                            </div>
-                            <div class="col-6">
+                            <div class="col-3">
                                 <div class="form-group">
-                                    <label for="">Danh mục</label>
-                                    <input class="form-control" type="text" value="{{$model->category->name}}" readonly>
+                                    <label for="">Ảnh đại diện giống loài</label>
+                                    <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Giống loài này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                                 </div>
+                            </div>
+                            <div class="col-9">
                                 <div class="form-group">
                                     <label for="">Tên giống loài</label>
                                     <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên giống loài" readonly>
+                                </div>
+                                <div class="form-group">
+                                    <label for="">Danh mục</label>
+                                    <input class="form-control" type="text" value="{{$model->category->name}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Số lượng sản phẩm</label>

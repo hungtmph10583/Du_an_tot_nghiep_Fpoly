@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\BreedController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\AccessoryController;
+use App\Http\Controllers\Admin\NewsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -75,6 +77,35 @@ Route::prefix('san-pham')->group(function () {
 
     Route::get('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
     // Route::get('xoa/{id}', [ProductController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
+});
+
+Route::prefix('phu-kien')->group(function () {
+    Route::get('/', [AccessoryController::class, 'index'])->name('accessory.index');
+
+    Route::get('tao-moi', [AccessoryController::class, 'addForm'])->name('accessory.add');
+    Route::post('tao-moi', [AccessoryController::class, 'saveAdd']);
+
+    Route::get('cap-nhat/{id}', [AccessoryController::class, 'editForm'])->name('accessory.edit');
+    Route::post('cap-nhat/{id}', [AccessoryController::class, 'saveEdit']);
+
+    Route::get('chi-tiet/{id}', [AccessoryController::class, 'detail'])->name('accessory.detail');
+
+    Route::get('xoa/{id}', [AccessoryController::class, 'remove'])->name('accessory.remove');
+    // Route::get('xoa/{id}', [AccessoryController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
+});
+
+Route::prefix('tin-tuc')->group(function () {
+    Route::get('/', [NewsController::class, 'index'])->name('news.index');
+
+    Route::get('tao-moi', [NewsController::class, 'addForm'])->name('news.add');
+    Route::post('tao-moi', [NewsController::class, 'saveAdd']);
+
+    Route::get('cap-nhat/{id}', [NewsController::class, 'editForm'])->name('news.edit');
+    Route::post('cap-nhat/{id}', [NewsController::class, 'saveEdit']);
+
+    Route::get('chi-tiet/{id}', [NewsController::class, 'detail'])->name('news.detail');
+
+    Route::get('xoa/{id}', [NewsController::class, 'remove'])->name('news.remove');
 });
 
 ?>

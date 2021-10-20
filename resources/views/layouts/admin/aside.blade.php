@@ -10,17 +10,17 @@
     <!-- Sidebar user panel (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
             <div class="image">
-            @if(Auth::check())
-                <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" class="img-circle elevation-2" alt="User Image" width="70" />
-            @else
-                <img src="{{ asset('admin-theme/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
-            @endif
+                @if(Auth::check())
+                    <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" class="img-circle elevation-2" alt="User Image" width="70" />
+                @else
+                    <img src="{{ asset('admin-theme/dist/img/user2-160x160.jpg')}}" class="img-circle elevation-2" alt="User Image">
+                @endif
             </div>
             <div class="info">
             @if(Auth::check())
-            <a href="{{route('user.profile', ['id' => Auth::user()->id])}}" class="d-block">{{Auth::user()->name}}</a>
+                <a href="{{route('user.profile', ['id' => Auth::user()->id])}}" class="d-block">{{Auth::user()->name}}</a>
             @else
-            <a href="">Chua dang nhap</a>
+                <a href="">Chua dang nhap</a>
             @endif
             </div>
         </div>
@@ -144,6 +144,56 @@
                             <a href="{{route('product.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm sản phẩm</p>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-archive"></i>
+                        <p>
+                            Phụ kiện
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('accessory.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        @hasanyrole('admin|manage')
+                        <li class="nav-item">
+                            <a href="{{route('accessory.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm Phụ kiện</p>
+                            </a>
+                        </li>
+                        @endhasanyrole
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="far fa-newspaper"></i>
+                        <p>
+                            Tin tức
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('news.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        @hasanyrole('admin|manage')
+                        <li class="nav-item">
+                            <a href="{{route('news.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tạo bài viết</p>
                             </a>
                         </li>
                         @endhasanyrole

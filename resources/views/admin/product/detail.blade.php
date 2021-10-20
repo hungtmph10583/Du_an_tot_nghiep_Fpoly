@@ -24,7 +24,10 @@
                         @csrf
                         <div class="row">
                             <div class="col-3">
-                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                                <div class="form-group">
+                                    <label for="">Ảnh sản phẩm</label>
+                                    <img class="img-custom-edit"  src="{{asset( 'storage/' . $model->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                                </div>
                             </div>
                             <div class="col-9">
                                 <div class="form-group">
@@ -79,7 +82,19 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Giới tính</label>
-                                        <input class="form-control" type="text" name="gender_id" value="{{ ($model->gender_id == 1 ? 'Giống đực' : ($model->gender_id == 2 ? 'Giống cái' : 'Lưỡng tính')) }}"readonly >
+                                    <input class="form-control" type="text" name="gender_id" value="{{ ($model->gender_id == 1 ? 'Giống đực' : ($model->gender_id == 2 ? 'Giống cái' : 'Lưỡng tính')) }}"readonly >
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group">
+                                <label for="">Thumbnail</label>
+                                <div class="row">
+                                        @foreach ($model->galleries as $gl)
+                                        <div class="col">
+                                            <img src="{{asset('storage/' . $gl->image_url)}}" class="form-control" style="width: 100%; height: 100%">
+                                        </div>
+                                        @endforeach
                                 </div>
                             </div>
                         </div>
@@ -91,9 +106,9 @@
                                 </div>
                             </div>
                             <div class="text-left">
-                                    <a href="{{route('product.index')}}" class="btn btn-warning text-light">Quay lại</a>
-                                    <a href="{{route('product.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa danh mục</a>
-                                </div>
+                                <a href="{{route('product.index')}}" class="btn btn-warning text-light">Quay lại</a>
+                                <a href="{{route('product.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa danh mục</a>
+                            </div>
                         </div>
                     </form>
                 </div>

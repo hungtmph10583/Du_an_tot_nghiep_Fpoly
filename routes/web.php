@@ -32,10 +32,10 @@ Route::post('login', [AuthController::class, 'postLogin']);
 // Route::post('registration', [AuthController::class, 'postRegistration']);
 
 //------------------------------- Logout -------------------------------
-// Route::any('logout', function(){
-//     Auth::logout();
-//     return redirect(route('login'));
-// })->name('logout');
+Route::any('logout', function(){
+    Auth::logout();
+    return redirect(route('login'));
+})->name('logout');
 
 // ------------------------------- Forget password -------------------------------
 // Route::get('forget-password', 'App\Http\Controllers\Auth\ForgotPasswordController@getEmail')->name('forget-password');

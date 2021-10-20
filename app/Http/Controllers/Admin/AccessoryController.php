@@ -3,18 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductFormRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use App\Models\Product;
+use App\Models\Accessory;
 use App\Models\Category;
-use App\Models\Breed;
-use App\Models\Gender;
-use App\Models\Age;
-use App\Models\ProductGallery;
-use Illuminate\Support\Facades\Auth;
+use App\Models\AccessoryGallery;
 
-class ProductController extends Controller
+class AccessoryController extends Controller
 {
     public function index(Request $request){
         $pagesize = 5;
@@ -22,63 +17,50 @@ class ProductController extends Controller
         
         if(count($request->all()) == 0){
             // Lấy ra danh sách sản phẩm & phân trang cho nó
-            $products = Product::paginate($pagesize);
+            $accessories = Accessory::paginate($pagesize);
         }else{
-            $productQuery = Product::where('name', 'like', "%" .$request->keyword . "%");
+            $accessoryQuery = Accessory::where('name', 'like', "%" .$request->keyword . "%");
             if($request->has('category_id') && $request->category_id != ""){
-                $productQuery = $productQuery->where('category_id', $request->category_id);
+                $accessoryQuery = $accessoryQuery->where('category_id', $request->category_id);
             }
 
             if($request->has('order_by') && $request->order_by > 0){
                 if($request->order_by == 1){
-                    $productQuery = $productQuery->orderBy('name');
+                    $accessoryQuery = $accessoryQuery->orderBy('name');
                 }else if($request->order_by == 2){
-                    $productQuery = $productQuery->orderByDesc('name');
+                    $accessoryQuery = $accessoryQuery->orderByDesc('name');
                 }else if($request->order_by == 3){
-                    $productQuery = $productQuery->orderBy('price');
+                    $accessoryQuery = $accessoryQuery->orderBy('price');
                 }else {
-                    $productQuery = $productQuery->orderByDesc('price');
+                    $accessoryQuery = $accessoryQuery->orderByDesc('price');
                 }
             }
-            $products = $productQuery->paginate($pagesize)->appends($searchData);
+            $accessories = $accessoryQuery->paginate($pagesize)->appends($searchData);
         }
-        //$products->load('category', 'tags', 'company', 'galleries', 'product_tag');
-        $products->load('category', 'breed', 'gender');
+        $accessories->load('category');
         
         $categories = Category::all();
-        $gender = Gender::all();
-        $breed = Breed::all();
         
-        // trả về cho người dùng 1 giao diện + dữ liệu products vừa lấy đc 
-        return view('admin.product.index', [
-            'product' => $products,
+        // trả về cho người dùng 1 giao diện + dữ liệu accessorys vừa lấy đc 
+        return view('admin.accessory.index', [
+            'accessory' => $accessories,
             'category' => $categories,
-            'gender' => $gender,
-            'breed' => $breed,
+            
             'searchData' => $searchData
         ]);
     }
 
     public function addForm(){
         $category = Category::all();
-        $breed = Breed::all();
-        $gender = Gender::all();
-        $age = Age::all();
-        return view('admin.product.add-form', compact('category', 'breed', 'gender', 'age'));
+        return view('admin.accessory.add-form', compact('category'));
     }
 
     public function saveAdd(Request $request){
-        $model = new Product(); 
+        $model = new Accessory(); 
         if(!$model){
             return redirect()->back();
         }
         $model->fill($request->all());
-
-        /**
-         * @note: upload ảnh lên bảng phụ
-         * @date: 03/10/21
-         * @name: hungtm
-         */
 
         /**
          * @note: huyen doi ky tu chu thanh slug
@@ -109,52 +91,40 @@ class ProductController extends Controller
         $model->slug = strtolower($slug);
 
         if($request->hasFile('uploadfile')){
-            $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+            $model->image = $request->file('uploadfile')->storeAs('uploads/accessories', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
 
-        $model->creator = Auth::user()->id;
-
+        
+        //dd($request->id);
         $model->save();
 
         if($request->has('galleries')){
             foreach($request->galleries as $i => $item){
-                $galleryObj = new ProductGallery();
-                $galleryObj->product_id = $model->id;
+                $galleryObj = new AccessoryGallery();
+                $galleryObj->accessory_id = $model->id;
                 $galleryObj->order_no = $i+1;
-                $galleryObj->image_url = $item->storeAs('uploads/products/galleries/' . $model->id , 
+                $galleryObj->image_url = $item->storeAs('uploads/accessories/galleries/' . $model->id , 
                                         uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-                                        
                 $galleryObj->save();
             }
         }
-        
-        //dd($request);
-        // if ($request->has('ageInsert')) {
-        //     $age = new Age();
-        //     $age->age = $request->ageInsert;
-        //     $age->save();
-        //     $last = Age::all()->last();
-        //     $request->age_id = $last->id;
-        // }
-        return redirect(route('product.index'));
+        return redirect(route('accessory.index'));
     }
 
     public function editForm($id){
-        $model = Product::find($id);
+        $model = Accessory::find($id);
         if(!$model){
             return redirect()->back();
         }
 
         $category = Category::all();
-        $breed = Breed::all();
-        $gender = Gender::all();
 
-        $model->load('category', 'breed', 'gender');
-        return view('admin.product.edit-form', compact('model', 'category', 'breed', 'gender'));
+        $model->load('galleries', 'category');
+        return view('admin.accessory.edit-form', compact('model', 'category'));
     }
 
-    public function saveEdit($id, ProductFormRequest $request){
-        $model = Product::find($id); 
+    public function saveEdit($id, Request $request){
+        $model = Accessory::find($id); 
         
         if(!$model){
             return redirect()->back();
@@ -162,10 +132,8 @@ class ProductController extends Controller
         $model->fill($request->all());
         // upload ảnh
         if($request->hasFile('uploadfile')){
-            $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
+            $model->image = $request->file('uploadfile')->storeAs('uploads/accessories', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
-
-        $model->creator = Auth::user()->id;
         $model->save();
 
         /* gallery
@@ -175,44 +143,42 @@ class ProductController extends Controller
             $strIds = rtrim($request->removeGalleryIds, '|');
             $lstIds = explode('|', $strIds);
             // xóa các ảnh vật lý
-            $removeList = ProductGallery::whereIn('id', $lstIds)->get();
+            $removeList = AccessoryGallery::whereIn('id', $lstIds)->get();
             foreach ($removeList as $gl) {
                 Storage::delete($gl->url);
             }
-            ProductGallery::destroy($lstIds);
+            AccessoryGallery::destroy($lstIds);
         }
 
         // lưu mới danh sách gallery
         if($request->has('galleries')){
             foreach($request->galleries as $i => $item){
-                $galleryObj = new ProductGallery();
-                $galleryObj->product_id = $model->id;
+                $galleryObj = new AccessoryGallery();
+                $galleryObj->accessory_id = $model->id;
                 $galleryObj->order_no = $i+1;
-                $galleryObj->url = $item->storeAs('uploads/products/galleries/' . $model->id , 
+                $galleryObj->url = $item->storeAs('uploads/accessories/galleries/' . $model->id , 
                                         uniqid() . '-' . $item->getClientOriginalName());
                 $galleryObj->save();
             }
         }
 
-        return redirect(route('product.index'));
+        return redirect(route('accessory.index'));
     }
 
     public function detail($id)
     {
-        $model = Product::find($id);
-        $model->load('category', 'breed', 'gender');
+        $model = Accessory::find($id);
+        $model->load('galleries', 'category');
 
         $category = Category::all();
-        $breed = Breed::all();
-        $gender = Gender::all();
 
-        return view('admin.product.detail', compact('category', 'model', 'breed', 'gender'));
+        return view('admin.accessory.detail', compact('model', 'category'));
     }
 
     public function remove($id){
-        $product = Product::find($id);
-        $product->product_tag()->delete();
-        $product->delete();
+        $accessory = Accessory::find($id);
+        $accessory->galleries()->delete();
+        $accessory->delete();
         return redirect()->back();
     }
 }

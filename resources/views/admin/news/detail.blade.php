@@ -23,13 +23,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="">Ảnh danh mục</label>
-                                    <img class="form-control" style="width:100%; height: 100%" src="{{asset( 'storage/' . $category->image)}}" alt="Danh mục này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                                </div>
+                            <div class="col-6">
+                                <img style="margin: auto 0;" src="{{asset( 'storage/' . $category->image)}}" alt="Danh mục này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                             </div>
-                            <div class="col-9">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Tên danh mục</label>
                                     <input type="text" class="form-control" value="{{$category->name}}" readonly>

@@ -6,8 +6,8 @@
             <div class="card card-secondary my-0">
                 <div class="card-header">
                     <ol class="breadcrumb float-sm-left ">
-                        <li class="breadcrumb-item"><a class="card-title" href="{{route('product.index')}}">Danh sách sản phẩm</a></li>
-                        <li class="breadcrumb-item active">Sửa sản phẩm</li>
+                        <li class="breadcrumb-item"><a class="card-title" href="{{route('accessory.index')}}">Danh sách phụ kiện</a></li>
+                        <li class="breadcrumb-item active">Sửa phụ kiện</li>
                     </ol>
                 </div>
             </div><!-- /.row -->
@@ -24,21 +24,18 @@
                         @csrf
                         <div class="row">
                             <div class="col-3">
-                                <div class="form-group">
-                                        <label for="">Ảnh sản phẩm</label>
-                                    <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                                </div>
+                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="phụ kiện này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                             </div>
                             <div class="col-9">
                                 <div class="form-group">
-                                    <label for="">Tên sản phẩm</label>
-                                    <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên sản phẩm">
+                                    <label for="">Tên phụ kiện</label>
+                                    <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên phụ kiện">
                                     @error('name')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Ảnh sản phẩm</label>
+                                    <label for="">Ảnh phụ kiện</label>
                                     <input type="file" name="uploadfile" class="form-control">
                                     @error('uploadfile')
                                         <span class="text-danger">{{$message}}</span>
@@ -48,35 +45,16 @@
                                     <label for="">Danh mục</label>
                                     <select name="category_id" class="form-control">
                                         @foreach($category as $c)
-                                        <option value="{{$c->id}}" @if($model->category_id == $c->id) selected @endif>{{$c->name}}</option>
+                                            @if($c->genre_type == 1)
+                                                <option value="{{$c->id}}" @if($model->category_id == $c->id) selected @endif>{{$c->name}}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="">Giống loài</label>
-                                    <select name="breed_id" class="form-control">
-                                        @foreach($breed as $br)
-                                        <option value="{{$br->id}}" @if($model->breed_id == $br->id) selected @endif>{{$br->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Số lượng</label>
-                                    <input type="text" name="quantity" class="form-control" value="{{$model->quantity}}" placeholder="Số lượng sản phẩm">
+                                    <input type="text" name="quantity" class="form-control" value="{{$model->quantity}}" placeholder="Số lượng phụ kiện">
                                     @error('quantity')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Cân nặng</label>
-                                    <input type="text" name="weight" class="form-control" value="{{$model->weight}} kg" placeholder="Cân nặng của thú cưng">
-                                    @error('weight')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
@@ -86,23 +64,12 @@
                             <div class="col-6"> 
                                 <div class="form-group">
                                     <label for="">Giá bán</label>
-                                    <input type="text" name="price" class="form-control" value="{{$model->price}}" placeholder="Giá sản phẩm">
+                                    <input type="text" name="price" class="form-control" value="{{$model->price}}" placeholder="Giá phụ kiện">
                                     @error('price')
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
                             </div>
-                            <div class="col-6"> 
-                                <div class="form-group">
-                                    <label for="">Tuổi của thú cưng</label>
-                                    <input type="text" name="age_id" class="form-control" value="{{$model->age_id}}" placeholder="Tuổi hiện tại của thú cưng">
-                                    @error('age_id')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Trạng thái</label>
@@ -112,20 +79,6 @@
                                         <input type="radio" name="status" value="0" id="stt0" @if($model->status === 0) checked @endif>
                                         <label for="stt0">Hết hàng</label>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Giới tính</label>
-                                    <div class="form-control">
-                                        @foreach($gender as $gd)
-                                        <input type="radio" name="gender_id" id="{{$gd->id}}" value="{{$gd->id}}" @if($model->gender_id == $gd->id) checked @endif>
-                                        <label for="{{$gd->id}}" class="pr-4">{{$gd->gender}}</label>
-                                        @endforeach
-                                    </div>
-                                    @error('gender')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
                                 </div>
                             </div>
                         </div>
@@ -157,13 +110,13 @@
                             </div>
                             <div class="col-12">
                                 <div class="form-group">
-                                    <label for="">Chi tiết sản phẩm:</label>
+                                    <label for="">Chi tiết phụ kiện:</label>
                                     <textarea name="detail" class=form-control rows="10" placeholder="{{$model->detail}}">{{$model->detail}}</textarea>
                                 </div>
                             </div>
                             <div class="text-right">
                                 <button type="submit" class="btn btn-success ml-2">Lưu</button>
-                                <a href="{{route('product.index')}}" class="btn btn-danger">Hủy</a>
+                                <a href="{{route('accessory.index')}}" class="btn btn-danger">Hủy</a>
                             </div>
                         </div>
                     </form>

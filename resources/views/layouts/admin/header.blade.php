@@ -5,11 +5,15 @@
 			<a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
 		</li>
 		<li class="nav-item d-none d-sm-inline-block">
-			<a href="{{route('dashboard.index')}}" class="nav-link">Home</a>
-		</li>
-		<li class="nav-item d-none d-sm-inline-block">
-			<!--  -->
-		</li>
+            <a href="{{route('dashboard.index')}}" class="nav-link">Home</a>
+        </li>
+        <li class="nav-item d-none d-sm-inline-block">
+            @if(Auth::check())
+            <a href="{{route('logout')}}" class="nav-link">Logout</a>
+            @else
+            <a href="{{route('login')}}" class="nav-link">Login</a>
+            @endif
+        </li>
 	</ul>
 
 	<!-- Right navbar links -->
