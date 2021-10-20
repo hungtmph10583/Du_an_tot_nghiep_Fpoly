@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\BreedController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AccessoryController;
 use App\Http\Controllers\Admin\NewsController;
+use App\Http\Controllers\Admin\SlideController;
 
 /*
 |--------------------------------------------------------------------------
@@ -106,6 +107,20 @@ Route::prefix('tin-tuc')->group(function () {
     Route::get('chi-tiet/{id}', [NewsController::class, 'detail'])->name('news.detail');
 
     Route::get('xoa/{id}', [NewsController::class, 'remove'])->name('news.remove');
+});
+
+Route::prefix('slide')->group(function () {
+    Route::get('/', [SlideController::class, 'index'])->name('slide.index');
+
+    Route::get('tao-moi', [SlideController::class, 'addForm'])->name('slide.add');
+    Route::post('tao-moi', [SlideController::class, 'saveAdd']);
+
+    Route::get('cap-nhat/{id}', [SlideController::class, 'editForm'])->name('slide.edit');
+    Route::post('cap-nhat/{id}', [SlideController::class, 'saveEdit']);
+
+    Route::get('chi-tiet/{id}', [SlideController::class, 'detail'])->name('slide.detail');
+
+    Route::get('xoa/{id}', [SlideController::class, 'remove'])->name('slide.remove');
 });
 
 ?>

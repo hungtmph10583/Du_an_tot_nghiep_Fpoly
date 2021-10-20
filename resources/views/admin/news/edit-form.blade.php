@@ -5,8 +5,8 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('category.index')}}">Danh sách danh mục</a></li>
-                    <li class="breadcrumb-item active">Sửa danh mục</li>
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('category.index')}}">Danh sách tin tức</a></li>
+                    <li class="breadcrumb-item active">Sửa tin tức</li>
                 </ol>
             </div>
         </div>
@@ -24,28 +24,24 @@
             <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-6">
-                            <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Danh mục này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                        </div>
-                        <div class="col-6">
+                        <div class="col-3">
                             <div class="form-group">
-                                <label for="">Tên danh mục</label>
-                                <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên danh mục">
-                                @error('name')
+                                <label for="">Ảnh tin tức</label>
+                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="Tin tức này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="form-group">
+                                <label for="">Tiêu đề tin tức</label>
+                                <input type="text" name="title" class="form-control" value="{{$model->title}}" placeholder="Tiêu đề tin tức">
+                                @error('title')
                                     <span class="text-danger">{{$message}}</span>
                                 @enderror
                             </div>
                             <div class="form-group">
-                                <label for="">Ảnh danh mục</label>
+                                <label for="">Ảnh tin tức</label>
                                 <input type="file" name="uploadfile" class="form-control"> @error('uploadfile')
                                 <span class="text-danger">{{$message}}</span> @enderror
-                            </div>
-                            <div class="form-group">
-                                <label for="">Loại danh mục</label>
-                                <select name="genre_type" class="form-control">
-                                    <option value="0" @if($model->genre_type === 0) selected @endif>Thú cưng</option>
-                                    <option value="1" @if($model->genre_type === 1) selected @endif>Phụ kiện</option>
-                                </select>
                             </div>
                             <div class="row">
                                 <div class="col">
@@ -61,19 +57,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="">Show menu</label>
-                                        <div class="form-control">
-                                            <label class="pr-2">
-                                        <input type="radio" name="show_menu" value="1"  {{ ($model->show_menu == 1 ? 'checked' : '') }}> Hiển thị
-                                    </label>
-                                            <label class="pl-2">
-                                        <input type="radio" name="show_menu" value="0" {{ ($model->show_menu == 0 ? 'checked' : '') }}> Ẩn
-                                    </label>
-                                        </div>
-                                    </div>
-                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Nội dung bài viết</label>
+                                <textarea class="form-control" name="content" id="" cols="30" rows="10" placeholder="{{$model->content}}">{{$model->content}}</textarea>
                             </div>
                         </div>
                     </div>

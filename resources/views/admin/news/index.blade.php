@@ -50,10 +50,8 @@
                                 <tr>
                                     <td>{{(($news->currentPage()-1)*7) + $loop->iteration}}</td>
                                     <td>{{$n->title}}</td>
-                                    <td>
-                                        <img src="" alt="">
-                                    </td>
-                                    <td>Big boss</td>
+                                    <td class="text-center"><img src="{{asset( 'storage/' . $n->image)}}" width="70" /></td>
+                                    <td class="text-center">{{$n->user->name}}</td>
                                     <td class="text-center">
                                         <span class="btn {{ $n->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
                                             {{ $n->status == 1 ? 'Active' : 'Inactive'  }}

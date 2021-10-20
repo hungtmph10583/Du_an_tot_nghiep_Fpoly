@@ -6,8 +6,8 @@
             <div class="card card-secondary my-0">
                 <div class="card-header">
                     <ol class="breadcrumb float-sm-left ">
-                        <li class="breadcrumb-item"><a class="card-title" href="{{route('category.index')}}">Danh sách danh mục</a></li>
-                        <li class="breadcrumb-item active">Chi tiết danh mục</li>
+                        <li class="breadcrumb-item"><a class="card-title" href="{{route('news.index')}}">Danh sách tin tức</a></li>
+                        <li class="breadcrumb-item active">Chi tiết tin tức</li>
                     </ol>
                 </div>
             </div><!-- /.row -->
@@ -23,59 +23,38 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-6">
-                                <img style="margin: auto 0;" src="{{asset( 'storage/' . $category->image)}}" alt="Danh mục này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                            </div>
-                            <div class="col-6">
+                            <div class="col-3">
                                 <div class="form-group">
-                                    <label for="">Tên danh mục</label>
-                                    <input type="text" class="form-control" value="{{$category->name}}" readonly>
+                                    <label for="">Ảnh tin tức</label>
+                                    <img class="form-control" style="width:100%; height: 100%" src="{{asset( 'storage/' . $news->image)}}" alt="Tin tức này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                                </div>
+                            </div>
+                            <div class="col-9">
+                                <div class="form-group">
+                                    <label for="">Tiêu đề tin tức</label>
+                                    <input type="text" class="form-control" value="{{$news->title}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Trạng thái</label>
-                                    <input class="form-control" type="text" value="{{ ($category->status == 1 ? 'Active' : 'Inactive') }}" readonly>
+                                    <input class="form-control" type="text" value="{{ ($news->status == 1 ? 'Active' : 'Inactive') }}" readonly>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label for="">Show menu</label>
-                                    <input class="form-control" type="text" value="{{ ($category->show_menu == 1 ? 'Hiển thị' : 'Ẩn') }}" readonly>
-                                </div>
-                                <div class="row">
-                                    <div class="col sm">
-                                        <div class="form-group">
-                                            <label for="">Số lượng sản phẩm</label>
-                                            <input type="text" class="form-control" value="{{count($category->products)}}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col sm">
-                                        <div class="form-group">
-                                            <label for="">Số lượng giống loài</label>
-                                            <input type="text" class="form-control" value="{{count($category->breeds)}}" readonly>
-                                        </div>
-                                    </div>
+                                    <label for="">Nội dung bài viết</label>
+                                    <textarea class="form-control" name="content" id="" cols="30" rows="10" readonly>{{$news->content}}</textarea>
                                 </div>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                <!-- <div class="row">
-                                    <div class="col sm">
-                                        <div class="form-group">
-                                            <label for="">Số lượng sản phẩm</label>
-                                            <input type="text" class="form-control" value="{{count($category->products)}}" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="col sm">
-                                        <div class="form-group">
-                                            <label for="">Số lượng giống loài</label>
-                                            <input type="text" class="form-control" value="{{count($category->breeds)}}" readonly>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </div>
                             <div class="col-6 mt-2"><br>
-                                <div class="text-left">
-                                    <a href="{{route('category.index')}}" class="btn btn-warning text-light">Quay lại</a>
-                                    <a href="{{route('category.edit', ['id' => $category->id])}}" class="btn btn-info">Sửa danh mục</a>
+                                <div class="text-right">
+                                    <a href="{{route('news.index')}}" class="btn btn-warning text-light">Quay lại</a>
+                                    <a href="{{route('news.edit', ['id' => $news->id])}}" class="btn btn-info">Sửa tin tức</a>
                                 </div>
                             </div>
                         </div>

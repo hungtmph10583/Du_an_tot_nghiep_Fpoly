@@ -26,8 +26,8 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="">Tên bài viết</label>
-                                <input type="text" name="title" class="form-control" value="{{old('title')}}" placeholder="Tên bài viết"> @error('title')
+                                <label for="">Tiêu đề bài viết</label>
+                                <input type="text" name="title" class="form-control" value="{{old('title')}}" placeholder="Tiêu đề bài viết"> @error('title')
                                 <span class="text-danger">{{$message}}</span> @enderror
                             </div>
                         </div>
@@ -40,28 +40,40 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col">
                             <div class="form-group">
-                                <label for="">Gắn thẻ danh mục liên quan vào bài viết</label>
+                                <label for="">Gắn thẻ danh mục liên quan cho bài viết</label>
                                 <select class="form-control" name="category_id" id="">
-                                        <option value="0">Danh mục liên quan</option>
-                                        <option value="">Chó</option>
-                                        <option value="">Mèo</option>
-                                        <option value="">Rùa</option>
-                                        <option value="">Khỉ</option>
-                                    </select>
+                                    <option value="0">Danh mục liên quan</option>
+                                    <option value="">Chó</option>
+                                    <option value="">Mèo</option>
+                                    <option value="">Rùa</option>
+                                    <option value="">Khỉ</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Gắn thẻ sản phẩm liên quan cho bài viết</label>
+                                <select class="form-control" name="product_id" id="">
+                                    <option value="0">Sản phẩm liên quan</option>
+                                    <option value="">Chó</option>
+                                    <option value="">Mèo</option>
+                                    <option value="">Rùa</option>
+                                    <option value="">Khỉ</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col">
                             <div class="form-group">
                                 <label for="">Trạng thái</label>
                                 <div class="form-control">
                                     <label class="pr-2">
-                                            <input type="radio" name="status" value="1" checked> Hiển thị
-                                        </label>
-                                    <label class="pl-2">
-                                            <input type="radio" name="status" value="0"> Ẩn
-                                        </label>
+                                        <input type="radio" name="status" value="1" checked> Hiển thị
+                                    </label>
+                                <label class="pl-2">
+                                        <input type="radio" name="status" value="0"> Ẩn
+                                    </label>
                                 </div>
                             </div>
                         </div>
