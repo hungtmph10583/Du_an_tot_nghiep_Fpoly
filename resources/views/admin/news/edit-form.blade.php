@@ -71,7 +71,7 @@
                     <div class="row">
                         <div class="col-6"></div>
                         <div class="col-6 mt-2"><br>
-                            <div class="text-left">
+                            <div class="text-right">
                                 <button type="submit" class="btn btn-info">Lưu</button>
                                 <a href="{{route('category.index')}}" class="btn btn-danger">Hủy</a>
                             </div>
