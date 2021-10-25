@@ -10,7 +10,7 @@ class Category extends Model
     use HasFactory;
     protected $table = "categories";
     protected $fillable = [
-        'name', 'slug', 'status', 'genre_type', 'image'
+        'name', 'slug','image', 'show_slide',  'category_type_id'
     ];
     // Quan hệ category -> product
     public function products()
@@ -23,5 +23,9 @@ class Category extends Model
     {
         return $this->hasMany(Breed::class,'category_id');
         // quan he 
+    }
+
+    public function categoryType(){
+        return $this->belongsTo(Category::class, 'category_type_id');
     }
 }

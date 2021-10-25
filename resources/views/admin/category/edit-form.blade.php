@@ -45,35 +45,23 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Loại danh mục</label>
-                                <select name="genre_type" class="form-control">
-                                    <option value="0" @if($model->genre_type === 0) selected @endif>Thú cưng</option>
-                                    <option value="1" @if($model->genre_type === 1) selected @endif>Phụ kiện</option>
+                                <select name="category_type_id" class="form-control">
+                                @foreach($categoryType as $type)
+                                    <option value="{{$type->id}}" @if($model->category_type_id == $type->id) selected @endif>{{$type->name}}</option>
+                                @endforeach
                                 </select>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="">Trạng thái</label>
+                                    <label for="">Hiển thị ra slide</label>
                                         <div class="form-control">
                                             <label class="pr-2">
-                                        <input type="radio" name="status" value="1" {{ ($model->status == 1 ? 'checked' : '') }}> Hiển thị
-                                    </label>
-                                            <label class="pl-2">
-                                        <input type="radio" name="status" value="0" {{ ($model->status == 0 ? 'checked' : '') }}> Ẩn
-                                    </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="">Show menu</label>
-                                        <div class="form-control">
-                                            <label class="pr-2">
-                                        <input type="radio" name="show_menu" value="1"  {{ ($model->show_menu == 1 ? 'checked' : '') }}> Hiển thị
-                                    </label>
-                                            <label class="pl-2">
-                                        <input type="radio" name="show_menu" value="0" {{ ($model->show_menu == 0 ? 'checked' : '') }}> Ẩn
-                                    </label>
+                                            <input type="radio" name="show_slide" value="1" {{ ($model->show_slide == 1 ? 'checked' : '') }}> Hiển thị
+                                        </label>
+                                                <label class="pl-2">
+                                            <input type="radio" name="show_slide" value="0" {{ ($model->show_slide == 0 ? 'checked' : '') }}> Ẩn
+                                        </label>
                                         </div>
                                     </div>
                                 </div>

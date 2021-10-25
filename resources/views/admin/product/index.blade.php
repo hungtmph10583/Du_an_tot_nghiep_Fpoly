@@ -77,31 +77,19 @@
                             <thead>
                                 <th>STT</th>
                                 <th>Tên sản phẩm</th>
-                                <th>Ảnh</th>
-                                <th>Danh mục</th>
-                                <th>Số lượng</th>
-                                <th>Giá bán</th>
-                                <th>Trạng thái</th>
-                                <th><a href="{{route('product.add')}}" class="btn btn-info">Thêm sản phẩm</a></th>
+                                <th><a href="{{route('product.add')}}" class="btn btn-outline-info float-right">Thêm sản phẩm</a></th>
                             </thead>
                             <tbody>
                                 @foreach($product as $p)
                                 <tr>
                                     <td>{{(($product->currentPage()-1)*5) + $loop->iteration}}</td>
                                     <td>{{$p->name}}</td>
-                                    <td><img src="{{asset( 'storage/' . $p->image)}}" width="70" /></td>
-                                    <td>{{$p->category->name}}</td>
-                                    <td>{{number_format($p->quantity)}}</td>
-                                    <td>{{number_format($p->price)}} <span>VND</span></td>
                                     <td>
-                                        <span class="btn {{ $p->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
-                                            {{ $p->status == 1 ? 'Active' : 'Inactive'  }}
+                                        <span class="float-right">
+                                            <a href="{{route('product.detail', ['id' => $p->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                                            <a href="{{route('product.edit', ['id' => $p->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('product.remove', ['id' => $p->id])}}" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa sản phẩm này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
-                                    </td>
-                                    <td>
-                                        <a href="{{route('product.detail', ['id' => $p->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href="{{route('product.edit', ['id' => $p->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="{{route('product.remove', ['id' => $p->id])}}" class="btn btn-danger" onclick="confirm('Bạn có chắc muốn xóa sản phẩm này?')"><i class="far fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach

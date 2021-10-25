@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\DiscountType;
 use App\Models\Breed;
 use App\Models\Gender;
 use App\Models\Age;
@@ -63,8 +64,9 @@ class ProductController extends Controller
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
+        $discountType = DiscountType::all();
         $age = Age::all();
-        return view('admin.product.add-form', compact('category', 'breed', 'gender', 'age'));
+        return view('admin.product.add-form', compact('category', 'breed', 'gender', 'age', 'discountType'));
     }
 
     public function saveAdd(Request $request){
@@ -112,7 +114,7 @@ class ProductController extends Controller
             $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
 
-        $model->creator = Auth::user()->id;
+        $model->user_id = Auth::user()->id;
 
         $model->save();
 
@@ -148,9 +150,11 @@ class ProductController extends Controller
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
+        $age = Age::all();
+        $discountType = DiscountType::all();
 
-        $model->load('category', 'breed', 'gender');
-        return view('admin.product.edit-form', compact('model', 'category', 'breed', 'gender'));
+        $model->load('category', 'breed', 'gender', 'age');
+        return view('admin.product.edit-form', compact('model', 'category', 'breed', 'gender', 'age', 'discountType'));
     }
 
     public function saveEdit($id, ProductFormRequest $request){

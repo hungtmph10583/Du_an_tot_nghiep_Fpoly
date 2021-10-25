@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Accessory;
 use App\Models\Category;
+use App\Models\DiscountType;
 use App\Models\AccessoryGallery;
 
 class AccessoryController extends Controller
@@ -52,7 +53,8 @@ class AccessoryController extends Controller
 
     public function addForm(){
         $category = Category::all();
-        return view('admin.accessory.add-form', compact('category'));
+        $discountType = DiscountType::all();
+        return view('admin.accessory.add-form', compact('category', 'discountType'));
     }
 
     public function saveAdd(Request $request){
@@ -118,9 +120,9 @@ class AccessoryController extends Controller
         }
 
         $category = Category::all();
-
+        $discountType = DiscountType::all();
         $model->load('galleries', 'category');
-        return view('admin.accessory.edit-form', compact('model', 'category'));
+        return view('admin.accessory.edit-form', compact('model', 'category', 'discountType'));
     }
 
     public function saveEdit($id, Request $request){

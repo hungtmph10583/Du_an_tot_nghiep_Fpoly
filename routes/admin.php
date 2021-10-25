@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\BreedController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AccessoryController;
@@ -41,7 +42,7 @@ Route::prefix('danh-muc')->group(function () {
     Route::get('/', [CategoryController::class, 'index'])->name('category.index');
 
     Route::get('tao-moi', [CategoryController::class, 'addForm'])->name('category.add');
-    Route::post('tao-moi', [CategoryController::class, 'saveAdd']);
+    Route::post('tao-moi', [CategoryController::class, 'saveAdd'])->name('category.saveAdd');
 
     Route::get('cap-nhat/{id}', [CategoryController::class, 'editForm'])->name('category.edit');
     Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit']);;
@@ -49,6 +50,17 @@ Route::prefix('danh-muc')->group(function () {
     Route::get('chi-tiet/{id}', [CategoryController::class, 'detail'])->name('category.detail');
 
     Route::get('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
+});
+
+Route::prefix('don-hang')->group(function () {
+    Route::get('/', [OrderController::class, 'index'])->name('order.index');
+
+    Route::get('cap-nhat/{id}', [OrderController::class, 'editForm'])->name('order.edit');
+    Route::post('cap-nhat/{id}', [OrderController::class, 'saveEdit']);;
+
+    Route::get('chi-tiet/{id}', [OrderController::class, 'detail'])->name('order.detail');
+
+    Route::get('xoa/{id}', [OrderController::class, 'remove'])->name('order.remove');
 });
 
 Route::prefix('giong-loai')->group(function () {

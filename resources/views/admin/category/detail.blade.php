@@ -35,12 +35,8 @@
                                     <input type="text" class="form-control" value="{{$category->name}}" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="">Trạng thái</label>
-                                    <input class="form-control" type="text" value="{{ ($category->status == 1 ? 'Active' : 'Inactive') }}" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Show menu</label>
-                                    <input class="form-control" type="text" value="{{ ($category->show_menu == 1 ? 'Hiển thị' : 'Ẩn') }}" readonly>
+                                    <label for="">Hiển thị slide</label>
+                                    <input class="form-control" type="text" value="{{ ($category->show_slide == 1 ? 'Hiển thị' : 'Ẩn') }}" readonly>
                                 </div>
                                 <div class="row">
                                     <div class="col sm">
@@ -76,7 +72,7 @@
                                 </div> -->
                             </div>
                             <div class="col-6 mt-2"><br>
-                                <div class="text-left">
+                                <div class="text-right">
                                     <a href="{{route('category.index')}}" class="btn btn-warning text-light">Quay lại</a>
                                     <a href="{{route('category.edit', ['id' => $category->id])}}" class="btn btn-info">Sửa danh mục</a>
                                 </div>

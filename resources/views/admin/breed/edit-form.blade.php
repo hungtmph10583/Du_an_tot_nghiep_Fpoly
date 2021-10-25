@@ -50,7 +50,7 @@
                                 <div class="form-group">
                                     <label for="">Ảnh</label>
                                     <div class="form-control">
-                                        <input type="file" name="image" id="">
+                                        <input type="file" name="uploadfile" id="">
                                     </div>
                                 </div>
                                 <div class="form-group">

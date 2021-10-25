@@ -15,7 +15,7 @@ class CreateAccessoryGalleriesTable extends Migration
     {
         Schema::create('accessory_galleries', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('accessory_id');
+            $table->integer('accessory_id');
             $table->string('image_url');
             $table->string('order_no');
             $table->timestamps();

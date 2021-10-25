@@ -26,7 +26,7 @@
         </div>
 
         <!-- SidebarSearch Form -->
-        <div class="form-inline">
+        <!-- <div class="form-inline">
             <div class="input-group" data-widget="sidebar-search">
             <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
             <div class="input-group-append">
@@ -35,7 +35,7 @@
                 </button>
             </div>
             </div>
-        </div>
+        </div> -->
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -45,13 +45,111 @@
                     <a href="{{route('dashboard.index')}}" class="nav-link">
                         <i class="fa fa-home"></i>
                         <p>
-                            Dashboard
+                            Trang chủ
                         </p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-users"></i>
+                    <i class="far fa-money-bill-alt"></i>
+                        <p>
+                            Thống kê
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Doanh thu</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Lịch sử nhập hàng</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-shopping-cart"></i>
+                        <p>
+                            Đơn hàng
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('order.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Tất cả đơn hàng</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-paw"></i>
+                        <p>
+                            Sản phẩm
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('product.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sản phẩm thú cưng</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('accessory.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Sản phẩm phụ kiện</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Đánh giá sản phẩm</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-swatchbook"></i>
+                        <p>
+                            Danh mục
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('category.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('category.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Loại danh mục</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('breed.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Giống loài</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-user-friends"></i>
                         <p>
                             Tài khoản
                             <i class="right fas fa-angle-left"></i>
@@ -76,109 +174,9 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                    <i class="fas fa-swatchbook"></i>
-                        <p>
-                            Danh mục
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('category.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
-                        @hasanyrole('admin|manage')
-                        <li class="nav-item">
-                            <a href="{{route('category.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm danh mục</p>
-                            </a>
-                        </li>
-                        @endhasanyrole
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    <i class="fas fa-balance-scale"></i>
-                        <p>
-                            Giống loài
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('breed.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
-                        @hasanyrole('admin|manage')
-                        <li class="nav-item">
-                            <a href="{{route('breed.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm giống loài</p>
-                            </a>
-                        </li>
-                        @endhasanyrole
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    <i class="fas fa-paw"></i>
-                        <p>
-                            Sản phẩm
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('product.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
-                        @hasanyrole('admin|manage')
-                        <li class="nav-item">
-                            <a href="{{route('product.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm sản phẩm</p>
-                            </a>
-                        </li>
-                        @endhasanyrole
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                    <i class="fas fa-archive"></i>
-                        <p>
-                            Phụ kiện
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('accessory.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
-                        @hasanyrole('admin|manage')
-                        <li class="nav-item">
-                            <a href="{{route('accessory.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm Phụ kiện</p>
-                            </a>
-                        </li>
-                        @endhasanyrole
-                    </ul>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
                     <i class="far fa-newspaper"></i>
                         <p>
-                            Tin tức
+                            Bài viết
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -193,10 +191,51 @@
                         <li class="nav-item">
                             <a href="{{route('news.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Tạo bài viết</p>
+                                <p>Thêm bài viết</p>
                             </a>
                         </li>
                         @endhasanyrole
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                    <i class="fas fa-cogs"></i>
+                        <p>
+                            Hệ thống
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('news.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Logo</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('news.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Header</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('news.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Slide</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('news.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Banner</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('news.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Footer</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

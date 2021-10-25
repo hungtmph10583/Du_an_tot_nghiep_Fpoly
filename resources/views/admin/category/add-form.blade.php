@@ -17,7 +17,7 @@
 
     <!-- Main content -->
     <section class="content">
-        <div class="container-fluid">
+        <div class="container">
             <form action="" method="post" enctype="multipart/form-data">
                 @csrf
                 <div class="card">
@@ -42,48 +42,37 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-6">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="">Trạng thái</label>
-                                            <div class="form-control">
-                                                <label class="pr-2">
-                                                    <input type="radio" name="status" value="1" checked> Hiển thị
-                                                </label>
-                                                <label class="pl-2">
-                                                    <input type="radio" name="status" value="0"> Ẩn
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="form-group">
-                                            <label for="">Show menu</label>
-                                            <div class="form-control">
-                                                <label class="pr-2">
-                                                    <input type="radio" name="show_menu" value="1" checked> Hiển thị
-                                                </label>
-                                                <label class="pl-2">
-                                                    <input type="radio" name="show_menu" value="0"> Ẩn
-                                                </label>
-                                            </div>
-                                        </div>
+                            <div class="form-group">
+                                    <label for="">Hiển thị ra slide</label>
+                                    <div class="form-control">
+                                        <label class="pr-2">
+                                            <input type="radio" name="show_slide" value="1" checked> Hiển thị
+                                        </label>
+                                        <label class="pl-2">
+                                            <input type="radio" name="show_slide" value="0"> Ẩn
+                                        </label>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col">
-                                        <div class="form-group">
-                                            <label for="">Loại danh mục</label>
-                                            <select name="genre_type" class="form-control">
-                                                <option value="0">Thú cưng</option>
-                                                <option value="1">Phụ kiện</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                            <div class="col mt-2"><br>
-                                <div class="text-left">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Loại danh mục</label>
+                                    <select name="category_type_id" class="form-control">
+                                        @foreach($categoryType as $type)
+                                            <option value="{{$type->id}}">{{$type->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6"></div>
+                            <div class="col-6 mt-2"><br>
+                                <div class="text-right">
                                     <button type="submit" class="btn btn-info">Lưu</button>
                                     <a href="{{route('category.index')}}" class="btn btn-danger">Hủy</a>
                                 </div>

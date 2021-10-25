@@ -17,7 +17,7 @@ class CreateNewsTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->unsignedBigInteger('creator');
+            $table->integer('creator');
             $table->string('image');
             $table->string('content');
             $table->integer('status')->default(1);

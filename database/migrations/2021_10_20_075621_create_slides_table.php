@@ -17,9 +17,10 @@ class CreateSlidesTable extends Migration
             $table->id();
             $table->string('title');
             $table->string('slug');
-            $table->unsignedBigInteger('creator');
+            $table->integer('user_id');
             $table->string('image');
             $table->string('short_description');
+            $table->string('url');
             $table->integer('status')->default(1);
             $table->timestamps();
         });

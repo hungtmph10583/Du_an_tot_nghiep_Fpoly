@@ -1,0 +1,69 @@
+.blog-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(42rem, 1fr));
+    gap: 5rem;
+}
+
+.blog-container .item-top .thumbnail {
+    width: 100%;
+    height: 35rem;
+}
+
+.blog-container .item-top .thumbnail img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.blog-container .item-bottom {
+    text-align: center;
+}
+
+.blog-container .item-bottom .item-extra ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    padding: 2rem 0;
+    justify-content: center;
+    list-style: none;
+}
+
+.blog-container .item-bottom .item-extra ul li {
+    padding: 0 1rem;
+}
+
+.blog-container .item-bottom .item-extra ul li.middle {
+    border-right: 0.1rem solid var(--main-color);
+    border-left: 0.1rem solid var(--main-color);
+}
+
+.blog-container .item-bottom .item-extra i {
+    color: var(--main-color);
+    font-size: 1.5rem;
+    padding-right: 1rem;
+}
+
+.blog-container .item-bottom .item-extra span {
+    color: var(--light-black);
+    font-size: 1.5rem;
+}
+
+.blog-container .item-bottom .item-extra span.author {
+    color: var(--main-color);
+    font-weight: bold;
+    padding-left: 0.4rem;
+}
+
+.blog-container .item-bottom .item-extra span.comment {
+    color: var(--main-color);
+    font-weight: bold;
+    padding-right: 0.4rem;
+}
+
+.blog-container .item-bottom .title {
+    font-size: 2.3rem;
+    font-weight: bold;
+    color: var(--main-color);
+    text-align: center;
+    padding: 0 0 1rem 0;
+}

@@ -49,32 +49,26 @@
                         <table class="table table-striped">
                             <thead>
                                 <th>STT</th>
-                                <th>Tên danh mục</th>
                                 <th>Tên giống loài</th>
-                                <th class="text-center">Số lượng sản phẩm</th>
-                                <th class="text-center">Trạng thái</th>
-                                <th><a href="{{route('breed.add')}}" class="btn btn-info">Thêm giống loài</a></th>
+                                <th class="text-center">Tên danh mục</th>
+                                <th><a href="{{route('breed.add')}}" class="btn btn-outline-info float-right">Thêm giống loài</a></th>
                             </thead>
                             <tbody>
                                 @foreach($breed as $b)
                                 <tr>
                                     <td>{{(($breed->currentPage()-1)*7) + $loop->iteration}}</td>
-                                    <td>
+                                    <td>{{$b->name}}</td>
+                                    <td class="text-center">
                                         <span class="btn btn-info btn-sm text-light">{{$b->category->name}}</span>
                                     </td>
-                                    <td>{{$b->name}}</td>
-                                    <td class="text-center">{{count($b->products)}}</td>
-                                    <td class="text-center">
-                                    <span class="btn {{ $b->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
-                                            {{ $b->status == 1 ? 'Active' : 'Inactive'  }}
-                                        </span>
-                                    </td>
                                     <td>
-                                        <a href="{{route('breed.detail', ['id' => $b->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href="{{route('breed.edit', ['id' => $b->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                            <a class="btn btn-danger" href="{{route('breed.remove', ['id' => $b->id])}}" onclick="return confirm('Bạn có chắc muốn xóa danh mục này?')">
-                                            <i class="far fa-trash-alt"></i>
-                                        </a>
+                                        <span class="float-right">
+                                            <a href="{{route('breed.detail', ['id' => $b->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                                            <a href="{{route('breed.edit', ['id' => $b->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                                <a class="btn btn-outline-danger" href="{{route('breed.remove', ['id' => $b->id])}}" onclick="return confirm('Bạn có chắc muốn xóa danh mục này?')">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                                 @endforeach

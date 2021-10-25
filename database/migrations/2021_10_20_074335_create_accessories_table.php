@@ -16,11 +16,12 @@ class CreateAccessoriesTable extends Migration
         Schema::create('accessories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('category_id');
+            $table->integer('category_id');
             $table->integer('color_id');
-            $table->unsignedBigInteger('creator');
+            $table->integer('user_id');
             $table->string('slug');
             $table->string('image');
+            $table->double('rating')->default(0); // Xep hang
             $table->integer('price')->default(0);
             $table->integer('status')->default(1);
             $table->integer('quantity')->default(0);

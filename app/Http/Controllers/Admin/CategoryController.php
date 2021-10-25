@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryFormRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\CategoryType;
 use App\Models\Product;
 use App\Models\Breed;
 
@@ -36,7 +37,8 @@ class CategoryController extends Controller
     }
 
     public function addForm(){
-        return view('admin.category.add-form');
+        $categoryType = CategoryType::all();
+        return view('admin.category.add-form', compact('categoryType'));
     }
     
     public function saveAdd(CategoryFormRequest $request){
@@ -87,11 +89,11 @@ class CategoryController extends Controller
 
     public function editForm($id){
         $model = Category::find($id);
-       
+        $categoryType = CategoryType::all();
         if(!$model){
             return redirect()->back();
         }
-        return view('admin.category.edit-form', compact('model'));
+        return view('admin.category.edit-form', compact('model', 'categoryType'));
     }
 
     public function saveEdit($id, CategoryFormRequest $request){

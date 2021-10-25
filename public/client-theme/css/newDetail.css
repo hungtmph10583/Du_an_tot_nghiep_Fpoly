@@ -1,0 +1,180 @@
+.detail-blog .blog-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 2rem;
+}
+
+.detail-blog .blog-container .blog-image {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    outline: 0;
+}
+
+.detail-blog .blog-container .blog-image img {
+    border-style: none;
+    border: 0;
+    vertical-align: middle;
+    height: auto;
+    max-width: 100%;
+}
+
+.detail-blog .blog-container .blog-description .title {
+    font-size: 3rem;
+    color: var(--main-color);
+    padding-bottom: 1rem;
+}
+
+.detail-blog .blog-container .blog-description .comments-section .comment-extra ul,
+.detail-blog .blog-container .blog-description .blog-extra ul {
+    list-style: none;
+    display: flex;
+    border-bottom: 0.1rem solid var(--main-color);
+}
+
+.detail-blog .blog-container .blog-description .comments-section .comment-extra ul li,
+.detail-blog .blog-container .blog-description .blog-extra ul li {
+    color: var(--black);
+    padding: 1.5rem 2rem 1.5rem 0;
+    font-size: 1.6rem;
+}
+
+.detail-blog .blog-container .blog-description .comments-section .comment-extra ul li i,
+.detail-blog .blog-container .blog-description .blog-extra ul li i {
+    color: var(--main-color);
+    padding-right: 0.4rem;
+}
+
+.detail-blog .blog-container .blog-description .blog-extra ul li .comment {
+    padding: 0 0.6rem;
+}
+
+.detail-blog .blog-container .blog-description .comments-section .comment-extra ul li .author,
+.detail-blog .blog-container .blog-description .blog-extra ul li .author {
+    padding-left: 1rem;
+}
+
+.detail-blog .blog-container .blog-description .content {
+    font-size: 1.6rem;
+    text-align: justify;
+    padding: 1rem 0;
+}
+
+.detail-blog .blog-container .blog-description .blog-navigation {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 30px 0;
+    overflow: hidden;
+    border-radius: 0.5rem;
+    border: 1px solid var(--light-color);
+}
+
+.detail-blog .blog-container .blog-description .blog-navigation div a {
+    padding: 1.5rem 2rem;
+    font-size: 1.6rem;
+    display: block;
+    color: var(--main-color);
+}
+
+.detail-blog .blog-container .blog-description .blog-navigation div.prev {
+    border-right: 0.1rem solid var(--light-color);
+}
+
+.detail-blog .blog-container .blog-description .blog-navigation div.next {
+    border-left: 0.1rem solid var(--light-color);
+}
+
+.detail-blog .blog-container .blog-description .blog-comment {
+    /* padding: 2rem;
+    background-color: var(--white-light); */
+}
+
+.detail-blog .blog-container .blog-description .blog-comment-item {
+    padding: 2rem;
+    background-color: var(--white-light);
+    margin-bottom: 2rem;
+    border-radius: 0.5rem;
+}
+
+.detail-blog .blog-container .blog-description .blog-comment ul {
+    list-style: none;
+    /* display: flex;
+    flex-direction: column; */
+}
+
+.detail-blog .blog-container .blog-description .blog-comment ul li {
+    list-style: none;
+    display: flex;
+    align-items: center;
+}
+
+.detail-blog .blog-container .blog-description .blog-comment .total {
+    font-size: 2rem;
+    padding: 1.5rem 1rem;
+    color: var(--main-color);
+}
+
+.detail-blog .blog-container .blog-description .blog-comment .total .number-comment {
+    padding: 0 0.5rem 0 0.7rem;
+}
+
+.detail-blog .blog-container .blog-description .comments-section {
+    border-radius: 0.5rem;
+    background-color: var(--white);
+    padding: 0 1.6rem;
+    margin-bottom: 1rem;
+}
+
+.detail-blog .blog-container .blog-description .blog-comment .comments-section .comment-extra .number {
+    font-size: 2rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 0.5rem;
+    margin: 0.5rem 2rem 0.5rem 0;
+    text-align: center;
+    background-color: var(--main-color);
+    color: var(--white);
+}
+
+.detail-blog .blog-container .blog-description .blog-comment .comment-description {
+    font-size: 1.6rem;
+    line-height: 2.5rem;
+    padding: 1rem 0 3rem 0;
+}
+
+.detail-blog .blog-container .blog-description form {
+    width: 100%;
+}
+
+.detail-blog .blog-container .blog-description form h5 {
+    font-size: 2rem;
+    color: var(--main-color);
+    padding: 2rem 1rem 1rem;
+}
+
+.detail-blog .blog-container .blog-description form .form-comment-item {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    gap: 1rem;
+    margin: 0 0 1rem;
+}
+
+.detail-blog .blog-container .blog-description form .form-comment-item input {
+    width: 100%;
+    font-size: 1.6rem;
+    padding: 1rem 2rem;
+    border: 0.1rem solid var(--light-color);
+    border-radius: 0.5rem;
+}
+
+.detail-blog .blog-container .blog-description form textarea {
+    width: 100%;
+    font-size: 1.6rem;
+    padding: 2rem;
+    border: 0.1rem solid var(--light-color);
+    border-radius: 0.5rem;
+}

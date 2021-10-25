@@ -11,18 +11,18 @@ class Product extends Model
     protected $table = 'products';
     protected $fillable = [
         'name',
+        'user_id',
         'category_id',
-        'breed_id',
         'slug',
         'image',
         'weight',
+        'breed_id',
         'age_id',
         'gender_id',
-        'creator',
         'price',
         'status',
         'quantity',
-        'detail'
+        'description'
     ];
 
     public function category(){

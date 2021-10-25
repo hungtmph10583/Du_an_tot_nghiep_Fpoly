@@ -69,31 +69,19 @@
                             <thead>
                                 <th>STT</th>
                                 <th>Tên phụ kiện</th>
-                                <th>Ảnh</th>
-                                <th>Danh mục</th>
-                                <th>Số lượng</th>
-                                <th>Giá bán</th>
-                                <th>trạng thái</th>
-                                <th><a href="{{route('accessory.add')}}" class="btn btn-info">Thêm phụ kiện</a></th>
+                                <th><a href="{{route('accessory.add')}}" class="btn btn-outline-info float-right">Thêm phụ kiện</a></th>
                             </thead>
                             <tbody>
                                 @foreach($accessory as $p)
                                 <tr>
                                     <td>{{(($accessory->currentPage()-1)*5) + $loop->iteration}}</td>
                                     <td>{{$p->name}}</td>
-                                    <td><img src="{{asset( 'storage/' . $p->image)}}" width="70" /></td>
-                                    <td>{{$p->category->name}}</td>
-                                    <td>{{number_format($p->quantity)}}</td>
-                                    <td>{{number_format($p->price)}} <span>VND</span></td>
                                     <td>
-                                        <span class="btn {{ $c->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
-                                            {{ $c->status == 1 ? 'Còn hàng' : 'Hết hàng'  }}
+                                        <span class="float-right">
+                                            <a href="{{route('accessory.detail', ['id' => $p->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                                            <a href="{{route('accessory.edit', ['id' => $p->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('accessory.remove', ['id' => $p->id])}}" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa phụ kiện này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
-                                    </td>
-                                    <td>
-                                        <a href="{{route('accessory.detail', ['id' => $p->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href="{{route('accessory.edit', ['id' => $p->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="{{route('accessory.remove', ['id' => $p->id])}}" class="btn btn-danger" onclick="confirm('Bạn có chắc muốn xóa phụ kiện này?')"><i class="far fa-trash-alt"></i></a>
                                     </td>
                                 </tr>
                                 @endforeach

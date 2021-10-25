@@ -16,19 +16,20 @@ class CreateProductsTable extends Migration
         Schema::create('products', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('category_id'); // Bang chinh
-            $table->integer('breed_id'); // Bang chinh ( Giong loai )
+            $table->integer('user_id'); // users 
+            $table->integer('category_id'); // Categories
             $table->string('slug');
             $table->string('image');
             $table->string('weight');
-            $table->integer('age_id'); // Bang chinh ( Tuoi )
-            $table->integer('color_id')->nullable();
-            $table->integer('gender_id'); // Bang chinh ( Giới tính )
-            $table->integer('creator'); // Bang chính ( users )
+            $table->integer('breed_id'); // Breeds
+            $table->integer('age_id'); // ages
+            $table->integer('coupon_id')->nullable(); // Coupons
+            $table->integer('gender_id'); // Genders ( Giới tính )
+            $table->double('rating')->default(0); // Xep hang
             $table->integer('price')->default(0);
             $table->integer('status')->default(1);
             $table->integer('quantity')->default(0);
-            $table->text('detail');
+            $table->text('description');
             $table->timestamps();
         });
     }
