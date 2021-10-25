@@ -40,29 +40,21 @@
                             <thead>
                                 <th>STT</th>
                                 <th>Tiêu đề bài viết</th>
-                                <th class="text-center">Ảnh</th>
-                                <th class="text-center">Người tạo</th>
-                                <th class="text-center">Trạng thái</th>
-                                <th><a href="{{route('news.add')}}" class="btn btn-info">Thêm bài viết</a></th>
+                                <th><a href="{{route('news.add')}}" class="btn btn-outline-info float-right">Thêm bài viết</a></th>
                             </thead>
                             <tbody>
                                 @foreach($news as $n)
                                 <tr>
                                     <td>{{(($news->currentPage()-1)*7) + $loop->iteration}}</td>
                                     <td>{{$n->title}}</td>
-                                    <td class="text-center"><img src="{{asset( 'storage/' . $n->image)}}" width="70" /></td>
-                                    <td class="text-center">{{$n->user->name}}</td>
-                                    <td class="text-center">
-                                        <span class="btn {{ $n->status == 1 ? 'btn-success' : 'btn-danger'}} btn-sm text-light">
-                                            {{ $n->status == 1 ? 'Active' : 'Inactive'  }}
-                                        </span>
-                                    </td>
                                     <td>
-                                        <a href="{{route('news.detail', ['id' => $n->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href="{{route('news.edit', ['id' => $n->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a class="btn btn-danger" href="{{route('news.remove', ['id' => $n->id])}}" onclick="return confirm('Bạn có chắc muốn xóa bài viết này?')">
-                                            <i class="far fa-trash-alt"></i>
-                                        </a>
+                                        <span class="float-right">
+                                            <a href="{{route('news.detail', ['id' => $n->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                                            <a href="{{route('news.edit', ['id' => $n->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a class="btn btn-outline-danger" href="{{route('news.remove', ['id' => $n->id])}}" onclick="return confirm('Bạn có chắc muốn xóa bài viết này?')">
+                                                <i class="far fa-trash-alt"></i>
+                                            </a>
+                                        </span>
                                     </td>
                                 </tr>
                                 @endforeach

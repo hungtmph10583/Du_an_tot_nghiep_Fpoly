@@ -162,12 +162,6 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('user.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
                         @hasanyrole('admin|manage')
                         <li class="nav-item">
                             <a href="{{route('user.add')}}" class="nav-link">
@@ -176,6 +170,12 @@
                             </a>
                         </li>
                         @endhasanyrole
+                        <li class="nav-item">
+                            <a href="{{route('user.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -187,12 +187,6 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('news.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
                         @hasanyrole('admin|manage')
                         <li class="nav-item">
                             <a href="{{route('news.add')}}" class="nav-link">
@@ -201,6 +195,18 @@
                             </a>
                         </li>
                         @endhasanyrole
+                        <li class="nav-item">
+                            <a href="{{route('news.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh mục bài viết</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">

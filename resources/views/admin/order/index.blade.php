@@ -76,7 +76,7 @@
                                     <td>
                                         <span class="float-right">
                                             <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="#" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
                                             <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
                                     </td>
@@ -96,7 +96,7 @@
                                     <td>
                                         <span class="float-right">
                                             <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="#" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
                                             <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
                                     </td>
@@ -116,7 +116,7 @@
                                     <td>
                                         <span class="float-right">
                                             <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="#" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
                                             <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
                                     </td>
@@ -136,7 +136,7 @@
                                     <td>
                                         <span class="float-right">
                                             <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="#" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
                                             <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
                                     </td>

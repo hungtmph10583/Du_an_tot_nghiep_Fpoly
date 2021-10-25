@@ -20,10 +20,10 @@
 	<!-- END: Subheader -->
 	<section class="content">
         <div class="container-fluid pb-1">
-            <div class="card">
-                <div class="card-body">
-                    <form action="" method="post" enctype="multipart/form-data">
-                        @csrf
+            <form action="" method="post" enctype="multipart/form-data">
+            @csrf
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -33,6 +33,19 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Ảnh đại diện</label>
+                                    <input type="file" name="uploadfile" id="imgInp" class="form-control">
+                                    @error('uploadfile')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Email</label>
                                     <input type="text" name="email" class="form-control" value="{{old('email')}}" placeholder="Nhập vào email">
@@ -40,6 +53,8 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Số điện thoại</label>
                                     <input type="text" name="phone" class="form-control" value="{{old('phone')}}" placeholder="Nhập vào số điện thoại">
@@ -47,6 +62,14 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror   
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Password</label>
                                     <input type="password" name="password" class="form-control" value="{{old('password')}}" placeholder="Mật khẩu">
@@ -54,6 +77,8 @@
                                         <span class="text-danger">{{$message}}</span>
                                     @enderror
                                 </div>
+                            </div>
+                            <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Confirm Password</label>
                                     <input type="password" name="cfpassword" class="form-control" value="{{old('cfpassword')}}" placeholder="Nhập lại mật khẩu">
@@ -62,30 +87,24 @@
                                     @enderror
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-6">
-								<!-- <div id="cc" style="display: none">
-									<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
-								</div> -->
-                                <div class="form-group">
-                                    <label for="">Ảnh đại diện</label>
-                                    <input type="file" name="uploadfile" id="imgInp" class="form-control">
-                                    @error('uploadfile')
-                                        <span class="text-danger">{{$message}}</span>
-                                    @enderror
-                                </div>
                                 @hasrole('admin')
                                 <div class="form-group">
                                     <label for="">Trạng thái</label>
                                     <div class="form-control">
                                         <label class="pr-1">
-                                            <input type="radio" name="active" value="1" checked> Hiển thị
+                                            <input type="radio" name="active" value="1" checked> Active
                                         </label>
                                         <label class="pl-1">
-                                            <input type="radio" name="active" value="0"> Ẩn
+                                            <input type="radio" name="active" value="0"> Inactive
                                         </label>
                                     </div>
                                 </div>
                                 @endhasrole
+                            </div>
+                            <div class="col-6">
                                 @hasrole('admin')
                                 <div class="form-group">
                                     <label for="">Quyền hạn</label>
@@ -97,14 +116,21 @@
                                 </div>
                                 @endhasrole
                             </div>
-                            <div class="text-right pl-2">
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <!-- <div id="cc" style="display: none">
+                                    <img class="add-product-preview-img" id="blah" src="#" alt="your image" />
+                                </div> -->
+                            </div>
+                            <div class="col-12 text-right pl-2">
                                 <button type="submit" class="btn btn-success">Lưu</button>
                                 <a href="{{route('user.index')}}" class="btn btn-danger">Hủy</a>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div><!-- /.container-fluid -->
     </section>
 @endsection

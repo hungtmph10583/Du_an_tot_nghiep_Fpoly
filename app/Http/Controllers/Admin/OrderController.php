@@ -16,10 +16,13 @@ class OrderController extends Controller
             // Lấy ra danh sách tin tức & phân trang cho nó
             $order = Order::paginate($pagesize);
         }
-        
         // trả về cho người dùng 1 giao diện + dữ liệu categories vừa lấy đc 
         return view('admin.order.index', [
             'order' => $order,
         ]);
+    }
+
+    public function editForm(Request $request){
+        return view('admin.order.edit-form');
     }
 }

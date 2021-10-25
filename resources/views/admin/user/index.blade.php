@@ -42,16 +42,11 @@
                             <thead>
                                 <th>STT</th>
                                 <th>Name</th>
-                                <th>Avatar</th>
-                                <th>Role</th>
-                                <th>Email</th>
-                                <th>Phone</th>
-                                <th>Status</th>
                                 <th>
                                     @hasanyrole('admin|manage')
-                                        <a href="{{route('user.add')}}" class="btn btn-primary">Thêm tài khoản</a>
+                                        <a href="{{route('user.add')}}" class="btn btn-outline-info float-right">Thêm tài khoản</a>
                                     @else
-                                        <a href="#" onclick="alert('Bạn không được cấp quyền để tạo tài khoản?')" class="btn btn-primary">Thêm tài khoản</a>
+                                        <a href="#" onclick="alert('Bạn không được cấp quyền để tạo tài khoản?')" class="btn-outline-info float-right">Thêm tài khoản</a>
                                     @endhasrole
                                 </th>
                             </thead>
@@ -60,23 +55,12 @@
                                 <tr>
                                     <td>{{(($users->currentPage()-1)*5) + $loop->iteration}}</td>
                                     <td>{{$u->name}}</td>
-                                    <td><img src="{{asset( 'storage/' . $u->avatar)}}" width="70" /></td>
                                     <td>
-                                        @foreach($mdh_role as $mdhr)
-                                            @if($mdhr->model_id === $u->id)
-                                            <b class="{{ ($mdhr->role_id === 1 ? 'text-danger' : ($mdhr->role_id === 2 ? 'text-success' : 'text-info')) }}">
-                                                {{ucfirst($mdhr->role->name)}}
-                                            </b>
-                                            @endif
-                                        @endforeach
-                                    </td>
-                                    <td>{{$u->email}}</td>
-                                    <td>{{$u->phone}}</td>
-                                    <td><i class="{{ $u->status == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} pl-3"></i></td>
-                                    <td>
-                                        <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-info"><i class="far fa-eye"></i></a>
-                                        <a href="{{route('user.edit', ['id' => $u->id])}}" class="btn btn-success"><i class="far fa-edit"></i></a>
-                                        <a href="{{route('user.remove', ['id' => $u->id])}}" class="btn btn-danger" onclick="confirm('Bạn có chắc muốn xóa tài khoản này?')"><i class="far fa-trash-alt"></i></a>
+                                        <span class="float-right">
+                                            <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                                            <a href="{{route('user.edit', ['id' => $u->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('user.remove', ['id' => $u->id])}}" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa tài khoản này?')"><i class="far fa-trash-alt"></i></a>
+                                        </span>
                                     </td>
                                 </tr>
                                 @endforeach

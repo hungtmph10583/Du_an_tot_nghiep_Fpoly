@@ -18,7 +18,7 @@
 
 <!-- Main content -->
 <section class="content">
-    <div class="container-fluid">
+    <div class="container">
         <form action="" method="post" enctype="multipart/form-data">
             @csrf
             <div class="card">
@@ -33,51 +33,42 @@
                         </div>
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="">Ảnh bài viết</label>
-                                <input type="file" name="uploadfile" class="form-control"> @error('uploadfile')
-                                <span class="text-danger">{{$message}}</span> @enderror
+                                <label for="">Danh mục bài viết</label>
+                                <select class="form-control" name="category_id" id="">
+                                    <option value="">Chó</option>
+                                    <option value="">Mèo</option>
+                                    <option value="">Rùa</option>
+                                    <option value="">Khỉ</option>
+                                </select>
                             </div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col">
+                        <div class="col-6">
                             <div class="form-group">
-                                <label for="">Gắn thẻ danh mục liên quan cho bài viết</label>
-                                <select class="form-control" name="category_id" id="">
-                                    <option value="0">Danh mục liên quan</option>
-                                    <option value="">Chó</option>
-                                    <option value="">Mèo</option>
-                                    <option value="">Rùa</option>
-                                    <option value="">Khỉ</option>
-                                </select>
+                                <label for="">Ảnh bìa</label>
+                                <input type="file" name="uploadfile" class="form-control"> @error('uploadfile')
+                                <span class="text-danger">{{$message}}</span> @enderror
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="">Gắn thẻ sản phẩm liên quan cho bài viết</label>
-                                <select class="form-control" name="product_id" id="">
-                                    <option value="0">Sản phẩm liên quan</option>
-                                    <option value="">Chó</option>
-                                    <option value="">Mèo</option>
-                                    <option value="">Rùa</option>
-                                    <option value="">Khỉ</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label for="">Trạng thái</label>
                                 <div class="form-control">
                                     <label class="pr-2">
                                         <input type="radio" name="status" value="1" checked> Hiển thị
                                     </label>
-                                <label class="pl-2">
-                                        <input type="radio" name="status" value="0"> Ẩn
+                                    <label class="pl-2">
+                                        <input type="radio" name="status" value="0"> Ẩn bài viết
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
                     <div class="row">
                         <div class="col">
                             <div class="form-group">

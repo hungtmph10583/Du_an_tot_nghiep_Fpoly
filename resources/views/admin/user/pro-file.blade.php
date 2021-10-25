@@ -53,7 +53,9 @@
 							</li>
 							<li class="list-group-item">
 								<b>Trạng thái</b>
-								<i class="{{ $user->active == 1 ? 'fa fa-check text-success' : 'fa fa-times text-danger' }} float-right pr-3"></i>
+								<span class="btn {{ $user->status == 1 ? 'btn-success' : 'btn-warning' }} float-right btn-sm text-light">
+									{{ $user->status == 1 ? 'Active' : 'Inactive' }}
+								</span>
 							</li>
 							<li class="list-group-item">
 								<b>
