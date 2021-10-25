@@ -18,10 +18,10 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
+            <form action="" method="POST" enctype="multipart/form-data">
+            @csrf
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-3">
                                 <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="phụ kiện này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
@@ -41,6 +41,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
@@ -55,6 +59,34 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-stripped">
+                                    <thead>
+                                        <th>File</th>
+                                        <th>Thumbnail</th>
+                                    </thead>
+                                    <tbody id="gallery">
+                                        @foreach ($model->galleries as $gl)
+                                        <tr id="{{$gl->id}}">
+                                            <td>{{$gl->image_url}}</td>
+                                            <td>
+                                                <img src="{{asset('storage/' . $gl->image_url)}}" width="80">
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
@@ -67,9 +99,9 @@
                                 <a href="{{route('accessory.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa danh mục</a>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

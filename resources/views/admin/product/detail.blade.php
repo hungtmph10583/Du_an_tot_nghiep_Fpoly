@@ -90,24 +90,40 @@
                             <div class="form-group">
                                 <label for="">Thumbnail</label>
                                 <div class="row">
-                                        @foreach ($model->galleries as $gl)
-                                        <div class="col">
-                                            <img src="{{asset('storage/' . $gl->image_url)}}" class="form-control" style="width: 100%; height: 100%">
-                                        </div>
-                                        @endforeach
+                                        
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-stripped">
+                                    <thead>
+                                        <th>File</th>
+                                        <th>Thumbnail</th>
+                                    </thead>
+                                    <tbody id="gallery">
+                                        @foreach ($model->galleries as $gl)
+                                        <tr id="{{$gl->id}}">
+                                            <td>{{$gl->image_url}}</td>
+                                            <td>
+                                                <img src="{{asset('storage/' . $gl->image_url)}}" width="80">
+                                            </td>
+                                        </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="">Chi tiết sản phẩm:</label>
-                                    <textarea name="detail" class=form-control rows="10" readonly>{{$model->detail}}</textarea>
+                                    <textarea name="description" class=form-control rows="10" readonly>{{$model->description}}</textarea>
                                 </div>
                             </div>
                             <div class="text-left">
                                 <a href="{{route('product.index')}}" class="btn btn-warning text-light">Quay lại</a>
-                                <a href="{{route('product.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa danh mục</a>
+                                <a href="{{route('product.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa sản phẩm</a>
                             </div>
                         </div>
                     </form>
@@ -118,5 +134,4 @@
     <!-- /.content -->
 @endsection
 @section('pagejs')
-
 @endsection

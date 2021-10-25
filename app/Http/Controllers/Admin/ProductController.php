@@ -169,7 +169,7 @@ class ProductController extends Controller
             $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
 
-        $model->creator = Auth::user()->id;
+        $model->user_id = Auth::user()->id;
         $model->save();
 
         /* gallery
@@ -192,7 +192,7 @@ class ProductController extends Controller
                 $galleryObj = new ProductGallery();
                 $galleryObj->product_id = $model->id;
                 $galleryObj->order_no = $i+1;
-                $galleryObj->url = $item->storeAs('uploads/products/galleries/' . $model->id , 
+                $galleryObj->image_url = $item->storeAs('uploads/products/galleries/' . $model->id , 
                                         uniqid() . '-' . $item->getClientOriginalName());
                 $galleryObj->save();
             }

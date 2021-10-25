@@ -18,10 +18,10 @@
     <!-- Main content -->
     <section class="content">
         <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
+            <form action="" method="POST" enctype="multipart/form-data">
+            @csrf
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-3">
                                 <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}" alt="phụ kiện này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
@@ -45,7 +45,7 @@
                                     <label for="">Danh mục</label>
                                     <select name="category_id" class="form-control">
                                         @foreach($category as $c)
-                                            @if($c->genre_type == 1)
+                                            @if($c->category_type_id == 2)
                                                 <option value="{{$c->id}}" @if($model->category_id == $c->id) selected @endif>{{$c->name}}</option>
                                             @endif
                                         @endforeach
@@ -60,6 +60,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-6"> 
                                 <div class="form-group">
@@ -82,6 +86,77 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Giảm giá</label>
+                                    <select name="" id="" class="form-control">
+                                        <option value="">Kiểu giảm giá</option>
+                                        @foreach($discountType as $dt)
+                                        <option value="{{$dt->id}}">{{$dt->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Nhập giá trị</label>
+                                    <input type="text" class="form-control" placeholder="Nhập giá trị giảm giá">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="">Giới hạn</label>
+                                    <input type="text" class="form-control" placeholder="Số lượng sản phẩm giảm giá">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Mã giảm giá</label>
+                                    <input type="text" class="form-control" placeholder="Nhập mã giảm giá">
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <label for="" class="">Tạo mã tự động</label>
+                                <div class="text-left">
+                                    <button class="btn btn-outline-info">Auto</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Ngày bắt đầu</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Ngày Kết thúc</label>
+                                    <input type="date" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="">Mô tả</label>
+                                    <textarea name="" id="" cols="30" rows="4" class="form-control" placeholder="Chi tiết giảm giá"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-md-12">
                                 <input type="hidden" name="removeGalleryIds" value="">
@@ -119,9 +194,9 @@
                                 <a href="{{route('accessory.index')}}" class="btn btn-danger">Hủy</a>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
         </div><!-- /.container-fluid -->
     </section>
     <!-- /.content -->

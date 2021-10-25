@@ -9,6 +9,7 @@ use App\Models\Accessory;
 use App\Models\Category;
 use App\Models\DiscountType;
 use App\Models\AccessoryGallery;
+use Illuminate\Support\Facades\Auth;
 
 class AccessoryController extends Controller
 {
@@ -96,7 +97,7 @@ class AccessoryController extends Controller
             $model->image = $request->file('uploadfile')->storeAs('uploads/accessories', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
 
-        
+        $model->user_id = Auth::user()->id;
         //dd($request->id);
         $model->save();
 
@@ -136,6 +137,8 @@ class AccessoryController extends Controller
         if($request->hasFile('uploadfile')){
             $model->image = $request->file('uploadfile')->storeAs('uploads/accessories', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
+
+        $model->user_id = Auth::user()->id;
         $model->save();
 
         /* gallery

@@ -247,7 +247,7 @@
                             <div class="col-12">
                                 <div class="form-group">
                                     <label for="">Chi tiết sản phẩm:</label>
-                                    <textarea name="detail" class=form-control rows="10" placeholder="{{$model->detail}}">{{$model->detail}}</textarea>
+                                    <textarea name="description" class=form-control rows="10" placeholder="{{$model->description}}">{{$model->description}}</textarea>
                                 </div>
                             </div>
                         </div>
