@@ -19,7 +19,7 @@
     <div class="container-fluid pb-1">
         <div class="card">
             <div class="card-body">
-                <form action="" method="get">
+                <!-- <form action="" method="get">
                     <div class="row">
                         <div class="col">
                             <div class="form-group">
@@ -47,13 +47,17 @@
                             </div>
                         </div>
                     </div>
-                </form>
+                </form> -->
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
-                    <table class="table table-striped">
+                    <table class="table table-striped data-table">
                         <thead>
                             <th>STT</th>
                             <th>Tên giống loài</th>
                             <th class="text-center">Tên danh mục</th>
+                            <th>Slug</th>
+                            <th>Status</th>
+                            <th>Tác vụ</th>
                             <th><a href="{{route('breed.add')}}" class="btn btn-outline-info float-right">Thêm giống
                                     loài</a></th>
                         </thead>
@@ -70,8 +74,8 @@
 @endsection
 @section('pagejs')
 @section('pagejs')
-<link rel="stylesheet" href="{{ asset('custom-css/custom.css')}}">
-<script src="{{ asset('admin-theme/custom-css/custom.js')}}"></script>
+<link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css')}}">
+<script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
 <script>
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
@@ -131,12 +135,6 @@ $(document).ready(function() {
         ajax: {
             url: "{{ route('breed.filter') }}",
             data: function(d) {
-                // d.cate = $('#cate').val();
-                // d.breed = $('#breed').val();
-                // d.age = $('#age').val();
-                // d.gender = $('#gender').val();
-                // d.color = $('#color').val();
-                // d.status = $('#status').val();
                 d.search = $('input[type="search"]').val();
             }
         },
@@ -146,23 +144,17 @@ $(document).ready(function() {
                 searchable: false,
             },
             {
-                data: 'category_id',
-                name: 'category_id',
-            },
-            {
                 data: 'name',
                 name: 'name',
             },
             {
-                data: 'slug',
-                name: 'slug',
+                data: 'category_id',
+                name: 'category_id',
             },
-
             {
                 data: 'status',
                 name: 'status',
             },
-
             {
                 data: 'action',
                 name: 'action',
@@ -174,14 +166,14 @@ $(document).ready(function() {
     let column = table.column(0); // here is the index of the column, starts with 0
     column.visible(false); // this should be either true or false
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
-    $('select').map(function(i, dom) {
-        var idSelect = $(dom).attr('id');
-        $('#' + idSelect).change(function() {
-            table.draw();
-        });
-        // $('#' + idSelect).select2({});
+    // $('select').map(function(i, dom) {
+    //     var idSelect = $(dom).attr('id');
+    //     $('#' + idSelect).change(function() {
+    //         table.draw();
+    //     });
+    //     // $('#' + idSelect).select2({});
 
-    })
+    // })
 });
 </script>
 @endsection

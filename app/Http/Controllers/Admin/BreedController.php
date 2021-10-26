@@ -33,8 +33,8 @@ class BreedController extends Controller
             ->orderColumn('status', function ($row, $order) {
                 return $row->orderBy('status', $order);
             })
-            ->addColumn('category_id', function ($row) use ($request) {
-                return $row->categories->name;
+            ->addColumn('category_id', function ($row) {
+                return $row->category->name;
             })
             ->addColumn('status', function ($row) {
                 if ($row->status == 1) {
@@ -46,7 +46,7 @@ class BreedController extends Controller
                 }
             })
             ->addColumn('action', function ($row) {
-                return '<a  class="btn btn-success" href="' . route('petbreed.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                return '<a  class="btn btn-success" href="' . route('breed.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
                                     <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>';
             })
             ->filter(function ($instance) use ($request) {
