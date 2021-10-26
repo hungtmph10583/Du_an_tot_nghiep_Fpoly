@@ -10,31 +10,64 @@ use App\Models\Product;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
+use Yajra\Datatables\Datatables;
 
 class BreedController extends Controller
 {
     public function index(Request $request)
     {
-        $pagesize = 7;
-        $searchData = $request->except('page');
+        return view('admin.breed.index');
+    }
 
-        if (count($request->all()) == 0) {
-            // Lấy ra danh sách sản phẩm & phân trang cho nó
-            $breed = Breed::paginate($pagesize);
-        } else {
-            $breedQuery = Breed::where('name', 'like', "%" . $request->keyword . "%");
-            if ($request->has('genre_type') && $request->genre_type != "") {
-                $productQuery = $productQuery->where('genre_type', $request->genre_type);
-            }
-            $breed = $breedQuery->paginate($pagesize)->appends($searchData);
-        }
+    public function getData(Request $request)
+    {
+        $breed = Breed::select('breeds.*');
+        return dataTables::of($breed)
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
+            ->addIndexColumn()
+            ->orderColumn('cate_id', function ($row, $order) {
+                return $row->orderBy('category_id', $order);
+            })
+            ->orderColumn('status', function ($row, $order) {
+                return $row->orderBy('status', $order);
+            })
+            ->addColumn('category_id', function ($row) use ($request) {
+                return $row->categories->name;
+            })
+            ->addColumn('status', function ($row) {
+                if ($row->status == 1) {
+                    return '<span class="badge badge-primary">Active</span>';
+                } elseif ($row->status == 0) {
+                    return '<span class="badge badge-danger">Deactive</span>';
+                } else {
+                    return '<span class="badge badge-danger">Sắp ra mắt</span>';
+                }
+            })
+            ->addColumn('action', function ($row) {
+                return '<a  class="btn btn-success" href="' . route('petbreed.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>';
+            })
+            ->filter(function ($instance) use ($request) {
+                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
+                    $instance->where('status', $request->get('status'));
+                }
 
-        $breed->load('products', 'category');
-        // trả về cho người dùng 1 giao diện + dữ liệu breed vừa lấy đc 
-        return view('admin.breed.index', [
-            'breed' => $breed,
-            'searchData' => $searchData
-        ]);
+                if ($request->get('cate') != '') {
+                    $instance->where('category_id', $request->get('cate'));
+                }
+
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('slug', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['status', 'action'])
+            ->make(true);
     }
 
     public function addForm()

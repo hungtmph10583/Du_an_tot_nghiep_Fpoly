@@ -18,30 +18,37 @@ class Product extends Model
         'weight',
         'breed_id',
         'age_id',
+        'counpon_id',
         'gender_id',
+        'rating',
         'price',
         'status',
         'quantity',
         'description'
     ];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function breed(){
+    public function breed()
+    {
         return $this->belongsTo(Breed::class, 'breed_id');
     }
 
-    public function gender(){
+    public function gender()
+    {
         return $this->belongsTo(Gender::class, 'gender_id');
     }
 
-    public function age(){
+    public function age()
+    {
         return $this->belongsTo(Age::class, 'age_id');
     }
 
-    public function galleries(){
+    public function galleries()
+    {
         return $this->hasMany(ProductGallery::class, 'product_id');
     }
 

@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\SlideController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::prefix('tai-khoan')->group(function () {
@@ -45,7 +46,7 @@ Route::prefix('danh-muc')->group(function () {
     Route::post('tao-moi', [CategoryController::class, 'saveAdd'])->name('category.saveAdd');
 
     Route::get('cap-nhat/{id}', [CategoryController::class, 'editForm'])->name('category.edit');
-    Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit']);;
+    Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit'])->name('category.saveEdit');
 
     Route::get('chi-tiet/{id}', [CategoryController::class, 'detail'])->name('category.detail');
 
@@ -70,11 +71,12 @@ Route::prefix('giong-loai')->group(function () {
     Route::post('tao-moi', [BreedController::class, 'saveAdd'])->name('breed.saveAdd');
 
     Route::get('cap-nhat/{id}', [BreedController::class, 'editForm'])->name('breed.edit');
-    Route::post('cap-nhat/{id}', [BreedController::class, 'saveEdit']);;
+    Route::post('cap-nhat/{id}', [BreedController::class, 'saveEdit'])->name('breed.saveEdit');
 
     Route::get('chi-tiet/{id}', [BreedController::class, 'detail'])->name('breed.detail');
 
     Route::get('xoa/{id}', [BreedController::class, 'remove'])->name('breed.remove');
+    Route::get('dataPet', [PetBreedController::class, 'getData'])->name('breed.filter');
 });
 
 Route::prefix('san-pham')->group(function () {
