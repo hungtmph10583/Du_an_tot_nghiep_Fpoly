@@ -67,7 +67,7 @@ Route::prefix('giong-loai')->group(function () {
     Route::get('/', [BreedController::class, 'index'])->name('breed.index');
 
     Route::get('tao-moi', [BreedController::class, 'addForm'])->name('breed.add');
-    Route::post('tao-moi', [BreedController::class, 'saveAdd']);
+    Route::post('tao-moi', [BreedController::class, 'saveAdd'])->name('breed.saveAdd');
 
     Route::get('cap-nhat/{id}', [BreedController::class, 'editForm'])->name('breed.edit');
     Route::post('cap-nhat/{id}', [BreedController::class, 'saveEdit']);;
@@ -134,5 +134,3 @@ Route::prefix('slide')->group(function () {
 
     Route::get('xoa/{id}', [SlideController::class, 'remove'])->name('slide.remove');
 });
-
-?>
