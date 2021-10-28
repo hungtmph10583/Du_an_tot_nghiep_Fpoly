@@ -76,7 +76,7 @@ Route::prefix('giong-loai')->group(function () {
     Route::get('chi-tiet/{id}', [BreedController::class, 'detail'])->name('breed.detail');
 
     Route::get('xoa/{id}', [BreedController::class, 'remove'])->name('breed.remove');
-    Route::get('dataPet', [PetBreedController::class, 'getData'])->name('breed.filter');
+    Route::get('dataPet', [BreedController::class, 'getData'])->name('breed.filter');
 });
 
 Route::prefix('san-pham')->group(function () {

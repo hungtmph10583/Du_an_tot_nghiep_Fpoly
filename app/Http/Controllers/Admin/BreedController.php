@@ -21,7 +21,7 @@ class BreedController extends Controller
 
     public function getData(Request $request)
     {
-        $breed = Breed::select('breeds.*');
+        $breed = Breed::select('breeds.*')->with('category');
         return dataTables::of($breed)
             ->setRowId(function ($row) {
                 return $row->id;
@@ -46,8 +46,12 @@ class BreedController extends Controller
                 }
             })
             ->addColumn('action', function ($row) {
-                return '<a  class="btn btn-success" href="' . route('breed.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
-                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>';
+                return '
+                <span class="float-right">
+                <a href="' . route('breed.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                <a  class="btn btn-success" href="' . route('breed.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                                    </span>';
             })
             ->filter(function ($instance) use ($request) {
                 if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
