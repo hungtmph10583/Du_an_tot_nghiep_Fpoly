@@ -1,12 +1,16 @@
 <!-- jQuery -->
 <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
-
 <script src="{{ asset('admin-theme/plugins/jquery/jquery.min.js')}}"></script>
+<!-- ajax -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<!-- tinymce -->
+<script src="https://cdn.tiny.cloud/1/u8myefzilomjfel4lb6g0k3l3qi13ty75j4lzfl4vz8kg2tw/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('admin-theme/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
 <script>
-  $.widget.bridge('uibutton', $.ui.button)
+$.widget.bridge('uibutton', $.ui.button)
 </script>
 <!-- Bootstrap 4 -->
 <script src="{{ asset('admin-theme/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
@@ -31,5 +35,23 @@
 <!-- AdminLTE App -->
 <script src="{{ asset('admin-theme/dist/js/adminlte.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ asset('admin-theme/dist/js/pages/dashboard.js')}}"></script>
+
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+
+<script src="{{ asset('admin-theme/plugins/jszip/jszip.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/pdfmake/pdfmake.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/pdfmake/vfs_fonts.js')}}"></script>
+
+
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/dataTables.buttons.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.bootstrap4.min.js')}}"></script>
+
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.html5.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.print.min.js')}}"></script>
+<script src="{{ asset('admin-theme/plugins/datatables-buttons/js/buttons.colVis.min.js')}}"></script>

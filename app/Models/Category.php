@@ -10,22 +10,23 @@ class Category extends Model
     use HasFactory;
     protected $table = "categories";
     protected $fillable = [
-        'name', 'slug','image', 'show_slide',  'category_type_id'
+        'name', 'slug', 'show_slide',  'category_type_id'
     ];
     // Quan hệ category -> product
     public function products()
     {
-        return $this->hasMany(Product::class,'category_id');
+        return $this->hasMany(Product::class, 'category_id');
         // quan he 
     }
 
     public function breeds()
     {
-        return $this->hasMany(Breed::class,'category_id');
+        return $this->hasMany(Breed::class, 'category_id');
         // quan he 
     }
 
-    public function categoryType(){
+    public function categoryType()
+    {
         return $this->belongsTo(Category::class, 'category_type_id');
     }
 }
