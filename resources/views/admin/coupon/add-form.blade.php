@@ -90,14 +90,14 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
+                                <!-- <div class="row">
                                     <div class="col">
                                         <div class="form-group">
                                             <input type="checkbox" id="forever" name="forever" value="{{old('forever')}}">
                                             <label for="forever">Không thời hạn</label>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
                         <div class="row">

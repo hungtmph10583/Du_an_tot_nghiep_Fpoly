@@ -85,7 +85,15 @@ class CouponController extends Controller
         }
         return view('admin.coupon.edit-form', compact('coupon', 'couponType', 'discountType', 'product'));
     }
-    public function saveEdit(Request $request){}
+    // public function saveEdit($id, Request $request){
+    //     $model = Coupons::find($id); 
+        
+    //     if(!$model){
+    //         return redirect()->back();
+    //     }
+    //     $model->fill($request->all());
+
+    // }
     public function detail(Request $request){}
     public function remove(Request $request){}
 }
