@@ -16,12 +16,14 @@ class CreateOrdersTable extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id');
-            $table->integer('delivery_status')->default(1);
-            $table->string('payment_type');
-            $table->string('payment_status');
-            $table->string('payment_details');
-            $table->double('grand_total', 20, 2);
-            $table->double('coupon_discount', 20, 2);
+            $table->text('shipping_address');
+            $table->string('delibery_status'); // Tinh trang giao hang
+            $table->string('payment_type'); // Hinh thuc thanh toan
+            $table->string('payment_status'); // Trang thai thanh toan
+            //$table->string('payment_details');
+            $table->integer('delivery_status'); // Trang thai giao hang
+            $table->integer('grand_total')->nullable(); // Tonng cong
+            $table->integer('coupon_discount'); //
             $table->integer('code');
             $table->timestamps();
         });

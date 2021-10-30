@@ -5,7 +5,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('news.index')}}">Danh sách bài viết</a></li>
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('blog.index')}}">Danh sách bài viết</a></li>
                     <li class="breadcrumb-item active">Tạo bài viết</li>
                 </ol>
             </div>
@@ -81,7 +81,7 @@
                         <div class="col mt-2"><br>
                             <div class="text-right">
                                 <button type="submit" class="btn btn-info">Lưu</button>
-                                <a href="{{route('news.index')}}" class="btn btn-danger">Hủy</a>
+                                <a href="{{route('blog.index')}}" class="btn btn-danger">Hủy</a>
                             </div>
                         </div>
                     </div>

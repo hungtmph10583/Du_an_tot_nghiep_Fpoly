@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\News;
+use App\Models\Blog;
 use Illuminate\Support\Facades\Auth;
 
-class NewsController extends Controller
+class BlogController extends Controller
 {
     public function index(Request $request){
         $pagesize = 7;
@@ -15,22 +15,22 @@ class NewsController extends Controller
         
         if(count($request->all()) == 0){
             // Lấy ra danh sách tin tức & phân trang cho nó
-            $news = News::paginate($pagesize);
+            $blog = Blog::paginate($pagesize);
         }
         
         // trả về cho người dùng 1 giao diện + dữ liệu categories vừa lấy đc 
-        return view('admin.news.index', [
-            'news' => $news,
+        return view('admin.blog.index', [
+            'blog' => $blog,
             'searchData' => $searchData
         ]);
     }
 
     public function addForm(){
-        return view('admin.news.add-form');
+        return view('admin.blog.add-form');
     }
 
     public function saveAdd(Request $request){
-        $model = new News();
+        $model = new Blog();
         $model->fill($request->all());
         $title = $request->title;
         $slug = $request->tiele;
@@ -68,27 +68,27 @@ class NewsController extends Controller
          * End
          */
         if($request->has('uploadfile')){
-            $model->image =$request->file('uploadfile')->storeAs('uploads/news/' . $model->id , 
+            $model->image =$request->file('uploadfile')->storeAs('uploads/blog/' . $model->id , 
                                     uniqid() . '-' . $request->uploadfile->getClientOriginalName());
             $model->save();
         }
 
         $model->creator = Auth::user()->id;
         $model->save();
-        return redirect(route('news.index'));
+        return redirect(route('blog.index'));
     }
 
     public function editForm($id){
-        $model = News::find($id);
+        $model = Blog::find($id);
        
         if(!$model){
             return redirect()->back();
         }
-        return view('admin.news.edit-form', compact('model'));
+        return view('admin.blog.edit-form', compact('model'));
     }
 
     public function saveEdit($id,Request $request){
-        $model = News::find($id); 
+        $model = Blog::find($id); 
         if(!$model){
             return redirect()->back();
         }
@@ -127,24 +127,24 @@ class NewsController extends Controller
          */
         $model->title = ucwords($title);
         if($request->has('uploadfile')){
-            $model->image =$request->file('uploadfile')->storeAs('uploads/news/' . $model->id , 
+            $model->image =$request->file('uploadfile')->storeAs('uploads/blog/' . $model->id , 
                                     uniqid() . '-' . $request->uploadfile->getClientOriginalName());
             $model->save();
         }
         $model->save();
-        return redirect(route('news.index'));
+        return redirect(route('blog.index'));
     }
 
     public function detail($id)
     {
-        $news = News::find($id);
+        $blog = Blog::find($id);
 
-        return view('admin.news.detail', compact('news'));
+        return view('admin.blog.detail', compact('blog'));
     }
 
     public function remove($id){
-        $news = News::find($id);
-        $news->delete();
+        $blog = Blog::find($id);
+        $blog->delete();
         return redirect()->back();
     }
 }

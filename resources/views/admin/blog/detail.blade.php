@@ -6,7 +6,7 @@
             <div class="card card-secondary my-0">
                 <div class="card-header">
                     <ol class="breadcrumb float-sm-left ">
-                        <li class="breadcrumb-item"><a class="card-title" href="{{route('news.index')}}">Danh sách tin tức</a></li>
+                        <li class="breadcrumb-item"><a class="card-title" href="{{route('blog.index')}}">Danh sách tin tức</a></li>
                         <li class="breadcrumb-item active">Chi tiết tin tức</li>
                     </ol>
                 </div>
@@ -26,17 +26,17 @@
                             <div class="col-3">
                                 <div class="form-group">
                                     <label for="">Ảnh tin tức</label>
-                                    <img class="form-control" style="width:100%; height: 100%" src="{{asset( 'storage/' . $news->image)}}" alt="Tin tức này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                                    <img class="form-control" style="width:100%; height: 100%" src="{{asset( 'storage/' . $blog->image)}}" alt="Tin tức này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                                 </div>
                             </div>
                             <div class="col-9">
                                 <div class="form-group">
                                     <label for="">Tiêu đề tin tức</label>
-                                    <input type="text" class="form-control" value="{{$news->title}}" readonly>
+                                    <input type="text" class="form-control" value="{{$blog->title}}" readonly>
                                 </div>
                                 <div class="form-group">
                                     <label for="">Trạng thái</label>
-                                    <input class="form-control" type="text" value="{{ ($news->status == 1 ? 'Active' : 'Inactive') }}" readonly>
+                                    <input class="form-control" type="text" value="{{ ($blog->status == 1 ? 'Active' : 'Inactive') }}" readonly>
                                 </div>
                             </div>
                         </div>
@@ -44,7 +44,7 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="">Nội dung bài viết</label>
-                                    <textarea class="form-control" name="content" id="" cols="30" rows="10" readonly>{{$news->content}}</textarea>
+                                    <textarea class="form-control" name="content" id="" cols="30" rows="10" readonly>{{$blog->content}}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -53,8 +53,8 @@
                             </div>
                             <div class="col-6 mt-2"><br>
                                 <div class="text-right">
-                                    <a href="{{route('news.index')}}" class="btn btn-warning text-light">Quay lại</a>
-                                    <a href="{{route('news.edit', ['id' => $news->id])}}" class="btn btn-info">Sửa tin tức</a>
+                                    <a href="{{route('blog.index')}}" class="btn btn-warning text-light">Quay lại</a>
+                                    <a href="{{route('blog.edit', ['id' => $blog->id])}}" class="btn btn-info">Sửa tin tức</a>
                                 </div>
                             </div>
                         </div>

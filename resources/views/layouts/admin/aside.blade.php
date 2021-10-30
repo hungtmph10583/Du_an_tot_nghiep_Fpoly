@@ -117,9 +117,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{route('coupon.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Giảm giá</p>
+                                <p>Phiếu giảm giá</p>
                             </a>
                         </li>
                     </ul>
@@ -162,6 +162,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('user.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
                         @hasanyrole('admin|manage')
                         <li class="nav-item">
                             <a href="{{route('user.add')}}" class="nav-link">
@@ -170,12 +176,6 @@
                             </a>
                         </li>
                         @endhasanyrole
-                        <li class="nav-item">
-                            <a href="{{route('user.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -189,14 +189,14 @@
                     <ul class="nav nav-treeview">
                         @hasanyrole('admin|manage')
                         <li class="nav-item">
-                            <a href="{{route('news.add')}}" class="nav-link">
+                            <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thêm bài viết</p>
                             </a>
                         </li>
                         @endhasanyrole
                         <li class="nav-item">
-                            <a href="{{route('news.index')}}" class="nav-link">
+                            <a href="{{route('blog.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
                             </a>
@@ -219,31 +219,31 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('news.index')}}" class="nav-link">
+                            <a href="{{route('blog.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Logo</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('news.add')}}" class="nav-link">
+                            <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Header</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('news.add')}}" class="nav-link">
+                            <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Slide</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('news.add')}}" class="nav-link">
+                            <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Banner</p>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('news.add')}}" class="nav-link">
+                            <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Footer</p>
                             </a>

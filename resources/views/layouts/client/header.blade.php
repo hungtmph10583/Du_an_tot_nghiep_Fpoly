@@ -25,10 +25,17 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        @if(Auth::check())
+                        <a href="{{route('logout')}}">
+                            <span>logout</span>
+                            <i class="fas fa-sign-out-alt"></i>
+                        </a>
+                        @else
+                        <a href="{{route('login')}}">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>login</span>
                         </a>
+                        @endif
                     </li>
                 </ul>
             </div>

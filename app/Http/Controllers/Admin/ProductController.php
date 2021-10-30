@@ -115,7 +115,7 @@ class ProductController extends Controller
         }
 
         $model->user_id = Auth::user()->id;
-
+        
         $model->save();
 
         if($request->has('galleries')){

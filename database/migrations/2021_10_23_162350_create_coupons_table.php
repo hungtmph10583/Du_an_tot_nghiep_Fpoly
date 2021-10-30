@@ -16,13 +16,13 @@ class CreateCouponsTable extends Migration
         Schema::create('coupons', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id'); // xg
-            $table->integer('discount_type_id'); // xg ( kieu giam gia )
-            $table->integer('quantity'); //xg
+            $table->integer('type'); // product -  total product
             $table->string('code'); // xg
             $table->string('details'); // xg
             $table->string('discount'); // chiet khau 
-            $table->integer('start_date'); // xg
-            $table->integer('end_date'); // xg
+            $table->integer('discount_type'); // xg ( kieu giam gia )
+            $table->timestamp('start_date')->nullable(); // xg
+            $table->timestamp('end_date')->nullable(); // xg
             $table->timestamps();
         });
     }

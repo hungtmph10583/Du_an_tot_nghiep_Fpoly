@@ -41,7 +41,7 @@ class CategoryController extends Controller
         return view('admin.category.add-form', compact('categoryType'));
     }
     
-    public function saveAdd(CategoryFormRequest $request){
+    public function saveAdd(Request $request){
         $model = new Category();
         $model->fill($request->all());
         $name = $request->name;

@@ -5,12 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class BlogCategory extends Model
+class CouponType extends Model
 {
     use HasFactory;
-    protected $table = 'blog_categories';
-    protected $fillable = [
-        'title',
-        'slug',
-    ];
+    // protected $table = "coupon_types";
+    // protected $fillable = [
+    //     'name',
+    // ];
 }

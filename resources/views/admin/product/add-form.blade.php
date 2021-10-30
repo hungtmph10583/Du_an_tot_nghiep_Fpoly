@@ -20,54 +20,54 @@
         <div class="container-fluid pb-1">
             <form action="" method="POST" enctype="multipart/form-data">
             @csrf
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="">Tên sản phẩm</label>
-                                <input type="text" name="name" class="form-control" value="{{old('name')}}" placeholder="Tên sản phẩm">
-                                @error('name')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Tên sản phẩm</label>
+                                    <input type="text" name="name" class="form-control" value="{{old('name')}}" placeholder="Tên sản phẩm">
+                                    @error('name')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="">Ảnh sản phẩm</label>
+                                    <input type="file" name="uploadfile" class="form-control">
+                                    @error('uploadfile')
+                                        <span class="text-danger">{{$message}}</span>
+                                    @enderror
+                                </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="row">
+                        <div class="col-6"> 
                             <div class="form-group">
-                                <label for="">Ảnh sản phẩm</label>
-                                <input type="file" name="uploadfile" class="form-control">
-                                @error('uploadfile')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <label for="">Danh mục</label>
+                                <select name="category_id" class="form-control">
+                                    @foreach($category as $c)
+                                        @if($c->categoryType->id === 1)
+                                        <option value="{{$c->id}}" @if($c->id == old('category_id')) selected @endif>{{$c->name}}</option>
+                                        @endif
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                    <div class="col-6"> 
-                        <div class="form-group">
-                            <label for="">Danh mục</label>
-                            <select name="category_id" class="form-control">
-                                @foreach($category as $c)
-                                    @if($c->categoryType->id === 1)
-                                    <option value="{{$c->id}}" @if($c->id == old('category_id')) selected @endif>{{$c->name}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
+                        <div class="col-6"> 
+                            <div class="form-group">
+                                <label for="">Giống loài</label>
+                                <select name="breed_id" class="form-control">
+                                    @foreach($breed as $br)
+                                    <option value="{{$br->id}}" @if($br->id == old('breed_id')) selected @endif>{{$br->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="col-6"> 
-                        <div class="form-group">
-                            <label for="">Giống loài</label>
-                            <select name="breed_id" class="form-control">
-                                @foreach($breed as $br)
-                                <option value="{{$br->id}}" @if($br->id == old('breed_id')) selected @endif>{{$br->name}}</option>
-                                @endforeach
-                            </select>
                         </div>
-                    </div>
                     </div>
                 </div>
-            </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
@@ -138,11 +138,17 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
+                        <div class="card-title">Thông tin phiếu giảm giá</div>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col"><label for="">Giảm giá</label>
+                                <input type="text" class="form-control" name="discount" placeholder="Giảm giá">
+                            </div>
+                            <div class="col">
                                 <div class="form-group">
-                                    <label for="">Giảm giá</label>
-                                    <select name="" id="" class="form-control">
+                                    <label for="">Kiểu giảm giá</label>
+                                    <select name="discount_type" id="" class="form-control">
                                         <option value="">Kiểu giảm giá</option>
                                         @foreach($discountType as $dt)
                                         <option value="{{$dt->id}}">{{$dt->name}}</option>
@@ -150,32 +156,26 @@
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-6">
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label for="">Nhập giá trị</label>
-                                    <input type="text" class="form-control" placeholder="Nhập giá trị giảm giá">
+                                    <label for="">Ngày bắt đầu</label>
+                                    <input type="date" class="form-control" name="discount_start_date">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Ngày kết thúc</label>
+                                    <input type="date" class="form-control" name="discount_end_date">
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
+                        <!-- <div class="row">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label for="">Giới hạn</label>
-                                    <input type="text" class="form-control" placeholder="Số lượng sản phẩm giảm giá">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Mã giảm giá</label>
-                                    <input type="text" class="form-control" placeholder="Nhập mã giảm giá">
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <label for="" class="">Tạo mã tự động</label>
-                                <div class="text-left">
-                                    <button class="btn btn-outline-info">Auto</button>
+                                    <label for="">Giảm giá</label>
+                                    <input type="text" class="form-control" placeholder="Giảm giá">
                                 </div>
                             </div>
                         </div>
@@ -192,15 +192,7 @@
                                     <input type="date" class="form-control">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="">Mô tả</label>
-                                    <textarea name="" id="" cols="30" rows="4" class="form-control" placeholder="Chi tiết giảm giá"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="card">

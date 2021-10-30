@@ -16,8 +16,15 @@ class CreateOrderDetailsTable extends Migration
         Schema::create('order_details', function (Blueprint $table) {
             $table->id();
             $table->integer('order_id');
+            $table->integer('seller_id'); // Nguoi ban
             $table->integer('product_id');
-            $table->integer('price');
+            $table->integer('price')->default(0);
+            $table->double('tax',20, 0)->default(0); // Thue
+            $table->integer('shipping_cost')->default(0); // Gia van chuyen
+            $table->integer('shipping_type')->default(0); // Kieu van chuyen
+            $table->string('payment_status'); // Tinh trang thanh toan
+            $table->string('delivery_status'); // Tinh trang giao hang
+            $table->integer('quantity');
             // Chua hoan thien
             $table->timestamps();
         });

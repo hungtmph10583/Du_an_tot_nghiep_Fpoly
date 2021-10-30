@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class DiscountType extends Model
 {
     use HasFactory;
+    // protected $table = "discount_types";
+    // protected $fillable = [
+    //     'name',
+    // ];
 }

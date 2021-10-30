@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Breed;
 use App\Models\Category;
 use App\Models\Product;
+use Illuminate\Support\Facades\Auth;
 
 class BreedController extends Controller
 {
@@ -79,6 +80,7 @@ class BreedController extends Controller
                                     uniqid() . '-' . $request->uploadfile->getClientOriginalName());
             $model->save();
         }
+        $model->user_id = Auth::user()->id;
         $model->save();
         return redirect(route('breed.index'));
     }
@@ -137,6 +139,7 @@ class BreedController extends Controller
                                     uniqid() . '-' . $request->uploadfile->getClientOriginalName());
             $model->save();
         }
+        $model->user_id = Auth::user()->id;
         $model->save();
         return redirect(route('breed.index'));
     }

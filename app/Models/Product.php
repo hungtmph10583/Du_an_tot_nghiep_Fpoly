@@ -20,6 +20,12 @@ class Product extends Model
         'age_id',
         'gender_id',
         'price',
+        'coupon_id',
+        'discount',
+        'discount_type',
+        'min_quantity',
+        'discount_start_date',
+        'discount_end_date',
         'status',
         'quantity',
         'description'
@@ -43,6 +49,10 @@ class Product extends Model
 
     public function galleries(){
         return $this->hasMany(ProductGallery::class, 'product_id');
+    }
+
+    public function discountType(){
+        return $this->belongsTo(DiscountType::class, 'discount_type');
     }
 
     // public function product_tag(){
