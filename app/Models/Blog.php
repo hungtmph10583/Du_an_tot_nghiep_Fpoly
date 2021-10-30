@@ -14,13 +14,14 @@ class Blog extends Model
         'title',
         'slug',
         'user_id',
+        'category_blog_id',
         'image',
         'content',
         'status'
     ];
 
     public function BlogCategory(){
-        return $this->belongsTo(User::class, 'user_id');
+        return $this->belongsTo(User::class, 'category_blog_id');
     }
 
     public function User(){

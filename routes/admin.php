@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AccessoryController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\BlogController;
+use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\SlideController;
 
 /*
@@ -135,6 +136,18 @@ Route::prefix('tin-tuc')->group(function () {
     Route::get('chi-tiet/{id}', [BlogController::class, 'detail'])->name('blog.detail');
 
     Route::get('xoa/{id}', [BlogController::class, 'remove'])->name('blog.remove');
+});
+
+Route::prefix('danh-muc-tin-tuc')->group(function () {
+    Route::get('/', [BlogCategoryController::class, 'index'])->name('blogCategory.index');
+
+    Route::get('tao-moi', [BlogCategoryController::class, 'addForm'])->name('blogCategory.add');
+    Route::post('tao-moi', [BlogCategoryController::class, 'saveAdd']);
+
+    Route::get('cap-nhat/{id}', [BlogCategoryController::class, 'editForm'])->name('blogCategory.edit');
+    Route::post('cap-nhat/{id}', [BlogCategoryController::class, 'saveEdit']);
+
+    Route::get('xoa/{id}', [BlogCategoryController::class, 'remove'])->name('blogCategory.remove');
 });
 
 Route::prefix('slide')->group(function () {

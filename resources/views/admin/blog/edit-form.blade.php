@@ -5,7 +5,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('category.index')}}">Danh sách tin tức</a></li>
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('blog.index')}}">Danh sách tin tức</a></li>
                     <li class="breadcrumb-item active">Sửa tin tức</li>
                 </ol>
             </div>

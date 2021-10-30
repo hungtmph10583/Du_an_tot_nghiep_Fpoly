@@ -55,7 +55,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function saveAdd(UserFormRequest $request){
+    public function saveAdd(Request $request){
         $model = new User();
 
         $model->fill($request->all());

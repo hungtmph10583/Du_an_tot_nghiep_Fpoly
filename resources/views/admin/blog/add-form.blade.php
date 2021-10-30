@@ -34,11 +34,11 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="">Danh mục bài viết</label>
-                                <select class="form-control" name="category_id" id="">
-                                    <option value="">Chó</option>
-                                    <option value="">Mèo</option>
-                                    <option value="">Rùa</option>
-                                    <option value="">Khỉ</option>
+                                <select class="form-control" name="category_blog_id" id="">
+                                    <option value="">Chọn danh mục cho bài viết</option>
+                                    @foreach($categoryBlog as $ctb)
+                                    <option value="{{$ctb->id}}">{{$ctb->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>

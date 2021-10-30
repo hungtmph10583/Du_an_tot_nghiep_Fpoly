@@ -52,10 +52,10 @@
                                     <label for="">Hiển thị ra slide</label>
                                     <div class="form-control">
                                         <label class="pr-2">
-                                            <input type="radio" name="show_slide" value="1" checked> Hiển thị
+                                            <input type="radio" name="show_slide" value="1"> Hiển thị
                                         </label>
                                         <label class="pl-2">
-                                            <input type="radio" name="show_slide" value="0"> Ẩn
+                                            <input type="radio" name="show_slide" value="0" checked> Ẩn
                                         </label>
                                     </div>
                                 </div>

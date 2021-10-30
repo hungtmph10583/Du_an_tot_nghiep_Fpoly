@@ -187,6 +187,12 @@
                         </p>
                     </a>
                     <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('blog.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
                         @hasanyrole('admin|manage')
                         <li class="nav-item">
                             <a href="{{route('blog.add')}}" class="nav-link">
@@ -196,13 +202,7 @@
                         </li>
                         @endhasanyrole
                         <li class="nav-item">
-                            <a href="{{route('blog.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
+                            <a href="{{route('blogCategory.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh mục bài viết</p>
                             </a>

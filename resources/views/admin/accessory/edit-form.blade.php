@@ -90,44 +90,44 @@
                 </div>
                 <div class="card">
                     <div class="card-body">
+                        <div class="card-title">Thông tin phiếu giảm giá</div>
+                    </div>
+                    <div class="card-body">
                         <div class="row">
-                            <div class="col-6">
+                            <div class="col"><label for="">Giảm giá</label>
+                                <input type="text" class="form-control" name="discount" placeholder="Giảm giá" value="{{$model->discount}}">
+                            </div>
+                            <div class="col">
                                 <div class="form-group">
-                                    <label for="">Giảm giá</label>
-                                    <select name="" id="" class="form-control">
+                                    <label for="">Kiểu giảm giá</label>
+                                    <select name="discount_type" id="" class="form-control">
                                         <option value="">Kiểu giảm giá</option>
                                         @foreach($discountType as $dt)
-                                        <option value="{{$dt->id}}">{{$dt->name}}</option>
+                                        <option value="{{$dt->id}}" @if($model->discount_type == $dt->id) selected @endif>{{$dt->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
-                            <div class="col-6">
+                        </div>
+                        <div class="row">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label for="">Nhập giá trị</label>
-                                    <input type="text" class="form-control" placeholder="Nhập giá trị giảm giá">
+                                    <label for="">Ngày bắt đầu</label>
+                                    <input type="date" class="form-control" name="discount_start_date">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label for="">Ngày kết thúc</label>
+                                    <input type="date" class="form-control" name="discount_end_date">
                                 </div>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-12">
+                        <!-- <div class="row">
+                            <div class="col">
                                 <div class="form-group">
-                                    <label for="">Giới hạn</label>
-                                    <input type="text" class="form-control" placeholder="Số lượng sản phẩm giảm giá">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Mã giảm giá</label>
-                                    <input type="text" class="form-control" placeholder="Nhập mã giảm giá">
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <label for="" class="">Tạo mã tự động</label>
-                                <div class="text-left">
-                                    <button class="btn btn-outline-info">Auto</button>
+                                    <label for="">Giảm giá</label>
+                                    <input type="text" class="form-control" placeholder="Giảm giá">
                                 </div>
                             </div>
                         </div>
@@ -144,15 +144,7 @@
                                     <input type="date" class="form-control">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="">Mô tả</label>
-                                    <textarea name="" id="" cols="30" rows="4" class="form-control" placeholder="Chi tiết giảm giá"></textarea>
-                                </div>
-                            </div>
-                        </div>
+                        </div> -->
                     </div>
                 </div>
                 <div class="card">

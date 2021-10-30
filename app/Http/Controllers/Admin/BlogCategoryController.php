@@ -6,9 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\BlogCategory;
-use Illuminate\Support\Facades\Auth;
 
-class BlogController extends Controller
+class BlogCategoryController extends Controller
 {
     public function index(Request $request){
         $pagesize = 7;
@@ -16,26 +15,23 @@ class BlogController extends Controller
         
         if(count($request->all()) == 0){
             // Lấy ra danh sách tin tức & phân trang cho nó
-            $blog = Blog::paginate($pagesize);
+            $blogCategory = BlogCategory::paginate($pagesize);
         }
         
         // trả về cho người dùng 1 giao diện + dữ liệu categories vừa lấy đc 
-        return view('admin.blog.index', [
-            'blog' => $blog,
+        return view('admin.blogCategory.index', [
+            'blogCategory' => $blogCategory,
             'searchData' => $searchData
         ]);
     }
-
     public function addForm(){
-        $categoryBlog = BlogCategory::all();
-        return view('admin.blog.add-form', compact('categoryBlog'));
+        return view('admin.blogCategory.add-form');
     }
-
     public function saveAdd(Request $request){
-        $model = new Blog();
+        $model = new BlogCategory();
         $model->fill($request->all());
-        $title = $request->title;
-        $slug = $request->title;
+        $name = $request->name;
+        $slug = $request->name;
         
         /**
          * Chuyen doi ky tu chu thanh slug
@@ -65,39 +61,31 @@ class BlogController extends Controller
         }
         $slug = str_replace(' ','-',$slug);
         $model->slug = strtolower($slug);
-        $model->title = ucwords($title);
+        $model->name = ucwords($name);
         /**
          * End
          */
-        $model->user_id = Auth::user()->id;
-        if($request->has('uploadfile')){
-            $model->image = $request->file('uploadfile')->storeAs('uploads/blog/' . $model->id , 
-                                    uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-            $model->save();
-        }
 
         $model->save();
         
-        return redirect(route('blog.index'));
+        return redirect(route('blogCategory.index'));
     }
-
     public function editForm($id){
-        $model = Blog::find($id);
+        $model = BlogCategory::find($id);
        
         if(!$model){
             return redirect()->back();
         }
-        return view('admin.blog.edit-form', compact('model'));
+        return view('admin.blogCategory.edit-form', compact('model'));
     }
-
     public function saveEdit($id,Request $request){
-        $model = Blog::find($id); 
+        $model = BlogCategory::find($id); 
         if(!$model){
             return redirect()->back();
         }
         $model->fill($request->all());
-        $title = $request->title;
-        $slug = $request->title;
+        $name = $request->name;
+        $slug = $request->name;
         /**
          * Chuyen doi ky tu chu thanh slug
          * @date: 28/09/21
@@ -128,28 +116,9 @@ class BlogController extends Controller
         /**
          * End
          */
-        $model->user_id = Auth::user()->id;
-        $model->title = ucwords($title);
-        if($request->has('uploadfile')){
-            $model->image =$request->file('uploadfile')->storeAs('uploads/blog/' . $model->id , 
-                                    uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-            $model->save();
-        }
+        $model->name = ucwords($name);
 
         $model->save();
-        return redirect(route('blog.index'));
-    }
-
-    public function detail($id)
-    {
-        $blog = Blog::find($id);
-
-        return view('admin.blog.detail', compact('blog'));
-    }
-
-    public function remove($id){
-        $blog = Blog::find($id);
-        $blog->delete();
-        return redirect()->back();
+        return redirect(route('blogCategory.index'));
     }
 }
