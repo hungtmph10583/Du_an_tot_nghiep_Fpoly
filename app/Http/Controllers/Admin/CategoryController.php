@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\admin;
+namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\CategoryFormRequest;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Category;
@@ -12,6 +11,7 @@ use App\Models\Product;
 use App\Models\Breed;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+
 
 class CategoryController extends Controller
 {
@@ -95,7 +95,7 @@ class CategoryController extends Controller
         return view('admin.category.edit-form', compact('model', 'categoryType'));
     }
 
-    public function saveEdit($id, CategoryFormRequest $request)
+    public function saveEdit($id, Request $request)
     {
         $model = Category::find($id);
         if (!$model) {
