@@ -11,32 +11,49 @@ use App\Models\Product;
 use App\Models\Breed;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Yajra\Datatables\Datatables;
 
 
 class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        $pagesize = 7;
-        $searchData = $request->except('page');
+        return view('admin.category.index');
+    }
 
-        if (count($request->all()) == 0) {
-            // Lấy ra danh sách sản phẩm & phân trang cho nó
-            $categories = Category::paginate($pagesize);
-        } else {
-            $categoryQuery = Category::where('name', 'like', "%" . $request->keyword . "%");
-            if ($request->has('genre_type') && $request->genre_type != "") {
-                $productQuery = $productQuery->where('genre_type', $request->genre_type);
-            }
-            $categories = $categoryQuery->paginate($pagesize)->appends($searchData);
-        }
-
-        $categories->load('products');
-        // trả về cho người dùng 1 giao diện + dữ liệu categories vừa lấy đc 
-        return view('admin.category.index', [
-            'cates' => $categories,
-            'searchData' => $searchData
-        ]);
+    public function getData(Request $request)
+    {
+        $category = Category::select('categories.*')->with('categoryType');
+        return dataTables::of($category)
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
+            ->addIndexColumn()
+            ->orderColumn('category_type_id', function ($row, $order) {
+                return $row->orderBy('category_type_id', $order);
+            })
+            ->addColumn('category_type_id', function ($row) {
+                return $row->categoryType->name;
+            })
+            ->addColumn('action', function ($row) {
+                return '
+                <span class="float-right">
+                <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                <a  class="btn btn-success" href="' . route('category.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                                    </span>';
+            })
+            ->filter(function ($instance) use ($request) {
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('slug', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     public function addForm()
@@ -48,7 +65,7 @@ class CategoryController extends Controller
     public function saveAdd(Request $request, $id = null)
     {
         $message = [
-            'name.required' => "Hãy nhập vào tên sách",
+            'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên thú cưng đã tồn tại",
             'category_type_id.required' => "Hãy chọn danh mục",
             'show_slide.required' => "Hãy chọn trạng thái thú cưng",

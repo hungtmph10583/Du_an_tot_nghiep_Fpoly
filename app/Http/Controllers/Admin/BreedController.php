@@ -135,7 +135,7 @@ class BreedController extends Controller
     public function saveEdit($id, Request $request)
     {
         $message = [
-            'name.required' => "Hãy nhập vào tên sách",
+            'name.required' => "Hãy nhập vào tên giống loài",
             'name.unique' => "Tên thú cưng đã tồn tại",
             'category_id.required' => "Hãy chọn danh mục",
             'status.required' => "Hãy chọn trạng thái thú cưng",

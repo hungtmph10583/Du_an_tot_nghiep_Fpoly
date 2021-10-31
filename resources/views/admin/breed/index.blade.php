@@ -50,7 +50,6 @@
 <!-- /.content -->
 @endsection
 @section('pagejs')
-@section('pagejs')
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css')}}">
 <script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
 <script>

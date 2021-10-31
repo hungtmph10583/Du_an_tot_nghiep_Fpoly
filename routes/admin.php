@@ -53,6 +53,7 @@ Route::prefix('danh-muc')->group(function () {
     Route::get('chi-tiet/{id}', [CategoryController::class, 'detail'])->name('category.detail');
 
     Route::get('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
+    Route::get('dataCate', [CategoryController::class, 'getData'])->name('category.filter');
 });
 
 Route::prefix('don-hang')->group(function () {
