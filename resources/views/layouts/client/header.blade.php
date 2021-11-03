@@ -21,21 +21,14 @@
                     <li>
                         <a href="#">
                             <i class="fas fa-user"></i>
-                            <span>tài khoản</span>
+                            <span>Tài khoản</span>
                         </a>
                     </li>
                     <li>
-                        @if(Auth::check())
-                        <a href="{{route('logout')}}">
-                            <span>logout</span>
-                            <i class="fas fa-sign-out-alt"></i>
-                        </a>
-                        @else
-                        <a href="{{route('login')}}">
+                        <a href="#">
                             <i class="fas fa-sign-in-alt"></i>
-                            <span>login</span>
+                            <span>Login</span>
                         </a>
-                        @endif
                     </li>
                 </ul>
             </div>
@@ -66,7 +59,7 @@
                                 <a href="./index.html">Danh mục</a>
                             </li>
                             <li>
-                                <a href="./product.html">Sản phẩm</a>
+                                <a href="{{route('product.client.index')}}">Sản phẩm</a>
                             </li>
                             <li>
                                 <a href="./blog.html">Tin tức</a>
@@ -78,6 +71,9 @@
                     </nav>
                 </div>
                 <div class="header-item icons">
+                    <!-- <div class="cart">
+                        <i class="fas fa-heart"></i>
+                    </div> -->
                     <div class="cart" id="cart-btn">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="title">Giỏ hàng</span>
@@ -88,7 +84,7 @@
                 <div class="shopping-cart">
                     <div class="box">
                         <i class="fas fa-trash-alt"></i>
-                        <img src="./images/002.jpg" alt="">
+                        <img src="{{ asset('client-theme/images/002.jpg')}}" alt="">
                         <div class="content">
                             <h3>pit bull</h3>
                             <span class="price">12.500 VND</span> <br>
@@ -97,7 +93,7 @@
                     </div>
                     <div class="box">
                         <i class="fas fa-trash-alt"></i>
-                        <img src="./images/003.jpg" alt="">
+                        <img src="{{ asset('client-theme/images/003.jpg')}}" alt="">
                         <div class="content">
                             <h3>supper dog pit bull</h3>
                             <span class="price">12.500 VND</span> <br>
@@ -106,7 +102,7 @@
                     </div>
                     <div class="box">
                         <i class="fas fa-trash-alt"></i>
-                        <img src="./images/004.jpg" alt="">
+                        <img src="{{ asset('client-theme/images/004.jpg')}}" alt="">
                         <div class="content">
                             <h3>pit bull</h3>
                             <span class="price">12.500 VND</span> <br>
@@ -117,8 +113,13 @@
                     <a href="#" class="btn">xem giỏ hàng</a>
                     <a href="#" class="btn">thanh toán</a>
                 </div>
-                <!--  -->
             </div>
         </div>
     </div>
 </header>
+@section('pagejs')
+<!-- <script src="{{ asset('client-theme/js/script.js')}}"></script> -->
+<script>
+    
+</script>
+@endsection

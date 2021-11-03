@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\SlideController;
+use App\Http\Controllers\Admin\GeneralSettingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -148,6 +149,14 @@ Route::prefix('danh-muc-tin-tuc')->group(function () {
     Route::post('cap-nhat/{id}', [BlogCategoryController::class, 'saveEdit']);
 
     Route::get('xoa/{id}', [BlogCategoryController::class, 'remove'])->name('blogCategory.remove');
+});
+
+Route::prefix('thong-tin-he-thong')->group(function () {
+    Route::get('/', [GeneralSettingController::class, 'index'])->name('generalSetting.index');
+
+    Route::post('/', [GeneralSettingController::class, 'save']);
+
+    Route::get('xoa/{id}', [GeneralSettingController::class, 'remove'])->name('generalSetting.remove');
 });
 
 Route::prefix('slide')->group(function () {

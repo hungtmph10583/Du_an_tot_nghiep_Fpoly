@@ -155,7 +155,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                    <i class="fas fa-user-friends"></i>
+                        <i class="fas fa-user-friends"></i>
                         <p>
                             Tài khoản
                             <i class="right fas fa-angle-left"></i>
@@ -219,9 +219,9 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('blog.index')}}" class="nav-link">
+                            <a href="{{route('generalSetting.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Logo</p>
+                                <p>Thông tin hệ thống</p>
                             </a>
                         </li>
                         <li class="nav-item">

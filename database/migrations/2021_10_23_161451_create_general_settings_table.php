@@ -18,10 +18,10 @@ class CreateGeneralSettingsTable extends Migration
             $table->string('logo');
             $table->string('phone');
             $table->string('email');
-            $table->string('facebook');
-            $table->string('instagram');
-            $table->string('twitter');
-            $table->string('youtube');
+            $table->string('facebook')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('twitter')->nullable();
+            $table->string('youtube')->nullable();
             $table->timestamps();
         });
     }

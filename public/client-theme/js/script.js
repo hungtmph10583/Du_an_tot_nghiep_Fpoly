@@ -1,29 +1,30 @@
 /*=============== SHOW MODAL ===============*/
-const showModal = (openButton, modalContent) => {
-    const openBtn = document.getElementById(openButton),
-        modalContainer = document.getElementById(modalContent)
+// const showModal = (openButton, modalContent) => {
+//     const openBtn = document.getElementById(openButton),
+//         modalContainer = document.getElementById(modalContent)
 
-    if (openBtn && modalContainer) {
-        openBtn.addEventListener('click', () => {
-            modalContainer.classList.add('show-modal')
-        })
-    }
-}
-showModal('open-modal', 'modal-container')
+//     if (openBtn && modalContainer) {
+//         openBtn.addEventListener('click', () => {
+//             modalContainer.classList.add('show-modal')
+//         })
+//     }
+// }
+// showModal('open-modal', 'modal-container')
 
-/*=============== CLOSE MODAL ===============*/
-const closeBtn = document.querySelectorAll('.close-modal')
+// /*=============== CLOSE MODAL ===============*/
+// const closeBtn = document.querySelectorAll('.close-modal')
 
-function closeModal() {
-    const modalContainer = document.getElementById('modal-container')
-    modalContainer.classList.remove('show-modal')
-}
-closeBtn.forEach(c => c.addEventListener('click', closeModal))
-    /**
-     * @note: status active ( cart, menu)
-     * hungtm
-     * down
-     */
+// function closeModal() {
+//     const modalContainer = document.getElementById('modal-container')
+//     modalContainer.classList.remove('show-modal')
+// }
+// closeBtn.forEach(c => c.addEventListener('click', closeModal))
+
+/**
+ * @note: status active ( cart, menu)
+ * hungtm
+ * down
+ */
 
 let shoppingCart = document.querySelector('.shopping-cart');
 let navbar = document.querySelector('.navbar');
@@ -59,7 +60,7 @@ window.onscroll = () => {
  * hungtm
  * down
  */
-var swiper = new Swiper(".product-slider", {
+var swiper = new Swiper(".category-slide", {
     loop: true,
     spaceBetween: 20,
     autoplay: {
@@ -128,37 +129,51 @@ scrollToTop.addEventListener("click", function() {
  * hungtm
  * down
  */
-// var swiper = new Swiper(".mySwiper", {
-//     loop: true,
-//     spaceBetween: 30,
-//     effect: "fade",
-//     navigation: {
-//         nextEl: ".swiper-button-next",
-//         prevEl: ".swiper-button-prev",
-//     },
-//     pagination: {
-//         el: ".swiper-pagination",
-//         clickable: true,
-//     },
-//     speed: 300,
-//     autoplay: {
-//         delay: 5000,
-//     },
-// });
-let slides = document.querySelectorAll('.sliders .sliders-container .slide');
-let index = 0;
+var swiper = new Swiper(".slider-container", {
+    // spaceBetween: 30,
+    // centeredSlides: true,
+    // autoplay: {
+    //     delay: 7500,
+    //     disableOnInteraction: false,
+    // },
+    // navigation: {
+    //     nextEl: ".swiper-button-next",
+    //     prevEl: ".swiper-button-prev",
+    // },
+    // pagination: {
+    //     el: ".swiper-pagination",
+    //     clickable: true,
+    // },
+    // loop: true,
+    loop: true,
+    spaceBetween: 30,
+    navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+    },
+    pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+    },
+    speed: 450,
+    autoplay: {
+        delay: 7000,
+    },
+});
+// let slides = document.querySelectorAll('.sliders .sliders-container .slide');
+// let index = 0;
 
-function next() {
-    slides[index].classList.remove('active');
-    index = (index + 1) % slides.length;
-    slides[index].classList.add('active');
-}
+// function next() {
+//     slides[index].classList.remove('active');
+//     index = (index + 1) % slides.length;
+//     slides[index].classList.add('active');
+// }
 
-function prev() {
-    slides[index].classList.remove('active');
-    index = (index - 1 + slides.length) % slides.length;
-    slides[index].classList.add('active');
-}
+// function prev() {
+//     slides[index].classList.remove('active');
+//     index = (index - 1 + slides.length) % slides.length;
+//     slides[index].classList.add('active');
+// }
 // detail
 
 function changeImage(id) {

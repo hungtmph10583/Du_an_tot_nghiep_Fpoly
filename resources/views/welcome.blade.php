@@ -3,48 +3,30 @@
 @section('content')
 	<!-- content -->
 	<div class="section-mt"></div>
-    <section class="sliders">
-        <div class="sliders-container">
-            <div class="slide active">
-                <div class="container">
-                    <span class="content">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit.
-                    </span>
-                    <h3 class="title">Nostrum deleniti</h3>
-                    <a href="#" class="btn">Chi tiết</a>
+    <div class="sliders">
+        <div class="swiper slider-container">
+            <div class="swiper-wrapper wrapper">
+                <div class="swiper-slide slide">
+                    <div class="image">
+                        <img src="{{ asset('client-theme/images/slide1.jpg')}}" alt="">
+                    </div>
                 </div>
-                <div class="image">
-                    <img src="{{ asset('client-theme/images/cate-dog.jpg')}}" alt="">
+                <div class="swiper-slide slide">
+                    <div class="image">
+                        <img src="{{ asset('client-theme/images/slide2.jpg')}}" alt="">
+                    </div>
                 </div>
-            </div>
-            <div class="slide">
-                <div class="container">
-                    <span class="content">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. huy
-                    </span>
-                    <h3 class="title">Huy</h3>
-                    <a href="#" class="btn">Chi tiết</a>
-                </div>
-                <div class="image">
-                    <img src="{{ asset('client-theme/images/cate-cat.jpg')}}" alt="">
+                <div class="swiper-slide slide">
+                    <div class="image">
+                        <img src="{{ asset('client-theme/images/slide3.jpg')}}" alt="">
+                    </div>
                 </div>
             </div>
-            <div class="slide">
-                <div class="container">
-                    <span class="content">
-                        Lorem ipsum dolor, sit amet consectetur adipisicing elit. nogjc
-                    </span>
-                    <h3 class="title">ngojc</h3>
-                    <a href="#" class="btn">Chi tiết</a>
-                </div>
-                <div class="image">
-                    <img src="{{ asset('client-theme/images/cate-bird.jpg')}}" alt="">
-                </div>
-            </div>
+            <div class="swiper-button-next"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-pagination"></div>
         </div>
-        <div id="next-slide" class="fas fa-angle-right" onclick="next()"></div>
-        <div id="prev-slide" class="fas fa-angle-left" onclick="next()"></div>
-    </section>
+    </div>
     <section class="search">
         <div class="container">
             <form action="" class="search-form">
@@ -62,53 +44,28 @@
     <section class="categories">
         <h1 class="heading">Danh mục thú cưng của chúng tôi</h1>
         <div class="heading-hr"></div>
-        <div class="category-container">
-            <div class="category-item">
-                <div class="item-top">
-                    <div class="thumbnail">
-                        <a href="#"><img src="{{ asset('client-theme/images/cate-dog.jpg')}}" alt=""></a>
+        <div class="swiper category-slide category-container">
+            <div class="swiper-wrapper">
+                <div class="swiper-slide category-item">
+                    <div class="item-top">
+                        <div class="thumbnail">
+                            <a href="#"><img src="{{ asset('client-theme/images/cate-dog.jpg')}}" alt=""></a>
+                        </div>
                     </div>
                 </div>
-                <div class="item-bottom">
-                    <div class="category-name">
-                        Dog
-                    </div>
-                    <!-- <div class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    </div> -->
-                    <a href="#" class="btn">Chi tiết</a>
-                </div>
-            </div>
-            <div class="category-item">
-                <div class="item-top">
-                    <div class="thumbnail">
-                        <a href="#"><img src="{{ asset('client-theme/images/cate-cat.jpg')}}" alt=""></a>
+                <div class="swiper-slide category-item">
+                    <div class="item-top">
+                        <div class="thumbnail">
+                            <a href="#"><img src="{{ asset('client-theme/images/cate-cat.jpg')}}" alt=""></a>
+                        </div>
                     </div>
                 </div>
-                <div class="item-bottom">
-                    <div class="category-name">
-                        Cat
+                <div class="swiper-slide category-item">
+                    <div class="item-top">
+                        <div class="thumbnail">
+                            <a href="#"><img src="{{ asset('client-theme/images/cate-bird.jpg')}}" alt=""></a>
+                        </div>
                     </div>
-                    <!-- <div class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    </div> -->
-                    <a href="#" class="btn">Chi tiết</a>
-                </div>
-            </div>
-            <div class="category-item">
-                <div class="item-top">
-                    <div class="thumbnail">
-                        <a href="#"><img src="{{ asset('client-theme/images/cate-bird.jpg')}}" alt=""></a>
-                    </div>
-                </div>
-                <div class="item-bottom">
-                    <div class="category-name">
-                        Bird
-                    </div>
-                    <!-- <div class="description">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    </div> -->
-                    <a href="#" class="btn">Chi tiết</a>
                 </div>
             </div>
         </div>

@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 // hungtmph10583 (21/09/21) end
+use App\Http\Controllers\Client\ProductController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +22,11 @@ use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('welcome');
 });
+Route::prefix('san-pham')->group(function () {
+    Route::get('/', [ProductController::class, 'index'])->name('product.client.index');
+    Route::get('/chi-tiet/{id}', [ProductController::class, 'detail'])->name('product.client.detail');
+});
+
 // hungtmph10583 (21/09/21) start
 
 // ------------------------------- Login -------------------------------

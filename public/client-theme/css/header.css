@@ -130,7 +130,8 @@
 }
 
 .header-wrapper .header-middle-bar .icon-bars div:hover,
-.header-wrapper .header-middle-bar .icons div:hover {
+.header-wrapper .header-middle-bar .icons div:hover,
+.header-wrapper .header-middle-bar .icons:active {
     background-color: var(--main-color);
     color: #fff;
 }
