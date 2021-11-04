@@ -32,40 +32,36 @@
                                 <span class="text-danger error_text name_error"></span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Ảnh sản phẩm</label>
-                                    <input type="file" name="uploadfile" class="form-control">
-                                    <span class="text-danger error_text uploadfile_error"></span>
-                                </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Ảnh sản phẩm</label>
+                                <input type="file" name="uploadfile" class="form-control">
+                                <span class="text-danger error_text uploadfile_error"></span>
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Danh mục</label>
-                                    <select name="category_id" class="form-control">
-                                        @foreach($category as $c)
-                                        @if($c->categoryType->id === 1)
-                                        <option value="{{$c->id}}" @if($c->id == old('category_id')) selected
-                                            @endif>{{$c->name}}</option>
-                                        @endif
-                                        @endforeach
-                                    </select>
-
-                                </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Danh mục</label>
+                                <select name="category_id" class="form-control">
+                                    @foreach($category as $c)
+                                    @if($c->categoryType->id === 1)
+                                    <option value="{{$c->id}}" @if($c->id == old('category_id')) selected
+                                        @endif>{{$c->name}}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                                <span class="text-danger error_text category_id_error"></span>
                             </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Giống loài</label>
-                                    <select name="breed_id" class="form-control">
-                                        @foreach($breed as $br)
-                                        <option value="{{$br->id}}">{{$br->name}}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger error_text breed_id_error"></span>
-                                </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Giống loài</label>
+                                <select name="breed_id" class="form-control">
+                                    @foreach($breed as $br)
+                                    <option value="{{$br->id}}">{{$br->name}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger error_text breed_id_error"></span>
                             </div>
                         </div>
                     </div>
@@ -153,6 +149,7 @@
                                     <label for="">Nhập giá trị</label>
                                     <input type="text" name="discount" class="form-control"
                                         placeholder="Nhập giá trị giảm giá">
+                                    <span class="text-danger error_text discount_error"></span>
                                 </div>
                             </div>
                         </div>
@@ -162,6 +159,7 @@
                                     <label for="">Giới hạn</label>
                                     <input type="text" name="quantity_counpon" class="form-control"
                                         placeholder="Số lượng sản phẩm giảm giá">
+                                    <span class="text-danger error_text quantity_counpon_error"></span>
                                 </div>
                             </div>
                         </div>
@@ -170,6 +168,7 @@
                                 <div class="form-group">
                                     <label for="">Mã giảm giá</label>
                                     <input type="text" name="code" class="form-control" placeholder="Nhập mã giảm giá">
+                                    <span class="text-danger error_text code_error"></span>
                                 </div>
                             </div>
                             <div class="col-6">
@@ -221,6 +220,7 @@
 
                                     </tbody>
                                 </table>
+                                <span class="text-danger error_text galleries_error"></span>
                             </div>
                         </div>
                     </div>
