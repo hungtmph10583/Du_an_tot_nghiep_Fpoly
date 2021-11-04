@@ -18,18 +18,39 @@
                 </ul>
                 <div class="header-item none"></div>
                 <ul class="header-item">
+                    @if(Auth::check())
+                    <li>
+                        <a href="{{route('dashboard.index')}}">
+                        <i class="fas fa-cogs"></i>
+                            <span>Đăng nhập quản trị</span>
+                        </a>
+                    </li>
                     <li>
                         <a href="#">
+                            <i class="fas fa-user"></i>
+                            <span>{{Auth::user()->name}}</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('logout')}}">
+                            <i class="fas fa-sign-out-alt"></i>
+                            <span>Logout</span>
+                        </a>
+                    </li>
+                    @else
+                    <li>
+                        <a href="{{route('login')}}">
                             <i class="fas fa-user"></i>
                             <span>Tài khoản</span>
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{route('login')}}">
                             <i class="fas fa-sign-in-alt"></i>
                             <span>Login</span>
                         </a>
                     </li>
+                    @endif
                 </ul>
             </div>
         </div>
@@ -50,7 +71,7 @@
                     <nav class="navbar">
                         <ul class="nav-item">
                             <li>
-                                <a href="./index.html">Trang chủ</a>
+                                <a href="#">Trang chủ</a>
                             </li>
                             <li>
                                 <a href="./introduce.html">Giới thiệu</a>

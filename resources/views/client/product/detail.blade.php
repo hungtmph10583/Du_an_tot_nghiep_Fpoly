@@ -1,7 +1,5 @@
-@section('title', 'Chi tiết sản phẩm')
-@extends('layouts.client.main')
-@section('content')
-	<!-- content -->
+@section('title', 'Chi tiết sản phẩm') @extends('layouts.client.main') @section('content')
+<!-- content -->
 <div class="section-mt"></div>
 <section class="search">
     <div class="container">
@@ -62,11 +60,9 @@
             <div class="item-extra">
                 <h6>Giá</h6>
                 @if($model->discount == '')
-                    <span class="discount">{{number_format($model->price)}}đ</span>
-                @else
-                    <span class="price">{{number_format($model->price)}}đ</span>
-                    <span class="discount">{{number_format($model->discount)}}đ</span>
-                @endif
+                <span class="discount">{{number_format($model->price)}}đ</span> @else
+                <span class="price">{{number_format($model->price)}}đ</span>
+                <span class="discount">{{number_format($model->discount)}}đ</span> @endif
             </div>
             <div class="item-extra">
                 <h6>Danh mục</h6>
@@ -84,8 +80,9 @@
                 <h6>Số lượng</h6>
                 <div class="quantity">
                     <button class="back fas fa-minus" onclick="backQuantity()"></button>
-                    <input id="quantity" min="1" name="quantity" type="number" value="1" />
-                    <button class="next fas fa-plus" onclick="nextQuantity()"></button>
+                    <input id="quantity" min="1" max="5" name="quantity" type="number" value="1" />
+                    <input type="hidden" value="{{$model->quantity}}" id="maxQuantityProduct">
+                    <button class="next fas fa-plus" onclick="nextQuantity()" id="nextQty"></button>
                 </div>
             </div>
             <a href="#" class="btn">Thêm vào giỏ hàng</a>
@@ -334,8 +331,7 @@
         </div>
     </div>
 </section>
-@endsection
-@section('pagejs')
+@endsection @section('pagejs')
 <script>
     function changeImage(id) {
         let imagePath = document.getElementById(id).getAttribute('src');

@@ -70,17 +70,7 @@
         </div>
         @endforeach
     </div>
-    <section class="paging">
-        <div class="paging-container">
-            <button class="fas fa-chevron-left"></button>
-            <input type="text" disabled value="1">
-            <input type="text" disabled value="2" class="active">
-            <input type="text" disabled value="3">
-            <input type="text" disabled value="4">
-            <input type="text" disabled value="5">
-            <button class="fas fa-chevron-right"></button>
-        </div>
-    </section>
+    {{ $product->links('vendor.pagination.custom') }}
 </section>
 	<!-- content -->
 @endsection

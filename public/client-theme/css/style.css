@@ -118,33 +118,52 @@ section {
 }
 
 .paging .paging-container {
-    position: absolute;
-    right: 0;
+    display: flex;
+    justify-content: end;
+    align-items: center;
 }
 
-.paging .paging-container input {
-    width: 4rem;
-    height: 4rem;
-    font-size: 1.4rem;
-    text-align: center;
+.paging .paging-container li {
+    list-style: none;
+    margin: 0 0.1rem;
     cursor: pointer;
+    /* border-radius: 0.2rem;
+    border: 0.1rem solid var(--main-color); */
+}
+
+.paging .paging-container li span {
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+    border-radius: 0.2rem;
     border: 0.1rem solid var(--main-color);
 }
 
-.paging .paging-container input.active {
+.paging .paging-container li a {
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+    border-radius: 0.2rem;
+    border: 0.1rem solid var(--main-color);
+    color: var(--text-color);
+}
+
+.paging .paging-container li:nth-child(2) a,
+.paging .paging-container li:nth-child(2) span {
+    padding: 1rem 1.7rem;
+}
+
+.paging .paging-container li.active span {
     background-color: var(--main-color);
     color: var(--white);
 }
 
-.paging .paging-container input:hover {
+.paging .paging-container li a:hover {
     background-color: var(--main-color);
     color: #fff;
 }
 
 .paging .paging-container button {
-    width: 4rem;
-    height: 4rem;
-    text-align: center;
+    padding: 1rem;
+    font-size: 1.4rem;
     cursor: pointer;
     border: 0.1rem solid var(--main-color-hover);
     background-color: var(--main-color);

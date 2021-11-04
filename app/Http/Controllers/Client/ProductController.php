@@ -16,12 +16,14 @@ use Illuminate\Support\Facades\Auth;
 class ProductController extends Controller
 {
     public function index(Request $request){
-        $pagesize = 10;
+        $pagesize = 5;
         $searchData = $request->except('page');
-        
         if(count($request->all()) == 0){
-            // Lấy ra danh sách sản phẩm & phân trang cho nó
+            //Lấy ra danh sách sản phẩm & phân trang cho nó
             $products = Product::paginate($pagesize);
+        }else{
+            $productQuery = Product::where('name', 'like', "%" .$request->keyword . "%");
+            $products = $productQuery->paginate($pagesize)->appends($searchData);
         }
         $products->load('category', 'breed', 'gender');
         

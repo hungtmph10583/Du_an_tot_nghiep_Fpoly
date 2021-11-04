@@ -183,17 +183,33 @@ function changeImage(id) {
 }
 
 
+var max = document.getElementById('maxQuantityProduct');
+var next = document.getElementById('nextQty');
+var maxQty = max.value;
+let maxquantity = --maxQty;
+
 function backQuantity() {
     var result = document.getElementById('quantity');
     var qty = result.value;
     if (qty > 1) result.value--;
+    if (qty > maxquantity) {
+        next.removeAttribute('disabled');
+    }
     return false;
 }
 
 function nextQuantity() {
     var result = document.getElementById('quantity');
-
     var qty = result.value;
-    if (!isNaN(qty)) result.value++;
+    console.log(maxQty);
+    console.log(qty);
+
+    if (!isNaN(qty)) {
+        result.value++;
+        if (qty == maxquantity) {
+            console.log('fuck')
+            next.setAttribute('disabled', 'disabled');
+        }
+    }
     return false;
 }
