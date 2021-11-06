@@ -102,7 +102,8 @@
 
 .detail-products .product-container .product-item-description .item-extra span.discount {
     color: var(--red);
-    padding-left: 2rem;
+    font-size: 2rem;
+    /* padding-left: 2rem; */
 }
 
 .detail-products .product-container .product-item-description .item-extra span.box {
@@ -164,7 +165,7 @@
 }
 
 .detail-products .product-container .product-item-description a.btn {
-    margin: 0.5rem;
+    margin: 2rem 1rem 0 0;
 }
 
 .product-tab .product-tabs-container .product-list-tabs button {

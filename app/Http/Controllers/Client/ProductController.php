@@ -11,6 +11,7 @@ use App\Models\Breed;
 use App\Models\Gender;
 use App\Models\Age;
 use App\Models\ProductGallery;
+use App\Models\Review;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -41,15 +42,29 @@ class ProductController extends Controller
         ]);
     }
 
-    public function detail($id)
-    {
+    public function detail($id){
         $model = Product::find($id);
         $model->load('category', 'breed', 'gender');
-
+        $pagesize = 5;
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
+        $review = Review::paginate($pagesize);
+        $countReview = Review::all()->count();
+        $rating = Review::where('product_id', $id)->avg('rating');
+        $rating = (int)round($rating);
+        return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview'));
+    }
 
-        return view('client.product.detail', compact('category', 'model', 'breed', 'gender'));
+    public function saveReview($id, Request $request){
+        $model = new Review(); 
+        if(!$model){
+            return redirect()->back();
+        }
+        $model->fill($request->all());
+        $model->user_id = Auth::user()->id;
+        $model->product_id = $id;
+        $model->save();
+        return redirect()->back();
     }
 }

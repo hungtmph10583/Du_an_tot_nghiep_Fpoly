@@ -1,19 +1,6 @@
 @section('title', 'Chi tiết sản phẩm') @extends('layouts.client.main') @section('content')
 <!-- content -->
 <div class="section-mt"></div>
-<section class="search">
-    <div class="container">
-        <form action="" class="search-form">
-            <div class="form-field">
-                <input type="search" class="form-input" id="search-box" placeholder=" ">
-                <label for="search" class="form-label"><i class="fas fa-search"></i> search here...</label>
-            </div>
-            <!-- <button for="search-box">
-                <i class="fas fa-search"></i>
-            </button> -->
-        </form>
-    </div>
-</section>
 <!-- section detail product -->
 <section class="detail-products">
     <div class="product-container">
@@ -36,11 +23,13 @@
             <h1 class="name">{{$model->name}}</h1>
             <div class="product-extra-star">
                 <span class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star-half-alt"></i>
-                    <i class="far fa-star"></i>
+                    @for($count=1; $count<=5; $count++)
+                        @if($count <= $rating)
+                            <i class="fas fa-star rating"></i>
+                        @else
+                            <i class="far fa-star"></i>
+                        @endif
+                    @endfor
                 </span>
             </div>
             <div class="product-extra-icons">
@@ -52,13 +41,13 @@
                     </li>
                     <li>
                         <i class="far fa-comments"></i>
-                        <span class="number">1</span>
-                        <span>Bình luận</span>
+                        <span class="number">{{$countReview}}</span>
+                        <span>Đánh giá</span>
                     </li>
                 </ul>
             </div>
             <div class="item-extra">
-                <h6>Giá</h6>
+                <h6>Giá bán</h6>
                 @if($model->discount == '')
                 <span class="discount">{{number_format($model->price)}}đ</span> @else
                 <span class="price">{{number_format($model->price)}}đ</span>
@@ -116,81 +105,86 @@
             <h5>Phản hồi từ khách hàng</h5>
             <div class="review-content comment">
                 <span class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                    @for($count=1; $count<=5; $count++)
+                        @if($count <= $rating)
+                            <i class="fas fa-star rating"></i>
+                        @else
+                            <i class="far fa-star"></i>
+                        @endif
+                    @endfor
                 </span>
-                <span class="total-start">Đựa trên 2 nhận xét</span>
+                <span class="total-start">Đựa trên {{$countReview}} nhận xét</span>
                 <button id="btn-write-comment">Viết nhận xét</button>
                 <div class="clear-both"></div>
             </div>
             <div class="write-comment">
                 <p>Viết đánh giá</p>
-                <form action="">
+                <form action="" method="POST" enctype="multipart/form-data">
+                @csrf
                     <div class="form-group">
                         <label for="">Name</label>
-                        <input type="text" placeholder="Nhập vào họ tên">
+                        @if(Auth::check())
+                        <input type="text" name="name" placeholder="Nhập vào họ tên" value="{{Auth::user()->name}}">
+                        @else
+                        <input type="text" name="name" placeholder="Nhập vào họ tên">
+                        @endif
                     </div>
                     <div class="form-group">
                         <label for="">Email</label>
-                        <input type="text" placeholder="Nhập vào email">
+                        @if(Auth::check())
+                        <input type="text" name="email" placeholder="Nhập vào email" value="{{Auth::user()->email}}">
+                        @else
+                        <input type="text" name="email" placeholder="Nhập vào email">
+                        @endif
                     </div>
                     <div class="form-group">
                         <label for="">Đánh giá sao</label>
                         <span class="star-widget">
-                            <input type="radio" name="rate" id="rate-5">
+                            <input type="radio" value="5" name="rating" id="rate-5">
                             <label for="rate-5" class="fas fa-star"></label>
-                            <input type="radio" name="rate" id="rate-4">
+                            <input type="radio" value="4" name="rating" id="rate-4">
                             <label for="rate-4" class="fas fa-star"></label>
-                            <input type="radio" name="rate" id="rate-3">
+                            <input type="radio" value="3" name="rating" id="rate-3">
                             <label for="rate-3" class="fas fa-star"></label>
-                            <input type="radio" name="rate" id="rate-2">
+                            <input type="radio" value="2" name="rating" id="rate-2">
                             <label for="rate-2" class="fas fa-star"></label>
-                            <input type="radio" name="rate" id="rate-1">
+                            <input type="radio" value="1" name="rating" id="rate-1">
                             <label for="rate-1" class="fas fa-star"></label>
                         </span>
                         <div class="clear-both"></div>
                     </div>
                     <div class="form-group">
                         <label for="">Tiêu đề đánh giá</label>
-                        <input type="text" placeholder="Nhập vào họ tên">
+                        <input type="text" name="title" placeholder="Nhập vào họ tên">
                     </div>
                     <div class="form-group">
                         <label for="">Nội dung đánh giá</label>
-                        <textarea name="" id="" cols="30" rows="10" placeholder="Viết nội dung dánh giá của bạn tại đây"></textarea>
+                        <textarea name="comment" id="" cols="30" rows="10" placeholder="Viết nội dung dánh giá của bạn tại đây"></textarea>
                     </div>
-                    <button class="btn">Submit</button>
+                    <button type="submit" class="btn">Submit</button>
                 </form>
             </div>
+            @foreach($review as $rv)
             <div class="review-content">
                 <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
+                    @for($count=1; $count<=5; $count++)
+                        @if($count <= $rv->rating)
+                            <i class="fas fa-star rating"></i>
+                        @else
+                            <i class="far fa-star"></i>
+                        @endif
+                    @endfor
+                    
                 </div>
-                <p class="name-custom-review">Mạnh Hùng</p>
-                <span class="date-custom-review">31/11/2021</span>
+                <p class="name-custom-review">{{$rv->user->name}}</p>
+                <span class="date-custom-review">{{$rv->created_at}}</span>
                 <div class="content">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid officiis amet dolorem sed ipsum tempore accusamus, nisi corrupti quae veritatis libero numquam labore vitae reiciendis itaque. Sapiente veritatis fuga eum?</p>
+                    <p>{{$rv->comment}}</p>
                 </div>
             </div>
-            <div class="review-content">
-                <div class="star">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                </div>
-                <p class="name-custom-review">Huy phan</p>
-                <span class="date-custom-review">01/12/2021</span>
-                <div class="content">
-                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aliquid officiis amet dolorem sed ipsum tempore accusamus, nisi corrupti quae veritatis libero numquam labore vitae reiciendis itaque. Sapiente veritatis fuga eum?</p>
-                </div>
+            @endforeach
+            <div class="paging">
+            {{ $review->links('vendor.pagination.custom') }}
             </div>
         </div>
     </div>

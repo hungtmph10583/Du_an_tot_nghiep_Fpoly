@@ -24,7 +24,9 @@ Route::get('/', function () {
 });
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.client.index');
+    
     Route::get('/chi-tiet/{id}', [ProductController::class, 'detail'])->name('product.client.detail');
+    Route::post('/chi-tiet/{id}', [ProductController::class, 'saveReview']);
 });
 
 // hungtmph10583 (21/09/21) start

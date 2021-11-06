@@ -183,12 +183,13 @@ function changeImage(id) {
 }
 
 
-var max = document.getElementById('maxQuantityProduct');
-var next = document.getElementById('nextQty');
-var maxQty = max.value;
-let maxquantity = --maxQty;
+
 
 function backQuantity() {
+    var max = document.getElementById('maxQuantityProduct');
+    var next = document.getElementById('nextQty');
+    var maxQty = max.value;
+    let maxquantity = --maxQty;
     var result = document.getElementById('quantity');
     var qty = result.value;
     if (qty > 1) result.value--;
@@ -199,6 +200,10 @@ function backQuantity() {
 }
 
 function nextQuantity() {
+    var max = document.getElementById('maxQuantityProduct');
+    var next = document.getElementById('nextQty');
+    var maxQty = max.value;
+    let maxquantity = --maxQty;
     var result = document.getElementById('quantity');
     var qty = result.value;
     console.log(maxQty);

@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <section class="paging">
+    
         <ul class="paging-container">
             @if ($paginator->onFirstPage())
                 <li class="disabled"><span><i class="fas fa-chevron-left"></i> Previous</span></li>
@@ -30,5 +30,4 @@
                 <li class="disabled"><span>Next <i class="fas fa-chevron-right"></i></span></li>
             @endif
         </ul>
-    </section>
 @endif 

@@ -55,7 +55,8 @@ class Product extends Model
         return $this->belongsTo(DiscountType::class, 'discount_type');
     }
 
-    // public function product_tag(){
-    //     return $this->hasMany(ProductTag::class, 'product_id');
-    // }
+    public function reviews()
+    {
+        return $this->hasMany(Product::class,'product_id');
+    }
 }
