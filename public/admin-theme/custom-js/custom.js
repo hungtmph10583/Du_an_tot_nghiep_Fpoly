@@ -27,19 +27,19 @@ function loadFiles(event, el_rowId) {
 
 //hàm dùng để upload ảnh lên sẽ hiện thì ảnh ngay dưới dạng base64
 //hàm này áp dụng vào file add
-function loadFile(event) {
-    var reader = new FileReader();
-    var output = document.getElementById('images');
-    reader.onload = function() {
-        output.src = reader.result;
-    };
-    if (event.target.files[0] == undefined) {
-        output.src = "";
-    } else {
-        reader.readAsDataURL(event.target.files[0]);
-    }
+// function loadFile(event) {
+//     var reader = new FileReader();
+//     var output = document.getElementById('images');
+//     reader.onload = function() {
+//         output.src = reader.result;
+//     };
+//     if (event.target.files[0] == undefined) {
+//         output.src = "";
+//     } else {
+//         reader.readAsDataURL(event.target.files[0]);
+//     }
 
-};
+// };
 //hàm dùng để xóa ảnh upload lên 
 //áp dụng với file add
 function removeImg(el) {

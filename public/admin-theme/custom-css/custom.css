@@ -71,3 +71,17 @@ div.dt-button-collection a.dt-button {
 .select2-selection__choice__display {
     color: #000;
 }
+
+#file-upload,
+input[type="file"] {
+    display: none;
+}
+
+.custom-file-upload {
+    border: 1px solid #ccc;
+    display: inline-block;
+    padding: 9px 184px;
+    cursor: pointer;
+    margin-top: 30px;
+    border-radius: 5px;
+}

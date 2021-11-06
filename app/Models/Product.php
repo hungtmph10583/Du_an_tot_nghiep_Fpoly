@@ -14,7 +14,6 @@ class Product extends Model
         'user_id',
         'category_id',
         'slug',
-        'image',
         'weight',
         'breed_id',
         'age_id',
@@ -58,7 +57,8 @@ class Product extends Model
         return $this->hasMany(ProductGallery::class, 'product_id');
     }
 
-    public function discountType(){
+    public function discountType()
+    {
         return $this->belongsTo(DiscountType::class, 'discount_type');
     }
 

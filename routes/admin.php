@@ -87,14 +87,16 @@ Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.index');
 
     Route::get('tao-moi', [ProductController::class, 'addForm'])->name('product.add');
-    Route::post('tao-moi', [ProductController::class, 'saveAdd']);
+    Route::post('tao-moi', [ProductController::class, 'saveAdd'])->name('product.saveAdd');
 
     Route::get('cap-nhat/{id}', [ProductController::class, 'editForm'])->name('product.edit');
-    Route::post('cap-nhat/{id}', [ProductController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [ProductController::class, 'saveEdit'])->name('product.saveEdit');
 
     Route::get('chi-tiet/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
     Route::get('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
+
+    Route::get('dataProduct', [ProductController::class, 'getData'])->name('product.filter');
     // Route::get('xoa/{id}', [ProductController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
 });
 
