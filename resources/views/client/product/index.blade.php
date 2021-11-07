@@ -70,9 +70,9 @@
         </div>
         @endforeach
     </div>
-    <section class="paging">
+    <div class="paging">
     {{ $product->links('vendor.pagination.custom') }}
-    </section>
+    </div>
 </section>
 	<!-- content -->
 @endsection

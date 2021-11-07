@@ -97,13 +97,14 @@
 
 .detail-products .product-container .product-item-description .item-extra span.price {
     color: var(--text-color);
+    font-size: 2rem;
+    padding-right: 2rem;
     text-decoration-line: line-through;
 }
 
 .detail-products .product-container .product-item-description .item-extra span.discount {
     color: var(--red);
     font-size: 2rem;
-    /* padding-left: 2rem; */
 }
 
 .detail-products .product-container .product-item-description .item-extra span.box {
