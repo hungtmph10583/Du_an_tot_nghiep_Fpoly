@@ -14,53 +14,93 @@ use App\Models\Gender;
 use App\Models\Age;
 use App\Models\ProductGallery;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+use Yajra\Datatables\Datatables;
 
 class ProductController extends Controller
 {
-    public function index(Request $request){
-        $pagesize = 5;
-        $searchData = $request->except('page');
-        
-        if(count($request->all()) == 0){
-            // Lấy ra danh sách sản phẩm & phân trang cho nó
-            $products = Product::paginate($pagesize);
-        }else{
-            $productQuery = Product::where('name', 'like', "%" .$request->keyword . "%");
-            if($request->has('category_id') && $request->category_id != ""){
-                $productQuery = $productQuery->where('category_id', $request->category_id);
-            }
+    public function index(Request $request)
+    {
 
-            if($request->has('order_by') && $request->order_by > 0){
-                if($request->order_by == 1){
-                    $productQuery = $productQuery->orderBy('name');
-                }else if($request->order_by == 2){
-                    $productQuery = $productQuery->orderByDesc('name');
-                }else if($request->order_by == 3){
-                    $productQuery = $productQuery->orderBy('price');
-                }else {
-                    $productQuery = $productQuery->orderByDesc('price');
-                }
-            }
-            $products = $productQuery->paginate($pagesize)->appends($searchData);
-        }
-        //$products->load('category', 'tags', 'company', 'galleries', 'product_tag');
-        $products->load('category', 'breed', 'gender');
-        
         $categories = Category::all();
         $gender = Gender::all();
         $breed = Breed::all();
-        
-        // trả về cho người dùng 1 giao diện + dữ liệu products vừa lấy đc 
-        return view('admin.product.index', [
-            'product' => $products,
-            'category' => $categories,
-            'gender' => $gender,
-            'breed' => $breed,
-            'searchData' => $searchData
-        ]);
+        $age = Age::all();
+
+        return view('admin.product.index', compact('categories', 'gender', 'breed', 'age'));
     }
 
-    public function addForm(){
+    public function getData(Request $request)
+    {
+        $pet = Product::select('products.*');
+        return dataTables::of($pet)
+            //thêm id vào tr trong datatable
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
+            ->addIndexColumn()
+            ->orderColumn('category_id', function ($row, $order) {
+                return $row->orderBy('category_id', $order);
+            })
+            ->orderColumn('status', function ($row, $order) {
+                return $row->orderBy('status', $order);
+            })
+            ->addColumn('category_id', function ($row) {
+                return $row->category->name;
+            })
+            ->addColumn('image', function ($row) {
+                return '<img class="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
+            })
+            ->addColumn('status', function ($row) {
+                if ($row->status == 1) {
+                    return '<span class="badge badge-primary">Active</span>';
+                } elseif ($row->status == 0) {
+                    return '<span class="badge badge-danger">Deactive</span>';
+                } else {
+                    return '<span class="badge badge-danger">Sắp ra mắt</span>';
+                }
+            })
+            ->addColumn('action', function ($row) {
+                return '<a  class="btn btn-success" href="' . route('product.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+<a class="btn btn-primary" href="' . route("product.detail", ["id" => $row->id]) . '"><i class="far fa-eye"></i></a>';
+            })
+            ->filter(function ($instance) use ($request) {
+                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
+                    $instance->where('status', $request->get('status'));
+                }
+
+                if ($request->get('cate') != '') {
+                    $instance->where('category_id', $request->get('cate'));
+                }
+
+                if ($request->get('gender') != '') {
+                    $instance->where('gender_id', $request->get('gender'));
+                }
+
+                if ($request->get('breed') != '') {
+                    $instance->where('breed_id', $request->get('breed'));
+                }
+
+                if ($request->get('age') != '') {
+                    $instance->where('age_id', $request->get('age'));
+                }
+
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('description', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['status', 'action', 'image'])
+            ->make(true);
+    }
+
+    public function addForm()
+    {
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
@@ -69,81 +109,85 @@ class ProductController extends Controller
         return view('admin.product.add-form', compact('category', 'breed', 'gender', 'age', 'discountType'));
     }
 
-    public function saveAdd(Request $request){
-        $model = new Product(); 
-        if(!$model){
-            return redirect()->back();
-        }
-        $model->fill($request->all());
+    public function saveAdd(Request $request, $id = null)
+    {
 
-        /**
-         * @note: upload ảnh lên bảng phụ
-         * @date: 03/10/21
-         * @name: hungtm
-         */
-
-        /**
-         * @note: huyen doi ky tu chu thanh slug
-         * @date: 28/09/21
-         * @name: hungtm
-         */
-        $slug = $request->name;
-        $unicode = array(
-            'a'=>'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ',
-            'd'=>'đ',
-            'e'=>'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ',
-            'i'=>'í|ì|ỉ|ĩ|ị',
-            'o'=>'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
-            'u'=>'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
-            'y'=>'ý|ỳ|ỷ|ỹ|ỵ',
-            'A'=>'Á|À|Ả|Ã|Ạ|Ă|Ắ|Ặ|Ằ|Ẳ|Ẵ|Â|Ấ|Ầ|Ẩ|Ẫ|Ậ',
-            'D'=>'Đ',
-            'E'=>'É|È|Ẻ|Ẽ|Ẹ|Ê|Ế|Ề|Ể|Ễ|Ệ',
-            'I'=>'Í|Ì|Ỉ|Ĩ|Ị',
-            'O'=>'Ó|Ò|Ỏ|Õ|Ọ|Ô|Ố|Ồ|Ổ|Ỗ|Ộ|Ơ|Ớ|Ờ|Ở|Ỡ|Ợ',
-            'U'=>'Ú|Ù|Ủ|Ũ|Ụ|Ư|Ứ|Ừ|Ử|Ữ|Ự',
-            'Y'=>'Ý|Ỳ|Ỷ|Ỹ|Ỵ',
+        $message = [
+            'name.required' => "Hãy nhập vào tên danh mục",
+            'name.unique' => "Tên thú cưng đã tồn tại",
+            'category_id.required' => "Hãy chọn danh mục",
+            'price.required' => "Hãy nhập giá thú cưng",
+            'price.numeric' => "Giá thú cưng phải là số",
+            'status.required' => "Hãy chọn trạng thái thú cưng",
+            'age_id.required' => "Hãy nhập tuổi thú cưng",
+            'quantity.required' => "Hãy nhập số lượng thú cưng",
+            'quantity.numeric' => "Số lượng thú cưng phải là số",
+            'weight.required' => "Hãy nhập cân nặng thú cưng",
+            'weight.numeric' => "Cân nặng thú cưng phải là số",
+            'breed_id.required' => "Hãy chọn giống loài",
+            'gender_id.required' => "Hãy chọn giới tính thú cưng",
+            'galleries.required' => "Hãy chọn thư viện ảnh cho thú cưng",
+            'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'galleries.*.max' => 'File ảnh không được quá 2MB',
+            'image.required' => 'Hãy chọn ảnh thú cưng',
+            'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'image.max' => 'File ảnh không được quá 2MB',
+        ];
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => [
+                    'required',
+                    Rule::unique('products')->ignore($id)
+                ],
+                'category_id' => 'required',
+                'gender_id' => 'required',
+                'price' => 'required|numeric',
+                'status' => 'required',
+                'age_id' => 'required',
+                'quantity' => 'required|numeric',
+                'weight' => 'required|numeric',
+                'breed_id' => 'required',
+                'galleries' => 'required',
+                'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048',
+                'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
+            ],
+            $message
         );
-        foreach($unicode as $key=>$value){
-            $slug = preg_replace("/($value)/i", $key, $slug);
-        }
-        $slug = str_replace(' ','-',$slug);
-        $model->slug = strtolower($slug);
+        if ($validator->fails()) {
+            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+        } else {
+            $model = new Product();
+            $model->user_id = Auth::id();
+            $model->fill($request->all());
+            if ($request->has('image')) {
+                $model->image = $request->file('image')->storeAs(
+                    'uploads/products/' . $model->id,
+                    uniqid() . '-' . $request->image->getClientOriginalName()
+                );
+            }
+            $model->save();
 
-        if($request->hasFile('uploadfile')){
-            $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-        }
-
-        $model->user_id = Auth::user()->id;
-        
-        $model->save();
-
-        if($request->has('galleries')){
-            foreach($request->galleries as $i => $item){
-                $galleryObj = new ProductGallery();
-                $galleryObj->product_id = $model->id;
-                $galleryObj->order_no = $i+1;
-                $galleryObj->image_url = $item->storeAs('uploads/products/galleries/' . $model->id , 
-                                        uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-                                        
-                $galleryObj->save();
+            if ($request->has('galleries')) {
+                foreach ($request->galleries as $i => $item) {
+                    $galleryObj = new ProductGallery();
+                    $galleryObj->product_id = $model->id;
+                    $galleryObj->order_no = $i + 1;
+                    $galleryObj->image_url = $item->storeAs(
+                        'uploads/gallery/' . $model->id,
+                        uniqid() . '-' . $item->getClientOriginalName()
+                    );
+                    $galleryObj->save();
+                }
             }
         }
-        
-        //dd($request);
-        // if ($request->has('ageInsert')) {
-        //     $age = new Age();
-        //     $age->age = $request->ageInsert;
-        //     $age->save();
-        //     $last = Age::all()->last();
-        //     $request->age_id = $last->id;
-        // }
-        return redirect(route('product.index'));
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/san-pham')]);
     }
 
-    public function editForm($id){
+    public function editForm($id)
+    {
         $model = Product::find($id);
-        if(!$model){
+        if (!$model) {
             return redirect()->back();
         }
 
@@ -157,48 +201,96 @@ class ProductController extends Controller
         return view('admin.product.edit-form', compact('model', 'category', 'breed', 'gender', 'age', 'discountType'));
     }
 
-    public function saveEdit($id, ProductFormRequest $request){
-        $model = Product::find($id); 
-        
-        if(!$model){
+    public function saveEdit($id, ProductFormRequest $request)
+    {
+        $model = Product::find($id);
+
+        if (!$model) {
             return redirect()->back();
         }
-        $model->fill($request->all());
-        // upload ảnh
-        if($request->hasFile('uploadfile')){
-            $model->image = $request->file('uploadfile')->storeAs('uploads/products', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
-        }
 
-        $model->user_id = Auth::user()->id;
-        $model->save();
+        $message = [
+            'name.required' => "Hãy nhập vào tên danh mục",
+            'name.unique' => "Tên thú cưng đã tồn tại",
+            'category_id.required' => "Hãy chọn danh mục",
+            'price.required' => "Hãy nhập giá thú cưng",
+            'price.numeric' => "Giá thú cưng phải là số",
+            'status.required' => "Hãy chọn trạng thái thú cưng",
+            'age_id.required' => "Hãy nhập tuổi thú cưng",
+            'quantity.required' => "Hãy nhập số lượng thú cưng",
+            'quantity.numeric' => "Số lượng thú cưng phải là số",
+            'weight.required' => "Hãy nhập cân nặng thú cưng",
+            'weight.numeric' => "Cân nặng thú cưng phải là số",
+            'breed_id.required' => "Hãy chọn giống loài",
+            'gender_id.required' => "Hãy chọn giới tính thú cưng",
+            'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'galleries.*.max' => 'File ảnh không được quá 2MB',
+            'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'image.max' => 'File ảnh không được quá 2MB',
+        ];
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'name' => [
+                    'required',
+                    Rule::unique('products')->ignore($id)
+                ],
+                'category_id' => 'required',
+                'gender_id' => 'required',
+                'price' => 'required|numeric',
+                'status' => 'required',
+                'age_id' => 'required',
+                'quantity' => 'required|numeric',
+                'weight' => 'required|numeric',
+                'breed_id' => 'required',
+                'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048',
+                'image' => 'mimes:jpg,bmp,png,jpeg|max:2048'
+            ],
+            $message
+        );
 
-        /* gallery
+        if ($validator->fails()) {
+            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+        } else {
+            $model->user_id = Auth::id();
+            $model->fill($request->all());
+            if ($request->image != '') {
+                $model->image = $request->file('image')->storeAs(
+                    'uploads/products/' . $model->id,
+                    uniqid() . '-' . $request->image->getClientOriginalName()
+                );
+            }
+            $model->save();
+
+            /* gallery
          * xóa gallery đc mark là bị xóa đi
         */
-        if($request->has('removeGalleryIds')){
-            $strIds = rtrim($request->removeGalleryIds, '|');
-            $lstIds = explode('|', $strIds);
-            // xóa các ảnh vật lý
-            $removeList = ProductGallery::whereIn('id', $lstIds)->get();
-            foreach ($removeList as $gl) {
-                Storage::delete($gl->url);
+            if ($request->has('removeGalleryIds')) {
+                $strIds = rtrim($request->removeGalleryIds, '|');
+                $lstIds = explode('|', $strIds);
+                // xóa các ảnh vật lý
+                $removeList = ProductGallery::whereIn('id', $lstIds)->get();
+                foreach ($removeList as $gl) {
+                    Storage::delete($gl->url);
+                }
+                ProductGallery::destroy($lstIds);
             }
-            ProductGallery::destroy($lstIds);
-        }
 
-        // lưu mới danh sách gallery
-        if($request->has('galleries')){
-            foreach($request->galleries as $i => $item){
-                $galleryObj = new ProductGallery();
-                $galleryObj->product_id = $model->id;
-                $galleryObj->order_no = $i+1;
-                $galleryObj->image_url = $item->storeAs('uploads/products/galleries/' . $model->id , 
-                                        uniqid() . '-' . $item->getClientOriginalName());
-                $galleryObj->save();
+            // lưu mới danh sách gallery
+            if ($request->has('galleries')) {
+                foreach ($request->galleries as $i => $item) {
+                    $galleryObj = new ProductGallery();
+                    $galleryObj->product_id = $model->id;
+                    $galleryObj->order_no = $i + 1;
+                    $galleryObj->image_url = $item->storeAs(
+                        'uploads/products/galleries/' . $model->id,
+                        uniqid() . '-' . $item->getClientOriginalName()
+                    );
+                    $galleryObj->save();
+                }
             }
         }
-
-        return redirect(route('product.index'));
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/san-pham')]);
     }
 
     public function detail($id)
@@ -213,7 +305,8 @@ class ProductController extends Controller
         return view('admin.product.detail', compact('category', 'model', 'breed', 'gender'));
     }
 
-    public function remove($id){
+    public function remove($id)
+    {
         $product = Product::find($id);
         $product->product_tag()->delete();
         $product->delete();

@@ -27,6 +27,7 @@ use App\Http\Controllers\Admin\GeneralSettingController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
+
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::prefix('tai-khoan')->group(function () {
@@ -48,11 +49,12 @@ Route::prefix('danh-muc')->group(function () {
     Route::post('tao-moi', [CategoryController::class, 'saveAdd'])->name('category.saveAdd');
 
     Route::get('cap-nhat/{id}', [CategoryController::class, 'editForm'])->name('category.edit');
-    Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit']);;
+    Route::post('cap-nhat/{id}', [CategoryController::class, 'saveEdit'])->name('category.saveEdit');
 
     Route::get('chi-tiet/{id}', [CategoryController::class, 'detail'])->name('category.detail');
 
     Route::get('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
+    Route::get('dataCate', [CategoryController::class, 'getData'])->name('category.filter');
 });
 
 Route::prefix('don-hang')->group(function () {
@@ -71,28 +73,31 @@ Route::prefix('giong-loai')->group(function () {
     Route::get('/', [BreedController::class, 'index'])->name('breed.index');
 
     Route::get('tao-moi', [BreedController::class, 'addForm'])->name('breed.add');
-    Route::post('tao-moi', [BreedController::class, 'saveAdd']);
+    Route::post('tao-moi', [BreedController::class, 'saveAdd'])->name('breed.saveAdd');
 
     Route::get('cap-nhat/{id}', [BreedController::class, 'editForm'])->name('breed.edit');
-    Route::post('cap-nhat/{id}', [BreedController::class, 'saveEdit']);;
+    Route::post('cap-nhat/{id}', [BreedController::class, 'saveEdit'])->name('breed.saveEdit');
 
     Route::get('chi-tiet/{id}', [BreedController::class, 'detail'])->name('breed.detail');
 
     Route::get('xoa/{id}', [BreedController::class, 'remove'])->name('breed.remove');
+    Route::get('dataPet', [BreedController::class, 'getData'])->name('breed.filter');
 });
 
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.index');
 
     Route::get('tao-moi', [ProductController::class, 'addForm'])->name('product.add');
-    Route::post('tao-moi', [ProductController::class, 'saveAdd']);
+    Route::post('tao-moi', [ProductController::class, 'saveAdd'])->name('product.saveAdd');
 
     Route::get('cap-nhat/{id}', [ProductController::class, 'editForm'])->name('product.edit');
-    Route::post('cap-nhat/{id}', [ProductController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [ProductController::class, 'saveEdit'])->name('product.saveEdit');
 
     Route::get('chi-tiet/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
     Route::get('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
+
+    Route::get('dataProduct', [ProductController::class, 'getData'])->name('product.filter');
     // Route::get('xoa/{id}', [ProductController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
 });
 
@@ -115,14 +120,16 @@ Route::prefix('giam-gia')->group(function () {
     Route::get('/', [CouponController::class, 'index'])->name('coupon.index');
 
     Route::get('tao-moi', [CouponController::class, 'addForm'])->name('coupon.add');
-    Route::post('tao-moi', [CouponController::class, 'saveAdd']);
+    Route::post('tao-moi', [CouponController::class, 'saveAdd'])->name('coupon.saveAdd');
 
     Route::get('cap-nhat/{id}', [CouponController::class, 'editForm'])->name('coupon.edit');
-    Route::post('cap-nhat/{id}', [CouponController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [CouponController::class, 'saveEdit'])->name('coupon.saveEdit');
 
     Route::get('chi-tiet/{id}', [CouponController::class, 'detail'])->name('coupon.detail');
 
     Route::get('xoa/{id}', [CouponController::class, 'remove'])->name('coupon.remove');
+
+    Route::get('dataCoupon', [CouponController::class, 'getData'])->name('coupon.filter');
 });
 
 Route::prefix('tin-tuc')->group(function () {
@@ -172,5 +179,3 @@ Route::prefix('slide')->group(function () {
 
     Route::get('xoa/{id}', [SlideController::class, 'remove'])->name('slide.remove');
 });
-
-?>
