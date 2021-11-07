@@ -1,3 +1,4 @@
+@section('title', 'Danh sách giống loài')
 @extends('layouts.admin.main')
 @section('content')
 
@@ -6,7 +7,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Danh sách danh mục</li>
+                    <li class="breadcrumb-item card-title">Danh sách giống loài</li>
                 </ol>
             </div>
         </div><!-- /.row -->

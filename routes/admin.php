@@ -119,14 +119,16 @@ Route::prefix('giam-gia')->group(function () {
     Route::get('/', [CouponController::class, 'index'])->name('coupon.index');
 
     Route::get('tao-moi', [CouponController::class, 'addForm'])->name('coupon.add');
-    Route::post('tao-moi', [CouponController::class, 'saveAdd']);
+    Route::post('tao-moi', [CouponController::class, 'saveAdd'])->name('coupon.saveAdd');
 
     Route::get('cap-nhat/{id}', [CouponController::class, 'editForm'])->name('coupon.edit');
-    Route::post('cap-nhat/{id}', [CouponController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [CouponController::class, 'saveEdit'])->name('coupon.saveEdit');
 
     Route::get('chi-tiet/{id}', [CouponController::class, 'detail'])->name('coupon.detail');
 
     Route::get('xoa/{id}', [CouponController::class, 'remove'])->name('coupon.remove');
+
+    Route::get('dataCoupon', [CouponController::class, 'getData'])->name('coupon.filter');
 });
 
 Route::prefix('tin-tuc')->group(function () {

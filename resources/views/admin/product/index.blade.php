@@ -1,9 +1,6 @@
+@section('title', 'Danh sách sản phẩm')
 @extends('layouts.admin.main')
 @section('content')
-<!-- @php
-    use Illuminate\Support\Facades\Auth;
-@endphp
-@dump(Auth::user()) -->
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -21,7 +18,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
-        <div class="card">
+        <div class="card card-success card-outline">
             <div class="card-body">
                 <div class="row">
                     <div class="col-6">
@@ -140,6 +137,7 @@ $(document).ready(function() {
             },
             {
                 extend: 'csvHtml5',
+                charset: 'utf-8',
                 exportOptions: {
                     stripHtml: false,
                     columns: ':visible'
