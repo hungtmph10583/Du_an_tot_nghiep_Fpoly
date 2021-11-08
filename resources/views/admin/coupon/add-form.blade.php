@@ -68,7 +68,9 @@
                                 <select name="product_id[]" class="form-control" id="product" multiple>
                                     <option value=""></option>
                                     @foreach($product as $p)
+                                    @if(!($p->discount))
                                     <option value="{{$p->id}}">{{$p->name}}</option>
+                                    @endif
                                     @endforeach
                                 </select>
                             </div>
@@ -97,7 +99,7 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <input type="checkbox" id="forever" name="forever" value="{{old('forever')}}">
+                                        <input type="checkbox" id="forever" name="forever">
                                         <label for="forever">Không thời hạn</label>
                                     </div>
                                 </div>
@@ -143,6 +145,7 @@
                                 <textarea name="details" id="" class="form-control" cols="30" rows="10"
                                     placeholder="Nội dung giảm giá"></textarea>
                             </div>
+                            <span class="text-danger error_text details_error"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -167,12 +170,10 @@
 $(".btn-info").click(function(e) {
     e.preventDefault();
     var formData = new FormData($('form')[0]);
-    $('#forever').click(function(e) {
-        if ($(this).is(':checked')) {
-            formData.set('start_date', '');
-            formData.set('end_date', '');
-        }
-    })
+    if ($('#forever').is(':checked')) {
+        formData.set('start_date', ' ');
+        formData.set('end_date', ' ');
+    }
     $.ajax({
         url: "{{ route('coupon.saveAdd') }}",
         type: 'POST',

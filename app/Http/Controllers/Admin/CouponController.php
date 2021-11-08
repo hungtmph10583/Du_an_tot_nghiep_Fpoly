@@ -8,6 +8,7 @@ use App\Models\Coupons;
 use App\Models\CouponType;
 use App\Models\DiscountType;
 use App\Models\Product;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -52,8 +53,8 @@ class CouponController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a href="' . route('breed.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                <a  class="btn btn-success" href="' . route('breed.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                <a href="' . route('coupon.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                <a  class="btn btn-success" href="' . route('coupon.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
                                     <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                                     </span>';
             })
@@ -148,15 +149,57 @@ class CouponController extends Controller
         }
         return view('admin.coupon.edit-form', compact('coupon', 'couponType', 'discountType', 'product'));
     }
-    // public function saveEdit($id, Request $request){
-    //     $model = Coupons::find($id); 
+    public function saveEdit($id, Request $request)
+    {
+        $model = Coupons::find($id);
 
-    //     if(!$model){
-    //         return redirect()->back();
-    //     }
-    //     $model->fill($request->all());
+        if (!$model) {
+            return redirect()->back();
+        }
 
-    // }
+        $message = [
+            'code.required' => "Hãy nhập vào mã khuyến mãi",
+            'code.unique' => "Mã khuyến mãi đã tồn tại",
+            'type.required' => "Hãy chọn loại giảm giá",
+            'product_id.required' => "Hãy chọn sản phẩm giảm giá",
+            'discount.required' => 'Hãy nhập vào giá trị giảm giá',
+            'discount.numeric' => 'Giá trị giảm giá phải là số',
+            'discount_type.required' => 'Hãy chọn kiểu giảm giá',
+            'details.required' => 'Hãy nhập vào chi tiết giảm giá'
+        ];
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'code' => [
+                    'required',
+                    Rule::unique('coupons')->ignore($id)
+                ],
+                'product_id' => 'required',
+                'discount' => 'required|numeric',
+                'discount_type' => 'required',
+                'details' => 'required'
+            ],
+            $message
+        );
+        if ($validator->fails()) {
+            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+        } else {
+            $model->fill($request->all());
+            $model->user_id = Auth::id();
+            $model->save();
+            if ($request->has('product_id')) {
+                foreach ($request->product_id as $i => $item) {
+                    $product = Product::find($item);
+                    $product->discount = $request->discount;
+                    $product->discount_type = $request->discount_type;
+                    $product->discount_start_date = $request->start_date;
+                    $product->discount_end_date = $request->end_date;
+                    $product->save();
+                }
+            }
+        }
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/giam-gia')]);
+    }
     public function detail(Request $request)
     {
     }
