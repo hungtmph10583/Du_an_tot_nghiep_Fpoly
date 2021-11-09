@@ -46,7 +46,9 @@
                                 <select name="category_id" class="form-control" id="category">
                                     <option value=""></option>
                                     @foreach($category as $c)
+                                    @if($c->category_type_id == 1)
                                     <option value="{{$c->id}}">{{$c->name}}</option>
+                                    @endif
                                     @endforeach
                                 </select>
                                 <span class="text-danger error_text category_id_error"></span>

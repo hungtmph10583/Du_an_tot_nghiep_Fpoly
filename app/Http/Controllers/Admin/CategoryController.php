@@ -157,6 +157,9 @@ class CategoryController extends Controller
     public function detail($id)
     {
         $category = Category::find($id);
+        if (!$category) {
+            $category = Category::onlyTrashed()->find($id);
+        }
         $category->load('products', 'breeds');
 
         $product = Product::all();
@@ -170,6 +173,58 @@ class CategoryController extends Controller
         $category = Category::find($id);
         $category->products()->delete();
         $category->delete();
-        return redirect()->back();
+        return response()->json(['success' => 'Xóa thú cưng thành công !']);
+    }
+
+    public function backUp()
+    {
+        return view('admin.category.back-up');
+    }
+
+    public function getBackUp(Request $request)
+    {
+        $category = Category::onlyTrashed();
+        return dataTables::of($category)
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
+            ->addIndexColumn()
+            ->orderColumn('category_type_id', function ($row, $order) {
+                return $row->orderBy('category_type_id', $order);
+            })
+            ->addColumn('category_type_id', function ($row) {
+                return $row->categoryType->name;
+            })
+            ->addColumn('action', function ($row) {
+                return '
+                <span class="float-right">
+                <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                <a  class="btn btn-success" href="' . route('category.restore', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                                    </span>';
+            })
+            ->filter(function ($instance) use ($request) {
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('slug', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
+
+    public function restore($id)
+    {
+
+        $category = Category::withTrashed();
+        $category->find($id)->products()->restore();
+        $category->restore();
+    }
+
+    public function delete($id)
+    {
     }
 }

@@ -53,8 +53,12 @@ Route::prefix('danh-muc')->group(function () {
 
     Route::get('chi-tiet/{id}', [CategoryController::class, 'detail'])->name('category.detail');
 
-    Route::get('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
+    Route::delete('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
     Route::get('dataCate', [CategoryController::class, 'getData'])->name('category.filter');
+    Route::get('back-up', [CategoryController::class, 'backUp'])->name('category.backup');
+    Route::get('dataBackUp', [CategoryController::class, 'getBackUp'])->name('category.getBackup');
+    Route::get('restore/{id}', [CategoryController::class, 'restore'])->name('category.restore');
+    Route::delete('back-up/xoa/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 });
 
 Route::prefix('don-hang')->group(function () {
@@ -105,10 +109,10 @@ Route::prefix('phu-kien')->group(function () {
     Route::get('/', [AccessoryController::class, 'index'])->name('accessory.index');
 
     Route::get('tao-moi', [AccessoryController::class, 'addForm'])->name('accessory.add');
-    Route::post('tao-moi', [AccessoryController::class, 'saveAdd']);
+    Route::post('tao-moi', [AccessoryController::class, 'saveAdd'])->name('accessory.saveAdd');
 
     Route::get('cap-nhat/{id}', [AccessoryController::class, 'editForm'])->name('accessory.edit');
-    Route::post('cap-nhat/{id}', [AccessoryController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [AccessoryController::class, 'saveEdit'])->name('accessory.saveEdit');
 
     Route::get('chi-tiet/{id}', [AccessoryController::class, 'detail'])->name('accessory.detail');
 

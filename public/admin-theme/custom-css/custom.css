@@ -72,8 +72,7 @@ div.dt-button-collection a.dt-button {
     color: #000;
 }
 
-#file-upload,
-input[type="file"] {
+#file-upload {
     display: none;
 }
 

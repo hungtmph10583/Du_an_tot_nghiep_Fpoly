@@ -11,10 +11,8 @@ class Accessory extends Model
     protected $table = 'accessories';
     protected $fillable = [
         'name',
-        'creator',
         'category_id',
         'slug',
-        'image',
         'price',
         'coupon_id',
         'discount',
@@ -24,15 +22,16 @@ class Accessory extends Model
         'discount_end_date',
         'status',
         'quantity',
-        'description',
         'detail'
     ];
 
-    public function category(){
+    public function category()
+    {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
-    public function galleries(){
+    public function galleries()
+    {
         return $this->hasMany(AccessoryGallery::class, 'accessory_id');
     }
 }
