@@ -56,9 +56,9 @@
                 @endif
             @endforeach
         </div>
-        <div class="details">
+        <!-- <div class="details">
             <button><a href="./category.html">xem thêm <i class="fas fa-chevron-right"></i></a></button>
-        </div>
+        </div> -->
     </section>
     <!-- banner -->
     <div class="banner">
@@ -80,9 +80,9 @@
     <section class="products">
         <div class="heading">
             <span class="heading-title">Sản phẩm</span>
-            <!-- <div class="heading-hr"></div> -->
         </div>
         <div class="product-container">
+            @foreach($product as $product)
             <div class="product-item">
                 <div class="item-top">
                     <div class="product-lable">
@@ -91,9 +91,9 @@
                         </p>
                     </div>
                     <div class="product-thumbnail">
-                        <a href="./detail.html">
-                            <img src="{{ asset('client-theme/images/cate-dog.jpg')}}" alt="">
-                        </a>
+                    <a href="{{route('client.product.detail', ['id' => $product->id])}}">
+                        <img src="{{asset( 'storage/' . $product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                    </a>
                     </div>
                     <div class="product-extra">
                         <a href="#" class="fas fa-heart"></a>
@@ -103,44 +103,19 @@
                 </div>
                 <div class="item-bottom">
                     <div class="product-info">
-                        <a href="#" class="name">Chó đốm</a>
-                        <span class="category">Danh mục<a href="#" class="link-ct">Dog</a></span>
-                        <span class="price">30.000.000 VND</span>
+                        <a href="#" class="name">{{$product->name}}</a>
+                        <span class="category">Danh mục<a href="" class="link-ct">{{$product->category->name}}</a></span>
+                        <span class="price">{{number_format($product->price)}}đ</span>
                     </div>
                 </div>
             </div>
-            <div class="product-item">
+            @endforeach
+            <!-- <div class="product-item">
                 <div class="item-top">
                     <div class="product-lable">
-                        <p class="new">
-                            <span>new</span>
-                        </p>
-                    </div>
-                    <div class="product-thumbnail">
-                        <a href="./detail.html">
-                            <img src="{{ asset('client-theme/images/cate-cat.jpg')}}" alt="">
-                        </a>
-                    </div>
-                    <div class="product-extra">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                        <a href="#" class="fas fa-shopping-cart"></a>
-                    </div>
-                </div>
-                <div class="item-bottom">
-                    <div class="product-info">
-                        <a href="#" class="name">Mèo trắng mắt xanh</a>
-                        <span class="category">Danh mục<a href="#" class="link-ct">Cat</a></span>
-                        <span class="price">30.000.000 VND</span>
-                    </div>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="item-top">
-                    <div class="product-lable">
-                        <!-- <p class="sale">
+                        <p class="sale">
                             <span>Giảm: 155.000 vnd</span>
-                        </p> -->
+                        </p>
                     </div>
                     <div class="product-thumbnail">
                         <a href="./detail.html">
@@ -160,62 +135,10 @@
                         <span class="price">30.000.000 VND</span>
                     </div>
                 </div>
-            </div>
-            <div class="product-item">
-                <div class="item-top">
-                    <div class="product-lable">
-                        <!-- <p class="sale">
-                            <span>Giảm: 155.000 vnd</span>
-                        </p> -->
-                    </div>
-                    <div class="product-thumbnail">
-                        <a href="./detail.html">
-                            <img src="{{ asset('client-theme/images/cold.jpg')}}" alt="">
-                        </a>
-                    </div>
-                    <div class="product-extra">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                        <a href="#" class="fas fa-shopping-cart"></a>
-                    </div>
-                </div>
-                <div class="item-bottom">
-                    <div class="product-info">
-                        <a href="#" class="name">Pitbull</a>
-                        <span class="category">Danh mục<a href="#" class="link-ct">Dog</a></span>
-                        <span class="price">30.000.000 VND</span>
-                    </div>
-                </div>
-            </div>
-            <div class="product-item">
-                <div class="item-top">
-                    <div class="product-lable">
-                        <!-- <p class="sale">
-                            <span>Giảm: 155.000 vnd</span>
-                        </p> -->
-                    </div>
-                    <div class="product-thumbnail">
-                        <a href="./detail.html">
-                            <img src="{{ asset('client-theme/images/glass.jpg')}}" alt="">
-                        </a>
-                    </div>
-                    <div class="product-extra">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                        <a href="#" class="fas fa-shopping-cart"></a>
-                    </div>
-                </div>
-                <div class="item-bottom">
-                    <div class="product-info">
-                        <a href="#" class="name">Deo biet giống này là gì</a>
-                        <span class="category">Danh mục<a href="#" class="link-ct">Dog</a></span>
-                        <span class="price">30.000.000 VND</span>
-                    </div>
-                </div>
-            </div>
+            </div> -->
         </div>
         <div class="details">
-            <button><a href="./category.html">xem thêm <i class="fas fa-chevron-right"></i></a></button>
+            <button><a href="{{route('client.product.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
         </div>
     </section>
     <!-- member -->

@@ -14,7 +14,7 @@
                 </li>
                 @foreach ($model->galleries as $gl)
                 <li>
-                    <img src="{{asset('storage/' . $gl->image_url)}}" onclick="changeImage('order_no')" id="order_no" alt="">
+                    <img src="{{asset('storage/' . $gl->image_url)}}" onclick="changeImage('{{$gl->order_no}}')" id="{{$gl->order_no}}" alt="">
                 </li>
                 @endforeach
             </ul>
@@ -159,10 +159,10 @@
                         </span>
                         <div class="clear-both"></div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="">Tiêu đề đánh giá</label>
                         <input type="text" name="title" placeholder="Nhập vào họ tên">
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="">Nội dung đánh giá</label>
                         <textarea name="comment" id="" cols="30" rows="10" placeholder="Viết nội dung dánh giá của bạn tại đây"></textarea>

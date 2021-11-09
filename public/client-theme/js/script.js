@@ -26,32 +26,20 @@
  * down
  */
 
-let shoppingCart = document.querySelector('.shopping-cart');
 let navbar = document.querySelector('.navbar');
 
 var menu = document.getElementById('menu-btn');
-var cart = document.getElementById('cart-btn');
 document.addEventListener('click', function(event) {
     var isClickInsideMenu = menu.contains(event.target);
-    var isClickInsideCart = cart.contains(event.target);
 
     if (isClickInsideMenu) {
         navbar.classList.toggle('active');
-        shoppingCart.classList.remove('active');
     } else {
         navbar.classList.remove('active');
-    }
-
-    if (isClickInsideCart) {
-        shoppingCart.classList.toggle('active');
-        navbar.classList.remove('active');
-    } else {
-        shoppingCart.classList.remove('active');
     }
 });
 
 window.onscroll = () => {
-    shoppingCart.classList.remove('active');
     navbar.classList.remove('active');
 }
 

@@ -12,20 +12,16 @@ use App\Models\Gender;
 use App\Models\Age;
 use App\Models\ProductGallery;
 use App\Models\Review;
+use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class CartController extends Controller
 {
-    public function home(Request $request){
+    public function index(Request $request){
         $category = Category::all();
-        $product = Product::paginate(5);
+        $product = Product::all();
         $gender = Gender::all();
         $breed = Breed::all();
         
-        return view('client.home', [
-            'category' => $category,
-            'product' => $product,
-            'gender' => $gender,
-            'breed' => $breed
-        ]);
+        return view('client.cart.index');
     }
 }

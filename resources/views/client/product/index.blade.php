@@ -50,7 +50,7 @@
                     </p> -->
                 </div>
                 <div class="product-thumbnail">
-                    <a href="{{route('product.client.detail', ['id' => $p->id])}}">
+                    <a href="{{route('client.product.detail', ['id' => $p->id])}}">
                         <img src="{{asset( 'storage/' . $p->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                 </div>

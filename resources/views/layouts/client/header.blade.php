@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="{{route('client.customer.info')}}">
                             <i class="fas fa-user"></i>
                             <span>{{Auth::user()->name}}</span>
                         </a>
@@ -71,7 +71,7 @@
                     <nav class="navbar">
                         <ul class="nav-item">
                             <li>
-                                <a href="#">Trang chủ</a>
+                                <a href="{{route('client.home')}}">Trang chủ</a>
                             </li>
                             <li>
                                 <a href="./introduce.html">Giới thiệu</a>
@@ -80,7 +80,7 @@
                                 <a href="./index.html">Danh mục</a>
                             </li>
                             <li>
-                                <a href="{{route('product.client.index')}}">Sản phẩm</a>
+                                <a href="{{route('client.product.index')}}">Sản phẩm</a>
                             </li>
                             <li>
                                 <a href="./blog.html">Tin tức</a>
@@ -95,14 +95,16 @@
                     <!-- <div class="cart">
                         <i class="fas fa-heart"></i>
                     </div> -->
-                    <div class="cart" id="cart-btn">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span class="title">Giỏ hàng</span>
-                        <span class="btn-number">3</span>
+                    <div class="cart">
+                        <a href="{{route('client.cart.index')}}">
+                            <i class="fas fa-shopping-cart"></i>
+                            <span class="title">Giỏ hàng</span>
+                            <span class="btn-number">3</span>
+                        </a>
                     </div>
                 </div>
                 <!--  -->
-                <div class="shopping-cart">
+                <!-- <div class="shopping-cart">
                     <div class="box">
                         <i class="fas fa-trash-alt"></i>
                         <img src="{{ asset('client-theme/images/002.jpg')}}" alt="">
@@ -133,7 +135,7 @@
                     <div class="total">tổng cộng : 24.000 VND</div>
                     <a href="#" class="btn">xem giỏ hàng</a>
                     <a href="#" class="btn">thanh toán</a>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
