@@ -14,7 +14,7 @@
                 </li>
                 @foreach ($model->galleries as $gl)
                 <li>
-                    <img src="{{asset('storage/' . $gl->image_url)}}" onclick="changeImage('order_no')" id="order_no" alt="">
+                    <img src="{{asset('storage/' . $gl->image_url)}}" onclick="changeImage('{{$gl->order_no}}')" id="{{$gl->order_no}}" alt="">
                 </li>
                 @endforeach
             </ul>
@@ -25,6 +25,8 @@
                 <span class="star">
                     @for($count=1; $count<=5; $count++)
                         @if($count <= $rating)
+                            <i class="fas fa-star rating"></i>
+                        @elseif($countReview == 0)
                             <i class="fas fa-star rating"></i>
                         @else
                             <i class="far fa-star"></i>
@@ -49,9 +51,11 @@
             <div class="item-extra">
                 <h6>Giá bán</h6>
                 @if($model->discount == '')
-                <span class="discount">{{number_format($model->price)}}đ</span> @else
+                <span class="discount">{{number_format($model->price)}}đ</span>
+                @else
                 <span class="price">{{number_format($model->price)}}đ</span>
-                <span class="discount">{{number_format($model->discount)}}đ</span> @endif
+                <span class="discount">{{number_format($model->discount)}}đ</span>
+                @endif
             </div>
             <div class="item-extra">
                 <h6>Danh mục</h6>
@@ -108,6 +112,8 @@
                     @for($count=1; $count<=5; $count++)
                         @if($count <= $rating)
                             <i class="fas fa-star rating"></i>
+                        @elseif($countReview == 0)
+                            <i class="fas fa-star rating"></i>
                         @else
                             <i class="far fa-star"></i>
                         @endif
@@ -153,10 +159,10 @@
                         </span>
                         <div class="clear-both"></div>
                     </div>
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="">Tiêu đề đánh giá</label>
                         <input type="text" name="title" placeholder="Nhập vào họ tên">
-                    </div>
+                    </div> -->
                     <div class="form-group">
                         <label for="">Nội dung đánh giá</label>
                         <textarea name="comment" id="" cols="30" rows="10" placeholder="Viết nội dung dánh giá của bạn tại đây"></textarea>
@@ -165,24 +171,32 @@
                 </form>
             </div>
             @foreach($review as $rv)
-            <div class="review-content">
-                <div class="star">
-                    @for($count=1; $count<=5; $count++)
-                        @if($count <= $rv->rating)
-                            <i class="fas fa-star rating"></i>
-                        @else
-                            <i class="far fa-star"></i>
-                        @endif
-                    @endfor
-                    
+                @if($rv->product_id == $model->id)
+                <div class="review-content">
+                    <div class="star">
+                        @for($count=1; $count<=5; $count++)
+                            @if($count <= $rv->rating)
+                                <i class="fas fa-star rating"></i>
+                            @else
+                                <i class="far fa-star"></i>
+                            @endif
+                        @endfor
+                    </div>
+                    <p class="name-custom-review">{{$rv->user->name}}</p>
+                    <span class="date-custom-review">{{$rv->created_at}}</span>
+                    <div class="content">
+                        <p>{{$rv->comment}}</p>
+                    </div>
                 </div>
-                <p class="name-custom-review">{{$rv->user->name}}</p>
-                <span class="date-custom-review">{{$rv->created_at}}</span>
+                @endif
+            @endforeach
+            @if($countReview < 1)
+            <div class="review-content">
                 <div class="content">
-                    <p>{{$rv->comment}}</p>
+                    <p>Chưa có bình luận nào</p>
                 </div>
             </div>
-            @endforeach
+            @endif
             <div class="paging">
             {{ $review->links('vendor.pagination.custom') }}
             </div>

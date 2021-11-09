@@ -35,17 +35,17 @@ class AuthController extends Controller
         if(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 0])){    
             return redirect()->back()->with('msg', "Tài khoản của bạn đang bị khóa, liên hệ Huy Phan để mở!");
         }elseif(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1])) {
-            return redirect(route('dashboard.index'));
+            return redirect(route('client.home'));
         } else {
             return redirect()->back()->with('msg', "Email hoặc mật khẩu không chính xác!");
         }
     }
 
-    public function registrationForm(Request $request){
+    public function registrationForm(){
         return view('auth.registration');
     }
 
-    public function postRegistration(Request $request){
+    public function saveRegistration(Request $request){
         $users = User::all();
         $request->validate(
             [
@@ -71,7 +71,52 @@ class AuthController extends Controller
         $model->password = Hash::make($request->password);
         $model->save();
 
+        //return redirect(route('login'));
+        return redirect()->back()->with("success","Tạo tài khoản thành công. Quay lại trang Sign in để đăng nhập!");
+    }
+
+    public function forgotPassword(Request $request){
+        return view('auth.forgot-password');
+    }
+
+    public function saveForgotPassword(){
         return redirect(route('login'));
+    }
+
+    public function changePassword(Request $request){
+        return view('auth.change-password');
+    }
+
+    public function saveChangePassword(Request $request){
+        $request->validate(
+            [
+                'email' => 'required|email',
+                'currentpassword' => 'required',
+                'newpassword' => 'required',
+                'cfpassword' => 'required|same:newpassword|'
+            ],
+            [
+                'email.required' => "Hãy nhập email",
+                'email.email' => "Không đúng định dạng email",
+                'currentpassword.required' => "Hãy nhập mật khẩu",
+                'newpassword.required' => "Hãy nhập mật khẩu mới",
+                'cfpassword.required' => "Hãy nhập xác nhận mật khẩu",
+                'cfpassword.same' => "Mật khẩu xác nhận không giống mật khẩu"
+            ]
+        );
+
+        if (!(Hash::check($request->get('currentpassword'), Auth::user()->password))) {
+            return redirect()->back()->with("error","Mật khẩu hiện tại bạn nhập không khớp. Vui lòng thử lại!");
+        }
+        if(strcmp($request->get('currentpassword'), $request->get('newpassword')) == 0){
+            return redirect()->back()->with("error","Mật khẩu mới không được giống với mật khẩu hiện tại!");
+        }
+        //Change Password
+        $user = Auth::user();
+        $user->password = Hash::make($request->newpassword);
+        $user->save();
+
+        return redirect()->back()->with("success","Mật khẩu của bạn đã được thay đổi !");
     }
 
 

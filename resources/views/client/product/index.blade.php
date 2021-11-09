@@ -50,7 +50,7 @@
                     </p> -->
                 </div>
                 <div class="product-thumbnail">
-                    <a href="{{route('product.client.detail', ['id' => $p->id])}}">
+                    <a href="{{route('client.product.detail', ['id' => $p->id])}}">
                         <img src="{{asset( 'storage/' . $p->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                 </div>
@@ -70,9 +70,9 @@
         </div>
         @endforeach
     </div>
-    <section class="paging">
+    <div class="paging">
     {{ $product->links('vendor.pagination.custom') }}
-    </section>
+    </div>
 </section>
 	<!-- content -->
 @endsection
