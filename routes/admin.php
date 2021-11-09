@@ -57,7 +57,7 @@ Route::prefix('danh-muc')->group(function () {
     Route::get('dataCate', [CategoryController::class, 'getData'])->name('category.filter');
     Route::get('back-up', [CategoryController::class, 'backUp'])->name('category.backup');
     Route::get('dataBackUp', [CategoryController::class, 'getBackUp'])->name('category.getBackup');
-    Route::get('restore/{id}', [CategoryController::class, 'restore'])->name('category.restore');
+    Route::get('back-up/restore/{id}', [CategoryController::class, 'restore'])->name('category.restore');
     Route::delete('back-up/xoa/{id}', [CategoryController::class, 'delete'])->name('category.delete');
 });
 
@@ -99,10 +99,9 @@ Route::prefix('san-pham')->group(function () {
 
     Route::get('chi-tiet/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
-    Route::get('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
+    Route::delete('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
 
     Route::get('dataProduct', [ProductController::class, 'getData'])->name('product.filter');
-    // Route::get('xoa/{id}', [ProductController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
 });
 
 Route::prefix('phu-kien')->group(function () {

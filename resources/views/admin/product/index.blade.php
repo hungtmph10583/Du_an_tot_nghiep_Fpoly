@@ -114,7 +114,6 @@
         </div>
     </div><!-- /.container-fluid -->
 </section>
-<!-- /.content -->
 @endsection
 @section('pagejs')
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">

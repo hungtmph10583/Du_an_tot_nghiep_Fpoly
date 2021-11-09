@@ -199,7 +199,7 @@ class CategoryController extends Controller
                 return '
                 <span class="float-right">
                 <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                <a  class="btn btn-success" href="' . route('category.restore', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                <a  class="btn btn-success" href="javascript:void(0);" onclick="restoreData(' . $row->id . ')"><i class="far fa-edit"></i></a>
                                     <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                                     </span>';
             })
@@ -218,10 +218,10 @@ class CategoryController extends Controller
 
     public function restore($id)
     {
-
         $category = Category::withTrashed();
         $category->find($id)->products()->restore();
         $category->restore();
+        return response()->json(['success' => 'Xóa thú cưng thành công !']);
     }
 
     public function delete($id)

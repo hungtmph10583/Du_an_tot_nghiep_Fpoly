@@ -53,6 +53,25 @@ function deleteData(id) {
         $.ajax({
             url: urlData + '/xoa/' + id,
             type: 'DELETE',
+            method: 'DELETE',
+            data: {
+                _token: $("input[name=_token]").val()
+            },
+            success: function(data) {
+                $('div.alert-success').text(data.success);
+                $('div.alert-success').css('display', 'block');
+                $('#' + id).remove();
+            },
+        });
+    }
+}
+
+function restoreData(id) {
+    var urlData = window.location;
+    if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
+        $.ajax({
+            url: urlData + '/restore/' + id,
+            type: 'GET',
             data: {
                 _token: $("input[name=_token]").val()
             },

@@ -62,9 +62,12 @@ class ProductController extends Controller
                 }
             })
             ->addColumn('action', function ($row) {
-                return '<a  class="btn btn-success" href="' . route('product.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                return '
+                <span class="float-right">
+                <a href="' . route('product.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                <a  class="btn btn-success" href="' . route('product.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
                                     <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
-<a class="btn btn-primary" href="' . route("product.detail", ["id" => $row->id]) . '"><i class="far fa-eye"></i></a>';
+                                    </span>';
             })
             ->filter(function ($instance) use ($request) {
                 if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
@@ -308,8 +311,8 @@ class ProductController extends Controller
     public function remove($id)
     {
         $product = Product::find($id);
-        $product->product_tag()->delete();
+        $product->galleries()->delete();
         $product->delete();
-        return redirect()->back();
+        return response()->json(['success' => 'Xóa thú cưng thành công !']);
     }
 }
