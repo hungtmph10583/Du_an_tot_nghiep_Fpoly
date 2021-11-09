@@ -42,31 +42,44 @@
     </section>
     <!-- section category -->
     <section class="categories">
-        <h1 class="heading">Danh mục thú cưng của chúng tôi</h1>
-        <div class="heading-hr"></div>
-        <div class="swiper category-slide category-container">
-            <div class="swiper-wrapper">
-                <div class="swiper-slide category-item">
-                    <div class="item-top">
-                        <div class="thumbnail">
-                            <a href="#"><img src="{{ asset('client-theme/images/cate-dog.jpg')}}" alt=""></a>
-                        </div>
-                    </div>
+        <!-- <h1 class="heading">Danh mục thú cưng của chúng tôi</h1>
+        <div class="heading-hr"></div> -->
+        <div class="category-container">
+            <div class="category-item">
+                <div class="thumbnail">
+                    <a href="#"><img src="{{ asset('client-theme/images/category-dog.jpg')}}" alt=""></a>
                 </div>
-                <div class="swiper-slide category-item">
-                    <div class="item-top">
-                        <div class="thumbnail">
-                            <a href="#"><img src="{{ asset('client-theme/images/cate-cat.jpg')}}" alt=""></a>
-                        </div>
-                    </div>
+                <span class="category-name">Dogs</span>
+            </div>
+            <div class="category-item">
+                <div class="thumbnail">
+                    <a href="#"><img src="{{ asset('client-theme/images/category-cat.jpg')}}" alt=""></a>
                 </div>
-                <div class="swiper-slide category-item">
-                    <div class="item-top">
-                        <div class="thumbnail">
-                            <a href="#"><img src="{{ asset('client-theme/images/cate-bird.jpg')}}" alt=""></a>
-                        </div>
-                    </div>
+                <span class="category-name">Cats</span>
+            </div>
+            <div class="category-item">
+                <div class="thumbnail">
+                    <a href="#"><img src="{{ asset('client-theme/images/category-bird.jpg')}}" alt=""></a>
                 </div>
+                <span class="category-name">Birds</span>
+            </div>
+            <div class="category-item">
+                <div class="thumbnail">
+                    <a href="#"><img src="{{ asset('client-theme/images/category-fish.jpg')}}" alt=""></a>
+                </div>
+                <span class="category-name">Fishs</span>
+            </div>
+            <div class="category-item">
+                <div class="thumbnail">
+                    <a href="#"><img src="{{ asset('client-theme/images/category-mouse.jpg')}}" alt=""></a>
+                </div>
+                <span class="category-name">Mouse</span>
+            </div>
+            <div class="category-item">
+                <div class="thumbnail">
+                    <a href="#"><img src="{{ asset('client-theme/images/category-reptiles.jpg')}}" alt=""></a>
+                </div>
+                <span class="category-name">Reptiles</span>
             </div>
         </div>
         <div class="details">

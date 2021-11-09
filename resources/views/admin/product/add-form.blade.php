@@ -83,6 +83,12 @@
                                         placeholder="Số lượng sản phẩm">
                                     <span class="text-danger error_text quantity_error"></span>
                                 </div>
+                            <div class="form-group">
+                                <label for="">Giá bán</label>
+                                <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá bán">
+                                @error('price')
+                                    <span class="text-danger">{{$message}}</span>
+                                @enderror
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
@@ -131,14 +137,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="card-title">Thông tin phiếu giảm giá</div>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col"><label for="">Giảm giá</label>
-                                <input type="text" class="form-control" name="discount" placeholder="Giảm giá">
+                <div class="col">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title">Thông tin thêm</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="">Ảnh sản phẩm</label>
+                                <input type="file" name="uploadfile" class="form-control">
+                                @error('uploadfile')
+                                    <span class="text-danger">{{$message}}</span>
+                                @enderror
                             </div>
                             <div class="col">
                                 <div class="form-group">
@@ -151,18 +161,24 @@
                                     </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="">Ngày bắt đầu</label>
-                                    <input type="date" class="form-control" name="discount_start_date">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="">Trạng thái</label>
+                                        <select name="status" id="" class="form-control">
+                                            <option value="1">Còn hàng</option>
+                                            <option value="0">Hết hàng</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="">Ngày kết thúc</label>
-                                    <input type="date" class="form-control" name="discount_end_date">
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="">Nổi bật</label>
+                                        <select name="featured " id="" class="form-control">
+                                            <option value="1">Hiển thị</option>
+                                            <option value="0">Không</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -190,6 +206,7 @@
                         </div>
                     </div>
                 </div>
+            </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="col-12">

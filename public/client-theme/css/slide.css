@@ -59,7 +59,7 @@
 
 .sliders .slider-container .slide .image {
     width: 100%;
-    height: 70rem;
+    height: auto;
 }
 
 .sliders .slider-container .slide .image img {

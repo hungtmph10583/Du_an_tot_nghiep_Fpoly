@@ -157,8 +157,10 @@
     margin: 1rem;
     background-color: var(--red);
     border-radius: 0.5rem;
+    cursor: pointer;
 }
 
+.cart-detail-container .item-last button span,
 .cart-detail-container .item-last button a {
     color: var(--white);
     font-size: 1.5rem;

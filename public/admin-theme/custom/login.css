@@ -69,7 +69,7 @@ body {
     border-radius: 1.5rem;
     width: 100%;
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.35);
-    transform: scale(0);
+    /* transform: scale(0); */
     transition: 0.5s ease-in-out;
     transition-delay: 1s;
 }
@@ -238,6 +238,11 @@ body {
 .text.sign-in {
     top: 0%;
     max-width: 50%;
+}
+
+b.click-forgot-password {
+    font-size: 1rem;
+    cursor: pointer;
 }
 
 .text.sign-up {
@@ -442,4 +447,26 @@ p.alert-top {
     color: var(--google-color);
     font-size: 14px;
     padding-left: 10px;
+}
+
+p.success-top {
+    color: green;
+    font-size: 14px;
+    padding-left: 10px;
+}
+
+a.link {
+    color: var(--black);
+    text-decoration: none;
+    font-weight: 200;
+    font-size: 1rem;
+}
+
+a.link:hover {
+    color: var(--google-color);
+}
+
+.title {
+    font-size: 1.6rem;
+    color: var(--google-color);
 }

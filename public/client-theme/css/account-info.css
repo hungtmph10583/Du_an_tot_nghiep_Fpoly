@@ -1,0 +1,148 @@
+.account-info {
+    background-color: #f8f8f8;
+}
+
+.account-info .account-info-container {
+    display: grid;
+    grid-template-columns: 20% 80%;
+    padding: 0 0 5rem;
+}
+
+.account-info .account-info-container .account-info-left {
+    width: 100%;
+    padding: 2rem 0;
+    background-color: #f8f8f8;
+    border-radius: 0.5rem;
+}
+
+.account-info .account-info-container .account-info-left .information {
+    display: flex;
+    flex-direction: column;
+    padding: 0 2rem;
+}
+
+.account-info .account-info-container .account-info-left .information .avatar {
+    width: 15rem;
+    height: 15rem;
+    margin: auto;
+    border: 0.2rem solid var(--main-color);
+    border-radius: 50%;
+}
+
+.account-info .account-info-container .account-info-left .information .avatar img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.account-info .account-info-container .account-info-left .information span {
+    width: 100%;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    font-size: 1.7rem;
+    color: var(--white);
+    background-color: var(--main-color);
+    border-radius: 0 0 0.5rem 0.5rem;
+    margin: 1rem 0;
+}
+
+.account-info .account-info-container .account-info-left ul {
+    padding: 1rem 0;
+    list-style: none;
+}
+
+.account-info .account-info-container .account-info-left ul li a i {
+    padding: 0 1rem 0 0;
+}
+
+.account-info .account-info-container .account-info-left ul li a {
+    color: var(--text-color);
+    font-size: 1.5rem;
+    padding: 1rem 2rem;
+    display: block;
+}
+
+.account-info .account-info-container .account-info-left ul li a.active,
+.account-info .account-info-container .account-info-left ul li a:hover {
+    background-color: rgb(235, 235, 240);
+}
+
+
+/* right */
+
+.account-info .account-info-container .account-info-right {
+    width: 100%;
+    margin-left: 2rem;
+    padding: 2rem;
+    background-color: var(--white);
+    border-radius: 0.5rem;
+}
+
+.account-info .account-info-container .account-info-right .title {
+    font-size: 2rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+    border-bottom: 0.1rem solid var(--light-color);
+    padding-bottom: 1rem;
+    position: relative;
+}
+
+.account-info .account-info-container .account-info-right .title::after {
+    position: absolute;
+    content: "";
+    width: 18rem;
+    height: 2px;
+    background-color: var(--main-color);
+    bottom: -2px;
+    left: 0;
+}
+
+.account-info .account-info-container .account-info-right .group {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    color: var(--text-color);
+    font-size: 1.7rem;
+    padding: 1rem;
+}
+
+.account-info .account-info-container .account-info-right .group span {
+    padding-left: 1rem;
+}
+
+.account-info .account-info-container .account-info-right .group-last {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    margin: 2rem 0;
+    gap: 2rem;
+}
+
+.account-info .account-info-container .account-info-right .group-last a.updateinfo {
+    padding: 1rem 1.7rem;
+    border: 0.1rem solid var(--main-color);
+    background-color: var(--white);
+    color: var(--main-color);
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+.account-info .account-info-container .account-info-right .group-last a.updateinfo:hover {
+    background-color: var(--main-color);
+    color: var(--white);
+}
+
+.account-info .account-info-container .account-info-right .group-last a.changepassword {
+    padding: 1rem 1.7rem;
+    border: 0.1rem solid var(--text-color);
+    background-color: var(--white);
+    color: var(--text-color);
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+.account-info .account-info-container .account-info-right .group-last a.changepassword:hover {
+    background-color: var(--text-color);
+    color: var(--white);
+}
