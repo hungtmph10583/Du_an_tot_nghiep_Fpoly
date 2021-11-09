@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 // hungtmph10583 (21/09/21) start
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ResetPasswordController;
+// use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 // hungtmph10583 (21/09/21) end
@@ -68,14 +70,18 @@ Route::any('logout', function(){
 })->name('logout');
 
 // ------------------------------- Forget password -------------------------------
-Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
-Route::post('forgot-password', [AuthController::class, 'saveForgotPassword']);
+// Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
+// Route::post('forgot-password', [AuthController::class, 'saveForgotPassword']);
 
 // ------------------------------- Change password -------------------------------
 Route::get('change-password', [AuthController::class, 'changePassword'])->middleware('auth')->name('changePassword');
 Route::post('change-password', [AuthController::class, 'saveChangePassword']);
 
-// Route::get('reset-password/{token}', 'App\Http\Controllers\Auth\ResetPasswordController@getPassword');
-// Route::post('reset-password', 'App\Http\Controllers\Auth\ResetPasswordController@updatePassword');
+// ------------------------------- Reset password -------------------------------
+// Route::post('reset-password', 'ResetPasswordController@sendMail');
+Route::get('forgot-password', [ResetPasswordController::class, 'forgotPassword'])->name('forgotPassword');
+Route::post('reset-password', [ResetPasswordController::class, 'sendMail'])->name('resetPassword');
+Route::put('reset-password/{token}', [ResetPasswordController::class, 'reset']);
+// Route::put('reset-password/{token}', 'ResetPasswordController@reset');
 
 // hungtmph10583 (21/09/21) end

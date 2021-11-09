@@ -21,7 +21,7 @@
             <div class="col align-center flex-col sign-up"></div><!--  Ko duoc xoa -->
             <div class="col align-center flex-col sign-in">
                 <div class="form-wrapper align-center">
-                    <form class="form sign-in" method="POST">
+                    <form class="form sign-in" method="POST" action="{{route('resetPassword')}}">
                         <h1 class="title">Forgot Password</h1>
                     @csrf
                     @if(session('msg') != null)
