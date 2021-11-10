@@ -300,7 +300,9 @@ class ProductController extends Controller
     {
         $model = Product::find($id);
         $model->load('category', 'breed', 'gender');
-
+        if (!$model) {
+            $model = Product::onlyTrashed()->find($id);
+        }
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
@@ -314,5 +316,97 @@ class ProductController extends Controller
         $product->galleries()->delete();
         $product->delete();
         return response()->json(['success' => 'Xóa thú cưng thành công !']);
+    }
+
+    public function backUp()
+    {
+        $categories = Category::all();
+        $gender = Gender::all();
+        $breed = Breed::all();
+        $age = Age::all();
+        return view('admin.product.back-up', compact('categories', 'gender', 'breed', 'age'));
+    }
+
+    public function getBackUp(Request $request)
+    {
+        $product = Product::onlyTrashed();
+        return dataTables::of($product)
+            //thêm id vào tr trong datatable
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
+            ->addIndexColumn()
+            ->orderColumn('category_id', function ($row, $order) {
+                return $row->orderBy('category_id', $order);
+            })
+            ->orderColumn('status', function ($row, $order) {
+                return $row->orderBy('status', $order);
+            })
+            ->addColumn('category_id', function ($row) {
+                return $row->category->name;
+            })
+            ->addColumn('image', function ($row) {
+                return '<img class="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
+            })
+            ->addColumn('status', function ($row) {
+                if ($row->status == 1) {
+                    return '<span class="badge badge-primary">Active</span>';
+                } elseif ($row->status == 0) {
+                    return '<span class="badge badge-danger">Deactive</span>';
+                } else {
+                    return '<span class="badge badge-danger">Sắp ra mắt</span>';
+                }
+            })
+            ->addColumn('action', function ($row) {
+                return '
+                <span class="float-right">
+                <a href="' . route('product.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                <a  class="btn btn-success" href="javascript:void(0);" onclick="restoreData(' . $row->id . ')"><i class="far fa-edit"></i></a>
+                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                                    </span>';
+            })
+            ->filter(function ($instance) use ($request) {
+                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
+                    $instance->where('status', $request->get('status'));
+                }
+
+                if ($request->get('cate') != '') {
+                    $instance->where('category_id', $request->get('cate'));
+                }
+
+                if ($request->get('gender') != '') {
+                    $instance->where('gender_id', $request->get('gender'));
+                }
+
+                if ($request->get('breed') != '') {
+                    $instance->where('breed_id', $request->get('breed'));
+                }
+
+                if ($request->get('age') != '') {
+                    $instance->where('age_id', $request->get('age'));
+                }
+
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('description', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['status', 'action', 'image'])
+            ->make(true);
+    }
+
+    public function restore($id)
+    {
+        $category = Product::withTrashed();
+        $category->find($id)->galleries()->restore();
+        $category->restore();
+        return response()->json(['success' => 'Xóa thú cưng thành công !']);
+    }
+
+    public function delete($id)
+    {
     }
 }

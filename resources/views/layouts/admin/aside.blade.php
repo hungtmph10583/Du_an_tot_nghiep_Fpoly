@@ -126,6 +126,12 @@
                                 <p>Phiếu giảm giá</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('product.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Back Up Products</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">

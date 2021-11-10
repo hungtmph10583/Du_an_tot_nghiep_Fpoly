@@ -58,6 +58,7 @@ function deleteData(id) {
                 _token: $("input[name=_token]").val()
             },
             success: function(data) {
+                console.log(data)
                 $('div.alert-success').text(data.success);
                 $('div.alert-success').css('display', 'block');
                 $('#' + id).remove();

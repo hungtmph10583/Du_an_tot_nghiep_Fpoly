@@ -102,6 +102,10 @@ Route::prefix('san-pham')->group(function () {
     Route::delete('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
 
     Route::get('dataProduct', [ProductController::class, 'getData'])->name('product.filter');
+    Route::get('back-up', [ProductController::class, 'backUp'])->name('product.backup');
+    Route::get('dataBackUp', [ProductController::class, 'getBackUp'])->name('product.getBackup');
+    Route::get('back-up/restore/{id}', [ProductController::class, 'restore'])->name('product.restore');
+    Route::delete('back-up/xoa/{id}', [ProductController::class, 'delete'])->name('product.delete');
 });
 
 Route::prefix('phu-kien')->group(function () {
