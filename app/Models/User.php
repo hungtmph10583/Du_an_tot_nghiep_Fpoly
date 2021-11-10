@@ -49,11 +49,15 @@ class User extends Authenticatable
         return $this->hasMany(PersonalInformation::class, 'user_id');
     }
 
+    public function address(){
+        return $this->hasOne(Address::class, 'user_id');
+    }
+
     public function model_has_role(){
         return $this->hasMany(ModelHasRole::class, 'model_id');
     }
 
     public function role(){
-        return $this->bolongsTo(Role::class);
+        return $this->belongsTo(Role::class);
     }
 }
