@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductFormRequest;
+use App\Imports\ProductImport;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -16,6 +16,7 @@ use App\Models\ProductGallery;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Maatwebsite\Excel\Facades\Excel;
 use Yajra\Datatables\Datatables;
 
 class ProductController extends Controller
@@ -204,7 +205,7 @@ class ProductController extends Controller
         return view('admin.product.edit-form', compact('model', 'category', 'breed', 'gender', 'age', 'discountType'));
     }
 
-    public function saveEdit($id, ProductFormRequest $request)
+    public function saveEdit($id, Request $request)
     {
         $model = Product::find($id);
 
@@ -408,5 +409,15 @@ class ProductController extends Controller
 
     public function delete($id)
     {
+    }
+
+    public function store(Request $request)
+    {
+        $file = $request->file('file')->store('public/excel');
+        $import = new ProductImport;
+        $import->import($file);
+        dd($import->failures());
+        Excel::import(new ProductImport, $file);
+        return back()->with('congratulation!');
     }
 }

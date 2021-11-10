@@ -106,6 +106,7 @@ Route::prefix('san-pham')->group(function () {
     Route::get('dataBackUp', [ProductController::class, 'getBackUp'])->name('product.getBackup');
     Route::get('back-up/restore/{id}', [ProductController::class, 'restore'])->name('product.restore');
     Route::delete('back-up/xoa/{id}', [ProductController::class, 'delete'])->name('product.delete');
+    Route::post('import', [ProductController::class, 'store'])->name('book.import');
 });
 
 Route::prefix('phu-kien')->group(function () {

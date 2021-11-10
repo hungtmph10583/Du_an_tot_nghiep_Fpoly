@@ -18,7 +18,6 @@ class Product extends Model
         'weight',
         'breed_id',
         'age_id',
-        'counpon_id',
         'gender_id',
         'rating',
         'price',
