@@ -81,10 +81,14 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <label for="file-upload" class="custom-file-upload">
-                            <i class="fas fa-file-import"></i> Import Data
-                        </label>
-                        <input id="file-upload" type="file" />
+                        <form action="{{route('product.import')}}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <label for="file-upload" class="custom-file-upload">
+                                <i class="fas fa-file-import"></i> Import Data
+                            </label>
+                            <input id="file-upload" name="file" type="file" />
+                            <button type="submit">Import</button>
+                        </form>
                     </div>
                 </div>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />

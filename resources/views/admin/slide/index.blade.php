@@ -59,7 +59,7 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-control border-0">
-                                <label for="">Twitter</label>
+                                    <label for="">Twitter</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -75,25 +75,31 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input type="file" name="uploadfile" class="form-control">
+                                <input type="file" name="image" class="form-control">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="phone" class="form-control" placeholder="Số điện thoại liên hệ của cửa hảng">
+                                <input type="text" name="phone" class="form-control"
+                                    placeholder="Số điện thoại liên hệ của cửa hảng">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="email" class="form-control" placeholder="Email liên hệ của cửa hàng">
+                                <input type="text" name="email" class="form-control"
+                                    placeholder="Email liên hệ của cửa hàng">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="facebook" class="form-control" placeholder="Link facebook ( nếu có )">
+                                <input type="text" name="facebook" class="form-control"
+                                    placeholder="Link facebook ( nếu có )">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="instagram" class="form-control" placeholder="Link instagram ( nếu có )">
+                                <input type="text" name="instagram" class="form-control"
+                                    placeholder="Link instagram ( nếu có )">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="twitter" class="form-control" placeholder="Link twitter ( nếu có )">
+                                <input type="text" name="twitter" class="form-control"
+                                    placeholder="Link twitter ( nếu có )">
                             </div>
                             <div class="form-group">
-                                <input type="text" name="youtube" class="form-control" placeholder="Link kênh youtube ( nếu có )">
+                                <input type="text" name="youtube" class="form-control"
+                                    placeholder="Link kênh youtube ( nếu có )">
                             </div>
                         </div>
                     </div>

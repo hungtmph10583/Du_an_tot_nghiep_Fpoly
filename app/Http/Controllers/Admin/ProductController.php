@@ -51,7 +51,13 @@ class ProductController extends Controller
                 return $row->category->name;
             })
             ->addColumn('image', function ($row) {
-                return '<img class="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
+                $img = $row->image;
+                $find = strpos($img, 'products/');
+                if ($find == false) {
+                    return '<img class="img-fluid" width="70" src="' . $row->image . '" alt="">';
+                } else {
+                    return '<img class="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
+                }
             })
             ->addColumn('status', function ($row) {
                 if ($row->status == 1) {
@@ -416,7 +422,10 @@ class ProductController extends Controller
         $file = $request->file('file')->store('public/excel');
         $import = new ProductImport;
         $import->import($file);
-        dd($import->failures());
+        $fail = $import->failures();
+        if ($fail->isNotEmpty()) {
+            return view('admin.product.error', compact('fail'));
+        }
         Excel::import(new ProductImport, $file);
         return back()->with('congratulation!');
     }

@@ -187,6 +187,12 @@ return [
          * @name: huypqph11301
          */
         Maatwebsite\Excel\ExcelServiceProvider::class,
+        /**
+         * @note: intervention image
+         * @date: 10/11/2021
+         * @name: huypqph11301
+         */
+        Intervention\Image\ImageServiceProvider::class,
     ],
 
     /*
@@ -246,6 +252,7 @@ return [
          * @name: huypqph11301
          */
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Image' => Intervention\Image\Facades\Image::class,
 
     ],
 

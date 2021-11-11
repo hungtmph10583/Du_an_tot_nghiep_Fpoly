@@ -34,12 +34,13 @@ Route::prefix('tai-khoan')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
     Route::get('xoa/{id}', [UserController::class, 'remove'])->name('user.remove');
     Route::get('tao-moi', [UserController::class, 'addForm'])->name('user.add');
-    Route::post('tao-moi', [UserController::class, 'saveAdd']);
+    Route::post('tao-moi', [UserController::class, 'saveAdd'])->name('user.saveAdd');
     Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->name('user.edit');
-    Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit'])->name('user.saveEdit');
     Route::get('ho-so/{id}', [UserController::class, 'proFile'])->name('user.profile');
     Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->name('user.changeP');
     Route::post('doi-mat-khau/{id}', [UserController::class, 'saveChangeP']);
+    Route::get('dataUser', [UserController::class, 'getData'])->name('user.filter');
 });
 
 Route::prefix('danh-muc')->group(function () {
@@ -106,7 +107,7 @@ Route::prefix('san-pham')->group(function () {
     Route::get('dataBackUp', [ProductController::class, 'getBackUp'])->name('product.getBackup');
     Route::get('back-up/restore/{id}', [ProductController::class, 'restore'])->name('product.restore');
     Route::delete('back-up/xoa/{id}', [ProductController::class, 'delete'])->name('product.delete');
-    Route::post('import', [ProductController::class, 'store'])->name('book.import');
+    Route::post('import', [ProductController::class, 'store'])->name('product.import');
 });
 
 Route::prefix('phu-kien')->group(function () {
@@ -144,10 +145,10 @@ Route::prefix('tin-tuc')->group(function () {
     Route::get('/', [BlogController::class, 'index'])->name('blog.index');
 
     Route::get('tao-moi', [BlogController::class, 'addForm'])->name('blog.add');
-    Route::post('tao-moi', [BlogController::class, 'saveAdd']);
+    Route::post('tao-moi', [BlogController::class, 'saveAdd'])->name('blog.saveAdd');
 
     Route::get('cap-nhat/{id}', [BlogController::class, 'editForm'])->name('blog.edit');
-    Route::post('cap-nhat/{id}', [BlogController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [BlogController::class, 'saveEdit'])->name('blog.saveEdit');
 
     Route::get('chi-tiet/{id}', [BlogController::class, 'detail'])->name('blog.detail');
 
@@ -178,10 +179,10 @@ Route::prefix('slide')->group(function () {
     Route::get('/', [SlideController::class, 'index'])->name('slide.index');
 
     Route::get('tao-moi', [SlideController::class, 'addForm'])->name('slide.add');
-    Route::post('tao-moi', [SlideController::class, 'saveAdd']);
+    Route::post('tao-moi', [SlideController::class, 'saveAdd'])->name('slide.saveAdd');
 
     Route::get('cap-nhat/{id}', [SlideController::class, 'editForm'])->name('slide.edit');
-    Route::post('cap-nhat/{id}', [SlideController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [SlideController::class, 'saveEdit'])->name('slide.saveEdit');
 
     Route::get('chi-tiet/{id}', [SlideController::class, 'detail'])->name('slide.detail');
 
