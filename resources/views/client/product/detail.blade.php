@@ -81,7 +81,6 @@
                         <button class="next fas fa-plus" onclick="nextQuantity()" id="nextQty"></button>
                     </div>
                 </div>
-                <!-- <a href="#" class="btn">Thêm vào giỏ hàng</a> -->
                 <button type="submit" class="btn">Thêm vào giỏ hàng</button>
                 <a href="#" class="btn">Mua hàng</a>
             </form>

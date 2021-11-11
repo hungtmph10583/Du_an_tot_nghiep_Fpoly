@@ -43,7 +43,7 @@
                                 <select name="delivery_status" id="" class="form-control">
                                     <option value="1" @if($order->delivery_status == 1) selected @endif>Đang chờ xử lý</option>
                                     <option value="2" @if($order->delivery_status == 2) selected @endif>Đang giao hàng</option>
-                                    <option value="3" @if($order->delivery_status == 3) selected @endif>Đã giao hàng</option>
+                                    <option value="3" @if($order->delivery_status == 3) selected @endif>Giao hàng thành công</option>
                                     <option value="0" @if($order->delivery_status == 0) selected @endif>Hủy đơn hàng</option>
                                 </select>
                             </div>

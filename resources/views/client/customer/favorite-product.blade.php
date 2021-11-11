@@ -1,4 +1,4 @@
-@section('title', 'Quản lý tài khoản')
+@section('title', 'Sản phẩm yêu thích')
 @extends('layouts.client.main')
 @section('content')
 @section('pageStyle')
@@ -43,22 +43,9 @@
             </ul>
         </div>
         <div class="account-info-right">
-            <div class="title">Thông tin cá nhân</div>
+            <div class="title">Sản phẩm yêu thich</div>
             <div class="group">
-                <label for="">Họ & tên:</label>
-                <span>{{Auth::user()->name}}</span>
-            </div>
-            <div class="group">
-                <label for="">Số điện thoại:</label>
-                <span>{{Auth::user()->phone}}</span>
-            </div>
-            <div class="group">
-                <label for="">Email:</label>
-                <span>{{Auth::user()->email}}</span>
-            </div>
-            <div class="group-last">
-                <a href="{{route('client.customer.updateinfo')}}" class="updateinfo">Cập nhật tài khoản</a>
-                <a href="{{route('changePassword')}}" class="changepassword">Đổi mật khẩu</a>
+                <img src="{{ asset('client-theme/images/error.jpg')}}" alt="error">
             </div>
         </div>
     </div>

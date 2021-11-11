@@ -93,11 +93,11 @@
                                             @endif
                                         text-light">
                                             @if($value->delivery_status == 1)
-                                                Đang chờ sử lý
+                                                Đang chờ xử lý
                                             @elseif($value->delivery_status == 2)
                                                 Đang giao hàng
                                             @elseif($value->delivery_status == 3)
-                                                Đã giao hàng
+                                                Giao hàng thành công
                                             @elseif($value->delivery_status == 0)
                                                 Hủy đơn hàng
                                             @else

@@ -28,11 +28,7 @@ class CartController extends Controller
         return view('client.cart.index');
     }
 
-    public function saveCart(Request $request){
-        $category = Category::all();
-        $gender = Gender::all();
-        $breed = Breed::all();
-
+    public function saveCart(Request $request){//Giỏ hàng
         $product_id = $request->product_id_hidden;
         $quantity = $request->quantity;
         $product_info = Product::where('id', $product_id)->first();
@@ -45,12 +41,25 @@ class CartController extends Controller
         $data['options']['image'] = $product_info->image;
         Cart::add($data);
         Cart::setGlobalTax(10);
-
-        
-        //$count = Cart::content()->count();
-        //Cart::destroy();
-        return redirect(route('showCart'));
+        return redirect()->back();
     }
+
+    // public function muaHang(Request $request){
+    //     $product_id = $request->product_id_hidden;
+    //     $quantity = $request->quantity;
+    //     $product_info = Product::where('id', $product_id)->first();
+
+    //     $data['id'] = $product_id;
+    //     $data['qty'] = $quantity;
+    //     $data['name'] = $product_info->name;
+    //     $data['price'] = $product_info->price;
+    //     $data['weight'] = $product_info->price;
+    //     $data['options']['image'] = $product_info->image;
+    //     Cart::add($data);
+    //     Cart::setGlobalTax(10);
+    //     return redirect(route('showCart'));
+    // }
+
 
     public function showCart(Request $request){
         $category = Category::all();

@@ -8,6 +8,8 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Address;
 use App\Models\City;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -88,16 +90,23 @@ class CustomerController extends Controller
         return redirect(route('client.customer.info'));
     }
 
-    public function proFile($id){
-        $user = User::find($id);
-        $user->load('model_has_role');
+    public function orderHistory(){
+        $user_id = Auth::user()->id;
+        $order = Order::where('user_id', $user_id)->get();
 
-        $mdh_role = ModelHasRole::all();
-        $role = Role::all();
-        return view('admin.user.pro-file', [
-            'user' => $user,
-            'mdh_role' => $mdh_role,
-            'role' => $role
+        $orderDetail = OrderDetail::all();
+
+        
+        return view('client.customer.order-history', [
+            'order' => $order,
+            'orderDetail' => $orderDetail,
         ]);
+    }
+
+    public function review(){
+        return view('client.customer.review');
+    }
+    public function favoriteProduct(){
+        return view('client.customer.favorite-product');
     }
 }

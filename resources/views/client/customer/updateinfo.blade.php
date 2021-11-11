@@ -43,9 +43,8 @@
                     <label for="">Số điện thoại <span class="text-red">*</span></label>
                     <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
                 </div>
-                <div class="group">
+                <!-- <div class="group">
                     <label for="city">Tỉnh/Thành phố</label>
-                    <!--  -->
                     <select name="city" id="">
                             <option value="">Chọn thành phố</option>
                         @foreach($city as $city)
@@ -67,7 +66,7 @@
                 </div>
                 @error('address')
                     <span class="text-danger">{{$message}}</span>
-                @enderror
+                @enderror -->
                 <div class="group-last">
                     <a href="{{route('client.customer.info')}}">Hủy bỏ</a>
                     <button type="submit">Cập nhật</button>
