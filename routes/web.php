@@ -39,6 +39,15 @@ Route::prefix('san-pham')->group(function () {
 
 Route::prefix('gio-hang')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('client.cart.index');
+    
+    Route::get('/show-cart', [CartController::class, 'showCart'])->name('showCart');
+    Route::post('/save-cart', [CartController::class, 'saveCart'])->name('saveCart');
+
+    Route::get('/delete-to-cart/{rowId}', [CartController::class, 'deleteToCart'])->name('deleteToCart');
+    Route::post('/update-cart-quantity/{rowId}', [CartController::class, 'updateCartQty'])->name('updateCartQty');
+
+    Route::get('checkout', [CartController::class, 'checkout'])->name('checkout');
+    Route::post('checkout', [CartController::class, 'saveCheckout']);
 
     Route::get('/chi-tiet/{id}', [CartController::class, 'detail'])->name('client.cart.detail');
     Route::post('/chi-tiet/{id}', [CartController::class, 'saveReview']);

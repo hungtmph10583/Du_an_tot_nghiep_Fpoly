@@ -54,7 +54,7 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Cân nặng</label>
-                                    <input type="text" name="weight" class="form-control" value="{{$model->weight}} kg" readonly>
+                                    <input type="text" name="weight" class="form-control" value="{{$model->weight}}" readonly>
                                 </div>
                             </div>
                         </div>

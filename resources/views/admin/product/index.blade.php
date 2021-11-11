@@ -95,12 +95,6 @@
                                 <thead>
                                     <th>STT</th>
                                     <th>Name</th>
-                                    <th>Image</th>
-                                    <th>Slug</th>
-                                    <th>Category</th>
-                                    <th>Price</th>
-                                    <th>Status</th>
-                                    <th>Quantity</th>
                                     <th><a href="{{route('product.add')}}" class="btn btn-outline-info float-right">Thêm
                                             sản phẩm</a></th>
                                 </thead>
@@ -194,30 +188,6 @@ $(document).ready(function() {
             {
                 data: 'name',
                 name: 'name',
-            },
-            {
-                data: 'image',
-                name: 'image',
-            },
-            {
-                data: 'slug',
-                name: 'slug',
-            },
-            {
-                data: 'category_id',
-                name: 'category_id',
-            },
-            {
-                data: 'price',
-                name: 'price',
-            },
-            {
-                data: 'status',
-                name: 'status',
-            },
-            {
-                data: 'quantity',
-                name: 'quantity',
             },
             {
                 data: 'action',

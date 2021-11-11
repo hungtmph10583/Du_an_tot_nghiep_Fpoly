@@ -64,8 +64,8 @@ Route::prefix('danh-muc')->group(function () {
 Route::prefix('don-hang')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('order.index');
 
-    Route::get('cap-nhat', [OrderController::class, 'editForm'])->name('order.edit');
-    // Route::get('cap-nhat/{id}', [OrderController::class, 'editForm'])->name('order.edit');
+    // Route::get('cap-nhat', [OrderController::class, 'editForm'])->name('order.edit');
+    Route::get('cap-nhat/{id}', [OrderController::class, 'editForm'])->name('order.edit');
     Route::post('cap-nhat/{id}', [OrderController::class, 'saveEdit']);;
 
     Route::get('chi-tiet/{id}', [OrderController::class, 'detail'])->name('order.detail');

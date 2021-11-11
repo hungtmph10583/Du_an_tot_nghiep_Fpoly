@@ -6,7 +6,7 @@
             <div class="card card-secondary my-0">
                 <div class="card-header">
                     <ol class="breadcrumb float-sm-left ">
-                        <li class="breadcrumb-item card-title">Danh sách danh mục</li>
+                        <li class="breadcrumb-item card-title">Danh sách đơn hàng</li>
                     </ol>
                 </div>
             </div><!-- /.row -->
@@ -61,86 +61,78 @@
                                 <th><span class="float-right mr-4">Lựa chọn</span></th>
                             </thead>
                             <tbody>
+                                @foreach($order as $value)
                                 <tr>
-                                    <td>1</td>
-                                    <td>121252-013251</td>
-                                    <td>4</td>
-                                    <td>Mạnh Hùng</td>
-                                    <td>3.205.000 <span>đ</span></td>
+                                    <td>{{(($order->currentPage()-1)*7) + $loop->iteration}}</td>
+                                    <td>{{$value->code}}</td>
                                     <td>
-                                        <span class="btn btn-sm btn-info text-light">Đã giao hàng</span>
+                                        <?php
+                                            $total = 0;
+                                            foreach ($orderDetail as $key => $vldt) {
+                                                if ($vldt->order_id == $value->id) {
+                                                    $total += $vldt->quantity;
+                                                }
+                                            }
+                                            echo $total.' sản phẩm';
+                                        ?>
+                                    </td>
+                                    <td>{{$value->name}}</td>
+                                    <td>{{number_format($value->grand_total,0,',','.')}}<span>đ</span></td>
+                                    <td>
+                                        <span class="btn btn-sm 
+                                            @if($value->delivery_status == 1)
+                                                btn-secondary
+                                            @elseif($value->delivery_status == 2)
+                                                btn-warning
+                                            @elseif($value->delivery_status == 3)
+                                                btn-success
+                                            @elseif($value->delivery_status == 0)
+                                                btn-danger
+                                            @else
+                                                btn-danger
+                                            @endif
+                                        text-light">
+                                            @if($value->delivery_status == 1)
+                                                Đang chờ sử lý
+                                            @elseif($value->delivery_status == 2)
+                                                Đang giao hàng
+                                            @elseif($value->delivery_status == 3)
+                                                Đã giao hàng
+                                            @elseif($value->delivery_status == 0)
+                                                Hủy đơn hàng
+                                            @else
+                                                Lỗi code
+                                            @endif
+                                        </span>
                                     </td>
                                     <td>
-                                        <span class="btn btn-sm btn-success text-light">Đã thanh toán</span>
+                                        <span class="btn btn-sm 
+                                            @if($value->payment_status == 1)
+                                                btn-danger
+                                            @elseif($value->payment_status == 2)
+                                                btn-success
+                                            @else
+                                                btn-danger
+                                            @endif
+                                        text-light">
+                                            @if($value->payment_status == 1)
+                                                Chưa thanh toán
+                                            @elseif($value->payment_status == 2)
+                                                Đã thanh toán
+                                            @else
+                                                Lỗi code
+                                            @endif
+                                        </span>
                                     </td>
                                     <td>
                                         <span class="float-right">
                                             <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                                            <a href="{{route('order.edit', ['id' => $value->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
                                             <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>121252-018741</td>
-                                    <td>2</td>
-                                    <td>Huy</td>
-                                    <td>205.000 <span>đ</span></td>
-                                    <td>
-                                        <span class="btn btn-sm btn-secondary text-light">Đang chờ sử lý</span>
-                                    </td>
-                                    <td>
-                                        <span class="btn btn-sm btn-danger text-light">Chưa thanh toán</span>
-                                    </td>
-                                    <td>
-                                        <span class="float-right">
-                                            <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
-                                            <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>121252-084241</td>
-                                    <td>3</td>
-                                    <td>Ngoc</td>
-                                    <td>405.000 <span>đ</span></td>
-                                    <td>
-                                        <span class="btn btn-sm btn-danger text-light">Hủy đơn hàng</span>
-                                    </td>
-                                    <td>
-                                        <span class="btn btn-sm btn-danger text-light">Chưa thanh toán</span>
-                                    </td>
-                                    <td>
-                                        <span class="float-right">
-                                            <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
-                                            <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
-                                        </span>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>121252-084741</td>
-                                    <td>1</td>
-                                    <td>Thọ</td>
-                                    <td>150.000 <span>đ</span></td>
-                                    <td>
-                                        <span class="btn btn-sm btn-primary text-light">Đã xác nhận</span>
-                                    </td>
-                                    <td>
-                                        <span class="btn btn-sm btn-success text-light">Đã thanh toán</span>
-                                    </td>
-                                    <td>
-                                        <span class="float-right">
-                                            <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                                            <a href="{{route('order.edit')}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
-                                            <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
-                                        </span>
-                                    </td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-end">

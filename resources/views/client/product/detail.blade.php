@@ -20,66 +20,71 @@
             </ul>
         </div>
         <div class="product-item-description">
-            <h1 class="name">{{$model->name}}</h1>
-            <div class="product-extra-star">
-                <span class="star">
-                    @for($count=1; $count<=5; $count++)
-                        @if($count <= $rating)
-                            <i class="fas fa-star rating"></i>
-                        @elseif($countReview == 0)
-                            <i class="fas fa-star rating"></i>
-                        @else
-                            <i class="far fa-star"></i>
-                        @endif
-                    @endfor
-                </span>
-            </div>
-            <div class="product-extra-icons">
-                <ul>
-                    <li>
-                        <i class="fas fa-eye"></i>
-                        <span class="number">20</span>
-                        <span>lượt xem</span>
-                    </li>
-                    <li>
-                        <i class="far fa-comments"></i>
-                        <span class="number">{{$countReview}}</span>
-                        <span>Đánh giá</span>
-                    </li>
-                </ul>
-            </div>
-            <div class="item-extra">
-                <h6>Giá bán</h6>
-                @if($model->discount == '')
-                <span class="discount">{{number_format($model->price)}}đ</span>
-                @else
-                <span class="price">{{number_format($model->price)}}đ</span>
-                <span class="discount">{{number_format($model->discount)}}đ</span>
-                @endif
-            </div>
-            <div class="item-extra">
-                <h6>Danh mục</h6>
-                <span class="box">{{$model->category->name}}</span>
-            </div>
-            <div class="item-extra">
-                <h6>Giới tính</h6>
-                <span class="box">{{$model->gender->gender}}</span>
-            </div>
-            <div class="item-extra">
-                <h6>Giống loài</h6>
-                <span class="box">{{$model->breed->name}}</span>
-            </div>
-            <div class="item-extra">
-                <h6>Số lượng</h6>
-                <div class="quantity">
-                    <button class="back fas fa-minus" onclick="backQuantity()"></button>
-                    <input id="quantity" min="1" max="5" name="quantity" type="number" value="1" />
-                    <input type="hidden" value="{{$model->quantity}}" id="maxQuantityProduct">
-                    <button class="next fas fa-plus" onclick="nextQuantity()" id="nextQty"></button>
+                <h1 class="name">{{$model->name}}</h1>
+                <div class="product-extra-star">
+                    <span class="star">
+                        @for($count=1; $count<=5; $count++)
+                            @if($count <= $rating)
+                                <i class="fas fa-star rating"></i>
+                            @elseif($countReview == 0)
+                                <i class="fas fa-star rating"></i>
+                            @else
+                                <i class="far fa-star"></i>
+                            @endif
+                        @endfor
+                    </span>
                 </div>
-            </div>
-            <a href="#" class="btn">Thêm vào giỏ hàng</a>
-            <a href="#" class="btn">Mua hàng</a>
+                <div class="product-extra-icons">
+                    <ul>
+                        <li>
+                            <i class="fas fa-eye"></i>
+                            <span class="number">20</span>
+                            <span>lượt xem</span>
+                        </li>
+                        <li>
+                            <i class="far fa-comments"></i>
+                            <span class="number">{{$countReview}}</span>
+                            <span>Đánh giá</span>
+                        </li>
+                    </ul>
+                </div>
+                <div class="item-extra">
+                    <h6>Giá bán</h6>
+                    @if($model->discount == '')
+                    <span class="discount">{{number_format($model->price)}}đ</span>
+                    @else
+                    <span class="price">{{number_format($model->price)}}đ</span>
+                    <span class="discount">{{number_format($model->discount)}}đ</span>
+                    @endif
+                </div>
+                <div class="item-extra">
+                    <h6>Danh mục</h6>
+                    <span class="box">{{$model->category->name}}</span>
+                </div>
+                <div class="item-extra">
+                    <h6>Giới tính</h6>
+                    <span class="box">{{$model->gender->gender}}</span>
+                </div>
+                <div class="item-extra">
+                    <h6>Giống loài</h6>
+                    <span class="box">{{$model->breed->name}}</span>
+                </div>
+            <form action="{{route('saveCart')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+                <input type="hidden" name="product_id_hidden" value="{{$model->id}}">
+                <div class="item-extra">
+                    <h6>Số lượng</h6>
+                    <div class="quantity">
+                        <button class="back fas fa-minus" onclick="backQuantity()"></button>
+                        <input id="quantity" min="1" max="5" name="quantity" type="number" value="1" />
+                        <input type="hidden" value="{{$model->quantity}}" id="maxQuantityProduct">
+                        <button class="next fas fa-plus" onclick="nextQuantity()" id="nextQty"></button>
+                    </div>
+                </div>
+                <!-- <a href="#" class="btn">Thêm vào giỏ hàng</a> -->
+                <button type="submit" class="btn">Thêm vào giỏ hàng</button>
+                <a href="#" class="btn">Mua hàng</a>
+            </form>
         </div>
     </div>
 </section>

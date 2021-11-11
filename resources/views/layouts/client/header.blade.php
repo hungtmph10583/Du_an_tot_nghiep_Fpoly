@@ -19,12 +19,14 @@
                 <div class="header-item none"></div>
                 <ul class="header-item">
                     @if(Auth::check())
+                    @hasanyrole('admin|manage')
                     <li>
                         <a href="{{route('dashboard.index')}}">
                         <i class="fas fa-cogs"></i>
                             <span>Đăng nhập quản trị</span>
                         </a>
                     </li>
+                    @endhasanyrole
                     <li>
                         <a href="{{route('client.customer.info')}}">
                             <i class="fas fa-user"></i>
@@ -99,7 +101,12 @@
                         <a href="{{route('client.cart.index')}}">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="title">Giỏ hàng</span>
-                            <span class="btn-number">3</span>
+                            <span class="btn-number">
+                                <?php
+                                    $count = Cart::content()->count();
+                                ?>
+                                    {{$count}}
+                            </span>
                         </a>
                     </div>
                 </div>
