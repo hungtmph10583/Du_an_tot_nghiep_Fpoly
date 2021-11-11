@@ -20,11 +20,11 @@ class Blog extends Model
         'status'
     ];
 
-    public function BlogCategory(){
+    public function blogCategory(){
         return $this->belongsTo(User::class, 'category_blog_id');
     }
 
-    public function User(){
+    public function user(){
         return $this->belongsTo(User::class, 'user_id');
     }
 }

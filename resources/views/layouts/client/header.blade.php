@@ -85,7 +85,7 @@
                                 <a href="{{route('client.product.index')}}">Sản phẩm</a>
                             </li>
                             <li>
-                                <a href="./blog.html">Tin tức</a>
+                                <a href="{{route('client.blog.index')}}">Tin tức</a>
                             </li>
                             <li>
                                 <a href="./contact.html">Liên hệ</a>

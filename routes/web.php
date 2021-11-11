@@ -12,6 +12,7 @@ use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CustomerController;
+use App\Http\Controllers\Client\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,7 +29,7 @@ use App\Http\Controllers\Client\CustomerController;
 //     return view('welcome');
 // });
 Route::get('/', [HomeController::class, 'home'])->name('client.home');
-Route::get('/trang-chu', [HomeController::class, 'home'])->name('client.homes');
+Route::get('/trang-chu', [HomeController::class, 'home'])->name('client.home');
 
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('client.product.index');
@@ -64,6 +65,11 @@ Route::prefix('tai-khoan')->middleware('auth')->group(function () {
     Route::get('lich-su-don-hang', [CustomerController::class, 'orderHistory'])->name('client.customer.orderHistory');
     Route::get('danh-gia-san-pham', [CustomerController::class, 'review'])->name('client.customer.review');
     Route::get('san-pham-yeu-thich', [CustomerController::class, 'favoriteProduct'])->name('client.customer.favoriteProduct');
+});
+
+Route::prefix('bai-viet')->group(function () {
+    Route::get('/', [BlogController::class, 'index'])->name('client.blog.index');
+    Route::get('/chi-tiet/{id}', [BlogController::class, 'detail'])->name('client.blog.detail');
 });
 
 
