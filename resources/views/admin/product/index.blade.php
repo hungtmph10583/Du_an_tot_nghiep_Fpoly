@@ -14,12 +14,20 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
             <div class="card-body">
+                @if(session('BadState'))
+                <div class="alert alert-danger" role="alert">
+                    {{session('BadState')}}
+                </div>
+                @elseif(session('GoodState'))
+                <div class="alert alert-success" role="alert">
+                    {{session('GoodState')}}
+                </div>
+                @endif
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
@@ -99,12 +107,9 @@
                                 <thead>
                                     <th>STT</th>
                                     <th>Name</th>
-                                    <th>Image</th>
-                                    <th>Slug</th>
                                     <th>Category</th>
                                     <th>Price</th>
                                     <th>Status</th>
-                                    <th>Quantity</th>
                                     <th><a href="{{route('product.add')}}" class="btn btn-outline-info float-right">Thêm
                                             sản phẩm</a></th>
                                 </thead>
@@ -200,14 +205,6 @@ $(document).ready(function() {
                 name: 'name',
             },
             {
-                data: 'image',
-                name: 'image',
-            },
-            {
-                data: 'slug',
-                name: 'slug',
-            },
-            {
                 data: 'category_id',
                 name: 'category_id',
             },
@@ -218,10 +215,6 @@ $(document).ready(function() {
             {
                 data: 'status',
                 name: 'status',
-            },
-            {
-                data: 'quantity',
-                name: 'quantity',
             },
             {
                 data: 'action',

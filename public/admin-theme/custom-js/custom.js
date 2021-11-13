@@ -48,6 +48,7 @@ function removeImg(el) {
 //áp dụng với file index
 function deleteData(id) {
     var urlData = window.location;
+    console.log($("input[name=_token]").val())
     if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
         $.ajax({
             url: urlData + '/xoa/' + id,

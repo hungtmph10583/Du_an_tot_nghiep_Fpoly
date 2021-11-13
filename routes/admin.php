@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\GeneralSettingController;
+use App\Http\Controllers\Admin\UploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +33,7 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::prefix('tai-khoan')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
-    Route::get('xoa/{id}', [UserController::class, 'remove'])->name('user.remove');
+    Route::delete('xoa/{id}', [UserController::class, 'remove'])->name('user.remove');
     Route::get('tao-moi', [UserController::class, 'addForm'])->name('user.add');
     Route::post('tao-moi', [UserController::class, 'saveAdd'])->name('user.saveAdd');
     Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->name('user.edit');
@@ -153,18 +154,23 @@ Route::prefix('tin-tuc')->group(function () {
     Route::get('chi-tiet/{id}', [BlogController::class, 'detail'])->name('blog.detail');
 
     Route::get('xoa/{id}', [BlogController::class, 'remove'])->name('blog.remove');
+    Route::post('upload', [BlogController::class, 'upload'])->name('blog.upload');
+
+    Route::get('dataBlog', [BlogController::class, 'getData'])->name('blog.filter');
 });
 
 Route::prefix('danh-muc-tin-tuc')->group(function () {
     Route::get('/', [BlogCategoryController::class, 'index'])->name('blogCategory.index');
 
     Route::get('tao-moi', [BlogCategoryController::class, 'addForm'])->name('blogCategory.add');
-    Route::post('tao-moi', [BlogCategoryController::class, 'saveAdd']);
+    Route::post('tao-moi', [BlogCategoryController::class, 'saveAdd'])->name('blogCategory.saveAdd');
 
     Route::get('cap-nhat/{id}', [BlogCategoryController::class, 'editForm'])->name('blogCategory.edit');
-    Route::post('cap-nhat/{id}', [BlogCategoryController::class, 'saveEdit']);
+    Route::post('cap-nhat/{id}', [BlogCategoryController::class, 'saveEdit'])->name('blogCategory.saveEdit');
 
     Route::get('xoa/{id}', [BlogCategoryController::class, 'remove'])->name('blogCategory.remove');
+
+    Route::get('dataBlogCategory', [BlogCategoryController::class, 'getData'])->name('blogCategory.filter');
 });
 
 Route::prefix('thong-tin-he-thong')->group(function () {

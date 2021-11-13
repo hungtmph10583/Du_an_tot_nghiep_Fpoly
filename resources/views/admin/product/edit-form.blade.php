@@ -153,7 +153,8 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col"><label for="">Giảm giá</label>
+                        <div class="col">
+                            <label for="">Giảm giá</label>
                             <input type="text" class="form-control" name="discount" placeholder="Giảm giá"
                                 value="{{$model->discount}}">
                         </div>

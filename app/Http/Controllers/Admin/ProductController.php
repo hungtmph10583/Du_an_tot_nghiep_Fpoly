@@ -50,15 +50,6 @@ class ProductController extends Controller
             ->addColumn('category_id', function ($row) {
                 return $row->category->name;
             })
-            ->addColumn('image', function ($row) {
-                $img = $row->image;
-                $find = strpos($img, 'products/');
-                if ($find == false) {
-                    return '<img class="img-fluid" width="70" src="' . $row->image . '" alt="">';
-                } else {
-                    return '<img class="img-fluid" width="70" src="' . asset('storage/' . $row->image) . '" alt="">';
-                }
-            })
             ->addColumn('status', function ($row) {
                 if ($row->status == 1) {
                     return '<span class="badge badge-primary">Active</span>';
@@ -105,7 +96,7 @@ class ProductController extends Controller
                     });
                 }
             })
-            ->rawColumns(['status', 'action', 'image'])
+            ->rawColumns(['status', 'action'])
             ->make(true);
     }
 
@@ -123,8 +114,8 @@ class ProductController extends Controller
     {
 
         $message = [
-            'name.required' => "Hãy nhập vào tên danh mục",
-            'name.unique' => "Tên thú cưng đã tồn tại",
+            'name.required' => "Hãy nhập vào tên thú cưng",
+            'name.unique' => "Tên thú cưng đã tồn tại hoặc đã tồn tại trong thùng rác",
             'category_id.required' => "Hãy chọn danh mục",
             'price.required' => "Hãy nhập giá thú cưng",
             'price.numeric' => "Giá thú cưng phải là số",
@@ -165,6 +156,11 @@ class ProductController extends Controller
             $message
         );
         if ($validator->fails()) {
+            if ($request->name) {
+                $dupicate = Product::withTrashed()
+                    ->where('name', 'like', $request->name)->first();
+                return response()->json(['status' => 0, 'error' => $validator->errors(), 'dupicate' => $dupicate]);
+            }
             return response()->json(['status' => 0, 'error' => $validator->errors()]);
         } else {
             $model = new Product();
@@ -216,7 +212,7 @@ class ProductController extends Controller
         $model = Product::find($id);
 
         if (!$model) {
-            return redirect()->back();
+            return redirect()->back()->with('BadState', 'Sản phẩm có id là ' . $id . 'không tồn tại');
         }
 
         $message = [
@@ -260,6 +256,11 @@ class ProductController extends Controller
         );
 
         if ($validator->fails()) {
+            if ($request->name) {
+                $dupicate = Product::withTrashed()
+                    ->where('name', 'like', $request->name)->first();
+                return response()->json(['status' => 0, 'error' => $validator->errors(), 'dupicate' => $dupicate]);
+            }
             return response()->json(['status' => 0, 'error' => $validator->errors()]);
         } else {
             $model->user_id = Auth::id();
@@ -306,9 +307,13 @@ class ProductController extends Controller
     public function detail($id)
     {
         $model = Product::find($id);
-        $model->load('category', 'breed', 'gender');
         if (!$model) {
             $model = Product::onlyTrashed()->find($id);
+            if (!$model) {
+                return redirect()->back()->with('BadState', 'Sản phẩm có id là ' . $id . ' không tồn tại');
+            }
+        } else {
+            $model->load('category', 'breed', 'gender');
         }
         $category = Category::all();
         $breed = Breed::all();

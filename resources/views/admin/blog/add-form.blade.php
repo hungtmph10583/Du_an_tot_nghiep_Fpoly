@@ -1,4 +1,5 @@
-@extends('layouts.admin.main') @section('content')
+@extends('layouts.admin.main')
+@section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
@@ -153,7 +154,7 @@ $(document).ready(function() {
             var xhr, formData;
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
-            xhr.open('POST', "");
+            xhr.open('POST', "{{route('blog.upload')}}");
             var token = '{{csrf_token()}}';
             xhr.setRequestHeader("X-CSRF-Token", token);
             xhr.onload = function() {
@@ -184,7 +185,7 @@ $(".btn-info").click(function(e) {
     formData.set('title', title);
     formData.append('slug', $('input[name="slug"]').val())
     $.ajax({
-        url: "{{route('product.saveAdd')}}",
+        url: "{{route('blog.saveAdd')}}",
         type: 'POST',
         data: formData,
         dataType: 'json',

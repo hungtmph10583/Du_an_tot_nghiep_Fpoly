@@ -20,6 +20,7 @@
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
             <div class="card-body">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
                         <div class="table-responsive">

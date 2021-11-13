@@ -74,24 +74,20 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Giá bán</label>
-                                    <input type="text" name="price" class="form-control" placeholder="Giá bán">
+                                    <input type="number" name="price" class="form-control" placeholder="Giá bán">
                                     <span class="text-danger error_text price_error"></span>
                                 </div>
                             </div>
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Số lượng sản phẩm</label>
-                                    <input type="text" name="quantity" class="form-control"
+                                    <input type="number" name="quantity" class="form-control"
                                         placeholder="Số lượng sản phẩm">
                                     <span class="text-danger error_text quantity_error"></span>
                                 </div>
-                            <div class="form-group">
-                                <label for="">Giá bán</label>
-                                <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá bán">
-                                @error('price')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="">Trạng thái</label>
@@ -138,77 +134,67 @@
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col">
                     <div class="card">
                         <div class="card-body">
-                            <h5 class="card-title">Thông tin thêm</h5>
+                            <div class="card-title">Thông tin phiếu giảm giá</div>
                         </div>
                         <div class="card-body">
-                            <div class="form-group">
-                                <label for="">Ảnh sản phẩm</label>
-                                <input type="file" name="uploadfile" class="form-control">
-                                @error('uploadfile')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
-                            </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="">Kiểu giảm giá</label>
-                                    <select name="discount_type" id="type" class="form-control">
-                                        <option value="">Kiểu giảm giá</option>
-                                        @foreach($discountType as $dt)
-                                        <option value="{{$dt->id}}">{{$dt->name}}</option>
-                                        @endforeach
-                                    </select>
+                            <div class="row">
+                                <div class="col">
+                                    <label for="">Giảm giá</label>
+                                    <input type="text" class="form-control" name="discount" placeholder="Giảm giá">
+                                </div>
+                                <div class="col">
+                                    <div class="form-group">
+                                        <label for="">Kiểu giảm giá</label>
+                                        <select name="discount_type" id="type" class="form-control">
+                                            <option value="">Kiểu giảm giá</option>
+                                            @foreach($discountType as $dt)
+                                            <option value="{{$dt->id}}">{{$dt->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="">Trạng thái</label>
-                                        <select name="status" id="" class="form-control">
-                                            <option value="1">Còn hàng</option>
-                                            <option value="0">Hết hàng</option>
-                                        </select>
+                                        <label for="">Ngày bắt đầu</label>
+                                        <input type="date" class="form-control" name="discount_start_date">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <label for="">Nổi bật</label>
-                                        <select name="featured " id="" class="form-control">
-                                            <option value="1">Hiển thị</option>
-                                            <option value="0">Không</option>
-                                        </select>
+                                        <label for="">Ngày kết thúc</label>
+                                        <input type="date" class="form-control" name="discount_end_date">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-stripped">
-                                    <thead>
-                                        <th>File</th>
-                                        <th>Thumbnail</th>
-                                        <th>
-                                            <button class="btn btn-success add-img float-right" type="button">Thêm
-                                                ảnh</button>
-                                        </th>
-                                    </thead>
-                                    <tbody id="gallery">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-stripped">
+                                        <thead>
+                                            <th>File</th>
+                                            <th>Thumbnail</th>
+                                            <th>
+                                                <button class="btn btn-success add-img float-right" type="button">Thêm
+                                                    ảnh</button>
+                                            </th>
+                                        </thead>
+                                        <tbody id="gallery">
 
-                                    </tbody>
-                                </table>
-                                <span class="text-danger error_text galleries_error"></span>
+                                        </tbody>
+                                    </table>
+                                    <span class="text-danger error_text galleries_error"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
                 <div class="card">
                     <div class="card-body">
                         <div class="col-12">
@@ -347,6 +333,11 @@ $(".btn-info").click(function(e) {
                 $.each(data.error, function(key, value) {
                     $('span.' + key + '_error').text(value[0]);
                 });
+                if (data.dupicate) {
+                    alert(
+                        'Tên sản phẩm đã tồn tại trong thùng rác . Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác'
+                    );
+                }
             } else {
                 window.location.href = data.url;
             }

@@ -5,7 +5,8 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('category.index')}}">Danh sách danh mục tin tức</a></li>
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('category.index')}}">Danh sách danh
+                            mục tin tức</a></li>
                     <li class="breadcrumb-item active">Sửa danh mục tin tức</li>
                 </ol>
             </div>
@@ -27,12 +28,12 @@
                         <div class="col-6">
                             <div class="form-group">
                                 <label for="">Tên danh mục tin tức</label>
-                                <input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tiêu đề danh mục tin tức">
-                                @error('name')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <input type="text" name="name" id="name" class="form-control" value="{{$model->name}}"
+                                    placeholder="Tiêu đề danh mục tin tức">
+                                <span class="text-danger error_text name_error"></span>
                             </div>
                         </div>
+                        <input type="hidden" name="slug" id="slug" value="{{$model->id}}">
                         <div class="col-6 mt-2"><br>
                             <div class="text-left">
                                 <button type="submit" class="btn btn-info">Lưu</button>
@@ -48,4 +49,67 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+@endsection
+@section('pagejs')
+<link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">
+<script>
+function slugify(str) {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+    // remove accents, swap ñ for n, etc
+    var from = "ạảầấậẩẫăằắặẳẵãàáäâẹẻềếệểễẽèéëêìíịĩỉïîọỏõồốộổỗơờớợởỡõòóöôụủũưừứựửữùúüûñçỳýỵỷỹđ·/_,:;";
+    var to = "aaaaaaaaaaaaaaaaaaeeeeeeeeeeeeiiiiiiiooooooooooooooooooouuuuuuuuuuuuuncyyyyyd------";
+    for (var i = 0, l = from.length; i < l; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+        .replace(/-+/g, '-'); // collapse dashes
+    return str;
+}
+$(document).ready(function() {
+    var name = $('#name');
+    var slug = $('#slug');
+    name.keyup(function() {
+        slug.val(slugify(name.val()));
+    });
+});
+$(".btn-info").click(function(e) {
+    e.preventDefault();
+    var formData = new FormData($('form')[0]);
+    let nameValue = $('#name').val();
+    let name = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
+    formData.set('name', name);
+    formData.append('slug', $('input[name="slug"]').val())
+    $.ajax({
+        url: "{{ route('blogCategory.saveEdit',['id'=>$model->id]) }}",
+        type: 'POST',
+        data: formData,
+        dataType: 'json',
+        cache: false,
+        contentType: false,
+        processData: false,
+        beforeSend: function(data) {
+            $(document).find('span.error_text').text('');
+        },
+        success: function(data) {
+            console.log(data)
+            if (data.status == 0) {
+                $.each(data.error, function(key, value) {
+                    $('span.' + key + '_error').text(value[0]);
+                });
+            } else {
+                window.location.href = data.url;
+            }
+        },
+    });
+});
+$('select').map(function(i, dom) {
+    var idSelect = $(dom).attr('id');
+    console.log(i)
+    $('#' + idSelect).select2({
+        placeholder: 'Select ' + idSelect
+    });
+})
+</script>
 @endsection

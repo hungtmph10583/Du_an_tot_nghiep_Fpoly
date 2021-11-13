@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Review extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'reviews';
     protected $fillable = [
         'product_id',
@@ -17,11 +18,13 @@ class Review extends Model
         'status'
     ];
 
-    public function product(){
+    public function product()
+    {
         return $this->belongsTo(Category::class, 'product_id');
     }
 
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 }

@@ -19,8 +19,17 @@
 <section class="content">
     <div class="container-fluid pb-1">
         <div class="card">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
             <div class="card-body">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+                @if(session('BadState'))
+                <div class="alert alert-danger" role="alert">
+                    {{session('BadState')}}
+                </div>
+                @elseif(request()->get('status')))
+                <div class="alert alert-success" role="alert">
+                    {{str_replace('-',' ',request()->get('status'))}}
+                </div>
+                @endif
                 <div class="row">
                     <div style="width: 100%;">
                         <div class="table-responsive">

@@ -64,6 +64,9 @@ class CategoryController extends Controller
 
     public function saveAdd(Request $request, $id = null)
     {
+        $dupicate = Category::withTrashed()
+            ->where('name', 'like', '%' . $request->name . '%')->first();
+
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên thú cưng đã tồn tại",
@@ -87,7 +90,7 @@ class CategoryController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'dupicate' => $dupicate]);
         } else {
             $model = new Category();
             $model->fill($request->all());
@@ -99,7 +102,7 @@ class CategoryController extends Controller
             }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/danh-muc')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('category.index', ['status' => 'Thêm-danh-mục-thành-công'])]);
     }
 
     public function editForm($id)

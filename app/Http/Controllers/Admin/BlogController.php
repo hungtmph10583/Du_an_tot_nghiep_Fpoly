@@ -9,53 +9,84 @@ use App\Models\BlogCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Yajra\Datatables\Datatables;
 
 class BlogController extends Controller
 {
     public function index(Request $request)
     {
-        $pagesize = 7;
-        $searchData = $request->except('page');
-
-        if (count($request->all()) == 0) {
-            // Lấy ra danh sách tin tức & phân trang cho nó
-            $blog = Blog::paginate($pagesize);
-        }
-
-        // trả về cho người dùng 1 giao diện + dữ liệu categories vừa lấy đc 
-        return view('admin.blog.index', [
-            'blog' => $blog,
-            'searchData' => $searchData
-        ]);
+        return view('admin.blog.index');
     }
 
+    public function getData(Request $request)
+    {
+        $category = Blog::select('blogs.*');
+        return dataTables::of($category)
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
+            ->addIndexColumn()
+            ->orderColumn('category_blog_id', function ($row, $order) {
+                return $row->orderBy('category_blog_id', $order);
+            })
+            ->addColumn('category_blog_id', function ($row) {
+                return $row->BlogCategory->name;
+            })
+            ->addColumn('action', function ($row) {
+                return '
+                <span class="float-right">
+                    <a href="' . route('blog.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                    <a href="' . route('blog.edit', ['id' => $row->id]) . '" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-outline-danger"href="' . route('blog.remove', ['id' => $row->id]) . '"><i class="far fa-trash-alt"></i></a>
+                </span>';
+            })
+            ->filter(function ($instance) use ($request) {
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('title', 'LIKE', "%$search%")
+                            ->orWhere('slug', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['action'])
+            ->make(true);
+    }
     public function addForm()
     {
         $categoryBlog = BlogCategory::all();
         return view('admin.blog.add-form', compact('categoryBlog'));
     }
 
+    public function upload(Request $request)
+    {
+        $uploadImg = $request->file('file')->store('images', 'public');
+        return json_encode(['location' => "/storage/$uploadImg"]);
+    }
+
     public function saveAdd(Request $request, $id = null)
     {
         $model = new Blog();
         $message = [
-            'name.required' => "Hãy nhập vào tên danh mục",
-            'name.unique' => "Tên thú cưng đã tồn tại",
-            'category_type_id.required' => "Hãy chọn danh mục",
-            'show_slide.required' => "Hãy chọn trạng thái thú cưng",
-            'image.required' => 'Hãy chọn ảnh thú cưng',
+            'title.required' => "Hãy nhập vào chủ đề bài viết",
+            'title.unique' => "Tên chủ đề bài viết đã tồn tại",
+            'category_blog_id.required' => "Hãy chọn danh mục",
+            'status' => 'Hãy chọn trạng thái bài viết',
+            'content' => 'Hãy nhập nội dung bài viết',
+            'image.required' => 'Hãy chọn ảnh bài viết',
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'image.max' => 'File ảnh không được quá 2MB',
         ];
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => [
+                'title' => [
                     'required',
-                    Rule::unique('categories')->ignore($id)
+                    Rule::unique('blogs')->ignore($id)
                 ],
-                'category_type_id' => 'required',
-                'show_slide' => 'required',
+                'category_blog_id' => 'required',
+                'status' => 'required',
+                'content' => 'required',
                 'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
@@ -74,17 +105,18 @@ class BlogController extends Controller
 
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/danh-muc')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/tin-tuc')]);
     }
 
     public function editForm($id)
     {
         $model = Blog::find($id);
+        $categoryBlog = BlogCategory::all();
 
         if (!$model) {
             return redirect()->back();
         }
-        return view('admin.blog.edit-form', compact('model'));
+        return view('admin.blog.edit-form', compact('model', 'categoryBlog'));
     }
 
     public function saveEdit($id, Request $request)
@@ -93,51 +125,44 @@ class BlogController extends Controller
         if (!$model) {
             return redirect()->back();
         }
-        $model->fill($request->all());
-        $title = $request->title;
-        $slug = $request->title;
-        /**
-         * Chuyen doi ky tu chu thanh slug
-         * @date: 28/09/21
-         * hungtmph10583
-         * Start
-         */
-        $unicode = array(
-            'a' => 'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ',
-            'd' => 'đ',
-            'e' => 'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ',
-            'i' => 'í|ì|ỉ|ĩ|ị',
-            'o' => 'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
-            'u' => 'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
-            'y' => 'ý|ỳ|ỷ|ỹ|ỵ',
-            'A' => 'Á|À|Ả|Ã|Ạ|Ă|Ắ|Ặ|Ằ|Ẳ|Ẵ|Â|Ấ|Ầ|Ẩ|Ẫ|Ậ',
-            'D' => 'Đ',
-            'E' => 'É|È|Ẻ|Ẽ|Ẹ|Ê|Ế|Ề|Ể|Ễ|Ệ',
-            'I' => 'Í|Ì|Ỉ|Ĩ|Ị',
-            'O' => 'Ó|Ò|Ỏ|Õ|Ọ|Ô|Ố|Ồ|Ổ|Ỗ|Ộ|Ơ|Ớ|Ờ|Ở|Ỡ|Ợ',
-            'U' => 'Ú|Ù|Ủ|Ũ|Ụ|Ư|Ứ|Ừ|Ử|Ữ|Ự',
-            'Y' => 'Ý|Ỳ|Ỷ|Ỹ|Ỵ',
+        $message = [
+            'title.required' => "Hãy nhập vào chủ đề bài viết",
+            'title.unique' => "Tên chủ đề bài viết đã tồn tại",
+            'category_blog_id.required' => "Hãy chọn danh mục",
+            'status' => 'Hãy chọn trạng thái bài viết',
+            'content' => 'Hãy nhập nội dung bài viết',
+            'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'image.max' => 'File ảnh không được quá 2MB',
+        ];
+        $validator = Validator::make(
+            $request->all(),
+            [
+                'title' => [
+                    'required',
+                    Rule::unique('blogs')->ignore($id)
+                ],
+                'category_blog_id' => 'required',
+                'status' => 'required',
+                'content' => 'required',
+                'image' => 'mimes:jpg,bmp,png,jpeg|max:2048'
+            ],
+            $message
         );
-        foreach ($unicode as $key => $value) {
-            $slug = preg_replace("/($value)/i", $key, $slug);
-        }
-        $slug = str_replace(' ', '-', $slug);
-        $model->slug = strtolower($slug);
-        /**
-         * End
-         */
-        $model->user_id = Auth::user()->id;
-        $model->title = ucwords($title);
-        if ($request->has('uploadfile')) {
-            $model->image = $request->file('uploadfile')->storeAs(
-                'uploads/blog/' . $model->id,
-                uniqid() . '-' . $request->uploadfile->getClientOriginalName()
-            );
+        if ($validator->fails()) {
+            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+        } else {
+            $model->fill($request->all());
+
+            $model->user_id = Auth::user()->id;
+            if ($request->has('image')) {
+                $model->image = $request->file('image')->storeAs(
+                    'uploads/blog/',
+                    uniqid() . '-' . $request->image->getClientOriginalName()
+                );
+            }
             $model->save();
         }
-
-        $model->save();
-        return redirect(route('blog.index'));
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/tin-tuc')]);
     }
 
     public function detail($id)

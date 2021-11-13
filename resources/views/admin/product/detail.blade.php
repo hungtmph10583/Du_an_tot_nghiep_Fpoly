@@ -1,101 +1,154 @@
 @extends('layouts.admin.main')
 @section('content')
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-        <div class="container-fluid">
-            <div class="card card-secondary my-0">
-                <div class="card-header">
-                    <ol class="breadcrumb float-sm-left ">
-                        <li class="breadcrumb-item"><a class="card-title" href="{{route('product.index')}}">Danh sách sản phẩm</a></li>
-                        <li class="breadcrumb-item active">Sửa sản phẩm</li>
-                    </ol>
-                </div>
-            </div><!-- /.row -->
-        </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="card card-secondary my-0">
+            <div class="card-header">
+                <ol class="breadcrumb float-sm-left ">
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('product.index')}}">Danh sách sản
+                            phẩm</a></li>
+                    <li class="breadcrumb-item active">Sửa sản phẩm</li>
+                </ol>
+            </div>
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
 
-    <!-- Main content -->
-    <section class="content">
-        <div class="container-fluid">
-            <div class="card">
-                <div class="card-body">
-                    <form action="" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="row">
-                            <div class="col-3">
-                                <div class="form-group">
-                                    <label for="">Ảnh sản phẩm</label>
-                                    <img class="img-custom-edit"  src="{{asset( 'storage/' . $model->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                                </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="form-group">
-                                    <label for="">Tên sản phẩm</label>
-                                    <input type="text" name="name" class="form-control" value="{{$model->name}}" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Danh mục</label>
-                                    <input type="text" name="category_id" class="form-control" value="{{$model->category->name}}" readonly>
-                                </div>
-                                <div class="form-group">
-                                    <label for="">Giống loài</label>
-                                    <input type="text" name="breed_id" class="form-control" value="{{$model->breed->name}}" readonly>
-                                </div>
+<!-- Main content -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="card">
+            <div class="card-body">
+                <form action="" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="">Ảnh sản phẩm</label>
+                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}"
+                                    alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                             </div>
                         </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Số lượng</label>
-                                    <input type="text" name="quantity" class="form-control" value="{{$model->quantity}}" readonly>
+                        <div class="col-9">
+                            <div class="form-group">
+                                <label for="">Tên sản phẩm</label>
+                                @if($model->name)
+                                <input type="text" name="name" class="form-control" value="{{$model->name}}" readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
                                 </div>
+                                @endif
                             </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Cân nặng</label>
-                                    <input type="text" name="weight" class="form-control" value="{{$model->weight}} kg" readonly>
+                            <div class="form-group">
+                                <label for="">Danh mục</label>
+                                @if($model->category)
+                                <input type="text" name="category_id" class="form-control"
+                                    value="{{$model->category->name}}" readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
                                 </div>
+                                @endif
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6"> 
-                                <div class="form-group">
-                                    <label for="">Giá bán</label>
-                                    <input type="text" name="price" class="form-control" value="{{$model->price}}" readonly>
+                            <div class="form-group">
+                                <label for="">Giống loài</label>
+                                @if($model->breed)
+                                <input type="text" name="breed_id" class="form-control" value="{{$model->breed->name}}"
+                                    readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
                                 </div>
-                            </div>
-                            <div class="col-6"> 
-                                <div class="form-group">
-                                    <label for="">Tuổi của thú cưng</label>
-                                    <input type="text" name="age_id" class="form-control" value="{{$model->age_id}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Trạng thái</label>
-                                    <input class="form-control" type="text" name="status" value="{{ ($model->status == 1 ? 'Còn Hàng' : 'Hết hàng') }}" readonly>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Giới tính</label>
-                                    <input class="form-control" type="text" name="gender_id" value="{{ ($model->gender_id == 1 ? 'Giống đực' : ($model->gender_id == 2 ? 'Giống cái' : 'Lưỡng tính')) }}"readonly >
-                                </div>
+                                @endif
                             </div>
                         </div>
-                        <div class="row">
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Số lượng</label>
+                                @if($model->quantity)
+                                <input type="text" name="quantity" class="form-control" value="{{$model->quantity}}"
+                                    readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Cân nặng</label>
+                                @if($model->weight)
+                                <input type="text" name="weight" class="form-control" value="{{$model->weight}} kg"
+                                    readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Giá bán</label>
+                                @if($model->price)
+                                <input type="text" name="price" class="form-control" value="{{$model->price}}" readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Tuổi của thú cưng</label>
+                                @if($model->age)
+                                <input type="text" name="age_id" class="form-control" value="{{$model->age->age}}"
+                                    readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Trạng thái</label>
+                                <input class="form-control" type="text" name="status"
+                                    value="{{ ($model->status == 1 ? 'Còn Hàng' : 'Hết hàng') }}" readonly>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Giới tính</label>
+                                @if($model->gender)
+                                <input class="form-control" type="text" name="gender_id"
+                                    value="{{ ($model->gender_id == 1 ? 'Giống đực' : ($model->gender_id == 2 ? 'Giống cái' : 'Lưỡng tính')) }}"
+                                    readonly>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
                             <div class="form-group">
                                 <label for="">Thumbnail</label>
-                                <div class="row">
-                                        
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-12">
+                                @if($model->galleries == null)
                                 <table class="table table-stripped">
                                     <thead>
                                         <th>File</th>
@@ -112,26 +165,40 @@
                                         @endforeach
                                     </tbody>
                                 </table>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="">Chi tiết sản phẩm:</label>
-                                    <textarea name="description" class=form-control rows="10" readonly>{{$model->description}}</textarea>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
                                 </div>
-                            </div>
-                            <div class="text-left">
-                                <a href="{{route('product.index')}}" class="btn btn-warning text-light">Quay lại</a>
-                                <a href="{{route('product.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa sản phẩm</a>
+                                @endif
                             </div>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="">Chi tiết sản phẩm:</label>
+                                @if($model->description)
+                                <textarea name="description" class=form-control rows="10"
+                                    readonly>{{$model->description}}</textarea>
+                                @else
+                                <div class="text-left">
+                                    Chưa có thông tin
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+                        <div class="text-left">
+                            <a href="{{route('product.index')}}" class="btn btn-warning text-light">Quay lại</a>
+                            <a href="{{route('product.edit', ['id' => $model->id])}}" class="btn btn-info">Sửa sản
+                                phẩm</a>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </div><!-- /.container-fluid -->
-    </section>
-    <!-- /.content -->
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+<!-- /.content -->
 @endsection
 @section('pagejs')
 @endsection

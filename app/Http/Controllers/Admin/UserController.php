@@ -9,15 +9,9 @@ use App\Models\Role;
 use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
-
-// use App\Models\PersonalInformation;
-
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-
-use function PHPSTORM_META\map;
 
 class UserController extends Controller
 {
@@ -55,7 +49,7 @@ class UserController extends Controller
                 <span class="float-right">
                     <a href="' . route('user.profile', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
                     <a href="' . route('user.edit', ['id' => $row->id]) . '" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
-                    <a href="' . route('user.remove', ['id' => $row->id]) . '" class="btn btn-outline-danger"><i class="far fa-trash-alt"></i></a>
+                    <a class="btn btn-outline-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
@@ -247,5 +241,39 @@ class UserController extends Controller
             'mdh_role' => $mdh_role,
             'role' => $role
         ]);
+    }
+
+    public function remove($id)
+    {
+        $user = User::find($id);
+        $product = $user->products();
+        $product->each(function ($pro) {
+            $pro->galleries()->delete();
+            $pro->orderDetails()->delete();
+        });
+        $product->delete();
+        $user->reviews()->delete();
+        $user->slides()->delete();
+        $user->orders()->delete();
+        $coupon = $user->coupons();
+        $coupon->each(function ($coup) {
+            $coup->couponUsage()->delete();
+            $coup->accessory()->each(function ($galleries) {
+                $galleries->delete();
+            });
+            $coup->accessory();
+        });
+        $coupon->delete();
+        $user->carts()->delete();
+        $user->breeds()->delete();
+        $user->blogs()->delete();
+        $user->announcements()->delete();
+        $accessories = $user->accessories();
+        $accessories->each(function ($accessory) {
+            $accessory->galleries()->delete();
+        });
+        $accessories->delete();
+        $user->delete();
+        return response()->json(['success' => 'Xóa thú cưng thành công !', 'datas' => 1]);
     }
 }
