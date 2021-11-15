@@ -54,27 +54,35 @@
                         <th>Trạng thái đơn hàng</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="list-overflow">
                     @foreach($orderDetail as $orD)
-                    <tr>
-                        <td>{{$orD->order->code}}</td>
-                        <td>{{$orD->product->name}}</td>
-                        <td>{{date_format($orD->order->created_at,"d/m/Y H:i:s")}}</td>
-                        <td>{{number_format($orD->order->grand_total,0,',','.')}}đ</td>
-                        <td>
-                            @if($orD->order->delivery_status == 1)
-                                Đang chờ xử lý
-                            @elseif($orD->order->delivery_status == 2)
-                                Đang giao hàng
-                            @elseif($orD->order->delivery_status == 3)
-                                Giao hàng thành công
-                            @elseif($orD->order->delivery_status == 0)
-                                Hủy đơn hàng
-                            @else
-                                Lỗi code
+                        @foreach($order as $or)
+                            @if($or->id == $orD->order_id)
+                            <tr>
+                                <td>{{$orD->order->code}}</td>
+                                <td>
+                                    <a href="{{route('client.product.detail', ['id' => $orD->product->id])}}">
+                                        <img src="{{asset( 'storage/' . $orD->product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" width="100">
+                                    </a>
+                                </td>
+                                <td>{{date_format($orD->order->created_at,"d/m/Y H:i:s")}}</td>
+                                <td>{{number_format($orD->order->grand_total,0,',','.')}}đ</td>
+                                <td>
+                                    @if($orD->order->delivery_status == 1)
+                                        Đang chờ xử lý
+                                    @elseif($orD->order->delivery_status == 2)
+                                        Đang giao hàng
+                                    @elseif($orD->order->delivery_status == 3)
+                                        Giao hàng thành công
+                                    @elseif($orD->order->delivery_status == 0)
+                                        Hủy đơn hàng
+                                    @else
+                                        Lỗi code
+                                    @endif
+                                </td>
+                            </tr>
                             @endif
-                        </td>
-                    </tr>
+                        @endforeach
                     @endforeach
                 </tbody>
             </table>
