@@ -20,24 +20,29 @@
 <section class="products">
     <div class="product-top">
         <form action="">
-            <div class="form-item">
-                <label for="">Sắp xếp theo</label>
-                <select name="" id="">
-                    <option value="">Giá cao nhất</option>
-                    <option value="">Giá thấp nhất</option>
-                    <option value="">A-Z</option>
-                    <option value="">Z-A</option>
-                </select>
+            <div class="double">
+                <div class="form-item">
+                    <label for="">Danh mục</label>
+                    <select name="" id="">
+                        <option value="">Tìm kiếm theo danh mục</option>
+                        @foreach($category as $cate)
+                        <option value="{{$cate->id}}">{{$cate->name}}t</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label for="">Sắp xếp theo</label>
+                    <select name="" id="">
+                        <option value="">Giá cao nhất</option>
+                        <option value="">Giá thấp nhất</option>
+                        <option value="">Bán chạy nhất</option>
+                        <option value="">Hàng mới</option>
+                    </select>
+                </div>
             </div>
-            <div class="form-item">
-                <label for="">Sắp xếp theo</label>
-                <select name="" id="">
-                    <option value="">Giá cao nhất</option>
-                    <option value="">Giá thấp nhất</option>
-                    <option value="">A-Z</option>
-                    <option value="">Z-A</option>
-                </select>
-            </div>
+            <div class="clear-both"></div>
+            <button>Search</button>
+            <div class="clear-both"></div>
         </form>
     </div>
     <div class="product-container">
@@ -45,9 +50,6 @@
         <div class="product-item">
             <div class="item-top">
                 <div class="product-lable">
-                    <!-- <p class="sale">
-                        <span>Giảm: 155.000 vnd</span>
-                    </p> -->
                 </div>
                 <div class="product-thumbnail">
                     <a href="{{route('client.product.detail', ['id' => $p->id])}}">
@@ -55,16 +57,27 @@
                     </a>
                 </div>
                 <div class="product-extra">
-                    <a href="#" class="fas fa-heart"></a>
-                    <a href="#" class="fas fa-eye"></a>
-                    <a href="#" class="fas fa-shopping-cart"></a>
+                    <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                        <input type="hidden" name="product_id_hidden" value="{{$p->id}}">
+                        <input type="hidden" name="discount_price" value="{{$p->discount}}">
+                        <input type="hidden" name="quantity" value="1">
+                        <button type="submit" class="btn-buyNow">Mua hàng</button>
+                    </form>
                 </div>
             </div>
             <div class="item-bottom">
                 <div class="product-info">
-                    <a href="#" class="name">{{$p->name}}</a>
-                    <span class="category">Danh mục<a href="#" class="link-ct">{{$p->category->name}}</a></span>
-                    <span class="price">{{number_format($p->price)}} VND</span>
+                    <a href="{{route('client.product.detail', ['id' => $p->id])}}" class="name">{{$p->name}}</a>
+                    @if($p->discount == '')
+                        <span class="price">{{number_format($p->price)}}đ</span>
+                    @else
+                        <span class="price">
+                            <?php
+                                echo number_format($p->price - $p->discount).'đ';
+                            ?>
+                        </span>
+                    @endif
                 </div>
             </div>
         </div>

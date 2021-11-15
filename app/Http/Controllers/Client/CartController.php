@@ -53,6 +53,30 @@ class CartController extends Controller
         return redirect()->back();
     }
 
+    public function buyNow(Request $request){//Giỏ hàng
+        if ($request->quantity <= 0) {
+            return redirect()->back();
+        }
+
+        $product_id = $request->product_id_hidden;
+        $quantity = $request->quantity;
+        $product_info = Product::where('id', $product_id)->first();
+
+        $data['id'] = $product_id;
+        $data['qty'] = $quantity;
+        $data['name'] = $product_info->name;
+        if ($request->discount_price > 0) {
+            $data['price'] = $product_info->price - $request->discount_price;
+        }else{
+            $data['price'] = $product_info->price;
+        }
+        $data['weight'] = $product_info->price;
+        $data['options']['image'] = $product_info->image;
+        Cart::add($data);
+        Cart::setGlobalTax(10);
+        return redirect('gio-hang/checkout');
+    }
+
     // public function muaHang(Request $request){
     //     $product_id = $request->product_id_hidden;
     //     $quantity = $request->quantity;
@@ -168,7 +192,6 @@ class CartController extends Controller
         //     $rowId = $value->rowId;
         //     Cart::update($rowId,0);
         // }
-        alert()->basic('Basic Message', 'Mandatory Title')->autoclose(3500);
         return view('client.cart.index');
     }
 }

@@ -85,27 +85,33 @@
             @foreach($product as $product)
             <div class="product-item">
                 <div class="item-top">
-                    <div class="product-lable">
-                        <p class="new">
-                            <span>new</span>
-                        </p>
-                    </div>
                     <div class="product-thumbnail">
                     <a href="{{route('client.product.detail', ['id' => $product->id])}}">
                         <img src="{{asset( 'storage/' . $product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                     </div>
                     <div class="product-extra">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                        <a href="#" class="fas fa-shopping-cart"></a>
+                        <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                            <input type="hidden" name="product_id_hidden" value="{{$product->id}}">
+                            <input type="hidden" name="discount_price" value="{{$product->discount}}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn-buyNow">Mua hàng</button>
+                        </form>
                     </div>
                 </div>
                 <div class="item-bottom">
                     <div class="product-info">
-                        <a href="#" class="name">{{$product->name}}</a>
-                        <span class="category">Danh mục<a href="" class="link-ct">{{$product->category->name}}</a></span>
-                        <span class="price">{{number_format($product->price)}}đ</span>
+                        <a href="{{route('client.product.detail', ['id' => $product->id])}}" class="name">{{$product->name}}</a>
+                        @if($product->discount == '')
+                            <span class="price">{{number_format($product->price)}}đ</span>
+                        @else
+                            <span class="price">
+                                <?php
+                                    echo number_format($product->price - $product->discount).'đ';
+                                ?>
+                            </span>
+                        @endif
                     </div>
                 </div>
             </div>

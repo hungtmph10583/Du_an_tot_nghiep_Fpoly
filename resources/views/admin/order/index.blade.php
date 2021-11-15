@@ -93,7 +93,7 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                            <i class="{{ $value->payment_status == 1 ? 'fas fa-times text-danger' : 'far fa-check-circle text-success'  }}"></i>
+                                            <i class="{{ $value->payment_status == 1 ? 'far fa-times-circle text-danger' : 'far fa-check-circle text-success'  }}"></i>
                                     </td>
                                     <td>
                                         <span class="float-right">

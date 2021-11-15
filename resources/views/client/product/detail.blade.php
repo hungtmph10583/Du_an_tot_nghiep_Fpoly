@@ -97,7 +97,13 @@
                     </span>
                 </div>
                 <button type="submit" class="btn">Thêm vào giỏ hàng</button>
-                <a href="#" class="btn">Mua hàng</a>
+            </form>
+            <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
+            @csrf
+                <input type="hidden" name="product_id_hidden" value="{{$model->id}}">
+                <input type="hidden" name="discount_price" value="{{$model->discount}}">
+                <input type="hidden" name="quantity" value="1">
+                <button type="submit" class="btn">Mua hàng</button>
             </form>
         </div>
     </div>
@@ -106,7 +112,6 @@
     <div class="product-tabs-container">
         <div class="product-list-tabs">
             <button id="btn-product-description" class="one">Mô tả sản phẩm</button>
-            <button id="btn-shipping-details" class="two">Chi tiết vận chuyển</button>
             <button id="btn-reviews" class="three">Đánh giá</button>
         </div>
         <div class="product-tabs-content product-description active">
@@ -115,12 +120,6 @@
             <p>Cân nặng 5kg</p>
             <p>Giống đực</p>
             <p>Chủng loại: vẹt Bắc Âu</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat enim rerum reiciendis aperiam? Veniam explicabo distinctio quod, pariatur quasi dolorum assumenda accusantium iusto voluptatum voluptate modi dolore. Id, tempora consequatur.</p>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat enim rerum reiciendis aperiam? Veniam explicabo distinctio quod, pariatur quasi dolorum assumenda accusantium iusto voluptatum voluptate modi dolore. Id, tempora consequatur.</p>
-        </div>
-        <div class="product-tabs-content shipping-details">
-            <h5>Shipping details</h5>
-            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat enim rerum reiciendis aperiam? Veniam explicabo distinctio quod, pariatur quasi dolorum assumenda accusantium iusto voluptatum voluptate modi dolore. Id, tempora consequatur.</p>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat enim rerum reiciendis aperiam? Veniam explicabo distinctio quod, pariatur quasi dolorum assumenda accusantium iusto voluptatum voluptate modi dolore. Id, tempora consequatur.</p>
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat enim rerum reiciendis aperiam? Veniam explicabo distinctio quod, pariatur quasi dolorum assumenda accusantium iusto voluptatum voluptate modi dolore. Id, tempora consequatur.</p>
         </div>
@@ -386,37 +385,26 @@
     }
 
     let productDescription = document.querySelector('.product-description');
-    let shippingDetails = document.querySelector('.shipping-details');
     let reviews = document.querySelector('.reviews');
     let writeCommment = document.querySelector('.write-comment');
 
     var btnPD = document.getElementById('btn-product-description');
-    var btnSD = document.getElementById('btn-shipping-details');
     var btnRV = document.getElementById('btn-reviews');
     var btnRVC = document.getElementById('btn-write-comment');
 
     document.addEventListener('click', function(event) {
         var isClickInsidePD = btnPD.contains(event.target);
-        var isClickInsideSD = btnSD.contains(event.target);
         var isClickInsideRV = btnRV.contains(event.target);
         var isClickInsideRVC = btnRVC.contains(event.target);
 
         if (isClickInsidePD) {
             productDescription.classList.add('active');
-            shippingDetails.classList.remove('active');
             reviews.classList.remove('active');
-        }
-
-        if (isClickInsideSD) {
-            shippingDetails.classList.add('active');
-            reviews.classList.remove('active');
-            productDescription.classList.remove('active');
         }
 
         if (isClickInsideRV) {
             reviews.classList.add('active');
             productDescription.classList.remove('active');
-            shippingDetails.classList.remove('active');
         }
 
         if (isClickInsideRVC) {

@@ -44,6 +44,8 @@ Route::prefix('gio-hang')->group(function () {
     Route::get('/show-cart', [CartController::class, 'showCart'])->name('showCart');
     Route::post('/save-cart', [CartController::class, 'saveCart'])->name('saveCart');
 
+    Route::post('/buy-now', [CartController::class, 'buyNow'])->name('buyNow');
+
     Route::get('/delete-to-cart/{rowId}', [CartController::class, 'deleteToCart'])->name('deleteToCart');
     Route::post('/update-cart-quantity/{rowId}', [CartController::class, 'updateCartQty'])->name('updateCartQty');
 

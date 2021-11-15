@@ -13,7 +13,7 @@
     .header-wrapper .header-middle-bar {
         padding: 1.2rem 10%;
     }
-    .product-top form {
+    .product-top form .double {
         display: inline;
     }
     .product-top form label {
@@ -22,7 +22,7 @@
     .product-top form .form-item .selected,
     .product-top form select {
         width: 100%;
-        margin-top: 2rem;
+        margin: 1rem 0 2rem;
     }
     /* gio hang */
     .steps-to-take,
