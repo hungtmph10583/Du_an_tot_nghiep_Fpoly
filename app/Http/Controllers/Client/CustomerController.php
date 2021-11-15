@@ -9,7 +9,9 @@ use App\Models\Role;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\OrderDetail;
+use App\Models\Review;
 use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -93,19 +95,42 @@ class CustomerController extends Controller
     public function orderHistory(){
         $user_id = Auth::user()->id;
         $order = Order::where('user_id', $user_id)->get();
+        // $product = Product::where('product', $user_id)->firstOrFail();
+        $order->load('orderDetails');
 
         $orderDetail = OrderDetail::all();
 
-        
-        return view('client.customer.order-history', [
-            'order' => $order,
-            'orderDetail' => $orderDetail,
-        ]);
+        // dd($order);
+
+        return view('client.customer.order-history', compact(
+            'order',
+            'orderDetail'
+        ));
     }
 
     public function review(){
-        return view('client.customer.review');
+        $user_id = Auth::user()->id;
+        $review = Review::where('user_id', $user_id)->get();
+        $review->load('product');
+
+        // dd($review);
+
+        $product = Product::all();
+
+        // $rating = Review::where('product_id', $id)->avg('rating');
+        // $rating = (int)round($rating);
+        return view('client.customer.review', compact(
+            'review',
+            'product'
+        ));
     }
+
+    public function deleteReview($id){
+        $review = Review::find($id);
+        $review->delete();
+        return redirect()->back();
+    }
+
     public function favoriteProduct(){
         return view('client.customer.favorite-product');
     }
