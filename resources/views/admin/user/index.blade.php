@@ -59,7 +59,7 @@
                                         <span class="float-right">
                                             <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
                                             <a href="{{route('user.edit', ['id' => $u->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
-                                            <a href="{{route('user.remove', ['id' => $u->id])}}" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa tài khoản này?')"><i class="far fa-trash-alt"></i></a>
+                                            <a href="{{route('user.remove', ['id' => $u->id])}}" class="btn btn-outline-danger" onclick="return confirm('Bạn có chắc muốn xóa tài khoản này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
                                     </td>
                                 </tr>
