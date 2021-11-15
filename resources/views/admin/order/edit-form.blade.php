@@ -79,7 +79,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
-                                    <div class="col">Trạng thái đơn hàng</div>
+                                    <div class="col">Trạng thái thanh toán</div>
                                     <div class="col">
                                         <span class="btn 
                                             @if($order->payment_status == 1)
@@ -128,7 +128,7 @@
                                     <th scope="col">Hình thức giao hàng</th>
                                     <th scope="col">Số lượng</th>
                                     <th scope="col">Giá bán</th>
-                                    <th scope="col">Tổng tiền</th>
+                                    <th scope="col">Thành tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
