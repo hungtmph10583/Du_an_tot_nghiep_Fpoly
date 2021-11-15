@@ -65,6 +65,11 @@ class Product extends Model
 
     public function reviews()
     {
-        return $this->hasMany(Product::class, 'product_id');
+        return $this->hasOne(Review::class, 'product_id');
+    }
+
+    public function orderDetail()
+    {
+        return $this->hasOne(OrderDetail::class, 'product_id');
     }
 }
