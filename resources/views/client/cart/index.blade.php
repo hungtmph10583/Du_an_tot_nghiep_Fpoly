@@ -80,7 +80,7 @@
                         <div class="quantity">
                             <form action="{{route('updateCartQty', ['rowId' => $value->rowId])}}" method="POST" enctype="multipart/form-data">
                             @csrf
-                                Số lượng: <input type="number" value="{{$value->qty}}" name="quantity_cart">
+                                Số lượng: <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$value->quantity}}" min="1">
                                 <input type="hidden" value="{{$value->rowId}}" name="rowId_cart">
                                 <input type="submit" value="Cập nhật" name="update_qty" class="updateQty">
                             </form>
