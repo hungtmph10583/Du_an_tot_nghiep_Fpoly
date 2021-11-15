@@ -306,3 +306,12 @@
     font-size: 1.7rem;
     color: var(--red);
 }
+
+.group-label {
+    font-size: 1.7rem;
+    color: var(--black);
+}
+
+.text-red {
+    color: var(--red);
+}
