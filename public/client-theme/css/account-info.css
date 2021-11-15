@@ -175,6 +175,14 @@ table.greenTable th {
     padding: 1.4rem 0;
 }
 
+
+/* table.greenTable td.comment {
+    white-space: nowrap;
+    width: 90px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} */
+
 table.greenTable th:last-child,
 table.greenTable td:last-child {
     text-align: right;
@@ -195,4 +203,32 @@ table.greenTable thead th {
 
 table.greenTable thead th:first-child {
     border-left: none;
+}
+
+.list-overflow {
+    height: 200px;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+span.star i {
+    color: var(--yellow);
+    font-size: 1.7rem;
+}
+
+a.edit-review {
+    font-size: 1.5rem;
+    padding: 1rem 0.8rem 1rem 1.5rem;
+    color: var(--main-color);
+    border: 0.1rem solid var(--main-color);
+    border-radius: 0.5rem;
+    margin-right: 1rem;
+}
+
+a.delete-review {
+    font-size: 1.5rem;
+    padding: 1rem 1.5rem;
+    color: var(--red);
+    border: 0.1rem solid var(--red);
+    border-radius: 0.5rem;
 }
