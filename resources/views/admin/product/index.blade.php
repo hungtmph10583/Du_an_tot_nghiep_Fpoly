@@ -19,13 +19,11 @@
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
             <div class="card-body">
+                <div class="alert alert-success" role="alert" style="display: none;">
+                </div>
                 @if(session('BadState'))
                 <div class="alert alert-danger" role="alert">
                     {{session('BadState')}}
-                </div>
-                @elseif(session('GoodState'))
-                <div class="alert alert-success" role="alert">
-                    {{session('GoodState')}}
                 </div>
                 @endif
                 <div class="row">
@@ -89,13 +87,13 @@
                         </div>
                     </div>
                     <div class="col-6">
-                        <form action="{{route('product.import')}}" method="post" enctype="multipart/form-data">
+                        <form action="" method="post" enctype="multipart/form-data">
                             @csrf
                             <label for="file-upload" class="custom-file-upload">
                                 <i class="fas fa-file-import"></i> Import Data
                             </label>
-                            <input id="file-upload" name="file" type="file" />
-                            <button type="submit">Import</button>
+                            <input id="file-upload" type="file" />
+                            <button type="submit" class="infor">Import</button>
                         </form>
                     </div>
                 </div>
@@ -224,8 +222,6 @@ $(document).ready(function() {
             }
         ]
     });
-    let column = table.column(0); // here is the index of the column, starts with 0
-    column.visible(false); // this should be either true or false
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
     $('select').map(function(i, dom) {
         var idSelect = $(dom).attr('id');

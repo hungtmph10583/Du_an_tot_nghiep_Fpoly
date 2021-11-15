@@ -35,7 +35,7 @@ class Product extends Model
 
     public function category()
     {
-        return $this->belongsTo(Category::class, 'category_id');
+        return $this->belongsTo(Category::class, 'category_id')->withTrashed();
     }
 
     public function breed()
@@ -55,7 +55,7 @@ class Product extends Model
 
     public function galleries()
     {
-        return $this->hasMany(ProductGallery::class, 'product_id');
+        return $this->hasMany(ProductGallery::class, 'product_id')->withTrashed();
     }
 
     public function discountType()

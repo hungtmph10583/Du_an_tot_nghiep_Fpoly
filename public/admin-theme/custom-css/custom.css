@@ -84,3 +84,13 @@ div.dt-button-collection a.dt-button {
     margin-top: 30px;
     border-radius: 5px;
 }
+
+.infor {
+    color: #fff;
+    background-color: #138496;
+    border-color: #117a8b;
+    border: 10px;
+    border-radius: 5px;
+    height: 42px;
+    width: 75px;
+}

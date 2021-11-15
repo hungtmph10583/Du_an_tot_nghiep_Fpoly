@@ -16,18 +16,18 @@ class Category extends Model
     // Quan hệ category -> product
     public function products()
     {
-        return $this->hasMany(Product::class, 'category_id');
+        return $this->hasMany(Product::class, 'category_id')->withTrashed();
         // quan he 
     }
 
     public function breeds()
     {
-        return $this->hasMany(Breed::class, 'category_id');
+        return $this->hasMany(Breed::class, 'category_id')->withTrashed();
         // quan he 
     }
 
     public function categoryType()
     {
-        return $this->belongsTo(Category::class, 'category_type_id');
+        return $this->belongsTo(CategoryType::class, 'category_type_id')->withTrashed();
     }
 }

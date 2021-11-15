@@ -48,7 +48,6 @@ function removeImg(el) {
 //áp dụng với file index
 function deleteData(id) {
     var urlData = window.location;
-    console.log($("input[name=_token]").val())
     if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
         $.ajax({
             url: urlData + '/xoa/' + id,
@@ -59,7 +58,125 @@ function deleteData(id) {
             },
             success: function(data) {
                 console.log(data)
-                $('div.alert-success').text(data.success);
+                $('div.alert-success').html('<span class="text-success">' + data.success + ' <a href="javascript:void(0);" id="undoIndex" data-id="' + id + '">Hoàn tác</a></span>');
+                $('div.alert-success').css('display', 'block');
+                $('#' + id).remove();
+            },
+        });
+    }
+}
+//khôi phục dữ liệu của 1 bảng 
+function restoreData(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
+        $.ajax({
+            url: 'trash/restore/' + id,
+            type: 'GET',
+            data: {
+                _token: $("input[name=_token]").val()
+            },
+            success: function(data) {
+                $('div.alert-success').html('<span class="text-success">' + data.success + ' <a href="javascript:void(0);" id="undoTrashed" data-id="' + id + '">Hoàn tác</a></span>');
+                $('div.alert-success').css('display', 'block');
+                $('#' + id).remove();
+            },
+        });
+    }
+}
+//check input checkbox
+$('#checkAll').click(function() {
+    $('.checkPro').prop('checked', $(this).prop('checked'))
+})
+
+// delete column data multiple table index
+function deleteMul(route, allId) {
+    $.ajax({
+        url: route,
+        type: 'DELETE',
+        data: {
+            _token: $("input[name=_token]").val(),
+            allId: allId
+        },
+        success: function(data) {
+            $('div.alert-success').text(data.success);
+            $('div.alert-success').css('display', 'block');
+            $.each(allId, function(key, val) {
+                $('#' + val).remove();
+            })
+        },
+    });
+}
+
+// restore column data multiple table trash
+function restoreMul(route, allId) {
+    $.ajax({
+        url: route,
+        type: 'get',
+        data: {
+            _token: $("input[name=_token]").val(),
+            allId: allId
+        },
+        success: function(data) {
+            console.log(data)
+            $('div.alert-success').text(data.success);
+            $('div.alert-success').css('display', 'block');
+            $.each(allId, function(key, val) {
+                $('#' + val).remove();
+            })
+        },
+    });
+}
+
+// remove column data multiple table trash and index
+function removeMul(route, allId) {
+    $.ajax({
+        url: route,
+        type: 'delete',
+        data: {
+            _token: $("input[name=_token]").val(),
+            allId: allId
+        },
+        success: function(data) {
+            $('div.alert-success').text(data.success);
+            $('div.alert-success').css('display', 'block');
+            $.each(allId, function(key, val) {
+                $('#' + val).remove();
+            })
+        },
+    });
+}
+
+//remove forever data table trash
+
+function removeForever(id) {
+    if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
+        $.ajax({
+            url: 'trash/deleteForver/' + id,
+            type: 'delete',
+            data: {
+                _token: $("input[name=_token]").val(),
+                id: id
+            },
+            success: function(data) {
+                $('div.alert-success').html(data.success);
+                $('div.alert-success').css('display', 'block');
+                $('#' + id).remove();
+            },
+        });
+    }
+}
+//undo trash data table
+function undoTrash(id) {
+    if (confirm('Bạn có chắc chắn muốn hoàn tác mục này ?')) {
+        $.ajax({
+            url: 'xoa/' + id,
+            type: 'DELETE',
+            method: 'DELETE',
+            data: {
+                _token: $("input[name=_token]").val()
+            },
+            success: function(data) {
+                console.log(data)
+                $('div.alert-success').text(data.undo);
                 $('div.alert-success').css('display', 'block');
                 $('#' + id).remove();
             },
@@ -67,16 +184,18 @@ function deleteData(id) {
     }
 }
 
-function restoreData(id) {
+//undo index data table
+function undoIndex(id) {
     var urlData = window.location;
-    if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
+    if (confirm('Bạn có chắc chắn muốn hoàn tác mục này ?')) {
         $.ajax({
-            url: urlData + '/restore/' + id,
+            url: urlData + '/trash/restore/' + id,
             type: 'GET',
             data: {
                 _token: $("input[name=_token]").val()
             },
             success: function(data) {
+                console.log(data)
                 $('div.alert-success').text(data.success);
                 $('div.alert-success').css('display', 'block');
                 $('#' + id).remove();

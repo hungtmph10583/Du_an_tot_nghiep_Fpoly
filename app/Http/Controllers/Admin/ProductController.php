@@ -34,7 +34,7 @@ class ProductController extends Controller
 
     public function getData(Request $request)
     {
-        $pet = Product::select('products.*');
+        $pet = Product::select('products.*')->with('category');
         return dataTables::of($pet)
             //thêm id vào tr trong datatable
             ->setRowId(function ($row) {
@@ -341,13 +341,16 @@ class ProductController extends Controller
 
     public function getBackUp(Request $request)
     {
-        $product = Product::onlyTrashed();
+        $product = Product::onlyTrashed()->select('products.*');
         return dataTables::of($product)
             //thêm id vào tr trong datatable
             ->setRowId(function ($row) {
                 return $row->id;
             })
             ->addIndexColumn()
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
+            })
             ->orderColumn('category_id', function ($row, $order) {
                 return $row->orderBy('category_id', $order);
             })
@@ -406,16 +409,16 @@ class ProductController extends Controller
                     });
                 }
             })
-            ->rawColumns(['status', 'action', 'image'])
+            ->rawColumns(['status', 'action', 'image', 'checkbox'])
             ->make(true);
     }
 
     public function restore($id)
     {
-        $category = Product::withTrashed();
-        $category->find($id)->galleries()->restore();
+        $category = Product::withTrashed()->find($id);
+        $category->galleries()->restore();
         $category->restore();
-        return response()->json(['success' => 'Xóa thú cưng thành công !']);
+        return response()->json(['success' => 'Khôi phục thành công !']);
     }
 
     public function delete($id)
@@ -433,5 +436,16 @@ class ProductController extends Controller
         }
         Excel::import(new ProductImport, $file);
         return back()->with('congratulation!');
+    }
+
+    public function removeMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $product = Product::withTrashed()->whereIn('id', $idAll);
+        $product->each(function ($gallery) {
+            $gallery->galleries()->restore();
+        });
+        $product->restore();
+        return response()->json(['success' => 'Khôi phục thành công !']);
     }
 }

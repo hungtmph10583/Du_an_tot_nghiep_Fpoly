@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\CategoryType;
 use App\Models\Product;
 use App\Models\Breed;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\Datatables\Datatables;
@@ -28,7 +29,9 @@ class CategoryController extends Controller
             ->setRowId(function ($row) {
                 return $row->id;
             })
-            ->addIndexColumn()
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
+            })
             ->orderColumn('category_type_id', function ($row, $order) {
                 return $row->orderBy('category_type_id', $order);
             })
@@ -52,7 +55,7 @@ class CategoryController extends Controller
                     });
                 }
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'checkbox'])
             ->make(true);
     }
 
@@ -64,15 +67,18 @@ class CategoryController extends Controller
 
     public function saveAdd(Request $request, $id = null)
     {
-        $dupicate = Category::withTrashed()
-            ->where('name', 'like', '%' . $request->name . '%')->first();
-
+        if ($request->name) {
+            $dupicate = Category::onlyTrashed()
+                ->where('name', 'like', $request->name)->first();
+        } else {
+            $dupicate = null;
+        }
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
-            'name.unique' => "Tên thú cưng đã tồn tại",
+            'name.unique' => "Tên danh mục đã tồn tại",
             'category_type_id.required' => "Hãy chọn danh mục",
-            'show_slide.required' => "Hãy chọn trạng thái thú cưng",
-            'uploadfile.required' => 'Hãy chọn ảnh thú cưng',
+            'show_slide.required' => "Hãy chọn trạng thái danh mục",
+            'uploadfile.required' => 'Hãy chọn ảnh danh mục',
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
@@ -90,7 +96,7 @@ class CategoryController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index'), 'dupicate' => $dupicate]);
         } else {
             $model = new Category();
             $model->fill($request->all());
@@ -102,7 +108,7 @@ class CategoryController extends Controller
             }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('category.index', ['status' => 'Thêm-danh-mục-thành-công'])]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('category.index'), 'message' => 'Thêm sản phẩm thành công']);
     }
 
     public function editForm($id)
@@ -121,11 +127,19 @@ class CategoryController extends Controller
         if (!$model) {
             return redirect()->back();
         }
+
+        if ($request->name) {
+            $dupicate = Category::onlyTrashed()
+                ->where('name', 'like', $request->name)->first();
+        } else {
+            $dupicate = null;
+        }
+
         $message = [
-            'name.required' => "Hãy nhập vào tên sách",
-            'name.unique' => "Tên thú cưng đã tồn tại",
+            'name.required' => "Hãy nhập vào tên danh mục",
+            'name.unique' => "Tên danh mục đã tồn tại",
             'category_type_id.required' => "Hãy chọn danh mục",
-            'show_slide.required' => "Hãy chọn trạng thái thú cưng",
+            'show_slide.required' => "Hãy chọn trạng thái danh mục",
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
@@ -143,7 +157,7 @@ class CategoryController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index'), 'dupicate' => $dupicate]);
         } else {
             $model->fill($request->all());
             if ($request->has('uploadfile')) {
@@ -154,7 +168,7 @@ class CategoryController extends Controller
             }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/danh-muc')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('category.index'), 'message' => 'Sửa sản phẩm thành công']);
     }
 
     public function detail($id)
@@ -162,6 +176,7 @@ class CategoryController extends Controller
         $category = Category::find($id);
         if (!$category) {
             $category = Category::onlyTrashed()->find($id);
+            $category->load('products', 'breeds');
         }
         $category->load('products', 'breeds');
 
@@ -174,24 +189,31 @@ class CategoryController extends Controller
     public function remove($id)
     {
         $category = Category::find($id);
-        $category->products()->delete();
+        $pro = $category->products();
+        $pro->each(function ($galleries) {
+            $galleries->galleries()->delete();
+        });
+        $pro->delete();
         $category->delete();
-        return response()->json(['success' => 'Xóa thú cưng thành công !']);
+        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function backUp()
     {
-        return view('admin.category.back-up');
+        $admin = Auth::user()->hasanyrole('admin|manager');
+        return view('admin.category.back-up', compact('admin'));
     }
 
     public function getBackUp(Request $request)
     {
-        $category = Category::onlyTrashed();
+        $category = Category::onlyTrashed()->select('categories.*');
         return dataTables::of($category)
             ->setRowId(function ($row) {
                 return $row->id;
             })
-            ->addIndexColumn()
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
+            })
             ->orderColumn('category_type_id', function ($row, $order) {
                 return $row->orderBy('category_type_id', $order);
             })
@@ -201,10 +223,9 @@ class CategoryController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                <a  class="btn btn-success" href="javascript:void(0);" onclick="restoreData(' . $row->id . ')"><i class="far fa-edit"></i></a>
-                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
-                                    </span>';
+                    <a  class="btn btn-success" href="javascript:void(0);" onclick="restoreData(' . $row->id . ')"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                </span>';
             })
             ->filter(function ($instance) use ($request) {
                 if (!empty($request->get('search'))) {
@@ -215,19 +236,78 @@ class CategoryController extends Controller
                     });
                 }
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'checkbox'])
             ->make(true);
     }
 
     public function restore($id)
     {
-        $category = Category::withTrashed();
-        $category->find($id)->products()->restore();
+        $category = Category::withTrashed()->find($id);
+        $pro = $category->products();
+        $pro->each(function ($galleries) {
+            $galleries->galleries()->restore();
+        });
+        $pro->restore();
         $category->restore();
-        return response()->json(['success' => 'Xóa thú cưng thành công !']);
+        return response()->json(['success' => 'Khôi phục thú cưng thành công !']);
     }
 
     public function delete($id)
     {
+        $category = Category::withTrashed()->where('id', $id);
+        $category->each(function ($product) {
+            $pro = $product->products();
+            $pro->each(function ($galleries) {
+                $galleries->galleries()->forceDelete();
+            });
+            $pro->forceDelete();
+        });
+        $category->forceDelete();
+        return response()->json(['success' => 'Xóa danh mục thành công !']);
+    }
+
+    public function removeMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $category = Category::withTrashed()->whereIn('id', $idAll);
+        $category->each(function ($product) {
+            $pro = $product->products();
+            $pro->each(function ($galleries) {
+                $galleries->galleries()->delete();
+            });
+            $pro->delete();
+        });
+        $category->delete();
+        return response()->json(['success' => 'Xóa danh mục thành công !']);
+    }
+
+    public function restoreMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $category = Category::withTrashed()->whereIn('id', $idAll);
+        $category->each(function ($product) {
+            $pro = $product->products();
+            $pro->each(function ($galleries) {
+                $galleries->galleries()->restore();
+            });
+            $pro->restore();
+        });
+        $category->restore();
+        return response()->json(['success' => 'Khôi phục danh mục thành công !']);
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $category = Category::withTrashed()->whereIn('id', $idAll);
+        $category->each(function ($product) {
+            $pro = $product->products();
+            $pro->each(function ($galleries) {
+                $galleries->galleries()->forceDelete();
+            });
+            $pro->forceDelete();
+        });
+        $category->forceDelete();
+        return response()->json(['success' => 'Khôi phục danh mục thành công !']);
     }
 }

@@ -261,7 +261,7 @@ class UserController extends Controller
             $coup->accessory()->each(function ($galleries) {
                 $galleries->delete();
             });
-            $coup->accessory();
+            $coup->accessory()->delete();
         });
         $coupon->delete();
         $user->carts()->delete();

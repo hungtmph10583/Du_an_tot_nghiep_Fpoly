@@ -15,7 +15,25 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <a href="" class="btn btn-primary" id="cate">Quản trị danh mục</a>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Main content -->
 <section class="content">
     <div class="container">
@@ -131,12 +149,36 @@ $(".btn-info").click(function(e) {
         },
         success: function(data) {
             console.log(data)
+            $('#cate').attr('href', data.url)
             if (data.status == 0) {
+                $("#myModal").modal('show');
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
+                    if (data.dupicate != null) {
+                        if (key == 'name') {
+                            value = [
+                                'Tên danh mục đã tồn tại trong thùng rác . Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác'
+                            ];
+                        }
+                        showErr +=
+                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                            value[0] +
+                            '<br>';
+                    } else {
+                        showErr +=
+                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                            value[0] +
+                            '<br>';
+                    }
                     $('span.' + key + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
+
             } else {
-                window.location.href = data.url;
+                $("#myModal").modal('show');
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
             }
         },
     });

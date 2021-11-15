@@ -20,6 +20,9 @@
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
             <div class="card-body">
+                <div class="alert alert-success" role="alert" style="display: none;">
+
+                </div>
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
@@ -93,7 +96,7 @@
                         <div class="table-responsive">
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
-                                    <th>STT</th>
+                                    <th><input type="checkbox" id="checkAll"></th>
                                     <th>Name</th>
                                     <th>Image</th>
                                     <th>Slug</th>
@@ -128,6 +131,31 @@ $(document).ready(function() {
         autoWidth: false,
         dom: 'Bfrtip',
         buttons: [{
+                text: 'Restore',
+                action: function(e) {
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+
+                    $.ajax({
+                        url: "{{route('product.removeMul')}}",
+                        type: 'DELETE',
+                        data: {
+                            _token: $("input[name=_token]").val(),
+                            allId: allId
+                        },
+                        success: function(data) {
+                            $('div.alert-success').text(data.success);
+                            $('div.alert-success').css('display', 'block');
+                            $.each(allId, function(key, val) {
+                                $('#' + val).remove();
+                            })
+                        },
+                    });
+                }
+            },
+            {
                 extend: 'copyHtml5',
                 exportOptions: {
                     stripHtml: false,
@@ -168,9 +196,10 @@ $(document).ready(function() {
             "colvis"
         ],
         columnDefs: [{
-            targets: 0,
-            visible: true
+            "orderable": false,
+            "targets": 0
         }],
+        "order": [1],
         language: {
             processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },
@@ -187,7 +216,8 @@ $(document).ready(function() {
             }
         },
         columns: [{
-                data: 'DT_RowIndex',
+                data: 'checkbox',
+                name: 'checkbox',
                 orderable: false,
                 searchable: false,
             },
@@ -227,8 +257,6 @@ $(document).ready(function() {
             }
         ]
     });
-    let column = table.column(0); // here is the index of the column, starts with 0
-    column.visible(false); // this should be either true or false
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
     $('select').map(function(i, dom) {
         var idSelect = $(dom).attr('id');
@@ -236,6 +264,10 @@ $(document).ready(function() {
             table.draw();
         });
         $('#' + idSelect).select2({});
+    })
+
+    $('#checkAll').click(function() {
+        $('.checkPro').prop('checked', $(this).prop('checked'))
     })
 });
 </script>

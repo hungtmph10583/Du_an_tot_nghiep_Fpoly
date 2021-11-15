@@ -57,10 +57,13 @@ Route::prefix('danh-muc')->group(function () {
 
     Route::delete('xoa/{id}', [CategoryController::class, 'remove'])->name('category.remove');
     Route::get('dataCate', [CategoryController::class, 'getData'])->name('category.filter');
-    Route::get('back-up', [CategoryController::class, 'backUp'])->name('category.backup');
+    Route::get('trash', [CategoryController::class, 'backUp'])->name('category.backup');
     Route::get('dataBackUp', [CategoryController::class, 'getBackUp'])->name('category.getBackup');
-    Route::get('back-up/restore/{id}', [CategoryController::class, 'restore'])->name('category.restore');
-    Route::delete('back-up/xoa/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::get('trash/restore/{id}', [CategoryController::class, 'restore'])->name('category.restore');
+    Route::delete('trash/deleteForver/{id}', [CategoryController::class, 'delete'])->name('category.delete');
+    Route::delete('trash/remove', [CategoryController::class, 'removeMultiple'])->name('category.removeMul');
+    Route::get('trash/restore', [CategoryController::class, 'restoreMultiple'])->name('category.restoreMul');
+    Route::delete('trash/deleteForeverMul', [CategoryController::class, 'deleteMultiple'])->name('category.deleteMul');
 });
 
 Route::prefix('don-hang')->group(function () {
@@ -104,11 +107,12 @@ Route::prefix('san-pham')->group(function () {
     Route::delete('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
 
     Route::get('dataProduct', [ProductController::class, 'getData'])->name('product.filter');
-    Route::get('back-up', [ProductController::class, 'backUp'])->name('product.backup');
+    Route::get('trash', [ProductController::class, 'backUp'])->name('product.backup');
     Route::get('dataBackUp', [ProductController::class, 'getBackUp'])->name('product.getBackup');
-    Route::get('back-up/restore/{id}', [ProductController::class, 'restore'])->name('product.restore');
-    Route::delete('back-up/xoa/{id}', [ProductController::class, 'delete'])->name('product.delete');
+    Route::get('trash/restore/{id}', [ProductController::class, 'restore'])->name('product.restore');
+    Route::delete('trash/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
     Route::post('import', [ProductController::class, 'store'])->name('product.import');
+    Route::delete('trash/remove', [ProductController::class, 'removeMultiple'])->name('product.removeMul');
 });
 
 Route::prefix('phu-kien')->group(function () {
