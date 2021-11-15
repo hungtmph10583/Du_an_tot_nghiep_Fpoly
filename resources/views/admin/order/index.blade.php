@@ -24,19 +24,18 @@
                             <div class="col">
                                 <div class="form-group">
                                     <label for="">Search</label>
-                                    <input class="form-control" placeholder="Search" type="text">
+                                    <input class="form-control" placeholder="Search" type="text" name="keyword" @isset($searchData['keyword']) value="{{$searchData['keyword']}}" @endisset>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
                                     <label for="">Sắp xếp theo</label>
                                     <select class="form-control" name="order_by" >
-                                        <option value="0">Mặc định</option>
-                                        <option value="1">Đơn đã giao</option>
-                                        <option value="2">Đơn đã xác nhận</option>
-                                        <option value="2">Đơn đã thanh toán</option>
-                                        <option value="2">Đơn chưa thanh toán</option>
-                                        <option value="2">Đơn đã huỷ</option>
+                                        <option value="">Mặc định</option>
+                                        <option value="1">Đơn đang chờ xử lý</option>
+                                        <option value="2">Đơn đang giao hàng</option>
+                                        <option value="3">Đơn giao thành công</option>
+                                        <option value="0">Đơn hàng đã huỷ</option>
                                     </select>
                                 </div>
                             </div>
@@ -52,12 +51,11 @@
                         <table class="table table-striped">
                             <thead>
                                 <th>STT</th>
-                                <th>Mã đặt hàng</th>
-                                <th>Số lượng sản phẩm</th>
+                                <th>Mã đơn hàng</th>
                                 <th>Khách hàng</th>
                                 <th>Tổng tiền</th>
-                                <th>Giao hàng</th>
-                                <th>Thanh toán</th>
+                                <th>Trạng thái</th>
+                                <th class="text-center">Thanh toán</th>
                                 <th><span class="float-right mr-4">Lựa chọn</span></th>
                             </thead>
                             <tbody>
@@ -65,17 +63,6 @@
                                 <tr>
                                     <td>{{(($order->currentPage()-1)*7) + $loop->iteration}}</td>
                                     <td>{{$value->code}}</td>
-                                    <td>
-                                        <?php
-                                            $total = 0;
-                                            foreach ($orderDetail as $key => $vldt) {
-                                                if ($vldt->order_id == $value->id) {
-                                                    $total += $vldt->quantity;
-                                                }
-                                            }
-                                            echo $total.' sản phẩm';
-                                        ?>
-                                    </td>
                                     <td>{{$value->name}}</td>
                                     <td>{{number_format($value->grand_total,0,',','.')}}<span>đ</span></td>
                                     <td>
@@ -105,30 +92,13 @@
                                             @endif
                                         </span>
                                     </td>
-                                    <td>
-                                        <span class="btn btn-sm 
-                                            @if($value->payment_status == 1)
-                                                btn-danger
-                                            @elseif($value->payment_status == 2)
-                                                btn-success
-                                            @else
-                                                btn-danger
-                                            @endif
-                                        text-light">
-                                            @if($value->payment_status == 1)
-                                                Chưa thanh toán
-                                            @elseif($value->payment_status == 2)
-                                                Đã thanh toán
-                                            @else
-                                                Lỗi code
-                                            @endif
-                                        </span>
+                                    <td class="text-center">
+                                            <i class="{{ $value->payment_status == 1 ? 'fas fa-times text-danger' : 'far fa-check-circle text-success'  }}"></i>
                                     </td>
                                     <td>
                                         <span class="float-right">
                                             <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
                                             <a href="{{route('order.edit', ['id' => $value->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
-                                            <a href="#" class="btn btn-outline-danger" onclick="confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="far fa-trash-alt"></i></a>
                                         </span>
                                     </td>
                                 </tr>
