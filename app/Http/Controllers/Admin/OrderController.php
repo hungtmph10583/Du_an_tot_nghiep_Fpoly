@@ -12,14 +12,14 @@ class OrderController extends Controller
     public function index(Request $request){
         $pagesize = 7;
         $searchData = $request->except('page');
-        
+        $dateOrder = Order::orderBy('created_at', 'DESC');
         if(count($request->all()) == 0){
-            // Lấy ra danh sách tin tức & phân trang cho nó
-            $order = Order::paginate($pagesize);
+            $order = $dateOrder->paginate($pagesize);
         }else{
-            $orderQuery = Order::where('name', 'like', "%" . $request->keyword . "%");
+            $orderQuery = Order::where('phone', 'like', "%" . $request->keyword . "%")->orderBy('created_at', 'DESC');
             $order = $orderQuery->paginate($pagesize)->appends($searchData);
         }
+
         $order->load('orderDetails');
 
         $orderDetail = OrderDetail::all();
