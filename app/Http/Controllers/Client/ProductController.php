@@ -44,7 +44,10 @@ class ProductController extends Controller
 
     public function detail($id){
         $model = Product::find($id);
-        $model->load('category', 'breed', 'gender');
+        if (!$model) {
+            return redirect()->back();
+        }
+        //$model->load('category', 'breed', 'gender');
         $pagesize = 5;
         $category = Category::all();
         $breed = Breed::all();
