@@ -59,11 +59,13 @@
         <div class="group-double">
             <form method="POST" enctype="multipart/form-data">
                 @csrf
+                <input type="hidden" name="rowId" value="{{$value->rowId}}">
                 <div class="group-item">
                     <div class="cart-detail-heading">
                         <span>Thông tin liên lạc</span>
                     </div>
                     <div class="form-group">
+                        <label for="" class="group-label">Số điện thoại <span class="text-red">*</span></label>
                         @if(Auth::check())
                             <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
                         @else
@@ -74,6 +76,7 @@
                         @enderror
                     </div>
                     <div class="form-group">
+                        <label for="" class="group-label">Địa chỉ email <span class="text-red">*</span></label>
                         @if(Auth::check())
                             <input type="text" name="email" placeholder="Email" value="{{Auth::user()->email}}">
                         @else
@@ -86,7 +89,8 @@
                     <div class="cart-detail-heading">
                         <span>Địa chỉ giao hàng</span>
                     </div>
-                    <div class="form-group-double">
+                    <div class="form-group">
+                        <label for="" class="group-label">Họ tên <span class="text-red">*</span></label>
                         @if(Auth::check())
                             <input type="text" placeholder="Họ & Tên" name="name" value="{{Auth::user()->name}}">
                         @else
@@ -97,24 +101,34 @@
                         <span class="text-danger">{{$message}}</span>
                     @enderror
                     <div class="form-group">
-                        <input type="text" placeholder="Thành phố: (Hà Nội)" name="city" value="Hà Nội">
+                        <label for="" class="group-label">Thành phố <span class="text-red">*</span></label>
+                        <select name="calc_shipping_provinces" required="">
+                            <option value="">Tỉnh / Thành phố</option>
+                        </select>
+                        <input class="billing_address_1" name="city" type="hidden" value="">
                     </div>
                     @error('city')
                         <span class="text-danger">{{$message}}</span>
                     @enderror
-                    <div class="form-group-double">
-                        <input type="text" placeholder="Quận huyện (Nam Từ Liêm)" name="district" value="Nam Từ Liêm">
-                        <input type="text" placeholder="Phường xã (Cầu Diễn)" name="ward" value="Cầu Diễn">
+                    <div class="form-group">
+                        <label for="" class="group-label">Quận / Huyện <span class="text-red">*</span></label>
+                        <select name="calc_shipping_district" required="">
+                            <option value="">Quận / Huyện</option>
+                        </select>
+                        <input class="billing_address_2" name="district" type="hidden" value="">
                     </div>
-                    <div class="form-group-double">
                         @error('district')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
+                    <div class="form-group">
+                        <label for="" class="group-label">Phường / Xã <span class="text-red">*</span></label>
+                        <input type="text" placeholder="Phường xã (Cầu Diễn)" name="ward" value="Cầu Diễn">
+                    </div>
                         @error('ward')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
-                    </div>
                     <div class="form-group">
+                        <label for="" class="group-label">Địa chỉ <span class="text-red">*</span></label>
                         <input type="text" placeholder="Địa chỉ nhà (196 Hồ Tùng Mậu)" name="address" value="196 Hồ Tùng Mậu">
                     </div>
                     @error('address')
@@ -197,4 +211,77 @@
         </div> -->
     </div>
 </section>
+@endsection
+@section('pagejs')
+<script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'/></script>
+<script>//<![CDATA[
+if (address_2 = localStorage.getItem('address_2_saved')) {
+  $('select[name="calc_shipping_district"] option').each(function() {
+    if ($(this).text() == address_2) {
+      $(this).attr('selected', '')
+    }
+  })
+  $('input.billing_address_2').attr('value', address_2)
+}
+if (district = localStorage.getItem('district')) {
+  $('select[name="calc_shipping_district"]').html(district)
+  $('select[name="calc_shipping_district"]').on('change', function() {
+    var target = $(this).children('option:selected')
+    target.attr('selected', '')
+    $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+    address_2 = target.text()
+    $('input.billing_address_2').attr('value', address_2)
+    district = $('select[name="calc_shipping_district"]').html()
+    localStorage.setItem('district', district)
+    localStorage.setItem('address_2_saved', address_2)
+  })
+}
+$('select[name="calc_shipping_provinces"]').each(function() {
+  var $this = $(this),
+    stc = ''
+  c.forEach(function(i, e) {
+    e += +1
+    stc += '<option value=' + e + '>' + i + '</option>'
+    $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+    if (address_1 = localStorage.getItem('address_1_saved')) {
+      $('select[name="calc_shipping_provinces"] option').each(function() {
+        if ($(this).text() == address_1) {
+          $(this).attr('selected', '')
+        }
+      })
+      $('input.billing_address_1').attr('value', address_1)
+    }
+    $this.on('change', function(i) {
+      i = $this.children('option:selected').index() - 1
+      var str = '',
+        r = $this.val()
+      if (r != '') {
+        arr[i].forEach(function(el) {
+          str += '<option value="' + el + '">' + el + '</option>'
+          $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>' + str)
+        })
+        var address_1 = $this.children('option:selected').text()
+        var district = $('select[name="calc_shipping_district"]').html()
+        localStorage.setItem('address_1_saved', address_1)
+        localStorage.setItem('district', district)
+        $('select[name="calc_shipping_district"]').on('change', function() {
+          var target = $(this).children('option:selected')
+          target.attr('selected', '')
+          $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+          var address_2 = target.text()
+          $('input.billing_address_2').attr('value', address_2)
+          district = $('select[name="calc_shipping_district"]').html()
+          localStorage.setItem('district', district)
+          localStorage.setItem('address_2_saved', address_2)
+        })
+      } else {
+        $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
+        district = $('select[name="calc_shipping_district"]').html()
+        localStorage.setItem('district', district)
+        localStorage.removeItem('address_1_saved', address_1)
+      }
+    })
+  })
+})
+//]]></script>
 @endsection
