@@ -62,8 +62,12 @@ Route::prefix('tai-khoan')->middleware('auth')->group(function () {
     Route::post('cap-nhat', [CustomerController::class, 'saveUpdateinfo']);
     Route::get('doi-mat-khau/{id}', [CustomerController::class, 'changePForm'])->name('client.customer.changeP');
     Route::post('doi-mat-khau/{id}', [CustomerController::class, 'saveChangeP']);
+
     Route::get('lich-su-don-hang', [CustomerController::class, 'orderHistory'])->name('client.customer.orderHistory');
+
     Route::get('danh-gia-san-pham', [CustomerController::class, 'review'])->name('client.customer.review');
+    Route::get('xoa-danh-gia/{id}', [CustomerController::class, 'deleteReview'])->name('deleteReview');
+
     Route::get('san-pham-yeu-thich', [CustomerController::class, 'favoriteProduct'])->name('client.customer.favoriteProduct');
 });
 
