@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\DiscountType;
 use App\Models\Breed;
 use App\Models\Gender;
+use App\Models\Slide;
 use App\Models\Age;
 use App\Models\ProductGallery;
 use App\Models\Review;
@@ -20,12 +21,14 @@ class HomeController extends Controller
         $product = Product::paginate(5);
         $gender = Gender::all();
         $breed = Breed::all();
+        $slide = Slide::all();
         
         return view('client.home', [
             'category' => $category,
             'product' => $product,
             'gender' => $gender,
-            'breed' => $breed
+            'breed' => $breed,
+            'slide' => $slide
         ]);
     }
 }

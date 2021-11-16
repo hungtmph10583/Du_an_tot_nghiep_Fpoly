@@ -6,21 +6,15 @@
     <div class="sliders">
         <div class="swiper slider-container">
             <div class="swiper-wrapper wrapper">
+                @foreach($slide as $sl)
+                @if($sl->status == 1)
                 <div class="swiper-slide slide">
                     <div class="image">
-                        <img src="{{ asset('client-theme/images/slide1.jpg')}}" alt="">
+                        <img src="{{asset( 'storage/' . $sl->image)}}" alt="slide này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </div>
                 </div>
-                <div class="swiper-slide slide">
-                    <div class="image">
-                        <img src="{{ asset('client-theme/images/slide2.jpg')}}" alt="">
-                    </div>
-                </div>
-                <div class="swiper-slide slide">
-                    <div class="image">
-                        <img src="{{ asset('client-theme/images/slide3.jpg')}}" alt="">
-                    </div>
-                </div>
+                @endif
+                @endforeach
             </div>
             <div class="swiper-button-next"></div>
             <div class="swiper-button-prev"></div>

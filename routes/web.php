@@ -14,6 +14,7 @@ use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CustomerController;
 use App\Http\Controllers\Client\BlogController;
 
+use Carbon\Carbon;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -77,6 +78,21 @@ Route::prefix('bai-viet')->group(function () {
     Route::get('/', [BlogController::class, 'index'])->name('client.blog.index');
     Route::get('/chi-tiet/{id}', [BlogController::class, 'detail'])->name('client.blog.detail');
 });
+
+// Route::get('/time', function(){
+//     $current = new Carbon();
+//     // $current->timezone('Asia/Ho_Chi_Minh');
+//     echo $current;
+//     echo "<br>";
+//     echo $current->today();
+//     echo "<br>";
+//     echo $current->yesterday();
+//     echo "<br>";
+//     echo $current->tomorrow();
+//     echo "<br>";
+//     $newYear = new Carbon('First day of september 2018');
+//     echo $newYear->diffForHumans();
+// });
 
 
 // ------------------------------- Login -------------------------------

@@ -154,44 +154,44 @@ class CartController extends Controller
             ]
         );
 
-        // $model->fill($request->all());
-        // if (Auth::check()) {
-        //     $model->user_id = Auth::user()->id;
-        // }
-        // $model->shipping_address = $request->address.", ".$request->ward.", ".$request->district.", ".$request->city;
-        // $model->payment_type = "Trả tiền khi nhận hàng";
-        // $model->payment_status = 1;
-        // $model->delivery_status = 1;
-        // $model->grand_total = $request->grand_total;
-        // $model->code = date('dmY-His');
+        $model->fill($request->all());
+        if (Auth::check()) {
+            $model->user_id = Auth::user()->id;
+        }
+        $model->shipping_address = $request->address.", ".$request->ward.", ".$request->district.", ".$request->city;
+        $model->payment_type = "Trả tiền khi nhận hàng";
+        $model->payment_status = 1;
+        $model->delivery_status = 1;
+        $model->grand_total = $request->grand_total;
+        $model->code = date('dmY-His');
 
-        // $model->save();
+        $model->save();
 
-        // $id_order = $model->id;
-        // $content = Cart::content();
+        $id_order = $model->id;
+        $content = Cart::content();
 
-        // foreach ($content as $key => $value) {
-        //     $orderDetail = new OrderDetail();
-        //     $orderDetail->order_id = $id_order;
-        //     $orderDetail->product_id = $value->id;
-        //     $orderDetail->price = $value->priceTotal;
-        //     $orderDetail->tax = $request->tax;
+        foreach ($content as $key => $value) {
+            $orderDetail = new OrderDetail();
+            $orderDetail->order_id = $id_order;
+            $orderDetail->product_id = $value->id;
+            $orderDetail->price = $value->priceTotal;
+            $orderDetail->tax = $request->tax;
 
-        //     $orderDetail->shipping_cost = 0;
-        //     $orderDetail->shipping_type = "Giao hàng tận nhà";
+            $orderDetail->shipping_cost = 0;
+            $orderDetail->shipping_type = "Giao hàng tận nhà";
 
-        //     $orderDetail->payment_status = 1;
-        //     $orderDetail->delivery_status = 1;
+            $orderDetail->payment_status = 1;
+            $orderDetail->delivery_status = 1;
 
-        //     $orderDetail->quantity = $value->qty;
-        //     $orderDetail->save();
-        // }
+            $orderDetail->quantity = $value->qty;
+            $orderDetail->save();
+        }
         
-        // $content = Cart::content();
-        // foreach ($content as $key => $value) {
-        //     $rowId = $value->rowId;
-        //     Cart::update($rowId,0);
-        // }
+        $content = Cart::content();
+        foreach ($content as $key => $value) {
+            $rowId = $value->rowId;
+            Cart::update($rowId,0);
+        }
         return view('client.cart.index');
     }
 }

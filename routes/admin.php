@@ -163,10 +163,11 @@ Route::prefix('danh-muc-tin-tuc')->group(function () {
 
 Route::prefix('thong-tin-he-thong')->group(function () {
     Route::get('/', [GeneralSettingController::class, 'index'])->name('generalSetting.index');
-
     Route::post('/', [GeneralSettingController::class, 'save']);
-
     Route::get('xoa/{id}', [GeneralSettingController::class, 'remove'])->name('generalSetting.remove');
+
+    Route::get('/footer', [GeneralSettingController::class, 'footer'])->name('generalSetting.footer');
+    Route::post('/footer', [GeneralSettingController::class, 'saveFooter']);
 });
 
 Route::prefix('slide')->group(function () {
@@ -178,7 +179,9 @@ Route::prefix('slide')->group(function () {
     Route::get('cap-nhat/{id}', [SlideController::class, 'editForm'])->name('slide.edit');
     Route::post('cap-nhat/{id}', [SlideController::class, 'saveEdit']);
 
-    Route::get('chi-tiet/{id}', [SlideController::class, 'detail'])->name('slide.detail');
-
     Route::get('xoa/{id}', [SlideController::class, 'remove'])->name('slide.remove');
+});
+
+Route::prefix('doanh-thu')->group(function () {
+    Route::get('/', [SlideController::class, 'index'])->name('revenue.index');
 });

@@ -253,7 +253,7 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('blog.add')}}" class="nav-link">
+                            <a href="{{route('generalSetting.footer')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Footer</p>
                             </a>
