@@ -14,25 +14,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-
-            </div>
-            <div class="modal-footer">
-                <a type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</a>
-                <a type="button" class="btn btn-primary" id="cate" data-success="start">Thực hiện</a>
-            </div>
-        </div>
-    </div>
-</div>
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
@@ -80,18 +62,7 @@ $(document).ready(function() {
         buttons: [{
                 text: 'Reload',
                 action: function(e) {
-                    if ('{{$admin}}') {
-                        table.ajax.reload();
-                    } else {
-                        $("#myModal").modal('show');
-                        $('.modal-body').html(
-                            `<div class="alert alert-danger" role="alert">
-                        <span class="fas fa-times-circle text-danger mr-2">
-                        Bạn không đủ quyền để dùng chức năng này
-                        </span></div>`);
-                        $('#cate').css('display', 'none')
-                    }
-
+                    table.ajax.reload();
                 }
             },
             {
@@ -111,7 +82,8 @@ $(document).ready(function() {
                         Hãy chọn danh mục để khôi phục
                         </span></div>`);
 
-                            $('#cate').click(function(e) {
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                             })
                         } else {
@@ -121,7 +93,8 @@ $(document).ready(function() {
                         Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được khôi phục )
                         </span></div>`);
 
-                            $('#cate').click(function(e) {
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                                 restoreMul('{{route("category.restoreMul")}}', allId);
                                 table.ajax.reload();
@@ -134,7 +107,11 @@ $(document).ready(function() {
                         <span class="fas fa-times-circle text-danger mr-2">
                         Bạn không đủ quyền để dùng chức năng này
                         </span></div>`);
-                        $('#cate').css('display', 'none')
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
                     }
                 }
             },
@@ -155,7 +132,8 @@ $(document).ready(function() {
                         Hãy chọn danh mục để xóa
                         </span></div>`);
 
-                            $('#cate').click(function(e) {
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                             })
                         } else {
@@ -165,20 +143,25 @@ $(document).ready(function() {
                         Thực hiện xóa dữ liệu ( Lưu ý : sau khi xóa dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
                         </span></div>`);
 
-                            $('#cate').click(function(e) {
+                            $('#realize').click(function(e) {
+                                // ngăn quá trình thực thi nhiều lần modal bootstrap
+                                $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                                 removeMul('{{route("category.deleteMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
                     } else {
-                        $("#myModal").modal('show');
                         $('.modal-body').html(
                             `<div class="alert alert-danger" role="alert">
                         <span class="fas fa-times-circle text-danger mr-2">
                         Bạn không đủ quyền để dùng chức năng này
                         </span></div>`);
-                        $('#cate').css('display', 'none')
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
                     }
                 }
             },
@@ -255,14 +238,11 @@ $(document).ready(function() {
         ]
     });
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
-    $('select').map(function(i, dom) {
-        var idSelect = $(dom).attr('id');
-        $('#' + idSelect).change(function() {
-            table.draw();
-        });
-    })
     $(document).on("click", "#undoTrashed", function() {
-        undoTrash($('#undoTrashed').data('id'))
+        id = $('#undoTrashed').data('id');
+        var url = '{{route("category.remove",":id")}}';
+        url = url.replace(':id', id);
+        undoTrash(url, id)
         table.ajax.reload();
     })
 });

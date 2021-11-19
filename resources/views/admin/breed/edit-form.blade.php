@@ -15,7 +15,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -54,9 +54,9 @@
                             <div class="form-group">
                                 <label for="">Ảnh</label>
                                 <div class="form-control">
-                                    <input type="file" name="uploadfile" id="">
+                                    <input type="file" name="image" id="">
                                 </div>
-                                <span class="text-danger error_text uploadfile_error"></span>
+                                <span class="text-danger error_text image_error"></span>
                             </div>
                             <div class="form-group">
                                 <label for="">Trạng thái</label>
@@ -72,9 +72,15 @@
                                 </div>
                                 <span class="text-danger error_text status_error"></span>
                             </div><br>
-                            <div class="text-left">
-                                <button type="submit" class="btn btn-info">Lưu</button>
-                                <a href="{{route('breed.index')}}" class="btn btn-danger">Hủy</a>
+                            <div class="row">
+                                <div class="col-6"></div>
+                                <div class="col-6 mt-2"><br>
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-info">Lưu</button>
+                                        <a href="{{ route('breed.index') }}" class="btn btn-danger">Hủy</a>
+                                    </div>
+                                </div>
+                                <div class="col sm"></div>
                             </div>
                         </div>
                     </div>
@@ -128,13 +134,37 @@ $(".btn-info").click(function(e) {
             $(document).find('span.error_text').text('');
         },
         success: function(data) {
-            console.log(data)
+            $('#realize').attr('href', data.url)
+            $('#realize').text('Giống loài');
             if (data.status == 0) {
+                $("#myModal").modal('show');
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
+                    if (data.dupicate != null) {
+                        if (key == 'name') {
+                            value = [
+                                'Tên giống loài đã tồn tại trong thùng rác . Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác'
+                            ];
+                        }
+                        showErr +=
+                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                            value[0] +
+                            '<br>';
+                    } else {
+                        showErr +=
+                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                            value[0] +
+                            '<br>';
+                    }
                     $('span.' + key + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
+
             } else {
-                window.location.href = data.url;
+                $("#myModal").modal('show');
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
             }
         },
     });

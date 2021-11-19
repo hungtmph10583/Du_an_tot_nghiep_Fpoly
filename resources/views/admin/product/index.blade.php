@@ -14,6 +14,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
@@ -103,7 +104,7 @@
                         <div class="table-responsive">
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
-                                    <th>STT</th>
+                                    <th><input type="checkbox" id="checkAll"></th>
                                     <th>Name</th>
                                     <th>Category</th>
                                     <th>Price</th>
@@ -135,9 +136,63 @@ $(document).ready(function() {
         autoWidth: false,
         dom: 'Bfrtip',
         buttons: [{
+                text: 'Reload',
+                action: function(e) {
+                    table.ajax.reload();
+                }
+            },
+            {
+                text: 'Delete',
+                action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+                    if ('{{$admin}}') {
+                        if (allId == '') {
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để xóa
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                            })
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                deleteMul('{{route("product.removeMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
+                }
+            },
+            {
                 extend: 'copyHtml5',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -145,14 +200,12 @@ $(document).ready(function() {
                 extend: 'csvHtml5',
                 charset: 'utf-8',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -162,22 +215,21 @@ $(document).ready(function() {
                 pageSize: 'LEGAL',
                 orientation: 'landscape',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             }, {
                 extend: 'print',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             "colvis"
         ],
         columnDefs: [{
-            targets: 0,
-            visible: true
+            "orderable": false,
+            "targets": 0
         }],
+        "order": [],
         language: {
             processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },
@@ -194,7 +246,8 @@ $(document).ready(function() {
             }
         },
         columns: [{
-                data: 'DT_RowIndex',
+                data: 'checkbox',
+                name: 'checkbox',
                 orderable: false,
                 searchable: false,
             },

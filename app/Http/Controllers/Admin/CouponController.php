@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use App\Models\Coupons;
 use App\Models\CouponType;
@@ -85,25 +86,38 @@ class CouponController extends Controller
         $couponType = CouponType::all();
         $discountType = DiscountType::all();
         $product = Product::all();
-        return view('admin.coupon.add-form', compact('coupon', 'couponType', 'discountType', 'product'));
+        $category = Category::all();
+        return view('admin.coupon.add-form', compact('coupon', 'couponType', 'discountType', 'product', 'category'));
     }
 
     public function saveAdd(Request $request, $id = null)
     {
         $model = new Coupons();
+
         if (!$model) {
             return redirect()->back();
+        }
+
+        if ($request->code) {
+            $dupicate = Coupons::onlyTrashed()
+                ->where('code', 'like', $request->code)->first();
+        } else {
+            $dupicate = null;
         }
 
         $message = [
             'code.required' => "Hãy nhập vào mã khuyến mãi",
             'code.unique' => "Mã khuyến mãi đã tồn tại",
             'type.required' => "Hãy chọn loại giảm giá",
-            'product_id.required' => "Hãy chọn sản phẩm giảm giá",
+            'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
+            'category_id.required_without' => "Hãy chọn danh mục hoặc sản phẩm giảm giá",
             'discount.required' => 'Hãy nhập vào giá trị giảm giá',
             'discount.numeric' => 'Giá trị giảm giá phải là số',
+            'start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'end_date.after' => 'Ngày kết thúc giảm phải sau ngày bắt đầu',
             'discount_type.required' => 'Hãy chọn kiểu giảm giá',
-            'details.required' => 'Hãy nhập vào chi tiết giảm giá'
+            'details.required' => 'Hãy nhập vào chi tiết giảm giá',
         ];
         $validator = Validator::make(
             $request->all(),
@@ -112,31 +126,51 @@ class CouponController extends Controller
                     'required',
                     Rule::unique('coupons')->ignore($id)
                 ],
-                'product_id' => 'required',
-                'discount' => 'required|numeric',
+                'product_id' => 'required_without:category_id',
+                'category_id' => 'required_without:product_id',
+                'discount' => [
+                    'required',
+                    'numeric',
+                    function ($attribute, $value, $fail) use ($request) {
+                        if ($value > 100 && $request->discount_type == 2) {
+                            return $fail('Giảm giá không vượt quá 100%');
+                        }
+                    },
+                ],
+                //nullable cho phép validate không bắt buộc trừ khi có dữ liệu nhập vào
+                'start_date' => 'nullable|date_format:Y-m-d H:i',
+                'end_date' => 'nullable|date_format:Y-m-d H:i|after:start_date',
                 'discount_type' => 'required',
-                'details' => 'required'
+                'details' => 'required',
+                'type' => 'required'
             ],
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('coupon.index'), 'dupicate' => $dupicate]);
         } else {
             $model->fill($request->all());
             $model->user_id = Auth::id();
+            $model->start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i');
+            $model->end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i');
             $model->save();
             if ($request->has('product_id')) {
                 foreach ($request->product_id as $i => $item) {
                     $product = Product::find($item);
-                    $product->discount = $request->discount;
-                    $product->discount_type = $request->discount_type;
-                    $product->discount_start_date = $request->start_date;
-                    $product->discount_end_date = $request->end_date;
+                    $product->coupon_id = $model->id;
                     $product->save();
                 }
             }
+
+            if ($request->has('category_id')) {
+                foreach ($request->category_id as $i => $item) {
+                    $category = Category::find($item);
+                    $category->coupon_id = $model->id;
+                    $category->save();
+                }
+            }
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/giam-gia')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('coupon.index'), 'message' => 'Thêm giảm giá thành công']);
     }
     public function editForm($id)
     {
@@ -144,10 +178,11 @@ class CouponController extends Controller
         $couponType = CouponType::all();
         $discountType = DiscountType::all();
         $product = Product::all();
+        $category = Category::all();
         if (!$coupon) {
             return redirect()->back();
         }
-        return view('admin.coupon.edit-form', compact('coupon', 'couponType', 'discountType', 'product'));
+        return view('admin.coupon.edit-form', compact('coupon', 'couponType', 'discountType', 'product', 'category'));
     }
     public function saveEdit($id, Request $request)
     {
@@ -157,15 +192,26 @@ class CouponController extends Controller
             return redirect()->back();
         }
 
+        if ($request->code) {
+            $dupicate = Coupons::onlyTrashed()
+                ->where('code', 'like', $request->code)->first();
+        } else {
+            $dupicate = null;
+        }
+
         $message = [
             'code.required' => "Hãy nhập vào mã khuyến mãi",
             'code.unique' => "Mã khuyến mãi đã tồn tại",
             'type.required' => "Hãy chọn loại giảm giá",
-            'product_id.required' => "Hãy chọn sản phẩm giảm giá",
+            'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
+            'category_id.required_without' => "Hãy chọn danh mục hoặc sản phẩm giảm giá",
             'discount.required' => 'Hãy nhập vào giá trị giảm giá',
             'discount.numeric' => 'Giá trị giảm giá phải là số',
+            'start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'end_date.after' => 'Ngày kết thúc giảm phải sau ngày bắt đầu',
             'discount_type.required' => 'Hãy chọn kiểu giảm giá',
-            'details.required' => 'Hãy nhập vào chi tiết giảm giá'
+            'details.required' => 'Hãy nhập vào chi tiết giảm giá',
         ];
         $validator = Validator::make(
             $request->all(),
@@ -174,31 +220,51 @@ class CouponController extends Controller
                     'required',
                     Rule::unique('coupons')->ignore($id)
                 ],
-                'product_id' => 'required',
-                'discount' => 'required|numeric',
+                'product_id' => 'required_without:category_id',
+                'category_id' => 'required_without:product_id',
+                'discount' => [
+                    'required',
+                    'numeric',
+                    function ($attribute, $value, $fail) use ($request) {
+                        if ($value > 100 && $request->discount_type == 2) {
+                            return $fail('Giảm giá không vượt quá 100%');
+                        }
+                    },
+                ],
+                //nullable cho phép validate không bắt buộc trừ khi có dữ liệu nhập vào
+                'start_date' => 'nullable|date_format:Y-m-d H:i',
+                'end_date' => 'nullable|date_format:Y-m-d H:i|after:start_date',
                 'discount_type' => 'required',
-                'details' => 'required'
+                'details' => 'required',
+                'type' => 'required'
             ],
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('coupon.index'), 'dupicate' => $dupicate]);
         } else {
             $model->fill($request->all());
             $model->user_id = Auth::id();
+            $model->start_date = Carbon::parse($request->start_date)->format('Y-m-d H:i');
+            $model->end_date = Carbon::parse($request->end_date)->format('Y-m-d H:i');
             $model->save();
             if ($request->has('product_id')) {
                 foreach ($request->product_id as $i => $item) {
                     $product = Product::find($item);
-                    $product->discount = $request->discount;
-                    $product->discount_type = $request->discount_type;
-                    $product->discount_start_date = $request->start_date;
-                    $product->discount_end_date = $request->end_date;
+                    $product->coupon_id = $model->id;
                     $product->save();
                 }
             }
+
+            if ($request->has('category_id')) {
+                foreach ($request->category_id as $i => $item) {
+                    $category = Category::find($item);
+                    $category->coupon_id = $model->id;
+                    $category->save();
+                }
+            }
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/giam-gia')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('coupon.index'), 'message' => 'Sửa giảm giá thành công']);
     }
     public function detail(Request $request)
     {

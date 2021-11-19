@@ -1,4 +1,4 @@
-@section('title', 'Danh sách bài viết')
+@section('title', 'Thùng rác giống loài')
 @extends('layouts.admin.main')
 @section('content')
 <div class="content-header">
@@ -6,7 +6,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Danh sách bài viết</li>
+                    <li class="breadcrumb-item card-title">Thùng rác giống loài</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -17,7 +17,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
-        <div class="card">
+        <div class="card card-success card-outline">
             <div class="card-body">
                 <div class="alert alert-success" role="alert" style="display: none;">
 
@@ -33,12 +33,14 @@
                         <div class="table-responsive">
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
-                                    <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Tiêu đề bài viết</th>
-                                    <th>Danh mục bài viết</th>
-                                    <th><a href="{{route('blog.add')}}" class="btn btn-outline-info float-right">Thêm
-                                            bài
-                                            viết</a></th>
+                                    <th>STT</th>
+                                    <th>Tên giống loài</th>
+                                    <th class="text-center">Tên danh mục</th>
+                                    <th>Slug</th>
+                                    <th>Status</th>
+                                    <th><a href="{{route('breed.add')}}" class="btn btn-outline-info float-right">Thêm
+                                            giống
+                                            loài</a></th>
                                 </thead>
                                 <tbody>
 
@@ -72,6 +74,56 @@ $(document).ready(function() {
                 }
             },
             {
+                text: 'Restore',
+                action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+                    if ('{{$admin}}') {
+                        var IsAjaxExecuting = false;
+                        if (allId == '') {
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để khôi phục
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                            })
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được khôi phục )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                restoreMul('{{route("breed.restoreMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
+                }
+            },
+            {
                 text: 'Delete',
                 action: function(e) {
                     e.preventDefault();
@@ -96,13 +148,13 @@ $(document).ready(function() {
                             $('.modal-body').html(
                                 `<div class="alert alert-success" role="alert">
                         <span class="fas fa-check-circle text-success mr-2">
-                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi xóa dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
                         </span></div>`);
 
                             $('#realize').click(function(e) {
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                deleteMul('{{route("blog.removeMul")}}', allId);
+                                removeMul('{{route("breed.deleteMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -164,10 +216,10 @@ $(document).ready(function() {
         },
         serverSide: true,
         ajax: {
-            url: "{{ route('blog.filter') }}",
+            url: "{{ route('breed.getBackup') }}",
             data: function(d) {
                 d.search = $('input[type="search"]').val();
-            },
+            }
         },
         columns: [{
                 data: 'checkbox',
@@ -176,12 +228,20 @@ $(document).ready(function() {
                 searchable: false,
             },
             {
-                data: 'title',
-                name: 'title',
+                data: 'name',
+                name: 'name',
             },
             {
-                data: 'category_blog_id',
-                name: 'category_blog_id',
+                data: 'category_id',
+                name: 'category_id',
+            },
+            {
+                data: 'slug',
+                name: 'slug',
+            },
+            {
+                data: 'status',
+                name: 'status',
             },
             {
                 data: 'action',
@@ -191,15 +251,12 @@ $(document).ready(function() {
             }
         ]
     });
-    // let column = table.column(0); //
-    // column.visible(false); //
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
-
-    $(document).on("click", "#undoIndex", function() {
-        id = $('#undoIndex').data('id');
-        var url = '{{route("blog.restore",":id")}}';
+    $(document).on("click", "#undoTrashed", function() {
+        id = $('#undoTrashed').data('id');
+        var url = '{{route("breed.remove",":id")}}';
         url = url.replace(':id', id);
-        undoIndex(url, id)
+        undoTrash(url, id)
         table.ajax.reload();
     })
 });

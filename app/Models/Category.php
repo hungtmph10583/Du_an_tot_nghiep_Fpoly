@@ -11,7 +11,7 @@ class Category extends Model
     use HasFactory, SoftDeletes;
     protected $table = "categories";
     protected $fillable = [
-        'name', 'slug', 'show_slide',  'category_type_id'
+        'name', 'slug', 'show_slide',  'category_type_id', 'coupon_id'
     ];
     // Quan hệ category -> product
     public function products()

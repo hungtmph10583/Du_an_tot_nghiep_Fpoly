@@ -14,7 +14,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
@@ -98,14 +98,12 @@
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
                                     <th>Name</th>
-                                    <th>Image</th>
                                     <th>Slug</th>
                                     <th>Category</th>
                                     <th>Price</th>
                                     <th>Status</th>
                                     <th>Quantity</th>
-                                    <th><a href="{{route('product.add')}}" class="btn btn-outline-info float-right">Thêm
-                                            sản phẩm</a></th>
+                                    <th>Action</th>
                                 </thead>
                                 <tbody>
                                 </tbody>
@@ -131,28 +129,109 @@ $(document).ready(function() {
         autoWidth: false,
         dom: 'Bfrtip',
         buttons: [{
+                text: 'Reload',
+                action: function(e) {
+                    table.ajax.reload();
+                }
+            },
+            {
                 text: 'Restore',
                 action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
                     var allId = [];
                     $('input:checkbox[name=checkPro]:checked').each(function() {
                         allId.push($(this).val());
                     })
+                    if ('{{$admin}}') {
+                        if (allId == '') {
 
-                    $.ajax({
-                        url: "{{route('product.removeMul')}}",
-                        type: 'DELETE',
-                        data: {
-                            _token: $("input[name=_token]").val(),
-                            allId: allId
-                        },
-                        success: function(data) {
-                            $('div.alert-success').text(data.success);
-                            $('div.alert-success').css('display', 'block');
-                            $.each(allId, function(key, val) {
-                                $('#' + val).remove();
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để khôi phục
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
                             })
-                        },
-                    });
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được khôi phục )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                restoreMul('{{route("product.restoreMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
+                }
+            },
+            {
+                text: 'Delete',
+                action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+                    if ('{{$admin}}') {
+                        if (allId == '') {
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để xóa
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                            })
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi xóa dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                removeMul('{{route("product.deleteMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
                 }
             },
             {
@@ -226,10 +305,6 @@ $(document).ready(function() {
                 name: 'name',
             },
             {
-                data: 'image',
-                name: 'image',
-            },
-            {
                 data: 'slug',
                 name: 'slug',
             },
@@ -266,8 +341,12 @@ $(document).ready(function() {
         $('#' + idSelect).select2({});
     })
 
-    $('#checkAll').click(function() {
-        $('.checkPro').prop('checked', $(this).prop('checked'))
+    $(document).on("click", "#undoTrashed", function() {
+        id = $('#undoTrashed').data('id');
+        var url = '{{route("product.remove",":id")}}';
+        url = url.replace(':id', id);
+        undoTrash(url, id)
+        table.ajax.reload();
     })
 });
 </script>

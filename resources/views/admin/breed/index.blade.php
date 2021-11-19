@@ -1,7 +1,6 @@
 @section('title', 'Danh sách giống loài')
 @extends('layouts.admin.main')
 @section('content')
-
 <div class="content-header">
     <div class="container-fluid">
         <div class="card card-secondary my-0">
@@ -14,14 +13,20 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
-            <div class="card-header">
-            </div>
             <div class="card-body">
+                <div class="alert alert-success" role="alert" style="display: none;">
+
+                </div>
+                @if(session('BadState'))
+                <div class="alert alert-danger" role="alert">
+                    {{session('BadState')}}
+                </div>
+                @endif
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
@@ -63,6 +68,61 @@ $(document).ready(function() {
         autoWidth: false,
         dom: 'Bfrtip',
         buttons: [{
+                text: 'Reload',
+                action: function(e) {
+                    table.ajax.reload();
+                }
+            },
+            {
+                text: 'Delete',
+                action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+                    if ('{{$admin}}') {
+                        if (allId == '') {
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để xóa
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                            })
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                deleteMul('{{route("breed.removeMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
+                }
+            },
+            {
                 extend: 'copyHtml5',
                 exportOptions: {
                     columns: ':visible'
@@ -97,9 +157,10 @@ $(document).ready(function() {
             "colvis"
         ],
         columnDefs: [{
-            targets: 0,
-            visible: true
+            "orderable": false,
+            "targets": 0
         }],
+        "order": [],
         language: {
             processing: "<img width='70' src='{{asset('storage/uploads/loading/Dancing_kitty.gif')}}'>",
         },
@@ -111,7 +172,8 @@ $(document).ready(function() {
             }
         },
         columns: [{
-                data: 'DT_RowIndex',
+                data: 'checkbox',
+                name: 'checkbox',
                 orderable: false,
                 searchable: false,
             },
@@ -139,16 +201,13 @@ $(document).ready(function() {
             }
         ]
     });
-    let column = table.column(0); // here is the index of the column, starts with 0
-    column.visible(false); // this should be either true or false
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
-    $('select').map(function(i, dom) {
-        var idSelect = $(dom).attr('id');
-        $('#' + idSelect).change(function() {
-            table.draw();
-        });
-        // $('#' + idSelect).select2({});
-
+    $(document).on("click", "#undoIndex", function() {
+        id = $('#undoIndex').data('id');
+        var url = '{{route("breed.restore",":id")}}';
+        url = url.replace(':id', id);
+        undoIndex(url, id)
+        table.ajax.reload();
     })
 });
 </script>

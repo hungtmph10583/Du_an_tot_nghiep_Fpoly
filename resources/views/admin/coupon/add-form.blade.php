@@ -15,7 +15,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container">
@@ -68,13 +68,33 @@
                                 <select name="product_id[]" class="form-control" id="product" multiple>
                                     <option value=""></option>
                                     @foreach($product as $p)
-                                    @if(!($p->discount))
+                                    @if(!($p->discount || $p->coupon_id))
                                     <option value="{{$p->id}}">{{$p->name}}</option>
                                     @endif
                                     @endforeach
                                 </select>
                             </div>
                             <span class="text-danger error_text product_id_error"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="form-group">
+                                <label for="">Danh mục</label>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="form-group">
+                                <select name="category_id[]" class="form-control" id="category" multiple>
+                                    <option value=""></option>
+                                    @foreach($category as $c)
+                                    @if(!($c->coupon_id))
+                                    <option value="{{$c->id}}">{{$c->name}}</option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span class="text-danger error_text category_id_error"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -87,12 +107,12 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <input type="date" id="start" name="start_date" class="form-control">
+                                        <input type="datetime-local" id="start" name="start_date" class="form-control">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <input type="date" id="start" name="end_date" class="form-control">
+                                        <input type="datetime-local" id="end" name="end_date" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -166,6 +186,7 @@
 @endsection
 @section('pagejs')
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">
+<script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
 <script>
 $(".btn-info").click(function(e) {
     e.preventDefault();
@@ -174,6 +195,10 @@ $(".btn-info").click(function(e) {
         formData.set('start_date', ' ');
         formData.set('end_date', ' ');
     }
+
+    formData.set('start_date', dateTime($("#start").val()))
+    formData.set('end_date', dateTime($("#end").val()))
+
     $.ajax({
         url: "{{ route('coupon.saveAdd') }}",
         type: 'POST',
@@ -187,12 +212,38 @@ $(".btn-info").click(function(e) {
         },
         success: function(data) {
             console.log(data)
+            $('#realize').attr('href', data.url)
+            $('#realize').text('Giảm giá');
             if (data.status == 0) {
+                $("#myModal").modal('show');
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
+                    if (data.dupicate != null) {
+                        if (key == 'code') {
+                            value = [
+                                'Mã giảm giá đã tồn tại trong thùng rác . Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác'
+                            ];
+                        }
+                        showErr +=
+                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                            value[0] +
+                            '<br>';
+                    } else {
+                        showErr +=
+                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                            value[0] +
+                            '<br>';
+                    }
                     $('span.' + key + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
+
             } else {
-                window.location.href = data.url;
+                $("#myModal").modal('show');
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
+                $(document).find('input.form-control').val(null);
             }
         },
     });

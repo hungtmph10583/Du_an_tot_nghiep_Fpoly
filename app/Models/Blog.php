@@ -22,7 +22,7 @@ class Blog extends Model
 
     public function BlogCategory()
     {
-        return $this->belongsTo(User::class, 'category_blog_id');
+        return $this->belongsTo(BlogCategory::class, 'category_blog_id')->withTrashed();
     }
 
     public function User()

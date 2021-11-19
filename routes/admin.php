@@ -89,8 +89,15 @@ Route::prefix('giong-loai')->group(function () {
 
     Route::get('chi-tiet/{id}', [BreedController::class, 'detail'])->name('breed.detail');
 
-    Route::get('xoa/{id}', [BreedController::class, 'remove'])->name('breed.remove');
+    Route::delete('xoa/{id}', [BreedController::class, 'remove'])->name('breed.remove');
     Route::get('dataPet', [BreedController::class, 'getData'])->name('breed.filter');
+    Route::get('trash', [BreedController::class, 'backUp'])->name('breed.backup');
+    Route::get('dataBackUp', [BreedController::class, 'getBackUp'])->name('breed.getBackup');
+    Route::get('trash/restore/{id}', [BreedController::class, 'restore'])->name('breed.restore');
+    Route::delete('trash/deleteForver/{id}', [BreedController::class, 'delete'])->name('breed.delete');
+    Route::delete('trash/remove', [BreedController::class, 'removeMultiple'])->name('breed.removeMul');
+    Route::get('trash/restore', [BreedController::class, 'restoreMultiple'])->name('breed.restoreMul');
+    Route::delete('trash/deleteForeverMul', [BreedController::class, 'deleteMultiple'])->name('breed.deleteMul');
 });
 
 Route::prefix('san-pham')->group(function () {
@@ -110,9 +117,11 @@ Route::prefix('san-pham')->group(function () {
     Route::get('trash', [ProductController::class, 'backUp'])->name('product.backup');
     Route::get('dataBackUp', [ProductController::class, 'getBackUp'])->name('product.getBackup');
     Route::get('trash/restore/{id}', [ProductController::class, 'restore'])->name('product.restore');
-    Route::delete('trash/delete/{id}', [ProductController::class, 'delete'])->name('product.delete');
+    Route::delete('trash/deleteForver/{id}', [ProductController::class, 'delete'])->name('product.delete');
     Route::post('import', [ProductController::class, 'store'])->name('product.import');
     Route::delete('trash/remove', [ProductController::class, 'removeMultiple'])->name('product.removeMul');
+    Route::get('trash/restore', [ProductController::class, 'restoreMultiple'])->name('product.restoreMul');
+    Route::delete('trash/deleteForeverMul', [ProductController::class, 'deleteMultiple'])->name('product.deleteMul');
 });
 
 Route::prefix('phu-kien')->group(function () {
@@ -157,10 +166,17 @@ Route::prefix('tin-tuc')->group(function () {
 
     Route::get('chi-tiet/{id}', [BlogController::class, 'detail'])->name('blog.detail');
 
-    Route::get('xoa/{id}', [BlogController::class, 'remove'])->name('blog.remove');
+    Route::delete('xoa/{id}', [BlogController::class, 'remove'])->name('blog.remove');
     Route::post('upload', [BlogController::class, 'upload'])->name('blog.upload');
 
     Route::get('dataBlog', [BlogController::class, 'getData'])->name('blog.filter');
+    Route::get('trash', [BlogController::class, 'backUp'])->name('blog.backup');
+    Route::get('dataBackUp', [BlogController::class, 'getBackUp'])->name('blog.getBackup');
+    Route::get('trash/restore/{id}', [BlogController::class, 'restore'])->name('blog.restore');
+    Route::delete('trash/deleteForver/{id}', [BlogController::class, 'delete'])->name('blog.delete');
+    Route::delete('trash/remove', [BlogController::class, 'removeMultiple'])->name('blog.removeMul');
+    Route::get('trash/restore', [BlogController::class, 'restoreMultiple'])->name('blog.restoreMul');
+    Route::delete('trash/deleteForeverMul', [BlogController::class, 'deleteMultiple'])->name('blog.deleteMul');
 });
 
 Route::prefix('danh-muc-tin-tuc')->group(function () {

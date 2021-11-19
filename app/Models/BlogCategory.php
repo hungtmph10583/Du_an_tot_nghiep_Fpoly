@@ -14,4 +14,9 @@ class BlogCategory extends Model
         'name',
         'slug',
     ];
+
+    public function blogs()
+    {
+        return $this->hasMany(Blog::class, 'category_blog_id')->withTrashed();
+    }
 }

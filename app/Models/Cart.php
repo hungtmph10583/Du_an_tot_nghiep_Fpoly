@@ -10,4 +10,9 @@ class Cart extends Model
 {
     use HasFactory, SoftDeletes;
     protected $table = "carts";
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_id');
+    }
 }

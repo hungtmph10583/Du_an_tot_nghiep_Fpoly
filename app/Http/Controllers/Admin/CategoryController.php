@@ -19,7 +19,8 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        return view('admin.category.index');
+        $admin = Auth::user()->hasanyrole('admin|manager');
+        return view('admin.category.index', compact('admin'));
     }
 
     public function getData(Request $request)
@@ -41,10 +42,10 @@ class CategoryController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                <a  class="btn btn-success" href="' . route('category.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
-                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
-                                    </span>';
+                    <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                    <a  class="btn btn-success" href="' . route('category.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('category.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                </span>';
             })
             ->filter(function ($instance) use ($request) {
                 if (!empty($request->get('search'))) {
@@ -73,6 +74,7 @@ class CategoryController extends Controller
         } else {
             $dupicate = null;
         }
+
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên danh mục đã tồn tại",
@@ -82,6 +84,7 @@ class CategoryController extends Controller
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
+
         $validator = Validator::make(
             $request->all(),
             [
@@ -95,6 +98,7 @@ class CategoryController extends Controller
             ],
             $message
         );
+
         if ($validator->fails()) {
             return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index'), 'dupicate' => $dupicate]);
         } else {
@@ -189,12 +193,18 @@ class CategoryController extends Controller
     public function remove($id)
     {
         $category = Category::find($id);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
         $pro = $category->products();
         $pro->each(function ($galleries) {
             $galleries->galleries()->delete();
         });
         $pro->delete();
         $category->delete();
+
         return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
@@ -224,7 +234,7 @@ class CategoryController extends Controller
                 return '
                 <span class="float-right">
                     <a  class="btn btn-success" href="javascript:void(0);" onclick="restoreData(' . $row->id . ')"><i class="far fa-edit"></i></a>
-                    <a class="btn btn-danger" href="javascript:void(0);" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('category.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
@@ -243,18 +253,29 @@ class CategoryController extends Controller
     public function restore($id)
     {
         $category = Category::withTrashed()->find($id);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Sản phẩm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại danh muc']);
+        }
+
         $pro = $category->products();
         $pro->each(function ($galleries) {
             $galleries->galleries()->restore();
         });
         $pro->restore();
         $category->restore();
+
         return response()->json(['success' => 'Khôi phục thú cưng thành công !']);
     }
 
     public function delete($id)
     {
         $category = Category::withTrashed()->where('id', $id);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Sản phẩm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại danh mucj']);
+        }
+
         $category->each(function ($product) {
             $pro = $product->products();
             $pro->each(function ($galleries) {
@@ -263,6 +284,7 @@ class CategoryController extends Controller
             $pro->forceDelete();
         });
         $category->forceDelete();
+
         return response()->json(['success' => 'Xóa danh mục thành công !']);
     }
 
@@ -270,6 +292,11 @@ class CategoryController extends Controller
     {
         $idAll = $request->allId;
         $category = Category::withTrashed()->whereIn('id', $idAll);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
         $category->each(function ($product) {
             $pro = $product->products();
             $pro->each(function ($galleries) {
@@ -278,6 +305,7 @@ class CategoryController extends Controller
             $pro->delete();
         });
         $category->delete();
+
         return response()->json(['success' => 'Xóa danh mục thành công !']);
     }
 
@@ -285,6 +313,11 @@ class CategoryController extends Controller
     {
         $idAll = $request->allId;
         $category = Category::withTrashed()->whereIn('id', $idAll);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
         $category->each(function ($product) {
             $pro = $product->products();
             $pro->each(function ($galleries) {
@@ -293,6 +326,7 @@ class CategoryController extends Controller
             $pro->restore();
         });
         $category->restore();
+
         return response()->json(['success' => 'Khôi phục danh mục thành công !']);
     }
 
@@ -300,6 +334,11 @@ class CategoryController extends Controller
     {
         $idAll = $request->allId;
         $category = Category::withTrashed()->whereIn('id', $idAll);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
         $category->each(function ($product) {
             $pro = $product->products();
             $pro->each(function ($galleries) {
@@ -308,6 +347,7 @@ class CategoryController extends Controller
             $pro->forceDelete();
         });
         $category->forceDelete();
-        return response()->json(['success' => 'Khôi phục danh mục thành công !']);
+
+        return response()->json(['success' => 'Xóa danh mục danh mục thành công !']);
     }
 }

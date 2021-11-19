@@ -47,18 +47,21 @@ function removeImg(el) {
 //hàm dùng để xóa dữ liệu của 1 bảng bằng ajax
 //áp dụng với file index
 function deleteData(id) {
-    var urlData = window.location;
+
     if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
         $.ajax({
-            url: urlData + '/xoa/' + id,
+            url: $('#deleteUrl' + id).data('url'),
             type: 'DELETE',
-            method: 'DELETE',
             data: {
                 _token: $("input[name=_token]").val()
             },
             success: function(data) {
                 console.log(data)
-                $('div.alert-success').html('<span class="text-success">' + data.success + ' <a href="javascript:void(0);" id="undoIndex" data-id="' + id + '">Hoàn tác</a></span>');
+                if (data.empty) {
+                    $('div.alert-success').html('<span class="text-success">' + data.success);
+                } else {
+                    $('div.alert-success').html('<span class="text-success">' + data.success + ' <a href="javascript:void(0);" id="undoIndex" data-id="' + id + '">Hoàn tác</a></span>');
+                }
                 $('div.alert-success').css('display', 'block');
                 $('#' + id).remove();
             },
@@ -75,7 +78,12 @@ function restoreData(id) {
                 _token: $("input[name=_token]").val()
             },
             success: function(data) {
-                $('div.alert-success').html('<span class="text-success">' + data.success + ' <a href="javascript:void(0);" id="undoTrashed" data-id="' + id + '">Hoàn tác</a></span>');
+                console.log(data)
+                if (data.empty) {
+                    $('div.alert-success').html('<span class="text-success">' + data.success);
+                } else {
+                    $('div.alert-success').html('<span class="text-success">' + data.success + ' <a href="javascript:void(0);" id="undoTrashed" data-id="' + id + '">Hoàn tác</a></span>');
+                }
                 $('div.alert-success').css('display', 'block');
                 $('#' + id).remove();
             },
@@ -97,6 +105,7 @@ function deleteMul(route, allId) {
             allId: allId
         },
         success: function(data) {
+            console.log(data)
             $('div.alert-success').text(data.success);
             $('div.alert-success').css('display', 'block');
             $.each(allId, function(key, val) {
@@ -136,6 +145,7 @@ function removeMul(route, allId) {
             allId: allId
         },
         success: function(data) {
+            console.log(data)
             $('div.alert-success').text(data.success);
             $('div.alert-success').css('display', 'block');
             $.each(allId, function(key, val) {
@@ -150,7 +160,7 @@ function removeMul(route, allId) {
 function removeForever(id) {
     if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
         $.ajax({
-            url: 'trash/deleteForver/' + id,
+            url: $('#deleteUrl' + id).data('url'),
             type: 'delete',
             data: {
                 _token: $("input[name=_token]").val(),
@@ -165,10 +175,10 @@ function removeForever(id) {
     }
 }
 //undo trash data table
-function undoTrash(id) {
+function undoTrash(route, id) {
     if (confirm('Bạn có chắc chắn muốn hoàn tác mục này ?')) {
         $.ajax({
-            url: 'xoa/' + id,
+            url: route,
             type: 'DELETE',
             method: 'DELETE',
             data: {
@@ -185,11 +195,10 @@ function undoTrash(id) {
 }
 
 //undo index data table
-function undoIndex(id) {
-    var urlData = window.location;
+function undoIndex(route, id) {
     if (confirm('Bạn có chắc chắn muốn hoàn tác mục này ?')) {
         $.ajax({
-            url: urlData + '/trash/restore/' + id,
+            url: route,
             type: 'GET',
             data: {
                 _token: $("input[name=_token]").val()
@@ -202,4 +211,9 @@ function undoIndex(id) {
             },
         });
     }
+}
+
+// datetime
+function dateTime(time) {
+    return time.replace('T', ' ');
 }

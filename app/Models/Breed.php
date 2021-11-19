@@ -15,8 +15,7 @@ class Breed extends Model
     ];
     public function products()
     {
-        return $this->hasMany(Product::class, 'breed_id');
-        // quan he 
+        return $this->hasMany(Product::class, 'breed_id')->withTrashed();
     }
     public function category()
     {

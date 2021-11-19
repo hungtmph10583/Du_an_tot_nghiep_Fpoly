@@ -6,17 +6,22 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class City extends Model
+class District extends Model
 {
     use HasFactory, SoftDeletes;
-    protected $table = 'cities';
+    protected $table = 'districts';
     protected $fillable = [
-        'country_id',
+        'city_id',
         'name',
-        'cost'
     ];
-    public function address()
+
+    public function city()
     {
-        return $this->hasMany(Address::class, 'city_id');
+        return $this->belongsTo(City::class, 'city_id');
+    }
+
+    public function wards()
+    {
+        return $this->hasMany(Ward::class, 'district_id');
     }
 }

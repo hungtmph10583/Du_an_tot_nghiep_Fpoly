@@ -121,15 +121,26 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('coupon.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Phiếu giảm giá</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{route('product.backup')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Back Up Products</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-swatchbook"></i>
+                        <p>
+                            Phiếu giảm giá
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('coupon.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
                             </a>
                         </li>
                     </ul>
@@ -158,8 +169,24 @@
                         <li class="nav-item">
                             <a href="{{route('breed.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Giống loài</p>
+                                <p>Giống loài
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('breed.index')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('breed.backup')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thùng rác giống loài</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="{{route('category.backup')}}" class="nav-link">
@@ -221,6 +248,12 @@
                             <a href="{{route('blogCategory.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh mục bài viết</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('blog.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác bài viết</p>
                             </a>
                         </li>
                     </ul>

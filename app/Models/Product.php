@@ -40,17 +40,17 @@ class Product extends Model
 
     public function breed()
     {
-        return $this->belongsTo(Breed::class, 'breed_id');
+        return $this->belongsTo(Breed::class, 'id')->withTrashed();
     }
 
     public function gender()
     {
-        return $this->belongsTo(Gender::class, 'gender_id');
+        return $this->hasOne(Gender::class, 'id')->withTrashed();
     }
 
     public function age()
     {
-        return $this->belongsTo(Age::class, 'age_id');
+        return $this->belongsTo(Age::class, 'age_id')->withTrashed();
     }
 
     public function galleries()
@@ -60,16 +60,26 @@ class Product extends Model
 
     public function discountType()
     {
-        return $this->belongsTo(DiscountType::class, 'discount_type');
+        return $this->hasMany(DiscountType::class, 'discount_type')->withTrashed();
     }
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'product_id');
+        return $this->hasMany(Review::class, 'product_id')->withTrashed();
     }
 
     public function orderDetails()
     {
-        return $this->hasMany(OrderDetail::class, 'product_id');
+        return $this->hasMany(OrderDetail::class, 'product_id')->withTrashed();
+    }
+
+    public function coupon()
+    {
+        return $this->belongsTo(Coupons::class, 'coupon_id')->withTrashed();
+    }
+
+    public function carts()
+    {
+        return $this->hasMany(Cart::class, 'product_id')->withTrashed();
     }
 }

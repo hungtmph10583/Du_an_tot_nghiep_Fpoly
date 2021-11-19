@@ -38,4 +38,9 @@ class Coupons extends Model
     {
         return $this->hasMany(Accessory::class, 'coupon_id');
     }
+
+    public function category()
+    {
+        return $this->hasMany(Category::class, 'coupon_id');
+    }
 }
