@@ -80,7 +80,7 @@
             <div class="product-item">
                 <div class="item-top">
                     <div class="product-thumbnail">
-                    <a href="{{route('client.product.detail', ['id' => $product->id])}}">
+                    <a href="{{route('client.product.detail', ['id' => $product->slug])}}">
                         <img src="{{asset( 'storage/' . $product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                     </div>

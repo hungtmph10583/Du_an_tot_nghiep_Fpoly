@@ -50,7 +50,7 @@ class CartController extends Controller
         $data['options']['image'] = $product_info->image;
         Cart::add($data);
         Cart::setGlobalTax(10);
-        return redirect()->back();
+        return redirect()->back()->with('msg', "Đã thêm sản phẩm vào giỏ hàng");
     }
 
     public function buyNow(Request $request){//Giỏ hàng
@@ -104,7 +104,7 @@ class CartController extends Controller
 
     public function deleteToCart($rowId){
         Cart::update($rowId,0);
-        return redirect(route('client.cart.index'));
+        return redirect(route('client.cart.index'))->with('message', "Đã xóa sản phẩm!");
     }
 
     public function updateCartQty(Request $request){

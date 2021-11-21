@@ -48,7 +48,7 @@
                         @error('cfpassword')<p class="alert">{{ $message }}</p>@enderror
                         <button type="submit">Sign up</button>
                         <p>
-                            <a href="{{route('forgotPassword')}}" class="link">Forgot Password</a>
+                            <a href="{{route('password.request')}}" class="link">Forgot Password</a>
                         </p>
                         <span>Already have an account?</span>
                         <a href="{{route('login')}}" class="link">Sign in here</a>

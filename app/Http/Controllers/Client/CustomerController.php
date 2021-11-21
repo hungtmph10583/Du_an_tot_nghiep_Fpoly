@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
-use App\Models\Address;
 use App\Models\City;
 use App\Models\Order;
 use App\Models\Product;
@@ -21,20 +20,14 @@ class CustomerController extends Controller
 
     public function accountInfo (){
         $model = User::find(Auth::user()->id);
-        $model->load('address');
         return view('client.customer.account-info', compact('model'));
     }
 
     public function updateinfo(){
         $model = User::find(Auth::user()->id);
 
-        $address = Address::all();
-        // dd($address);
-        $city = City::all();
         return view('client.customer.updateinfo', [
-            'model' => $model,
-            'address' => $address,
-            'city' => $city
+            'model' => $model
         ]);
     }
 
@@ -65,30 +58,30 @@ class CustomerController extends Controller
         }
         $model->save();
 
-        if($request->has('address')){
-            $check = Address::where('user_id', $user)->get();
-            if (!Address::where('user_id', $user)) {
-                $city = City::find($request->city);
-                $newaddress = new Address();
-                $newaddress->user_id = $user;
-                $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-                $newaddress->city_id = $request->city;
-                $newaddress->save();
-            }else{
-                $city = City::find($request->city);
-                $newaddress = Address::fint(Auth::user()->address->id);
-                $newaddress->user_id = $user;
-                $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-                $newaddress->city_id = $request->city;
-                $newaddress->save();
-            }
-            // $city = City::find($request->city);
-            // $newaddress = new Address();
-            // $newaddress->user_id = $user;
-            // $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-            // $newaddress->city_id = $request->city;
-            // $newaddress->save();
-        }
+        // if($request->has('address')){
+        //     $check = Address::where('user_id', $user)->get();
+        //     if (!Address::where('user_id', $user)) {
+        //         $city = City::find($request->city);
+        //         $newaddress = new Address();
+        //         $newaddress->user_id = $user;
+        //         $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
+        //         $newaddress->city_id = $request->city;
+        //         $newaddress->save();
+        //     }else{
+        //         $city = City::find($request->city);
+        //         $newaddress = Address::fint(Auth::user()->address->id);
+        //         $newaddress->user_id = $user;
+        //         $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
+        //         $newaddress->city_id = $request->city;
+        //         $newaddress->save();
+        //     }
+        //     // $city = City::find($request->city);
+        //     // $newaddress = new Address();
+        //     // $newaddress->user_id = $user;
+        //     // $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
+        //     // $newaddress->city_id = $request->city;
+        //     // $newaddress->save();
+        // }
         return redirect(route('client.customer.info'));
     }
 

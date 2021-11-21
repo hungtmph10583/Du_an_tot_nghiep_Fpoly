@@ -66,7 +66,8 @@
                 <div class="header-item none"></div>
                 <div class="header-item">
                     <a href="#" class="logo">
-                        <i class="fas fa-paw"></i> <b> LOLI<span>PET</span></b>
+                        <!-- <i class="fas fa-paw"></i> <b> LOLI<span>PET</span></b> -->
+                        <img src="{{ asset('client-theme/images/logo.png')}}" alt=""><b> LOLI<span>PET</span></b>
                     </a>
                 </div>
                 <div class="header-item">
@@ -147,9 +148,27 @@
         </div>
     </div>
 </header>
+<!-- @if(session('msg') != null)
+<div class="msg-alert">
+    <p class="text-alert">
+        <span>{{session('msg')}}</span>
+        <i class="fas fa-times" data-dismiss="alert"></i>
+    </p>
+</div>
+@endif -->
+@if(session()->has('message'))
+    <div class="msg-alert">
+        <p class="text-alert">
+            <span>{{ session()->get('message') }}</span>
+            <i class="fas fa-times"></i>
+        </p>
+    </div>
+@endif
 @section('pagejs')
-<!-- <script src="{{ asset('client-theme/js/script.js')}}"></script> -->
 <script>
-    
+    // $(".msg-alert i").click(function() {
+    //     $(".msg-alert").removeClass('active');
+    //     $(this).parent().addClass('active');
+    // });
 </script>
 @endsection

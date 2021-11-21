@@ -16,15 +16,17 @@ class AuthController extends Controller
     }
 
     public function postLogin(Request $request){
+        $user = User::where('email', $request->email)->first();
         // thực hiện validate bằng $request
         $request->validate(
             [
-                'email' => 'required|email',
+                'email' => 'required|email|exists:users',
                 'password' => 'required'
             ],
             [
-                'email.required' => "Hãy nhập vào Email!",
+                'email.required' => "Hãy nhập vào tài khoản!",
                 'email.email' => "Email không đúng định dạng!",
+                'email.exists' => "Không tìm thấy tài khoản!",
                 'password.required' => "Hãy nhập vào mật khẩu!"
             ]
         );
@@ -37,7 +39,7 @@ class AuthController extends Controller
         }elseif(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1])) {
             return redirect(route('client.home'));
         } else {
-            return redirect()->back()->with('msg', "Email hoặc mật khẩu không chính xác!");
+            return back()->withInput()->with('msg', "Mật khẩu không chính xác. Vui lòng thử lại!");
         }
     }
 

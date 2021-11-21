@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Providers;
-
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
 /**
  * hungtm
@@ -37,5 +37,11 @@ class AppServiceProvider extends ServiceProvider
          */
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
+        /**
+         * @name: hungtm/
+         * @date: 18/11/21
+         * @note: seting datetime Carbon 
+         */
+        Carbon::setLocale('vi');
     }
 }

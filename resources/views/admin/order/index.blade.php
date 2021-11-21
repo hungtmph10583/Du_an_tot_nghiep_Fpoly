@@ -52,6 +52,7 @@
                             <thead>
                                 <th>STT</th>
                                 <th>Mã đơn hàng</th>
+                                <th>Thời gian</th>
                                 <th>Khách hàng</th>
                                 <th>Tổng tiền</th>
                                 <th>Trạng thái</th>
@@ -63,6 +64,7 @@
                                 <tr>
                                     <td>{{(($order->currentPage()-1)*7) + $loop->iteration}}</td>
                                     <td>{{$value->code}}</td>
+                                    <td>{{$value->created_at->diffForHumans()}}</td>
                                     <td>{{$value->name}}</td>
                                     <td>{{number_format($value->grand_total,0,',','.')}}<span>đ</span></td>
                                     <td>
@@ -93,7 +95,7 @@
                                         </span>
                                     </td>
                                     <td class="text-center">
-                                            <i class="{{ $value->payment_status == 1 ? 'far fa-times-circle text-danger' : 'far fa-check-circle text-success'  }}"></i>
+                                        <i class="{{ $value->payment_status == 1 ? 'far fa-times-circle text-danger' : 'far fa-check-circle text-success'  }}"></i>
                                     </td>
                                     <td>
                                         <span class="float-right">

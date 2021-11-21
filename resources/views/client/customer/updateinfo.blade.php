@@ -43,30 +43,6 @@
                     <label for="">Số điện thoại <span class="text-red">*</span></label>
                     <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
                 </div>
-                <!-- <div class="group">
-                    <label for="city">Tỉnh/Thành phố</label>
-                    <select name="city" id="">
-                            <option value="">Chọn thành phố</option>
-                        @foreach($city as $city)
-                            <option value="{{$city->id}}" >{{$city->name}}</option>
-                        @endforeach
-                    </select>
-                </div>
-                <div class="group">
-                    <label for="">Quận huyện</label>
-                    <input type="text" name="district" placeholder="Quận huyện" value="{{$address}}">
-                </div>
-                <div class="group">
-                    <label for="">Phường xã</label>
-                    <input type="text" name="ward" placeholder="Phường xã" value="{{Auth::user()->address->address}}">
-                </div>
-                <div class="group">
-                    <label for="">Địa chỉ <span class="text-red">*</span></label>
-                    <textarea name="address" id="" cols="30" rows="10" placeholder="Địa chỉ, Phường xã, Quận huyện"></textarea>
-                </div>
-                @error('address')
-                    <span class="text-danger">{{$message}}</span>
-                @enderror -->
                 <div class="group-last">
                     <a href="{{route('client.customer.info')}}">Hủy bỏ</a>
                     <button type="submit">Cập nhật</button>

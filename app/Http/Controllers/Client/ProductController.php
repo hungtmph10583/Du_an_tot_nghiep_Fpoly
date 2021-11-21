@@ -43,7 +43,7 @@ class ProductController extends Controller
     }
 
     public function detail($id){
-        $model = Product::find($id);
+        $model = Product::where('slug', $id)->first();
         if (!$model) {
             return redirect()->back();
         }
@@ -52,9 +52,11 @@ class ProductController extends Controller
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
-        $review = Review::where('product_id',$id)->paginate($pagesize);
-        $countReview = Review::where('product_id',$id)->count();
-        $rating = Review::where('product_id', $id)->avg('rating');
+
+
+        $review = Review::where('product_id',$model->id)->paginate($pagesize);
+        $countReview = Review::where('product_id',$model->id)->count();
+        $rating = Review::where('product_id', $model->id)->avg('rating');
         $rating = (int)round($rating);
         return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview'));
     }

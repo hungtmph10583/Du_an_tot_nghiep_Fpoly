@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\GeneralSettingController;
+use App\Http\Controllers\Admin\StatisticsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -182,6 +183,6 @@ Route::prefix('slide')->group(function () {
     Route::get('xoa/{id}', [SlideController::class, 'remove'])->name('slide.remove');
 });
 
-Route::prefix('doanh-thu')->group(function () {
-    Route::get('/', [SlideController::class, 'index'])->name('revenue.index');
+Route::prefix('thong-ke')->group(function () {
+    Route::get('/doanh-thu', [StatisticsController::class, 'revenue'])->name('statistics.revenue');
 });

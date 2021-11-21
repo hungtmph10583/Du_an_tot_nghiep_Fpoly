@@ -201,7 +201,7 @@
                         @endfor
                     </div>
                     <p class="name-custom-review">{{$rv->user->name}}</p>
-                    <span class="date-custom-review">{{$rv->created_at}}</span>
+                    <span class="date-custom-review">{{$rv->created_at->diffForHumans()}}</span>
                     <div class="content">
                         <p>{{$rv->comment}}</p>
                     </div>

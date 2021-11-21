@@ -52,7 +52,7 @@
                 <div class="product-lable">
                 </div>
                 <div class="product-thumbnail">
-                    <a href="{{route('client.product.detail', ['id' => $p->id])}}">
+                    <a href="{{route('client.product.detail', ['id' => $p->slug])}}">
                         <img src="{{asset( 'storage/' . $p->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                 </div>
