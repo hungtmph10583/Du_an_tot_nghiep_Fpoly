@@ -72,7 +72,7 @@ function deleteData(id) {
 function restoreData(id) {
     if (confirm('Bạn có chắc chắn muốn xóa mục này ?')) {
         $.ajax({
-            url: 'trash/restore/' + id,
+            url: $('#deleteUrl' + id).data('url'),
             type: 'GET',
             data: {
                 _token: $("input[name=_token]").val()

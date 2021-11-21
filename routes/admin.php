@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\BreedController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\AccessoryController;
+use App\Http\Controllers\Admin\AgeController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
@@ -100,6 +101,28 @@ Route::prefix('giong-loai')->group(function () {
     Route::delete('trash/deleteForeverMul', [BreedController::class, 'deleteMultiple'])->name('breed.deleteMul');
 });
 
+Route::prefix('tuoi')->group(function () {
+    Route::get('/', [AgeController::class, 'index'])->name('age.index');
+
+    Route::get('tao-moi', [AgeController::class, 'addForm'])->name('age.add');
+    Route::post('tao-moi', [AgeController::class, 'saveAdd'])->name('age.saveAdd');
+
+    Route::get('cap-nhat/{id}', [AgeController::class, 'editForm'])->name('age.edit');
+    Route::post('cap-nhat/{id}', [AgeController::class, 'saveEdit'])->name('age.saveEdit');
+
+    Route::get('chi-tiet/{id}', [AgeController::class, 'detail'])->name('age.detail');
+
+    Route::delete('xoa/{id}', [AgeController::class, 'remove'])->name('age.remove');
+    Route::get('dataAge', [AgeController::class, 'getData'])->name('age.filter');
+    Route::get('trash', [AgeController::class, 'backUp'])->name('age.backup');
+    Route::get('dataBackUp', [AgeController::class, 'getBackUp'])->name('age.getBackup');
+    Route::get('trash/restore/{id}', [AgeController::class, 'restore'])->name('age.restore');
+    Route::delete('trash/deleteForver/{id}', [AgeController::class, 'delete'])->name('age.delete');
+    Route::delete('trash/remove', [AgeController::class, 'removeMultiple'])->name('age.removeMul');
+    Route::get('trash/restore', [AgeController::class, 'restoreMultiple'])->name('age.restoreMul');
+    Route::delete('trash/deleteForeverMul', [AgeController::class, 'deleteMultiple'])->name('age.deleteMul');
+});
+
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('product.index');
 
@@ -150,9 +173,17 @@ Route::prefix('giam-gia')->group(function () {
 
     Route::get('chi-tiet/{id}', [CouponController::class, 'detail'])->name('coupon.detail');
 
-    Route::get('xoa/{id}', [CouponController::class, 'remove'])->name('coupon.remove');
+    Route::delete('xoa/{id}', [CouponController::class, 'remove'])->name('coupon.remove');
 
     Route::get('dataCoupon', [CouponController::class, 'getData'])->name('coupon.filter');
+    Route::get('trash', [CouponController::class, 'backUp'])->name('coupon.backup');
+    Route::get('dataBackUp', [CouponController::class, 'getBackUp'])->name('coupon.getBackup');
+    Route::get('trash/restore/{id}', [CouponController::class, 'restore'])->name('coupon.restore');
+    Route::delete('trash/deleteForver/{id}', [CouponController::class, 'delete'])->name('coupon.delete');
+    Route::post('import', [CouponController::class, 'store'])->name('coupon.import');
+    Route::delete('trash/remove', [CouponController::class, 'removeMultiple'])->name('coupon.removeMul');
+    Route::get('trash/restore', [CouponController::class, 'restoreMultiple'])->name('coupon.restoreMul');
+    Route::delete('trash/deleteForeverMul', [CouponController::class, 'deleteMultiple'])->name('coupon.deleteMul');
 });
 
 Route::prefix('tin-tuc')->group(function () {

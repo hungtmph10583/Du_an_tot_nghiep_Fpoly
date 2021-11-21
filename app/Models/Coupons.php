@@ -16,31 +16,31 @@ class Coupons extends Model
 
     public function couponType()
     {
-        return $this->belongsTo(CouponType::class, 'type');
+        return $this->belongsTo(CouponType::class, 'type')->withTrashed();
     }
 
     public function discountType()
     {
-        return $this->belongsTo(Category::class, 'discount_type');
+        return $this->belongsTo(Category::class, 'discount_type')->withTrashed();
     }
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'coupon_id');
+        return $this->hasMany(Product::class, 'coupon_id')->withTrashed();
     }
 
     public function couponUsage()
     {
-        return $this->hasMany(CouponUsage::class, 'coupon_id');
+        return $this->hasMany(CouponUsage::class, 'coupon_id')->withTrashed();
     }
 
     public function accessory()
     {
-        return $this->hasMany(Accessory::class, 'coupon_id');
+        return $this->hasMany(Accessory::class, 'coupon_id')->withTrashed();
     }
 
     public function category()
     {
-        return $this->hasMany(Category::class, 'coupon_id');
+        return $this->hasMany(Category::class, 'coupon_id')->withTrashed();
     }
 }

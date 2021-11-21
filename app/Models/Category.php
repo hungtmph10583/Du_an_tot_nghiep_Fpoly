@@ -30,4 +30,9 @@ class Category extends Model
     {
         return $this->belongsTo(CategoryType::class, 'category_type_id')->withTrashed();
     }
+
+    public function accessory()
+    {
+        return $this->hasMany(Accessory::class, 'category_id')->withTrashed();
+    }
 }

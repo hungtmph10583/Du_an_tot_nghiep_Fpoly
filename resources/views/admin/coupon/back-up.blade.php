@@ -1,12 +1,13 @@
-@section('title', 'Danh sách giống loài')
+@section('title', 'Thùng rác giảm giá')
 @extends('layouts.admin.main')
 @section('content')
+
 <div class="content-header">
     <div class="container-fluid">
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Danh sách giống loài</li>
+                    <li class="breadcrumb-item card-title">Thùng rác giảm giá</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -17,7 +18,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
-        <div class="card card-success card-outline">
+        <div class="card">
             <div class="card-body">
                 <div class="alert alert-success" role="alert" style="display: none;">
 
@@ -34,30 +35,30 @@
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Tên giống loài</th>
-                                    <th class="text-center">Tên danh mục</th>
-                                    <th>Slug</th>
-                                    <th>Status</th>
-                                    <th><a href="{{route('breed.add')}}" class="btn btn-outline-info float-right">Thêm
-                                            giống
-                                            loài</a></th>
+                                    <th>Mã giảm giá</th>
+                                    <th>Kiểu giảm giá</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
+                                    <th>
+                                        <a href="{{route('coupon.add')}}" class="btn btn-outline-info float-right">Thêm
+                                            phiếu
+                                            giảm giá mới</a>
+                                    </th>
                                 </thead>
                                 <tbody>
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div><!-- /.container-fluid -->
+        </div><!-- /.container-fluid -->
 </section>
 <!-- /.content -->
 @endsection
 @section('pagejs')
-<link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css')}}">
-<script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
+<link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">
+<script src="{{ asset('admin-theme/custom-js/custom.js') }}"></script>
 <script>
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
@@ -71,6 +72,56 @@ $(document).ready(function() {
                 text: 'Reload',
                 action: function(e) {
                     table.ajax.reload();
+                }
+            },
+            {
+                text: 'Restore',
+                action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+                    if ('{{$admin}}') {
+                        var IsAjaxExecuting = false;
+                        if (allId == '') {
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để khôi phục
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                            })
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được khôi phục )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                restoreMul('{{route("coupon.restoreMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
                 }
             },
             {
@@ -98,13 +149,13 @@ $(document).ready(function() {
                             $('.modal-body').html(
                                 `<div class="alert alert-success" role="alert">
                         <span class="fas fa-check-circle text-success mr-2">
-                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi xóa dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
                         </span></div>`);
 
                             $('#realize').click(function(e) {
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                deleteMul('{{route("breed.removeMul")}}', allId);
+                                removeMul('{{route("coupon.deleteMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -125,18 +176,22 @@ $(document).ready(function() {
             {
                 extend: 'copyHtml5',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             {
                 extend: 'csvHtml5',
+                charset: 'utf-8',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             {
                 extend: 'excelHtml5',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -146,11 +201,13 @@ $(document).ready(function() {
                 pageSize: 'LEGAL',
                 orientation: 'landscape',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             }, {
                 extend: 'print',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -162,11 +219,11 @@ $(document).ready(function() {
         }],
         "order": [],
         language: {
-            processing: "<img width='70' src='{{asset('storage/uploads/loading/Dancing_kitty.gif')}}'>",
+            processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },
         serverSide: true,
         ajax: {
-            url: "{{ route('breed.filter') }}",
+            url: "{{ route('coupon.getBackup') }}",
             data: function(d) {
                 d.search = $('input[type="search"]').val();
             }
@@ -178,20 +235,20 @@ $(document).ready(function() {
                 searchable: false,
             },
             {
-                data: 'name',
-                name: 'name',
+                data: 'code',
+                name: 'code',
             },
             {
-                data: 'category_id',
-                name: 'category_id',
+                data: 'type',
+                name: 'type',
             },
             {
-                data: 'slug',
-                name: 'slug',
+                data: 'start_date',
+                name: 'start_date',
             },
             {
-                data: 'status',
-                name: 'status',
+                data: 'end_date',
+                name: 'end_date',
             },
             {
                 data: 'action',
@@ -202,11 +259,11 @@ $(document).ready(function() {
         ]
     });
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
-    $(document).on("click", "#undoIndex", function() {
-        id = $('#undoIndex').data('id');
-        var url = '{{route("breed.restore",":id")}}';
+    $(document).on("click", "#undoTrashed", function() {
+        id = $('#undoTrashed').data('id');
+        var url = '{{route("coupon.remove",":id")}}';
         url = url.replace(':id', id);
-        undoIndex(url, id)
+        undoTrash(url, id)
         table.ajax.reload();
     })
 });

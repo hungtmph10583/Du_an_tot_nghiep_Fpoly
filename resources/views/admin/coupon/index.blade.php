@@ -14,23 +14,31 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
         <div class="card">
             <div class="card-body">
+                <div class="alert alert-success" role="alert" style="display: none;">
+
+                </div>
+                @if(session('BadState'))
+                <div class="alert alert-danger" role="alert">
+                    {{session('BadState')}}
+                </div>
+                @endif
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
                         <div class="table-responsive">
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
-                                    <th>STT</th>
-                                    <th>Code</th>
-                                    <th class="text-center">Kiểu</th>
-                                    <th class="text-center">Ngày bắt đầu</th>
-                                    <th class="text-center">Ngày kết thúc</th>
+                                    <th><input type="checkbox" id="checkAll"></th>
+                                    <th>Mã giảm giá</th>
+                                    <th>Kiểu giảm giá</th>
+                                    <th>Ngày bắt đầu</th>
+                                    <th>Ngày kết thúc</th>
                                     <th>
                                         <a href="{{route('coupon.add')}}" class="btn btn-outline-info float-right">Thêm
                                             phiếu
@@ -61,6 +69,61 @@ $(document).ready(function() {
         autoWidth: false,
         dom: 'Bfrtip',
         buttons: [{
+                text: 'Reload',
+                action: function(e) {
+                    table.ajax.reload();
+                }
+            },
+            {
+                text: 'Delete',
+                action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+                    if ('{{$admin}}') {
+                        if (allId == '') {
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để xóa
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                            })
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                deleteMul('{{route("coupon.removeMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
+                }
+            },
+            {
                 extend: 'copyHtml5',
                 exportOptions: {
                     stripHtml: false,
@@ -101,9 +164,10 @@ $(document).ready(function() {
             "colvis"
         ],
         columnDefs: [{
-            targets: 0,
-            visible: true
+            "orderable": false,
+            "targets": 0
         }],
+        "order": [],
         language: {
             processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },
@@ -115,7 +179,8 @@ $(document).ready(function() {
             }
         },
         columns: [{
-                data: 'DT_RowIndex',
+                data: 'checkbox',
+                name: 'checkbox',
                 orderable: false,
                 searchable: false,
             },
@@ -128,12 +193,12 @@ $(document).ready(function() {
                 name: 'type',
             },
             {
-                data: 'discount',
-                name: 'discount',
+                data: 'start_date',
+                name: 'start_date',
             },
             {
-                data: 'discount_type',
-                name: 'discount_type',
+                data: 'end_date',
+                name: 'end_date',
             },
             {
                 data: 'action',
@@ -143,15 +208,13 @@ $(document).ready(function() {
             }
         ]
     });
-    let column = table.column(0); // here is the index of the column, starts with 0
-    column.visible(false); // this should be either true or false
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
-    $('select').map(function(i, dom) {
-        var idSelect = $(dom).attr('id');
-        $('#' + idSelect).change(function() {
-            table.draw();
-        });
-        $('#' + idSelect).select2({});
+    $(document).on("click", "#undoIndex", function() {
+        id = $('#undoIndex').data('id');
+        var url = '{{route("coupon.restore",":id")}}';
+        url = url.replace(':id', id);
+        undoIndex(url, id)
+        table.ajax.reload();
     })
 });
 </script>

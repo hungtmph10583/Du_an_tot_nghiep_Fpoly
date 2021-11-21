@@ -143,6 +143,35 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('coupon.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác giảm giá</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-swatchbook"></i>
+                        <p>
+                            Tuổi
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('age.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('age.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác tuổi</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">

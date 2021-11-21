@@ -33,6 +33,6 @@ class Accessory extends Model
 
     public function galleries()
     {
-        return $this->hasMany(AccessoryGallery::class, 'accessory_id');
+        return $this->hasMany(AccessoryGallery::class, 'accessory_id')->withTrashed();
     }
 }

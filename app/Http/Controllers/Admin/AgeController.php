@@ -3,57 +3,43 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Breed;
-use App\Models\Category;
+use App\Models\Age;
 use App\Models\Product;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\Datatables\Datatables;
 
-class BreedController extends Controller
+class AgeController extends Controller
 {
     public function index(Request $request)
     {
         $admin = Auth::user()->hasanyrole('admin|manager');
-        return view('admin.breed.index', compact('admin'));
+        return view('admin.age.index', compact('admin'));
     }
 
     public function getData(Request $request)
     {
-        $breed = Breed::select('breeds.*')->with('category');
-        return dataTables::of($breed)
+        $age = Age::select('ages.*');
+        return dataTables::of($age)
             ->setRowId(function ($row) {
                 return $row->id;
             })
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
             })
-            ->orderColumn('cate_id', function ($row, $order) {
-                return $row->orderBy('category_id', $order);
-            })
-            ->orderColumn('status', function ($row, $order) {
-                return $row->orderBy('status', $order);
-            })
-            ->addColumn('category_id', function ($row) {
-                return $row->category->name;
-            })
-            ->addColumn('status', function ($row) {
-                if ($row->status == 1) {
-                    return '<span class="badge badge-primary">Active</span>';
-                } elseif ($row->status == 0) {
-                    return '<span class="badge badge-danger">Deactive</span>';
-                } else {
-                    return '<span class="badge badge-danger">Sắp ra mắt</span>';
-                }
+            ->addColumn('product', function ($row) {
+                $row->products()->each(function ($pro) {
+                    return $pro->name;
+                });
             })
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                    <a href="' . route('breed.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                    <a  class="btn btn-success" href="' . route('breed.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
-                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('breed.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                    <a href="' . route('age.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                    <a  class="btn btn-success" href="' . route('age.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('age.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
@@ -79,14 +65,14 @@ class BreedController extends Controller
 
     public function addForm()
     {
-        $category = Category::all();
-        return view('admin.breed.add-form', compact('category'));
+        $category = Age::all();
+        return view('admin.age.add-form', compact('category'));
     }
 
     public function saveAdd(Request $request, $id = null)
     {
         if ($request->name) {
-            $dupicate = Breed::onlyTrashed()
+            $dupicate = Age::onlyTrashed()
                 ->where('name', 'like', $request->name)->first();
         } else {
             $dupicate = null;
@@ -106,7 +92,7 @@ class BreedController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('breeds')->ignore($id)
+                    Rule::unique('ages')->ignore($id)
                 ],
                 'category_id' => 'required',
                 'status' => 'required',
@@ -115,44 +101,44 @@ class BreedController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('breed.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('age.index'), 'dupicate' => $dupicate]);
         } else {
-            $model = new Breed();
+            $model = new Age();
             $auth = Auth::user();
             $model->fill($request->all());
             $model->user_id =  $auth->id;
             if ($request->has('uploadfile')) {
                 $model->image = $request->file('uploadfile')->storeAs(
-                    'uploads/breeds/',
+                    'uploads/ages/',
                     uniqid() . '-' . $request->uploadfile->getClientOriginalName()
                 );
             }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('breed.index'), 'message' => 'Thêm giống loài thành công']);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('age.index'), 'message' => 'Thêm giống loài thành công']);
     }
 
     public function editForm($id)
     {
-        $model = Breed::find($id);
+        $model = Age::find($id);
         if (!$model) {
             return redirect()->back();
         }
         $category = Category::all();
-        return view('admin.breed.edit-form', compact('model', 'category'));
+        return view('admin.age.edit-form', compact('model', 'category'));
     }
 
     public function saveEdit($id, Request $request)
     {
 
-        $model = Breed::find($id);
+        $model = Age::find($id);
 
         if (!$model) {
             return redirect()->back();
         }
 
         if ($request->name) {
-            $dupicate = Breed::onlyTrashed()
+            $dupicate = Age::onlyTrashed()
                 ->where('name', 'like', $request->name)->first();
         } else {
             $dupicate = null;
@@ -171,7 +157,7 @@ class BreedController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('breeds')->ignore($id)
+                    Rule::unique('ages')->ignore($id)
                 ],
                 'category_id' => 'required',
                 'status' => 'required',
@@ -180,43 +166,43 @@ class BreedController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('breed.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('age.index'), 'dupicate' => $dupicate]);
         } else {
             $model->user_id =  Auth::id();
             $model->fill($request->all());
 
             if ($request->has('image')) {
                 $model->image = $request->file('image')->storeAs(
-                    'uploads/breeds/',
+                    'uploads/ages/',
                     uniqid() . '-' . $request->image->getClientOriginalName()
                 );
             }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('breed.index'), 'message' => 'Sửa giống loài thành công']);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('age.index'), 'message' => 'Sửa giống loài thành công']);
     }
 
     public function detail($id)
     {
-        $model = breed::find($id);
-        $model->load('products', 'category');
+        $model = Age::find($id);
+        $model->load('products');
 
         $product = Product::all();
-        $category = Category::all();
+        // $category = Category::all();
 
-        return view('admin.breed.detail', compact('category', 'product', 'model'));
+        return view('admin.age.detail', compact('product', 'model'));
     }
 
     public function backup(Request $request)
     {
         $admin = Auth::user()->hasanyrole('admin|manager');
-        return view('admin.breed.back-up', compact('admin'));
+        return view('admin.age.back-up', compact('admin'));
     }
 
     public function getBackUp(Request $request)
     {
-        $breed = Breed::onlyTrashed()->select('breeds.*')->with('category');
-        return dataTables::of($breed)
+        $age = Age::onlyTrashed()->select('ages.*')->with('category');
+        return dataTables::of($age)
             ->setRowId(function ($row) {
                 return $row->id;
             })
@@ -244,8 +230,8 @@ class BreedController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('breed.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
-                <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('breed.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('age.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
+                <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('age.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                                     </span>';
             })
             ->filter(function ($instance) use ($request) {
@@ -271,66 +257,66 @@ class BreedController extends Controller
 
     public function remove($id)
     {
-        $breed = Breed::withTrashed()->find($id);
-        if (empty($breed)) {
+        $age = Age::withTrashed()->find($id);
+        if (empty($age)) {
             return response()->json(['success' => 'Giống loài không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
-        $breed->products()->each(function ($related) {
+        $age->products()->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();
             $related->carts()->delete();
             $related->reviews()->delete();
         });
-        $breed->products()->delete();
-        $breed->delete();
+        $age->products()->delete();
+        $age->delete();
         return response()->json(['success' => 'Xóa giống loài thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function restore($id)
     {
-        $breed = Breed::withTrashed()->find($id);
-        if (empty($breed)) {
+        $age = Age::withTrashed()->find($id);
+        if (empty($age)) {
             return response()->json(['success' => 'Giống loài không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
-        $breed->products()->each(function ($related) {
+        $age->products()->each(function ($related) {
             $related->galleries()->restore();
             $related->orderDetails()->restore();
             $related->carts()->restore();
             $related->reviews()->restore();
             $related->category()->restore();
         });
-        $breed->products()->restore();
-        $breed->restore();
+        $age->products()->restore();
+        $age->restore();
         return response()->json(['success' => 'Khôi phục giống loài thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function delete($id)
     {
-        $breed = Breed::withTrashed()->find($id);
-        if (empty($breed)) {
+        $age = Age::withTrashed()->find($id);
+        if (empty($age)) {
             return response()->json(['success' => 'Giống loài không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
-        $breed->products()->each(function ($related) {
+        $age->products()->each(function ($related) {
             $related->galleries()->forceDelete();
             $related->orderDetails()->forceDelete();
             $related->carts()->forceDelete();
             $related->reviews()->forceDelete();
         });
-        $breed->products()->forceDelete();
-        $breed->forceDelete();
+        $age->products()->forceDelete();
+        $age->forceDelete();
         return response()->json(['success' => 'Xóa bài viết thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function removeMultiple(Request $request)
     {
         $idAll = $request->allId;
-        $breed = Breed::withTrashed()->whereIn('id', $idAll);
+        $age = Age::withTrashed()->whereIn('id', $idAll);
 
-        if ($breed->count() == 0) {
+        if ($age->count() == 0) {
             return response()->json(['success' => 'Xóa giống loài thất bại !']);
         }
 
-        $breed->each(function ($pro) {
+        $age->each(function ($pro) {
             $pro->products()->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
@@ -339,20 +325,20 @@ class BreedController extends Controller
             });
             $pro->products()->delete();
         });
-        $breed->delete();
+        $age->delete();
         return response()->json(['success' => 'Xóa giống loài thành công !']);
     }
 
     public function restoreMultiple(Request $request)
     {
         $idAll = $request->allId;
-        $breed = Breed::withTrashed()->whereIn('id', $idAll);
+        $age = Age::withTrashed()->whereIn('id', $idAll);
 
-        if ($breed->count() == 0) {
+        if ($age->count() == 0) {
             return response()->json(['success' => 'Khôi phục giống loài thất bại !']);
         }
 
-        $breed->each(function ($pro) {
+        $age->each(function ($pro) {
             $pro->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
@@ -362,20 +348,20 @@ class BreedController extends Controller
             });
             $pro->products()->restore();
         });
-        $breed->restore();
+        $age->restore();
         return response()->json(['success' => 'Khôi phục giống loài thành công !']);
     }
 
     public function deleteMultiple(Request $request)
     {
         $idAll = $request->allId;
-        $breed = Breed::withTrashed()->whereIn('id', $idAll);
+        $age = Age::withTrashed()->whereIn('id', $idAll);
 
-        if ($breed->count() == 0) {
+        if ($age->count() == 0) {
             return response()->json(['success' => 'Xóa giống loài thất bại !']);
         }
 
-        $breed->each(function ($pro) {
+        $age->each(function ($pro) {
             $pro->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
@@ -384,7 +370,7 @@ class BreedController extends Controller
             });
             $pro->products()->forceDelete();
         });
-        $breed->forceDelete();
+        $age->forceDelete();
         return response()->json(['success' => 'Xóa giống loài thành công !']);
     }
 }

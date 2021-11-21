@@ -233,7 +233,7 @@ class CategoryController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                    <a  class="btn btn-success" href="javascript:void(0);" onclick="restoreData(' . $row->id . ')"><i class="far fa-edit"></i></a>
+                <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('category.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
                     <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('category.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })

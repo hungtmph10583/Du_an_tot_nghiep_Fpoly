@@ -11,4 +11,9 @@ class Age extends Model
     use HasFactory, SoftDeletes;
     protected $table = "ages";
     protected $fillable = ['age'];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'age_id')->withTrashed();
+    }
 }
