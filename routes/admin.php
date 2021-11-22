@@ -219,6 +219,8 @@ Route::prefix('danh-muc-tin-tuc')->group(function () {
     Route::get('cap-nhat/{id}', [BlogCategoryController::class, 'editForm'])->name('blogCategory.edit');
     Route::post('cap-nhat/{id}', [BlogCategoryController::class, 'saveEdit'])->name('blogCategory.saveEdit');
 
+    Route::get('chi-tiet/{id}', [BlogController::class, 'detail'])->name('blogCategory.detail');
+
     Route::delete('xoa/{id}', [BlogCategoryController::class, 'remove'])->name('blogCategory.remove');
 
     Route::get('dataBlogCategory', [BlogCategoryController::class, 'getData'])->name('blogCategory.filter');

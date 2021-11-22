@@ -32,8 +32,8 @@ class BlogCategoryController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                    <a href="' . route('blog.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                    <a href="' . route('blog.edit', ['id' => $row->id]) . '" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
+                    <a href="' . route('blogCategory.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                    <a href="' . route('blogCategory.edit', ['id' => $row->id]) . '" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
                     <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('blogCategory.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })
@@ -57,28 +57,39 @@ class BlogCategoryController extends Controller
 
     public function saveAdd(Request $request, $id = null)
     {
-        $model = new BlogCategory();
         $message = [
-            'name.required' => "Hãy nhập vào tên danh mục",
-            'name.unique' => "Tên danh mục đã tồn tại",
+            'name.required' => "Hãy nhập vào danh mục bài viết",
+            'name.unique' => "Danh mục bài viết đã tồn tại",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
-                    Rule::unique('blog_categories')->ignore($id)
+                    Rule::unique('blog_categories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = BlogCategory::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Danh mục bài viết đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
             ],
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('blogCategory.index')]);
         } else {
+            $model = new BlogCategory();
             $model->fill($request->all());
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/danh-muc-tin-tuc')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('blogCategory.index'), 'message' => 'Thêm tuổi thành công']);
     }
 
     public function editForm($id)
@@ -99,27 +110,37 @@ class BlogCategoryController extends Controller
         }
 
         $message = [
-            'name.required' => "Hãy nhập vào tên danh mục",
-            'name.unique' => "Tên danh mục đã tồn tại",
+            'name.required' => "Hãy nhập vào danh mục bài viết",
+            'name.unique' => "Danh mục bài viết đã tồn tại",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
-                    Rule::unique('blog_categories')->ignore($id)
+                    Rule::unique('blog_categories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = BlogCategory::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Danh mục bài viết đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
             ],
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('blogCategory.index')]);
         } else {
             $model->fill($request->all());
-
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/danh-muc-tin-tuc')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('blogCategory.index'), 'message' => 'Sửa danh mục bài viết thành công']);
     }
 
     public function backUp()

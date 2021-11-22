@@ -184,7 +184,7 @@ class AgeController extends Controller
 
     public function getBackUp(Request $request)
     {
-        $age = Age::onlyTrashed()->select('ages.*')->with('category');
+        $age = Age::onlyTrashed()->select('ages.*');
         return dataTables::of($age)
             ->setRowId(function ($row) {
                 return $row->id;
@@ -192,23 +192,17 @@ class AgeController extends Controller
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
             })
-            ->orderColumn('cate_id', function ($row, $order) {
-                return $row->orderBy('category_id', $order);
+            ->orderColumn('product', function ($row, $order) {
+                return $row
+                    ->onlyTrashed()
+                    ->join('products', 'products.age_id', '=', 'ages.id')
+                    ->groupBy('ages.id')
+                    ->orderByRaw("count(ages.id)$order");
             })
-            ->orderColumn('status', function ($row, $order) {
-                return $row->orderBy('status', $order);
-            })
-            ->addColumn('category_id', function ($row) {
-                return $row->category->name;
-            })
-            ->addColumn('status', function ($row) {
-                if ($row->status == 1) {
-                    return '<span class="badge badge-primary">Active</span>';
-                } elseif ($row->status == 0) {
-                    return '<span class="badge badge-danger">Deactive</span>';
-                } else {
-                    return '<span class="badge badge-danger">Sắp ra mắt</span>';
-                }
+            ->addColumn('product', function (Age $row) {
+                return $row->products->map(function ($pro) {
+                    return '<a href="' . route('product.detail', ['id' => $pro->id]) . '" class="btn btn-outline-primary">' . $pro->name . '</a>';
+                })->implode(' ');
             })
             ->addColumn('action', function ($row) {
                 return '
@@ -234,7 +228,7 @@ class AgeController extends Controller
                     });
                 }
             })
-            ->rawColumns(['status', 'action', 'checkbox'])
+            ->rawColumns(['status', 'action', 'checkbox', 'product'])
             ->make(true);
     }
 
@@ -242,7 +236,7 @@ class AgeController extends Controller
     {
         $age = Age::withTrashed()->find($id);
         if (empty($age)) {
-            return response()->json(['success' => 'Giống loài không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
+            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
 
         $age->products()->each(function ($related) {
@@ -253,14 +247,14 @@ class AgeController extends Controller
         });
         $age->products()->delete();
         $age->delete();
-        return response()->json(['success' => 'Xóa giống loài thành công !', 'undo' => "Hoàn tác thành công !"]);
+        return response()->json(['success' => 'Xóa tuổi thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function restore($id)
     {
         $age = Age::withTrashed()->find($id);
         if (empty($age)) {
-            return response()->json(['success' => 'Giống loài không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
+            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
         $age->products()->each(function ($related) {
             $related->galleries()->restore();
@@ -271,14 +265,14 @@ class AgeController extends Controller
         });
         $age->products()->restore();
         $age->restore();
-        return response()->json(['success' => 'Khôi phục giống loài thành công !', 'undo' => "Hoàn tác thành công !"]);
+        return response()->json(['success' => 'Khôi phục tuổi thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function delete($id)
     {
         $age = Age::withTrashed()->find($id);
         if (empty($age)) {
-            return response()->json(['success' => 'Giống loài không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
+            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
         $age->products()->each(function ($related) {
             $related->galleries()->forceDelete();
@@ -288,7 +282,7 @@ class AgeController extends Controller
         });
         $age->products()->forceDelete();
         $age->forceDelete();
-        return response()->json(['success' => 'Xóa bài viết thành công !', 'undo' => "Hoàn tác thành công !"]);
+        return response()->json(['success' => 'Xóa tuổi thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function removeMultiple(Request $request)
@@ -297,7 +291,7 @@ class AgeController extends Controller
         $age = Age::withTrashed()->whereIn('id', $idAll);
 
         if ($age->count() == 0) {
-            return response()->json(['success' => 'Xóa giống loài thất bại !']);
+            return response()->json(['success' => 'Xóa Tuổi thất bại !']);
         }
 
         $age->each(function ($pro) {
@@ -310,7 +304,7 @@ class AgeController extends Controller
             $pro->products()->delete();
         });
         $age->delete();
-        return response()->json(['success' => 'Xóa giống loài thành công !']);
+        return response()->json(['success' => 'Xóa tuổi thành công !']);
     }
 
     public function restoreMultiple(Request $request)
@@ -319,7 +313,7 @@ class AgeController extends Controller
         $age = Age::withTrashed()->whereIn('id', $idAll);
 
         if ($age->count() == 0) {
-            return response()->json(['success' => 'Khôi phục giống loài thất bại !']);
+            return response()->json(['success' => 'Khôi phục tuổi thất bại !']);
         }
 
         $age->each(function ($pro) {
@@ -333,7 +327,7 @@ class AgeController extends Controller
             $pro->products()->restore();
         });
         $age->restore();
-        return response()->json(['success' => 'Khôi phục giống loài thành công !']);
+        return response()->json(['success' => 'Khôi phục tuổi thành công !']);
     }
 
     public function deleteMultiple(Request $request)
@@ -342,7 +336,7 @@ class AgeController extends Controller
         $age = Age::withTrashed()->whereIn('id', $idAll);
 
         if ($age->count() == 0) {
-            return response()->json(['success' => 'Xóa giống loài thất bại !']);
+            return response()->json(['success' => 'Xóa tuổi thất bại !']);
         }
 
         $age->each(function ($pro) {
@@ -355,6 +349,6 @@ class AgeController extends Controller
             $pro->products()->forceDelete();
         });
         $age->forceDelete();
-        return response()->json(['success' => 'Xóa giống loài thành công !']);
+        return response()->json(['success' => 'Xóa tuổi thành công !']);
     }
 }
