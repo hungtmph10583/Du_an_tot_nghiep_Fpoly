@@ -29,10 +29,17 @@ class AgeController extends Controller
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
             })
-            ->addColumn('product', function ($row) {
-                $row->products()->each(function ($pro) {
-                    return $pro->name;
-                });
+            ->orderColumn('product', function ($row, $order) {
+                return $row
+                    ->withTrashed()
+                    ->join('products', 'products.age_id', '=', 'ages.id')
+                    ->groupBy('ages.id')
+                    ->orderByRaw("count(ages.id)$order");
+            })
+            ->addColumn('product', function (Age $row) {
+                return $row->products->map(function ($pro) {
+                    return '<a href="' . route('product.detail', ['id' => $pro->id]) . '" class="btn btn-outline-primary">' . $pro->name . '</a>';
+                })->implode(' ');
             })
             ->addColumn('action', function ($row) {
                 return '
@@ -59,63 +66,51 @@ class AgeController extends Controller
                     });
                 }
             })
-            ->rawColumns(['status', 'action', 'checkbox'])
+            ->rawColumns(['status', 'action', 'checkbox', 'product'])
             ->make(true);
     }
 
     public function addForm()
     {
-        $category = Age::all();
-        return view('admin.age.add-form', compact('category'));
+        return view('admin.age.add-form');
     }
 
     public function saveAdd(Request $request, $id = null)
     {
-        if ($request->name) {
-            $dupicate = Age::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
-        }
 
         $message = [
-            'name.required' => "Hãy nhập vào tên giống loài",
-            'name.unique' => "Tên giống loài đã tồn tại",
-            'category_id.required' => "Hãy chọn danh mục",
-            'status.required' => "Hãy chọn trạng thái giống loài",
-            'uploadfile.required' => 'Hãy chọn ảnh giống loài',
-            'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
-            'uploadfile.max' => 'File ảnh không được quá 2MB',
+            'age.required' => "Hãy nhập vào tuổi",
+            'age.unique' => "Tuổi đã tồn tại",
         ];
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => [
+                'age' => [
                     'required',
-                    Rule::unique('ages')->ignore($id)
+                    Rule::unique('ages')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Age::onlyTrashed()
+                            ->where('age', 'like', '%' . $request->age . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->age) {
+                                return $fail('Tuổi đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
-                'category_id' => 'required',
-                'status' => 'required',
-                'uploadfile' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('age.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('age.index')]);
         } else {
             $model = new Age();
-            $auth = Auth::user();
             $model->fill($request->all());
-            $model->user_id =  $auth->id;
-            if ($request->has('uploadfile')) {
-                $model->image = $request->file('uploadfile')->storeAs(
-                    'uploads/ages/',
-                    uniqid() . '-' . $request->uploadfile->getClientOriginalName()
-                );
-            }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('age.index'), 'message' => 'Thêm giống loài thành công']);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('age.index'), 'message' => 'Thêm tuổi thành công']);
     }
 
     public function editForm($id)
@@ -124,8 +119,7 @@ class AgeController extends Controller
         if (!$model) {
             return redirect()->back();
         }
-        $category = Category::all();
-        return view('admin.age.edit-form', compact('model', 'category'));
+        return view('admin.age.edit-form', compact('model'));
     }
 
     public function saveEdit($id, Request $request)
@@ -137,49 +131,38 @@ class AgeController extends Controller
             return redirect()->back();
         }
 
-        if ($request->name) {
-            $dupicate = Age::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
-        }
-
         $message = [
-            'name.required' => "Hãy nhập vào tên giống loài",
-            'name.unique' => "Tên thú cưng đã tồn tại",
-            'category_id.required' => "Hãy chọn danh mục",
-            'status.required' => "Hãy chọn trạng thái thú cưng",
-            'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
-            'uploadfile.max' => 'File ảnh không được quá 2MB',
+            'age.required' => "Hãy nhập vào tuổi",
+            'age.unique' => "Tuổi đã tồn tại",
         ];
         $validator = Validator::make(
             $request->all(),
             [
-                'name' => [
+                'age' => [
                     'required',
-                    Rule::unique('ages')->ignore($id)
+                    Rule::unique('ages')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Age::onlyTrashed()
+                            ->where('age', 'like', '%' . $request->age . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->age) {
+                                return $fail('Tuổi đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
-                'category_id' => 'required',
-                'status' => 'required',
-                'uploadfile' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('age.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('age.index')]);
         } else {
-            $model->user_id =  Auth::id();
             $model->fill($request->all());
-
-            if ($request->has('image')) {
-                $model->image = $request->file('image')->storeAs(
-                    'uploads/ages/',
-                    uniqid() . '-' . $request->image->getClientOriginalName()
-                );
-            }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('age.index'), 'message' => 'Sửa giống loài thành công']);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('age.index'), 'message' => 'Sửa tuổi thành công']);
     }
 
     public function detail($id)
@@ -230,9 +213,9 @@ class AgeController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('age.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
-                <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('age.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
-                                    </span>';
+                    <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('age.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('age.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                </span>';
             })
             ->filter(function ($instance) use ($request) {
                 if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
@@ -261,6 +244,7 @@ class AgeController extends Controller
         if (empty($age)) {
             return response()->json(['success' => 'Giống loài không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
+
         $age->products()->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();

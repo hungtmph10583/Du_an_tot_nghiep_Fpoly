@@ -219,9 +219,17 @@ Route::prefix('danh-muc-tin-tuc')->group(function () {
     Route::get('cap-nhat/{id}', [BlogCategoryController::class, 'editForm'])->name('blogCategory.edit');
     Route::post('cap-nhat/{id}', [BlogCategoryController::class, 'saveEdit'])->name('blogCategory.saveEdit');
 
-    Route::get('xoa/{id}', [BlogCategoryController::class, 'remove'])->name('blogCategory.remove');
+    Route::delete('xoa/{id}', [BlogCategoryController::class, 'remove'])->name('blogCategory.remove');
 
     Route::get('dataBlogCategory', [BlogCategoryController::class, 'getData'])->name('blogCategory.filter');
+
+    Route::get('trash', [BlogCategoryController::class, 'backUp'])->name('blogCategory.backup');
+    Route::get('dataBackUp', [BlogCategoryController::class, 'getBackUp'])->name('blogCategory.getBackup');
+    Route::get('trash/restore/{id}', [BlogCategoryController::class, 'restore'])->name('blogCategory.restore');
+    Route::delete('trash/deleteForver/{id}', [BlogCategoryController::class, 'delete'])->name('blogCategory.delete');
+    Route::delete('trash/remove', [BlogCategoryController::class, 'removeMultiple'])->name('blogCategory.removeMul');
+    Route::get('trash/restore', [BlogCategoryController::class, 'restoreMultiple'])->name('blogCategory.restoreMul');
+    Route::delete('trash/deleteForeverMul', [BlogCategoryController::class, 'deleteMultiple'])->name('blogCategory.deleteMul');
 });
 
 Route::prefix('thong-tin-he-thong')->group(function () {

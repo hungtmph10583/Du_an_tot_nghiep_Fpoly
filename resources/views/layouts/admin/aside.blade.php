@@ -280,6 +280,12 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{route('blogCategory.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác danh mục</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{route('blog.backup')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thùng rác bài viết</p>

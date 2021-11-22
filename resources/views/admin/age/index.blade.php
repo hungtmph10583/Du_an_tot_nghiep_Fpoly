@@ -18,7 +18,6 @@
 <section class="content">
     <div class="container-fluid pb-1">
         <div class="card">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
             <div class="card-body">
                 <div class="alert alert-success" role="alert" style="display: none;">
 
@@ -28,6 +27,7 @@
                     {{session('BadState')}}
                 </div>
                 @endif
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
                         <div class="table-responsive">
