@@ -45,7 +45,7 @@ class Product extends Model
 
     public function gender()
     {
-        return $this->hasOne(Gender::class, 'id')->withTrashed();
+        return $this->belongsTo(Gender::class, 'gender_id')->withTrashed();
     }
 
     public function age()

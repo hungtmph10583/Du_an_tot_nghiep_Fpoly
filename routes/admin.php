@@ -15,6 +15,11 @@ use App\Http\Controllers\Admin\AgeController;
 use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
+use App\Http\Controllers\Admin\CategoryTypeController;
+use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\FooterController;
+use App\Http\Controllers\Admin\FooterTitleController;
+use App\Http\Controllers\Admin\GenderController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\GeneralSettingController;
 use App\Http\Controllers\Admin\UploadController;
@@ -253,5 +258,125 @@ Route::prefix('slide')->group(function () {
 
     Route::get('chi-tiet/{id}', [SlideController::class, 'detail'])->name('slide.detail');
 
-    Route::get('xoa/{id}', [SlideController::class, 'remove'])->name('slide.remove');
+    Route::delete('xoa/{id}', [SlideController::class, 'remove'])->name('slide.remove');
+
+    Route::get('dataSlide', [SlideController::class, 'getData'])->name('slide.filter');
+
+    Route::get('trash', [SlideController::class, 'backUp'])->name('slide.backup');
+    Route::get('dataBackUp', [SlideController::class, 'getBackUp'])->name('slide.getBackup');
+    Route::get('trash/restore/{id}', [SlideController::class, 'restore'])->name('slide.restore');
+    Route::delete('trash/deleteForver/{id}', [SlideController::class, 'delete'])->name('slide.delete');
+    Route::delete('trash/remove', [SlideController::class, 'removeMultiple'])->name('slide.removeMul');
+    Route::get('trash/restore', [SlideController::class, 'restoreMultiple'])->name('slide.restoreMul');
+    Route::delete('trash/deleteForeverMul', [SlideController::class, 'deleteMultiple'])->name('slide.deleteMul');
+});
+
+Route::prefix('loai-danh-muc')->group(function () {
+    Route::get('/', [CategoryTypeController::class, 'index'])->name('categoryType.index');
+
+    Route::get('tao-moi', [CategoryTypeController::class, 'addForm'])->name('categoryType.add');
+    Route::post('tao-moi', [CategoryTypeController::class, 'saveAdd'])->name('categoryType.saveAdd');
+
+    Route::get('cap-nhat/{id}', [CategoryTypeController::class, 'editForm'])->name('categoryType.edit');
+    Route::post('cap-nhat/{id}', [CategoryTypeController::class, 'saveEdit'])->name('categoryType.saveEdit');
+
+    Route::get('chi-tiet/{id}', [CategoryTypeController::class, 'detail'])->name('categoryType.detail');
+
+    Route::delete('xoa/{id}', [CategoryTypeController::class, 'remove'])->name('categoryType.remove');
+    Route::get('dataPet', [CategoryTypeController::class, 'getData'])->name('categoryType.filter');
+    Route::get('trash', [CategoryTypeController::class, 'backUp'])->name('categoryType.backup');
+    Route::get('dataBackUp', [CategoryTypeController::class, 'getBackUp'])->name('categoryType.getBackup');
+    Route::get('trash/restore/{id}', [CategoryTypeController::class, 'restore'])->name('categoryType.restore');
+    Route::delete('trash/deleteForver/{id}', [CategoryTypeController::class, 'delete'])->name('categoryType.delete');
+    Route::delete('trash/remove', [CategoryTypeController::class, 'removeMultiple'])->name('categoryType.removeMul');
+    Route::get('trash/restore', [CategoryTypeController::class, 'restoreMultiple'])->name('categoryType.restoreMul');
+    Route::delete('trash/deleteForeverMul', [CategoryTypeController::class, 'deleteMultiple'])->name('categoryType.deleteMul');
+});
+
+Route::prefix('quoc-gia')->group(function () {
+    Route::get('/', [CountryController::class, 'index'])->name('country.index');
+
+    Route::get('tao-moi', [CountryController::class, 'addForm'])->name('country.add');
+    Route::post('tao-moi', [CountryController::class, 'saveAdd'])->name('country.saveAdd');
+
+    Route::get('cap-nhat/{id}', [CountryController::class, 'editForm'])->name('country.edit');
+    Route::post('cap-nhat/{id}', [CountryController::class, 'saveEdit'])->name('country.saveEdit');
+
+    Route::get('chi-tiet/{id}', [CountryController::class, 'detail'])->name('country.detail');
+
+    Route::delete('xoa/{id}', [CountryController::class, 'remove'])->name('country.remove');
+    Route::get('dataPet', [CountryController::class, 'getData'])->name('country.filter');
+    Route::get('trash', [CountryController::class, 'backUp'])->name('country.backup');
+    Route::get('dataBackUp', [CountryController::class, 'getBackUp'])->name('country.getBackup');
+    Route::get('trash/restore/{id}', [CountryController::class, 'restore'])->name('country.restore');
+    Route::delete('trash/deleteForver/{id}', [CountryController::class, 'delete'])->name('country.delete');
+    Route::delete('trash/remove', [CountryController::class, 'removeMultiple'])->name('country.removeMul');
+    Route::get('trash/restore', [CountryController::class, 'restoreMultiple'])->name('country.restoreMul');
+    Route::delete('trash/deleteForeverMul', [CountryController::class, 'deleteMultiple'])->name('country.deleteMul');
+});
+
+Route::prefix('gioi-tinh')->group(function () {
+    Route::get('/', [GenderController::class, 'index'])->name('gender.index');
+
+    Route::get('tao-moi', [GenderController::class, 'addForm'])->name('gender.add');
+    Route::post('tao-moi', [GenderController::class, 'saveAdd'])->name('gender.saveAdd');
+
+    Route::get('cap-nhat/{id}', [GenderController::class, 'editForm'])->name('gender.edit');
+    Route::post('cap-nhat/{id}', [GenderController::class, 'saveEdit'])->name('gender.saveEdit');
+
+    Route::get('chi-tiet/{id}', [GenderController::class, 'detail'])->name('gender.detail');
+
+    Route::delete('xoa/{id}', [GenderController::class, 'remove'])->name('gender.remove');
+    Route::get('dataPet', [GenderController::class, 'getData'])->name('gender.filter');
+    Route::get('trash', [GenderController::class, 'backUp'])->name('gender.backup');
+    Route::get('dataBackUp', [GenderController::class, 'getBackUp'])->name('gender.getBackup');
+    Route::get('trash/restore/{id}', [GenderController::class, 'restore'])->name('gender.restore');
+    Route::delete('trash/deleteForver/{id}', [GenderController::class, 'delete'])->name('gender.delete');
+    Route::delete('trash/remove', [GenderController::class, 'removeMultiple'])->name('gender.removeMul');
+    Route::get('trash/restore', [GenderController::class, 'restoreMultiple'])->name('gender.restoreMul');
+    Route::delete('trash/deleteForeverMul', [GenderController::class, 'deleteMultiple'])->name('gender.deleteMul');
+});
+
+Route::prefix('tieu-de-chan-trang')->group(function () {
+    Route::get('/', [FooterTitleController::class, 'index'])->name('footerTitle.index');
+
+    Route::get('tao-moi', [FooterTitleController::class, 'addForm'])->name('footerTitle.add');
+    Route::post('tao-moi', [FooterTitleController::class, 'saveAdd'])->name('footerTitle.saveAdd');
+
+    Route::get('cap-nhat/{id}', [FooterTitleController::class, 'editForm'])->name('footerTitle.edit');
+    Route::post('cap-nhat/{id}', [FooterTitleController::class, 'saveEdit'])->name('footerTitle.saveEdit');
+
+    Route::get('chi-tiet/{id}', [FooterTitleController::class, 'detail'])->name('footerTitle.detail');
+
+    Route::delete('xoa/{id}', [FooterTitleController::class, 'remove'])->name('footerTitle.remove');
+    Route::get('dataPet', [FooterTitleController::class, 'getData'])->name('footerTitle.filter');
+    Route::get('trash', [FooterTitleController::class, 'backUp'])->name('footerTitle.backup');
+    Route::get('dataBackUp', [FooterTitleController::class, 'getBackUp'])->name('footerTitle.getBackup');
+    Route::get('trash/restore/{id}', [FooterTitleController::class, 'restore'])->name('footerTitle.restore');
+    Route::delete('trash/deleteForver/{id}', [FooterTitleController::class, 'delete'])->name('footerTitle.delete');
+    Route::delete('trash/remove', [FooterTitleController::class, 'removeMultiple'])->name('footerTitle.removeMul');
+    Route::get('trash/restore', [FooterTitleController::class, 'restoreMultiple'])->name('footerTitle.restoreMul');
+    Route::delete('trash/deleteForeverMul', [FooterTitleController::class, 'deleteMultiple'])->name('footerTitle.deleteMul');
+});
+
+Route::prefix('chan-trang')->group(function () {
+    Route::get('/', [FooterController::class, 'index'])->name('footer.index');
+
+    Route::get('tao-moi', [FooterController::class, 'addForm'])->name('footer.add');
+    Route::post('tao-moi', [FooterController::class, 'saveAdd'])->name('footer.saveAdd');
+
+    Route::get('cap-nhat/{id}', [FooterController::class, 'editForm'])->name('footer.edit');
+    Route::post('cap-nhat/{id}', [FooterController::class, 'saveEdit'])->name('footer.saveEdit');
+
+    Route::get('chi-tiet/{id}', [FooterController::class, 'detail'])->name('footer.detail');
+
+    Route::delete('xoa/{id}', [FooterController::class, 'remove'])->name('footer.remove');
+    Route::get('dataPet', [FooterController::class, 'getData'])->name('footer.filter');
+    Route::get('trash', [FooterController::class, 'backUp'])->name('footer.backup');
+    Route::get('dataBackUp', [FooterController::class, 'getBackUp'])->name('footer.getBackup');
+    Route::get('trash/restore/{id}', [FooterController::class, 'restore'])->name('footer.restore');
+    Route::delete('trash/deleteForver/{id}', [FooterController::class, 'delete'])->name('footer.delete');
+    Route::delete('trash/remove', [FooterController::class, 'removeMultiple'])->name('footer.removeMul');
+    Route::get('trash/restore', [FooterController::class, 'restoreMultiple'])->name('footer.restoreMul');
+    Route::delete('trash/deleteForeverMul', [FooterController::class, 'deleteMultiple'])->name('footer.deleteMul');
 });

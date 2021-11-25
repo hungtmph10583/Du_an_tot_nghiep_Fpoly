@@ -3,14 +3,17 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+
 /**
  * hungtm
  * @date: 28/09/21
  */
+
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use App\Models\User;
 use Illuminate\Pagination\Paginator;
+
 
 class AppServiceProvider extends ServiceProvider
 {

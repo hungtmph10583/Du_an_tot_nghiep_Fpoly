@@ -36,8 +36,7 @@
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
                                     <th>Tiêu đề danh mục bài viết</th>
-                                    <th><a href="{{route('blogCategory.add')}}"
-                                            class="btn btn-outline-info float-right">Thêm danh mục bài viết</a></th>
+                                    <th>Tác vụ</th>
                                 </thead>
                                 <tbody>
                                 </tbody>

@@ -96,7 +96,7 @@ class UserController extends Controller
             'password.max' => 'Mật khẩu nhiều nhất 20 ký tự',
             'cfpassword.required' => 'Hãy nhập lại mật khẩu',
             'cfpassword.same' => 'Mật khẩu nhập lại không chính xác',
-            'role_id' => 'Chọn quyền cho người dùng'
+            'role_id.required' => 'Chọn quyền cho người dùng'
         ];
         $validator = Validator::make(
             $request->all(),

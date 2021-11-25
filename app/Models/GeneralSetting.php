@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class GeneralSetting extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = "general_settings";
     protected $fillable = [
         'logo',
@@ -18,4 +19,9 @@ class GeneralSetting extends Model
         'twitter',
         'youtube'
     ];
+
+    public function footer()
+    {
+        return $this->belongsTo(Footer::class, 'general_setting_id')->withTrashed();
+    }
 }

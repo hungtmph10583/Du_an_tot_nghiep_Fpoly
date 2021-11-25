@@ -229,6 +229,35 @@
                     <a href="#" class="nav-link">
                         <i class="fas fa-user-friends"></i>
                         <p>
+                            Loại danh mục
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('categoryType.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('categoryType.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm loại danh mục</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('categoryType.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác loại danh mục</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        <p>
                             Tài khoản
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -248,6 +277,64 @@
                             </a>
                         </li>
                         @endhasanyrole
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        <p>
+                            Quốc Gia
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('country.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('country.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm quốc gia</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('country.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác quốc gia</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        <p>
+                            Giới tính
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('gender.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('gender.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm giới tính</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('gender.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác giới tính</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -327,10 +414,56 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a href="{{route('footerTitle.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Footer title</p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('footerTitle.index')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('footerTitle.add')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm footer title</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('footerTitle.backup')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thùng rác footer title</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
                             <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Footer</p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('footer.index')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('footer.add')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm footer</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('footer.backup')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thùng rác footer</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>

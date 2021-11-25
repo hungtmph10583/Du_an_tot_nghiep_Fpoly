@@ -1,4 +1,4 @@
-@section('title', 'Danh sách slide')
+@section('title', 'Danh sách tiêu đề chân trang')
 @extends('layouts.admin.main')
 @section('content')
 <div class="content-header">
@@ -6,7 +6,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Danh sách slide</li>
+                    <li class="breadcrumb-item card-title">Danh sách tiêu đề chân trang</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -34,10 +34,9 @@
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Hình ảnh</th>
-                                    <th>Đường dẫn</th>
-                                    <th><a href="{{route('slide.add')}}" class="btn btn-outline-info float-right">Thêm
-                                            tiêu đề</a></th>
+                                    <th>Tên tiêu đề</th>
+                                    <th><a href="{{route('footerTitle.add')}}"
+                                            class="btn btn-outline-info float-right">Thêm tiêu đề</a></th>
                                 </thead>
                                 <tbody>
 
@@ -102,7 +101,7 @@ $(document).ready(function() {
                             $('#realize').click(function(e) {
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                deleteMul('{{route("slide.removeMul")}}', allId);
+                                deleteMul('{{route("footerTitle.removeMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -164,7 +163,7 @@ $(document).ready(function() {
         },
         serverSide: true,
         ajax: {
-            url: "{{ route('slide.filter') }}",
+            url: "{{ route('footerTitle.filter') }}",
             data: function(d) {
                 d.search = $('input[type="search"]').val();
             },
@@ -176,12 +175,8 @@ $(document).ready(function() {
                 searchable: false,
             },
             {
-                data: 'image',
-                name: 'image',
-            },
-            {
-                data: 'url',
-                name: 'url',
+                data: 'name',
+                name: 'name',
             },
             {
                 data: 'action',
@@ -195,7 +190,7 @@ $(document).ready(function() {
 
     $(document).on("click", "#undoIndex", function() {
         id = $('#undoIndex').data('id');
-        var url = '{{route("slide.restore",":id")}}';
+        var url = '{{route("footerTitle.restore",":id")}}';
         url = url.replace(':id', id);
         undoIndex(url, id)
         table.ajax.reload();

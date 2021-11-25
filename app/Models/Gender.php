@@ -13,4 +13,9 @@ class Gender extends Model
     protected $fillable = [
         'gender'
     ];
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'gender_id')->withTrashed();
+    }
 }
