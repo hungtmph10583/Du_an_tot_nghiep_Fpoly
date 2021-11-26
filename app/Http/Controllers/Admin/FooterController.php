@@ -75,7 +75,7 @@ class FooterController extends Controller
 
         $message = [
             'content.required' => "Hãy nhập vào tiêu đề",
-            'content.string' => "Tiêu đề phải là chữ",
+            'content.regex' => "Tiêu đề không tồn tại số và các kí hiệu đặc biệt",
             'content.unique' => "Tiêu đề đã tồn tại",
             'type.required' => "Hãy nhập kiểu",
             'type.numeric' => "Kiểu là số",
@@ -91,7 +91,7 @@ class FooterController extends Controller
             [
                 'content' => [
                     'required',
-                    'string',
+                    'regex:/^([^0-9!@#$%^&*_+|\][}{;":><,.]*)$/',
                     Rule::unique('footers')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Footer::onlyTrashed()

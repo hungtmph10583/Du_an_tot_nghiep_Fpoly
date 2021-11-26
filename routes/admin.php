@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\CategoryTypeController;
 use App\Http\Controllers\Admin\CountryController;
+use App\Http\Controllers\Admin\CouponTypeController;
 use App\Http\Controllers\Admin\FooterController;
 use App\Http\Controllers\Admin\FooterTitleController;
 use App\Http\Controllers\Admin\GenderController;
@@ -82,6 +83,8 @@ Route::prefix('don-hang')->group(function () {
     Route::get('chi-tiet/{id}', [OrderController::class, 'detail'])->name('order.detail');
 
     Route::get('xoa/{id}', [OrderController::class, 'remove'])->name('order.remove');
+
+    Route::get('dataOrder', [OrderController::class, 'getData'])->name('order.filter');
 });
 
 Route::prefix('giong-loai')->group(function () {
@@ -191,6 +194,30 @@ Route::prefix('giam-gia')->group(function () {
     Route::delete('trash/deleteForeverMul', [CouponController::class, 'deleteMultiple'])->name('coupon.deleteMul');
 });
 
+Route::prefix('loai-giam-gia')->group(function () {
+    Route::get('/', [CouponTypeController::class, 'index'])->name('couponType.index');
+
+    Route::get('tao-moi', [CouponTypeController::class, 'addForm'])->name('couponType.add');
+    Route::post('tao-moi', [CouponTypeController::class, 'saveAdd'])->name('couponType.saveAdd');
+
+    Route::get('cap-nhat/{id}', [CouponTypeController::class, 'editForm'])->name('couponType.edit');
+    Route::post('cap-nhat/{id}', [CouponTypeController::class, 'saveEdit'])->name('couponType.saveEdit');
+
+    Route::get('chi-tiet/{id}', [CouponTypeController::class, 'detail'])->name('couponType.detail');
+
+    Route::delete('xoa/{id}', [CouponTypeController::class, 'remove'])->name('couponType.remove');
+
+    Route::get('dataCoupon', [CouponTypeController::class, 'getData'])->name('couponType.filter');
+    Route::get('trash', [CouponTypeController::class, 'backUp'])->name('couponType.backup');
+    Route::get('dataBackUp', [CouponTypeController::class, 'getBackUp'])->name('couponType.getBackup');
+    Route::get('trash/restore/{id}', [CouponTypeController::class, 'restore'])->name('couponType.restore');
+    Route::delete('trash/deleteForver/{id}', [CouponTypeController::class, 'delete'])->name('couponType.delete');
+    Route::post('import', [CouponTypeController::class, 'store'])->name('couponType.import');
+    Route::delete('trash/remove', [CouponTypeController::class, 'removeMultiple'])->name('couponType.removeMul');
+    Route::get('trash/restore', [CouponTypeController::class, 'restoreMultiple'])->name('couponType.restoreMul');
+    Route::delete('trash/deleteForeverMul', [CouponTypeController::class, 'deleteMultiple'])->name('couponType.deleteMul');
+});
+
 Route::prefix('tin-tuc')->group(function () {
     Route::get('/', [BlogController::class, 'index'])->name('blog.index');
 
@@ -240,11 +267,9 @@ Route::prefix('danh-muc-tin-tuc')->group(function () {
 });
 
 Route::prefix('thong-tin-he-thong')->group(function () {
-    Route::get('/', [GeneralSettingController::class, 'index'])->name('generalSetting.index');
+    Route::get('/', [GeneralSettingController::class, 'index'])->name('general.index');
 
-    Route::post('/', [GeneralSettingController::class, 'save']);
-
-    Route::get('xoa/{id}', [GeneralSettingController::class, 'remove'])->name('generalSetting.remove');
+    Route::post('tao-moi', [GeneralSettingController::class, 'saveAdd'])->name('general.saveAdd');
 });
 
 Route::prefix('slide')->group(function () {

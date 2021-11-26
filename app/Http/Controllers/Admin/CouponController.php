@@ -598,7 +598,7 @@ class CouponController extends Controller
         });
         $coupon->delete();
 
-        return response()->json(['success' => 'Xóa giống loài thành công !']);
+        return response()->json(['success' => 'Xóa giảm giá thành công !']);
     }
 
     public function restoreMultiple(Request $request)
@@ -648,6 +648,7 @@ class CouponController extends Controller
 
                     $product->accessory()->each(function ($related) {
                         $related->galleries()->restore();
+                        $related->category()->restore();
                     });
 
                     $product->accessory()->restore();

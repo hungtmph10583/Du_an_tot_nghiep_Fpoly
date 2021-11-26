@@ -155,6 +155,29 @@
                     <a href="#" class="nav-link">
                         <i class="fas fa-swatchbook"></i>
                         <p>
+                            Kiểu giảm giá
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('couponType.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('couponType.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác kiểu giảm giá</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-swatchbook"></i>
+                        <p>
                             Tuổi
                             <i class="right fas fa-angle-left"></i>
                         </p>
@@ -390,7 +413,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('generalSetting.index')}}" class="nav-link">
+                            <a href="{{route('general.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thông tin hệ thống</p>
                             </a>

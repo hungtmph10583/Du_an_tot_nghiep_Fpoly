@@ -11,6 +11,11 @@ class CouponType extends Model
     use HasFactory, SoftDeletes;
     protected $table = "coupon_types";
     protected $fillable = [
-        'name',
+        'name'
     ];
+
+    public function coupons()
+    {
+        return $this->hasMany(Coupons::class, 'type')->withTrashed();
+    }
 }

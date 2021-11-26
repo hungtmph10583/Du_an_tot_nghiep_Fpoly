@@ -1,4 +1,4 @@
-@section('title', 'Thùng rác giảm giá')
+@section('title', 'Thùng rác loại giảm giá')
 @extends('layouts.admin.main')
 @section('content')
 
@@ -7,7 +7,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Thùng rác giảm giá</li>
+                    <li class="breadcrumb-item card-title">Thùng rác loại giảm giá</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -35,10 +35,7 @@
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Mã giảm giá</th>
                                     <th>Kiểu giảm giá</th>
-                                    <th>Ngày bắt đầu</th>
-                                    <th>Ngày kết thúc</th>
                                     <th>
                                         Tác vụ
                                     </th>
@@ -104,7 +101,7 @@ $(document).ready(function() {
                             $('#realize').click(function(e) {
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                restoreMul('{{route("coupon.restoreMul")}}', allId);
+                                restoreMul('{{route("couponType.restoreMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -153,7 +150,7 @@ $(document).ready(function() {
                             $('#realize').click(function(e) {
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                removeMul('{{route("coupon.deleteMul")}}', allId);
+                                removeMul('{{route("couponType.deleteMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -221,7 +218,7 @@ $(document).ready(function() {
         },
         serverSide: true,
         ajax: {
-            url: "{{ route('coupon.getBackup') }}",
+            url: "{{ route('couponType.getBackup') }}",
             data: function(d) {
                 d.search = $('input[type="search"]').val();
             }
@@ -233,20 +230,8 @@ $(document).ready(function() {
                 searchable: false,
             },
             {
-                data: 'code',
-                name: 'code',
-            },
-            {
-                data: 'type',
-                name: 'type',
-            },
-            {
-                data: 'start_date',
-                name: 'start_date',
-            },
-            {
-                data: 'end_date',
-                name: 'end_date',
+                data: 'name',
+                name: 'name',
             },
             {
                 data: 'action',
@@ -259,7 +244,7 @@ $(document).ready(function() {
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
     $(document).on("click", "#undoTrashed", function() {
         id = $('#undoTrashed').data('id');
-        var url = '{{route("coupon.remove",":id")}}';
+        var url = '{{route("couponType.remove",":id")}}';
         url = url.replace(':id', id);
         undoTrash(url, id)
         table.ajax.reload();
