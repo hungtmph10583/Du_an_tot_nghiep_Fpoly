@@ -75,7 +75,8 @@ class FooterController extends Controller
 
         $message = [
             'content.required' => "Hãy nhập vào tiêu đề",
-            'content.regex' => "Tiêu đề không tồn tại số và các kí hiệu đặc biệt",
+            'content.regex' => "Tiêu đề không chứa kí tự đặc biệt và số",
+            'content.min' => "Tiêu đề ít nhất 3 kí tự",
             'content.unique' => "Tiêu đề đã tồn tại",
             'type.required' => "Hãy nhập kiểu",
             'type.numeric' => "Kiểu là số",
@@ -91,7 +92,8 @@ class FooterController extends Controller
             [
                 'content' => [
                     'required',
-                    'regex:/^([^0-9!@#$%^&*_+|\][}{;":><,.]*)$/',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('footers')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Footer::onlyTrashed()
@@ -145,7 +147,8 @@ class FooterController extends Controller
 
         $message = [
             'content.required' => "Hãy nhập vào tiêu đề",
-            'content.numeric' => "Tiêu đề phải là chữ",
+            'content.regex' => "Tiêu đề không chứa kí tự đặc biệt và số",
+            'content.min' => "Tiêu đề ít nhất 3 kí tự",
             'content.unique' => "Tiêu đề đã tồn tại",
             'type.required' => "Hãy nhập kiểu",
             'type.numeric' => "Kiểu là số",
@@ -160,7 +163,8 @@ class FooterController extends Controller
             [
                 'content' => [
                     'required',
-                    'numeric',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('footers')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Footer::onlyTrashed()

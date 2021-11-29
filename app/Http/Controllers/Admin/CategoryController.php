@@ -78,6 +78,8 @@ class CategoryController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên danh mục đã tồn tại",
+            'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên danh mục ít nhất 3 kí tự",
             'category_type_id.required' => "Hãy chọn danh mục",
             'show_slide.required' => "Hãy chọn trạng thái danh mục",
             'uploadfile.required' => 'Hãy chọn ảnh danh mục',
@@ -90,7 +92,20 @@ class CategoryController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('categories')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('categories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Category::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Danh mục đã tồn tại trong thùng rác .
+                             Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    }
                 ],
                 'category_type_id' => 'required',
                 'show_slide' => 'required',
@@ -132,16 +147,11 @@ class CategoryController extends Controller
             return redirect()->back();
         }
 
-        if ($request->name) {
-            $dupicate = Category::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
-        }
-
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên danh mục đã tồn tại",
+            'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên danh mục ít nhất 3 kí tự",
             'category_type_id.required' => "Hãy chọn danh mục",
             'show_slide.required' => "Hãy chọn trạng thái danh mục",
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
@@ -152,7 +162,20 @@ class CategoryController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('categories')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('categories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Category::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Danh mục đã tồn tại trong thùng rác .
+                             Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    }
                 ],
                 'category_type_id' => 'required',
                 'show_slide' => 'required',
@@ -161,7 +184,7 @@ class CategoryController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index')]);
         } else {
             $model->fill($request->all());
             if ($request->has('uploadfile')) {
@@ -188,24 +211,6 @@ class CategoryController extends Controller
         $breed = Breed::all();
 
         return view('admin.category.detail', compact('category', 'product', 'breed'));
-    }
-
-    public function remove($id)
-    {
-        $category = Category::find($id);
-
-        if ($category->count() == 0) {
-            return response()->json(['success' => 'Xóa danh mục thất bại !']);
-        }
-
-        $pro = $category->products();
-        $pro->each(function ($galleries) {
-            $galleries->galleries()->delete();
-        });
-        $pro->delete();
-        $category->delete();
-
-        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function backUp()
@@ -248,6 +253,24 @@ class CategoryController extends Controller
             })
             ->rawColumns(['action', 'checkbox'])
             ->make(true);
+    }
+
+    public function remove($id)
+    {
+        $category = Category::find($id);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
+        $pro = $category->products();
+        $pro->each(function ($galleries) {
+            $galleries->galleries()->delete();
+        });
+        $pro->delete();
+        $category->delete();
+
+        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function restore($id)

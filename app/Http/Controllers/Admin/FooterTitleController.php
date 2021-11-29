@@ -62,7 +62,8 @@ class FooterTitleController extends Controller
 
         $message = [
             'name.required' => "Hãy nhập vào tiêu đề",
-            'name.alpha' => "Tiêu đề phải là chữ",
+            'name.regex' => "Tiêu đề không chứa kí tự đặc biệt và số",
+            'name.min' => "Tiêu đề ít nhất 3 kí tự",
             'name.unique' => "Tiêu đề đã tồn tại",
             'status.required' => "Hãy chọn trạng thái"
         ];
@@ -71,7 +72,8 @@ class FooterTitleController extends Controller
             [
                 'name' => [
                     'required',
-                    'alpha',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('footer_titles')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = FooterTitle::onlyTrashed()
@@ -120,7 +122,8 @@ class FooterTitleController extends Controller
 
         $message = [
             'name.required' => "Hãy nhập vào tiêu đề",
-            'name.alpha' => "Tiêu đề phải là chữ",
+            'name.regex' => "Tiêu đề không chứa kí tự đặc biệt và số",
+            'name.min' => "Tiêu đề ít nhất 3 kí tự",
             'name.unique' => "Tiêu đề đã tồn tại",
             'status.required' => 'Hãy chọn trạng thái'
         ];
@@ -129,7 +132,8 @@ class FooterTitleController extends Controller
             [
                 'name' => [
                     'required',
-                    'alpha',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('footer_titles')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = FooterTitle::onlyTrashed()

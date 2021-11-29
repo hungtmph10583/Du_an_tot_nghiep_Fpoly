@@ -59,14 +59,20 @@ class CountryController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào tên quốc gia",
             'name.unique' => "Tên quốc gia đã tồn tại",
+            'name.regex' => "Tên quốc gia không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên quốc gia ít nhất 3 kí tự",
             'code.required' => "Hãy nhập vào ký hiệu",
             'code.unique' => "Ký hiệu đã tồn tại",
+            'code.regex' => "Tên quốc gia không chứa kí tự đặc biệt và số",
+            'code.min' => "Tên quốc gia ít nhất 3 kí tự",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('countries')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Country::onlyTrashed()
@@ -82,6 +88,8 @@ class CountryController extends Controller
                 ],
                 'code' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('countries')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Country::onlyTrashed()
@@ -128,14 +136,20 @@ class CountryController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào tên quốc gia",
             'name.unique' => "Tên quốc gia đã tồn tại",
+            'name.regex' => "Tên quốc gia không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên quốc gia ít nhất 3 kí tự",
             'code.required' => "Hãy nhập vào ký hiệu",
             'code.unique' => "Ký hiệu đã tồn tại",
+            'code.regex' => "Ký hiệu không chứa kí tự đặc biệt và số",
+            'code.min' => "Ký hiệu ít nhất 3 kí tự",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('countries')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Country::onlyTrashed()
@@ -151,6 +165,8 @@ class CountryController extends Controller
                 ],
                 'code' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('countries')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Country::onlyTrashed()

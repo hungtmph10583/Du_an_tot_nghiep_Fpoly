@@ -3,29 +3,25 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use App\Models\Coupons;
-use App\Models\CouponType;
 use App\Models\DiscountType;
-use App\Models\Product;
-use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\Datatables\Datatables;
 
-class CouponTypeController extends Controller
+class DiscountTypeController extends Controller
 {
     public function index(Request $request)
     {
         $admin = Auth::user()->hasanyrole('admin|manager');
-        return view('admin.couponType.index', compact('admin'));
+        return view('admin.discountType.index', compact('admin'));
     }
 
     public function getData(Request $request)
     {
-        $couponType = CouponType::select('coupon_types.*');
-        return dataTables::of($couponType)
+        $discountType = DiscountType::select('discount_types.*');
+        return dataTables::of($discountType)
             ->setRowId(function ($row) {
                 return $row->id;
             })
@@ -35,8 +31,8 @@ class CouponTypeController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                    <a  class="btn btn-success" href="' . route('couponType.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
-                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('couponType.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                    <a  class="btn btn-success" href="' . route('discountType.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('discountType.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
@@ -54,19 +50,17 @@ class CouponTypeController extends Controller
 
     public function addForm()
     {
-        return view('admin.couponType.add-form');
+        return view('admin.discountType.add-form');
     }
 
     public function saveAdd(Request $request, $id = null)
     {
-        $model = new CouponType();
+        $model = new DiscountType();
 
         $message = [
-            'name.required' => "Hãy nhập vào kiểu khuyến mãi",
-            'name.unique' => "Kiểu khuyến mãi đã tồn tại",
-            'name.regex' => "Kiểu khuyến mãi không tồn tại số và các kí hiệu đặc biệt",
-            'name.regex' => "Kiểu khuyến mãi không chứa kí tự đặc biệt và số",
-            'name.min' => "Kiểu khuyến mãi ít nhất 3 kí tự",
+            'name.required' => "Hãy nhập vào loại giảm giá",
+            'name.unique' => "Loại giảm giá đã tồn tại",
+            'name.regex' => "Loại giảm giá không tồn tại số và các kí hiệu đặc biệt",
         ];
         $validator = Validator::make(
             $request->all(),
@@ -74,15 +68,14 @@ class CouponTypeController extends Controller
                 'name' => [
                     'required',
                     'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
-                    'min:3',
                     Rule::unique('coupon_types')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
-                        $dupicate = CouponType::onlyTrashed()
+                        $dupicate = DiscountType::onlyTrashed()
                             ->where('name', 'like', '%' . $request->name . '%')
                             ->first();
                         if ($dupicate) {
                             if ($value == $dupicate->name) {
-                                return $fail('Kiểu khuyến mãi đã tồn tại trong thùng rác .
+                                return $fail('Loại giảm giá đã tồn tại trong thùng rác .
                              Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
                             }
                         }
@@ -92,34 +85,33 @@ class CouponTypeController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('couponType.index')]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('discountType.index')]);
         } else {
             $model->fill($request->all());
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('couponType.index'), 'message' => 'Thêm kiểu giảm giá thành công']);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('discountType.index'), 'message' => 'Thêm kiểu giảm giá thành công']);
     }
     public function editForm($id)
     {
-        $model = CouponType::find($id);
+        $model = DiscountType::find($id);
         if (!$model) {
             return redirect()->back();
         }
-        return view('admin.couponType.edit-form', compact('model'));
+        return view('admin.discountType.edit-form', compact('model'));
     }
     public function saveEdit($id, Request $request)
     {
-        $model = CouponType::find($id);
+        $model = DiscountType::find($id);
 
         if (!$model) {
             return redirect()->back();
         }
 
         $message = [
-            'name.required' => "Hãy nhập vào kiểu khuyến mãi",
-            'name.unique' => "Kiểu khuyến mãi đã tồn tại",
-            'name.regex' => "Kiểu khuyến mãi không chứa kí tự đặc biệt và số",
-            'name.min' => "Kiểu khuyến mãi ít nhất 3 kí tự",
+            'name.required' => "Hãy nhập vào loại giảm giá",
+            'name.unique' => "Loại giảm giá đã tồn tại",
+            'name.regex' => "Loại giảm giá không tồn tại số và các kí hiệu đặc biệt",
         ];
         $validator = Validator::make(
             $request->all(),
@@ -127,15 +119,14 @@ class CouponTypeController extends Controller
                 'name' => [
                     'required',
                     'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
-                    'min:3',
                     Rule::unique('coupon_types')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
-                        $dupicate = CouponType::onlyTrashed()
+                        $dupicate = DiscountType::onlyTrashed()
                             ->where('name', 'like', '%' . $request->name . '%')
                             ->first();
                         if ($dupicate) {
                             if ($value == $dupicate->name) {
-                                return $fail('Kiểu khuyến mãi đã tồn tại trong thùng rác .
+                                return $fail('Loại giảm giá đã tồn tại trong thùng rác .
                              Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
                             }
                         }
@@ -145,24 +136,24 @@ class CouponTypeController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('couponType.index')]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('discountType.index')]);
         } else {
             $model->fill($request->all());
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('couponType.index'), 'message' => 'Sửa kiểu giảm giá thành công']);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('discountType.index'), 'message' => 'Sửa kiểu giảm giá thành công']);
     }
 
     public function backup(Request $request)
     {
         $admin = Auth::user()->hasanyrole('admin|manager');
-        return view('admin.couponType.back-up', compact('admin'));
+        return view('admin.discountType.back-up', compact('admin'));
     }
 
     public function getBackUp(Request $request)
     {
-        $couponType = CouponType::onlyTrashed()->select('coupon_types.*');
-        return dataTables::of($couponType)
+        $discountType = DiscountType::onlyTrashed()->select('discount_types.*');
+        return dataTables::of($discountType)
             ->setRowId(function ($row) {
                 return $row->id;
             })
@@ -172,8 +163,8 @@ class CouponTypeController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                    <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('couponType.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
-                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('couponType.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                    <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('discountType.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('discountType.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
@@ -191,13 +182,13 @@ class CouponTypeController extends Controller
 
     public function remove($id)
     {
-        $couponType = CouponType::withTrashed()->find($id);
-        $couponType->with('coupons');
-        if (empty($couponType)) {
-            return response()->json(['success' => 'Giảm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
+        $discountType = DiscountType::withTrashed()->find($id);
+        $discountType->with('coupons');
+        if (empty($discountType)) {
+            return response()->json(['success' => 'Loại giảm giá không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
         }
-        if ($couponType->coupons()->count() !== 0) {
-            $couponType->coupons()->each(function ($coupon) {
+        if ($discountType->coupons()->count() !== 0) {
+            $discountType->coupons()->each(function ($coupon) {
                 if ($coupon->category()->count() !== 0) {
                     $coupon->category()->each(function ($product) {
 
@@ -255,19 +246,30 @@ class CouponTypeController extends Controller
                 $coupon->couponUsage()->delete();
             });
         };
-        $couponType->coupons()->delete();
-        $couponType->delete();
-        return response()->json(['success' => 'Xóa kiểu giảm giá thành công !', 'undo' => "Hoàn tác thành công !"]);
+        $discountType->coupons()->delete();
+        $discountType->products()->each(function ($related) {
+            $related->galleries()->delete();
+            $related->orderDetails()->delete();
+            $related->carts()->delete();
+            $related->reviews()->delete();
+        });
+        $discountType->products()->delete();
+        $discountType->accessory()->each(function ($related) {
+            $related->galleries()->delete();
+        });
+        $discountType->accessory()->delete();
+        $discountType->delete();
+        return response()->json(['success' => 'Xóa loại giảm giá thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function restore($id)
     {
-        $couponType = CouponType::withTrashed()->find($id);
-        if (empty($couponType)) {
-            return response()->json(['success' => 'Giảm giá không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
+        $discountType = DiscountType::withTrashed()->find($id);
+        if (empty($discountType)) {
+            return response()->json(['success' => 'Loại giảm giá không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
         }
-        if ($couponType->coupons()->count() !== 0) {
-            $couponType->coupons()->each(function ($coupon) {
+        if ($discountType->coupons()->count() !== 0) {
+            $discountType->coupons()->each(function ($coupon) {
                 if ($coupon->category()->count() !== 0) {
                     $coupon->category()->each(function ($product) {
 
@@ -331,20 +333,33 @@ class CouponTypeController extends Controller
                 $coupon->couponUsage()->restore();
             });
         };
-        $couponType->coupons()->restore();
-        $couponType->restore();
-        return response()->json(['success' => 'Khôi phục kiểu giảm giá thành công !', 'undo' => "Hoàn tác thành công !"]);
+        $discountType->coupons()->restore();
+        $discountType->products()->each(function ($related) {
+            $related->galleries()->restore();
+            $related->orderDetails()->restore();
+            $related->carts()->restore();
+            $related->reviews()->restore();
+            $related->category()->restore();
+        });
+        $discountType->products()->restore();
+        $discountType->accessory()->each(function ($related) {
+            $related->galleries()->restore();
+            $related->category()->restore();
+        });
+        $discountType->accessory()->restore();
+        $discountType->restore();
+        return response()->json(['success' => 'Khôi phục loại giảm giá thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function delete($id)
     {
-        $couponType = CouponType::withTrashed()->find($id);
-        $couponType->with('coupons');
-        if (empty($couponType)) {
+        $discountType = DiscountType::withTrashed()->find($id);
+        $discountType->with('coupons');
+        if (empty($discountType)) {
             return response()->json(['success' => 'Kiểu giảm giá không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
         }
-        if ($couponType->coupons()->count() !== 0) {
-            $couponType->coupons()->each(function ($coupon) {
+        if ($discountType->coupons()->count() !== 0) {
+            $discountType->coupons()->each(function ($coupon) {
                 if ($coupon->category()->count() !== 0) {
                     $coupon->category()->each(function ($product) {
 
@@ -401,21 +416,32 @@ class CouponTypeController extends Controller
                 $coupon->products()->forceDelete();
                 $coupon->couponUsage()->forceDelete();
             });
-        }
-        $couponType->coupons()->forceDelete();
-        $couponType->forceDelete();
+        };
+        $discountType->coupons()->forceDelete();
+        $discountType->products()->each(function ($related) {
+            $related->galleries()->forceDelete();
+            $related->orderDetails()->forceDelete();
+            $related->carts()->forceDelete();
+            $related->reviews()->forceDelete();
+        });
+        $discountType->products()->forceDelete();
+        $discountType->accessory()->each(function ($related) {
+            $related->galleries()->forceDelete();
+        });
+        $discountType->accessory()->forceDelete();
+        $discountType->forceDelete();
         return response()->json(['success' => 'Xóa kiểu giảm giá thành công !']);
     }
 
     public function removeMultiple(Request $request)
     {
         $idAll = $request->allId;
-        $couponType = CouponType::withTrashed()->whereIn('id', $idAll);
+        $discountType = DiscountType::withTrashed()->whereIn('id', $idAll);
 
-        if ($couponType->count() == 0) {
+        if ($discountType->count() == 0) {
             return response()->json(['success' => 'Xóa giống loài thất bại !']);
         }
-        $couponType->each(function ($coupons) {
+        $discountType->each(function ($coupons) {
             if ($coupons->coupons()->count() !== 0) {
                 $coupons->coupons()->each(function ($coupon) {
                     if ($coupon->category()->count() !== 0) {
@@ -476,8 +502,19 @@ class CouponTypeController extends Controller
                 });
             };
             $coupons->coupons()->delete();
+            $coupons->products()->each(function ($related) {
+                $related->galleries()->delete();
+                $related->orderDetails()->delete();
+                $related->carts()->delete();
+                $related->reviews()->delete();
+            });
+            $coupons->products()->delete();
+            $coupons->accessory()->each(function ($related) {
+                $related->galleries()->delete();
+            });
+            $coupons->accessory()->delete();
         });
-        $couponType->delete();
+        $discountType->delete();
 
         return response()->json(['success' => 'Xóa kiểu giảm giá thành công !']);
     }
@@ -485,12 +522,12 @@ class CouponTypeController extends Controller
     public function restoreMultiple(Request $request)
     {
         $idAll = $request->allId;
-        $couponType = CouponType::withTrashed()->whereIn('id', $idAll);
+        $discountType = DiscountType::withTrashed()->whereIn('id', $idAll);
 
-        if ($couponType->count() == 0) {
+        if ($discountType->count() == 0) {
             return response()->json(['success' => 'Khôi phục kiểu giảm giá thất bại !']);
         }
-        $couponType->each(function ($coupons) {
+        $discountType->each(function ($coupons) {
             if ($coupons->coupons()->count() !== 0) {
                 $coupons->coupons()->each(function ($coupon) {
                     if ($coupon->category()->count() !== 0) {
@@ -530,7 +567,6 @@ class CouponTypeController extends Controller
 
                             $product->accessory()->each(function ($related) {
                                 $related->galleries()->restore();
-                                $related->category()->restore();
                             });
 
                             $product->accessory()->restore();
@@ -557,8 +593,21 @@ class CouponTypeController extends Controller
                 });
             };
             $coupons->coupons()->restore();
+            $coupons->products()->each(function ($related) {
+                $related->galleries()->restore();
+                $related->orderDetails()->restore();
+                $related->carts()->restore();
+                $related->reviews()->restore();
+                $related->category()->restore();
+            });
+            $coupons->products()->restore();
+            $coupons->accessory()->each(function ($related) {
+                $related->galleries()->restore();
+                $related->category()->restore();
+            });
+            $coupons->accessory()->restore();
         });
-        $couponType->restore();
+        $discountType->restore();
 
         return response()->json(['success' => 'Khôi phục kiểu giảm giá thành công !']);
     }
@@ -566,13 +615,13 @@ class CouponTypeController extends Controller
     public function deleteMultiple(Request $request)
     {
         $idAll = $request->allId;
-        $couponType = CouponType::withTrashed()->whereIn('id', $idAll);
+        $discountType = DiscountType::withTrashed()->whereIn('id', $idAll);
 
-        if ($couponType->count() == 0) {
+        if ($discountType->count() == 0) {
             return response()->json(['success' => 'Xóa kiểu giảm giá thất bại !']);
         }
 
-        $couponType->each(function ($coupons) {
+        $discountType->each(function ($coupons) {
             if ($coupons->coupons()->count() !== 0) {
                 $coupons->coupons()->each(function ($coupon) {
                     if ($coupon->category()->count() !== 0) {
@@ -633,8 +682,19 @@ class CouponTypeController extends Controller
                 });
             };
             $coupons->coupons()->forceDelete();
+            $coupons->products()->each(function ($related) {
+                $related->galleries()->forceDelete();
+                $related->orderDetails()->forceDelete();
+                $related->carts()->forceDelete();
+                $related->reviews()->forceDelete();
+            });
+            $coupons->products()->forceDelete();
+            $coupons->accessory()->each(function ($related) {
+                $related->galleries()->forceDelete();
+            });
+            $coupons->accessory()->forceDelete();
         });
-        $couponType->forceDelete();
+        $discountType->forceDelete();
 
         return response()->json(['success' => 'Xóa kiểu giảm giá thành công !']);
     }

@@ -79,6 +79,8 @@ class BlogController extends Controller
         $message = [
             'title.required' => "Hãy nhập vào chủ đề bài viết",
             'title.unique' => "Tên chủ đề bài viết đã tồn tại",
+            'title.min' => "Tên chủ đề bài viết ít nhất 3 kí tự",
+            'slug.required' => "Slug không được trống",
             'category_blog_id.required' => "Hãy chọn bài viết",
             'status.required' => 'Hãy chọn trạng thái bài viết',
             'content.required' => 'Hãy nhập nội dung bài viết',
@@ -91,8 +93,21 @@ class BlogController extends Controller
             [
                 'title' => [
                     'required',
-                    Rule::unique('blogs')->ignore($id)
+                    'min:3',
+                    Rule::unique('blogs')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Blog::onlyTrashed()
+                            ->where('title', 'like', '%' . $request->title . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->title) {
+                                return $fail('Loại danh mục đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
+                'slug' => 'required',
                 'category_blog_id' => 'required',
                 'status' => 'required',
                 'content' => 'required',

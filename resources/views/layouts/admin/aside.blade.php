@@ -155,7 +155,7 @@
                     <a href="#" class="nav-link">
                         <i class="fas fa-swatchbook"></i>
                         <p>
-                            Kiểu giảm giá
+                            Loại phiếu giảm giá
                             <i class="right fas fa-angle-left"></i>
                         </p>
                     </a>
@@ -169,7 +169,30 @@
                         <li class="nav-item">
                             <a href="{{route('couponType.backup')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Thùng rác kiểu giảm giá</p>
+                                <p>Thùng rác loại phiếu giảm giá</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-swatchbook"></i>
+                        <p>
+                            Loại giảm giá
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('discountType.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('discountType.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác loại giảm giá</p>
                             </a>
                         </li>
                     </ul>

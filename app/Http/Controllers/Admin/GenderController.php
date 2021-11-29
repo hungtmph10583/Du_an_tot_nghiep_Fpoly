@@ -74,12 +74,16 @@ class GenderController extends Controller
         $message = [
             'gender.required' => "Hãy nhập vào giới tính",
             'gender.unique' => "Giới tính đã tồn tại",
+            'gender.regex' => "Giới tính không chứa kí tự đặc biệt và số",
+            'gender.min' => "Giới tính ít nhất 3 kí tự",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'gender' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('genders')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Gender::onlyTrashed()
@@ -127,12 +131,16 @@ class GenderController extends Controller
         $message = [
             'gender.required' => "Hãy nhập vào giới tính",
             'gender.unique' => "Giới tính đã tồn tại",
+            'gender.regex' => "Giới tính không chứa kí tự đặc biệt và số",
+            'gender.min' => "Giới tính ít nhất 3 kí tự",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'gender' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('genders')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Gender::onlyTrashed()

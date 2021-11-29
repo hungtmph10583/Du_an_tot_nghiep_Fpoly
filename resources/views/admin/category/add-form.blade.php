@@ -137,26 +137,13 @@ $(".btn-info").click(function(e) {
                 $("#myModal").modal('show');
                 showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
-                    if (data.dupicate != null) {
-                        if (key == 'name') {
-                            value = [
-                                'Tên danh mục đã tồn tại trong thùng rác . Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác'
-                            ];
-                        }
-                        showErr +=
-                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
-                            value[0] +
-                            '<br>';
-                    } else {
-                        showErr +=
-                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
-                            value[0] +
-                            '<br>';
-                    }
+                    showErr +=
+                        '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                        value[0] +
+                        '<br>';
                     $('span.' + key + '_error').text(value[0]);
                 });
                 $('.modal-body').html(showErr);
-
             } else {
                 $("#myModal").modal('show');
                 $('.modal-body').html(

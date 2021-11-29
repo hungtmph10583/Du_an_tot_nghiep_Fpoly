@@ -60,7 +60,7 @@ class Product extends Model
 
     public function discountType()
     {
-        return $this->hasMany(DiscountType::class, 'discount_type')->withTrashed();
+        return $this->belongsTo(DiscountType::class, 'discount_type')->withTrashed();
     }
 
     public function reviews()

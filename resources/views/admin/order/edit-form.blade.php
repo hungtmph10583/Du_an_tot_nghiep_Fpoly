@@ -1,11 +1,13 @@
-@extends('layouts.admin.main') @section('content')
+@extends('layouts.admin.main')
+@section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Danh sách Đơn hàng</a></li>
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Danh sách Đơn
+                            hàng</a></li>
                     <li class="breadcrumb-item active">Sửa Đơn hàng</li>
                 </ol>
             </div>
@@ -22,9 +24,9 @@
         <form action="" method="post" enctype="multipart/form-data">
             @csrf
             <div class="card">
-            <div class="card-header">
-                Chi tiết đơn hàng
-            </div>
+                <div class="card-header">
+                    Chi tiết đơn hàng
+                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6"></div>
@@ -121,7 +123,8 @@
                             <tbody>
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-dog.jpg')}}" alt="" width="70"></td>
+                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-dog.jpg')}}"
+                                            alt="" width="70"></td>
                                     <td>Chó đốm</td>
                                     <td>Giao hàng tận nhà</td>
                                     <td>1</td>
@@ -130,7 +133,8 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">2</th>
-                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-cat.jpg')}}" alt="" width="70"></td>
+                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-cat.jpg')}}"
+                                            alt="" width="70"></td>
                                     <td>Mèo trắng mắt xanh</td>
                                     <td>Giao hàng tận nhà</td>
                                     <td>1</td>
@@ -139,7 +143,8 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-bird.jpg')}}" alt="" width="70"></td>
+                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-bird.jpg')}}"
+                                            alt="" width="70"></td>
                                     <td>Vẹt 7 màu</td>
                                     <td>Giao hàng tận nhà</td>
                                     <td>1</td>

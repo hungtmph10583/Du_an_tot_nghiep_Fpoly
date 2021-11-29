@@ -81,12 +81,14 @@ class AgeController extends Controller
         $message = [
             'age.required' => "Hãy nhập vào tuổi",
             'age.unique' => "Tuổi đã tồn tại",
+            'age.regex' => "Tuổi không chứa kí tự đặc biệt",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'age' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
                     Rule::unique('ages')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Age::onlyTrashed()
@@ -134,12 +136,14 @@ class AgeController extends Controller
         $message = [
             'age.required' => "Hãy nhập vào tuổi",
             'age.unique' => "Tuổi đã tồn tại",
+            'age.regex' => "Tuổi không chứa kí tự đặc biệt",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'age' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
                     Rule::unique('ages')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Age::onlyTrashed()

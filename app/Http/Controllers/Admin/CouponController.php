@@ -95,16 +95,11 @@ class CouponController extends Controller
             return redirect()->back();
         }
 
-        if ($request->code) {
-            $dupicate = Coupons::onlyTrashed()
-                ->where('code', 'like', $request->code)->first();
-        } else {
-            $dupicate = null;
-        }
-
         $message = [
             'code.required' => "Hãy nhập vào mã khuyến mãi",
             'code.unique' => "Mã khuyến mãi đã tồn tại",
+            'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt và số",
+            'code.min' => "Mã khuyến mãi ít nhất 3 kí tự",
             'type.required' => "Hãy chọn loại giảm giá",
             'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
             'category_id.required_without' => "Hãy chọn danh mục hoặc sản phẩm giảm giá",
@@ -121,7 +116,20 @@ class CouponController extends Controller
             [
                 'code' => [
                     'required',
-                    Rule::unique('coupons')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('coupons')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Coupons::onlyTrashed()
+                            ->where('code', 'like', '%' . $request->code . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->code) {
+                                return $fail('Mã khuyến mãi đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
                 'product_id' => 'required_without:category_id',
                 'category_id' => 'required_without:product_id',
@@ -144,7 +152,7 @@ class CouponController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('coupon.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('coupon.index')]);
         } else {
             $model->fill($request->all());
             $model->user_id = Auth::id();
@@ -189,16 +197,11 @@ class CouponController extends Controller
             return redirect()->back();
         }
 
-        if ($request->code) {
-            $dupicate = Coupons::onlyTrashed()
-                ->where('code', 'like', $request->code)->first();
-        } else {
-            $dupicate = null;
-        }
-
         $message = [
             'code.required' => "Hãy nhập vào mã khuyến mãi",
             'code.unique' => "Mã khuyến mãi đã tồn tại",
+            'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt và số",
+            'code.min' => "Mã khuyến mãi ít nhất 3 kí tự",
             'type.required' => "Hãy chọn loại giảm giá",
             'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
             'category_id.required_without' => "Hãy chọn danh mục hoặc sản phẩm giảm giá",
@@ -215,7 +218,20 @@ class CouponController extends Controller
             [
                 'code' => [
                     'required',
-                    Rule::unique('coupons')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('coupons')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Coupons::onlyTrashed()
+                            ->where('code', 'like', '%' . $request->code . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->code) {
+                                return $fail('Mã khuyến mãi đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
                 'product_id' => 'required_without:category_id',
                 'category_id' => 'required_without:product_id',
@@ -238,7 +254,7 @@ class CouponController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('coupon.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('coupon.index')]);
         } else {
             $model->fill($request->all());
             $model->user_id = Auth::id();

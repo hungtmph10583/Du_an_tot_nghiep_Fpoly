@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\CategoryTypeController;
 use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\CouponTypeController;
+use App\Http\Controllers\Admin\DiscountTypeController;
 use App\Http\Controllers\Admin\FooterController;
 use App\Http\Controllers\Admin\FooterTitleController;
 use App\Http\Controllers\Admin\GenderController;
@@ -194,7 +195,7 @@ Route::prefix('giam-gia')->group(function () {
     Route::delete('trash/deleteForeverMul', [CouponController::class, 'deleteMultiple'])->name('coupon.deleteMul');
 });
 
-Route::prefix('loai-giam-gia')->group(function () {
+Route::prefix('loai-phieu-giam-gia')->group(function () {
     Route::get('/', [CouponTypeController::class, 'index'])->name('couponType.index');
 
     Route::get('tao-moi', [CouponTypeController::class, 'addForm'])->name('couponType.add');
@@ -216,6 +217,30 @@ Route::prefix('loai-giam-gia')->group(function () {
     Route::delete('trash/remove', [CouponTypeController::class, 'removeMultiple'])->name('couponType.removeMul');
     Route::get('trash/restore', [CouponTypeController::class, 'restoreMultiple'])->name('couponType.restoreMul');
     Route::delete('trash/deleteForeverMul', [CouponTypeController::class, 'deleteMultiple'])->name('couponType.deleteMul');
+});
+
+Route::prefix('loai-giam-gia')->group(function () {
+    Route::get('/', [DiscountTypeController::class, 'index'])->name('discountType.index');
+
+    Route::get('tao-moi', [DiscountTypeController::class, 'addForm'])->name('discountType.add');
+    Route::post('tao-moi', [DiscountTypeController::class, 'saveAdd'])->name('discountType.saveAdd');
+
+    Route::get('cap-nhat/{id}', [DiscountTypeController::class, 'editForm'])->name('discountType.edit');
+    Route::post('cap-nhat/{id}', [DiscountTypeController::class, 'saveEdit'])->name('discountType.saveEdit');
+
+    Route::get('chi-tiet/{id}', [DiscountTypeController::class, 'detail'])->name('discountType.detail');
+
+    Route::delete('xoa/{id}', [DiscountTypeController::class, 'remove'])->name('discountType.remove');
+
+    Route::get('datadiscount', [DiscountTypeController::class, 'getData'])->name('discountType.filter');
+    Route::get('trash', [DiscountTypeController::class, 'backUp'])->name('discountType.backup');
+    Route::get('dataBackUp', [DiscountTypeController::class, 'getBackUp'])->name('discountType.getBackup');
+    Route::get('trash/restore/{id}', [DiscountTypeController::class, 'restore'])->name('discountType.restore');
+    Route::delete('trash/deleteForver/{id}', [DiscountTypeController::class, 'delete'])->name('discountType.delete');
+    Route::post('import', [DiscountTypeController::class, 'store'])->name('discountType.import');
+    Route::delete('trash/remove', [DiscountTypeController::class, 'removeMultiple'])->name('discountType.removeMul');
+    Route::get('trash/restore', [DiscountTypeController::class, 'restoreMultiple'])->name('discountType.restoreMul');
+    Route::delete('trash/deleteForeverMul', [DiscountTypeController::class, 'deleteMultiple'])->name('discountType.deleteMul');
 });
 
 Route::prefix('tin-tuc')->group(function () {

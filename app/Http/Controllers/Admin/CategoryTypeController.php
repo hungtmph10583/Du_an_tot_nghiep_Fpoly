@@ -58,12 +58,16 @@ class CategoryTypeController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào loại danh mục",
             'name.unique' => "Loại danh mục đã tồn tại",
+            'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên danh mục ít nhất 3 kí tự",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('category_types')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = CategoryType::onlyTrashed()
@@ -110,12 +114,16 @@ class CategoryTypeController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào loại danh mục",
             'name.unique' => "Loại danh mục đã tồn tại",
+            'name.regex' => "Loại danh mục không chứa kí tự đặc biệt và số",
+            'name.min' => "Loại danh mục ít nhất 3 kí tự",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
                     Rule::unique('category_types')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = CategoryType::onlyTrashed()

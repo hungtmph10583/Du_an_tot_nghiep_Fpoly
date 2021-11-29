@@ -46,7 +46,13 @@ class GeneralSettingController extends Controller
                 'instagram' => 'nullable|url',
                 'twitter' => 'nullable|url',
                 'youtube' => 'nullable|url',
-                'phone' => 'required|min:10|max:11|regex:/(0)[0-9]{8,9}/',
+                'phone' => [
+                    'required',
+                    'min:10',
+                    'max:11',
+                    'regex:/^(09|03|07|08|05)[0-9]{8,9}$/'
+                    //nên để regex trong mảng
+                ],
             ],
             $message
         );

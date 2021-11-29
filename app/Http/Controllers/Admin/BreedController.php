@@ -85,16 +85,12 @@ class BreedController extends Controller
 
     public function saveAdd(Request $request, $id = null)
     {
-        if ($request->name) {
-            $dupicate = Breed::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
-        }
 
         $message = [
             'name.required' => "Hãy nhập vào tên giống loài",
             'name.unique' => "Tên giống loài đã tồn tại",
+            'name.regex' => "Tên giống loài không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên giống loài ít nhất 3 kí tự",
             'category_id.required' => "Hãy chọn danh mục",
             'status.required' => "Hãy chọn trạng thái giống loài",
             'uploadfile.required' => 'Hãy chọn ảnh giống loài',
@@ -106,7 +102,20 @@ class BreedController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('breeds')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('breeds')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Breed::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Tên giống loài đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
                 'category_id' => 'required',
                 'status' => 'required',
@@ -115,7 +124,7 @@ class BreedController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('breed.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('breed.index')]);
         } else {
             $model = new Breed();
             $auth = Auth::user();
@@ -151,18 +160,13 @@ class BreedController extends Controller
             return redirect()->back();
         }
 
-        if ($request->name) {
-            $dupicate = Breed::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
-        }
-
         $message = [
             'name.required' => "Hãy nhập vào tên giống loài",
-            'name.unique' => "Tên thú cưng đã tồn tại",
+            'name.unique' => "Tên giống loài đã tồn tại",
+            'name.regex' => "Tên giống loài không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên giống loài ít nhất 3 kí tự",
             'category_id.required' => "Hãy chọn danh mục",
-            'status.required' => "Hãy chọn trạng thái thú cưng",
+            'status.required' => "Hãy chọn trạng thái giống loài",
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
@@ -171,7 +175,20 @@ class BreedController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('breeds')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('breeds')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Breed::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Tên giống loài đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
                 'category_id' => 'required',
                 'status' => 'required',
@@ -180,7 +197,7 @@ class BreedController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('breed.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('breed.index')]);
         } else {
             $model->user_id =  Auth::id();
             $model->fill($request->all());

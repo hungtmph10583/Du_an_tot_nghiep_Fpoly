@@ -60,12 +60,16 @@ class BlogCategoryController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào danh mục bài viết",
             'name.unique' => "Danh mục bài viết đã tồn tại",
+            'name.min' => "Danh mục bài viết ít nhất 3 kí tự",
+            'name.regex' => "Danh mục bài viết không chứa kí tự đặc biệt",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
+                    'min:3',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
                     Rule::unique('blog_categories')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = BlogCategory::onlyTrashed()
@@ -112,12 +116,16 @@ class BlogCategoryController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào danh mục bài viết",
             'name.unique' => "Danh mục bài viết đã tồn tại",
+            'name.min' => "Danh mục bài viết ít nhất 3 kí tự",
+            'name.regex' => "Danh mục bài viết không chứa kí tự đặc biệt",
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
+                    'min:3',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
                     Rule::unique('blog_categories')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = BlogCategory::onlyTrashed()

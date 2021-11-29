@@ -81,6 +81,8 @@ class UserController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên người dùng đã tồn tại",
+            'name.regex' => "Tên người dùng không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên người dùng ít nhất 3 kí tự",
             'status.required' => "Hãy chọn trạng thái người dùng",
             'image.required' => 'Hãy chọn ảnh người dùng',
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
@@ -103,12 +105,30 @@ class UserController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('users')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('users')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = User::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Tên người dùng đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
                 'status' => 'required',
                 'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048',
                 'email' => 'required|email',
-                'phone' => 'required|min:10|max:11|regex:/(0)[0-9]{8,9}/',
+                'phone' => [
+                    'required',
+                    'min:10',
+                    'max:11',
+                    'regex:/^(09|03|07|08|05)[0-9]{8,9}$/'
+                ],
                 'password' => 'required|min:6|max:20',
                 'cfpassword' => 'required|same:password',
                 'role_id' => 'required'
@@ -184,6 +204,8 @@ class UserController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên người dùng đã tồn tại",
+            'name.regex' => "Tên người dùng không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên người dùng ít nhất 3 kí tự",
             'status.required' => "Hãy chọn trạng thái người dùng",
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'image.max' => 'File ảnh không được quá 2MB',
@@ -200,12 +222,30 @@ class UserController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('users')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('users')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = User::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Tên người dùng đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
                 'status' => 'required',
                 'image' => 'mimes:jpg,bmp,png,jpeg|max:2048',
                 'email' => 'email',
-                'phone' => 'min:10|max:11|regex:/(0)[0-9]{8,9}/',
+                'phone' => [
+                    'required',
+                    'min:10',
+                    'max:11',
+                    'regex:/^(09|03|07|08|05)[0-9]{8,9}$/'
+                ],
                 'role_id' => 'required'
             ],
             $message
@@ -250,18 +290,70 @@ class UserController extends Controller
         $product->each(function ($pro) {
             $pro->galleries()->delete();
             $pro->orderDetails()->delete();
+            $pro->carts()->delete();
+            $pro->reviews()->delete();
         });
         $product->delete();
         $user->reviews()->delete();
         $user->slides()->delete();
         $user->orders()->delete();
         $coupon = $user->coupons();
-        $coupon->each(function ($coup) {
-            $coup->couponUsage()->delete();
-            $coup->accessory()->each(function ($galleries) {
-                $galleries->delete();
+        $coupon->each(function ($couponMul) {
+            if ($couponMul->category()->count() !== 0) {
+
+                $couponMul->category()->each(function ($product) {
+
+                    if ($product->breeds()->count() == 0) {
+                        $product->products()->each(function ($related) {
+                            $related->galleries()->delete();
+                            $related->orderDetails()->delete();
+                            $related->carts()->delete();
+                            $related->reviews()->delete();
+                        });
+                        $product->products()->delete();
+                    } else {
+
+                        $product->breeds()->each(function ($related) {
+                            $related->products()->each(function ($related) {
+                                $related->galleries()->delete();
+                                $related->orderDetails()->delete();
+                                $related->carts()->delete();
+                                $related->reviews()->delete();
+                            });
+                            $related->products()->delete();
+                        });
+                        $product->breeds()->delete();
+                        $product->products()->each(function ($related) {
+                            $related->galleries()->delete();
+                            $related->orderDetails()->delete();
+                            $related->carts()->delete();
+                            $related->reviews()->delete();
+                        });
+                        $product->products()->delete();
+                    }
+
+                    $product->accessory()->each(function ($related) {
+                        $related->galleries()->delete();
+                    });
+
+                    $product->accessory()->delete();
+                });
+
+                $couponMul->category()->delete();
+            }
+            $couponMul->products()->each(function ($related) {
+                $related->galleries()->delete();
+                $related->orderDetails()->delete();
+                $related->carts()->delete();
+                $related->reviews()->delete();
             });
-            $coup->accessory()->delete();
+
+            $couponMul->accessory()->each(function ($related) {
+                $related->galleries()->delete();
+            });
+            $couponMul->accessory()->delete();
+            $couponMul->products()->delete();
+            $couponMul->couponUsage()->delete();
         });
         $coupon->delete();
         $user->carts()->delete();

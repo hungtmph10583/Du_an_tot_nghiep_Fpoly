@@ -1,4 +1,4 @@
-@section('title', 'Danh sách loại phiếu giảm giá')
+@section('title', 'Danh sách loại giảm giá')
 @extends('layouts.admin.main')
 @section('content')
 
@@ -7,7 +7,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Danh sách loại phiếu giảm giá</li>
+                    <li class="breadcrumb-item card-title">Danh sách loại giảm giá</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -35,10 +35,10 @@
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Kiểu giảm giá</th>
+                                    <th>Loài giảm giá</th>
                                     <th>
-                                        <a href="{{route('couponType.add')}}"
-                                            class="btn btn-outline-info float-right">Thêm kiểu giảm giá</a>
+                                        <a href="{{route('discountType.add')}}"
+                                            class="btn btn-outline-info float-right">Thêm loài giảm giá</a>
                                     </th>
                                 </thead>
                                 <tbody>
@@ -101,7 +101,7 @@ $(document).ready(function() {
                             $('#realize').click(function(e) {
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                deleteMul('{{route("couponType.removeMul")}}', allId);
+                                deleteMul('{{route("discountType.removeMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -169,7 +169,7 @@ $(document).ready(function() {
         },
         serverSide: true,
         ajax: {
-            url: "{{ route('couponType.filter') }}",
+            url: "{{ route('discountType.filter') }}",
             data: function(d) {
                 d.search = $('input[type="search"]').val();
             }
@@ -195,7 +195,7 @@ $(document).ready(function() {
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
     $(document).on("click", "#undoIndex", function() {
         id = $('#undoIndex').data('id');
-        var url = '{{route("couponType.restore",":id")}}';
+        var url = '{{route("discountType.restore",":id")}}';
         url = url.replace(':id', id);
         undoIndex(url, id)
         table.ajax.reload();

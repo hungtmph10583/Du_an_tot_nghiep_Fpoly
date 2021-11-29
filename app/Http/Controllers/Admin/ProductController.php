@@ -125,6 +125,8 @@ class ProductController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào tên thú cưng",
             'name.unique' => "Tên thú cưng đã tồn tại",
+            'name.regex' => "Tên thú cưng không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên thú cưng ít nhất 3 kí tự",
             'category_id.required' => "Hãy chọn danh mục",
             'price.required' => "Hãy nhập giá thú cưng",
             'price.numeric' => "Giá thú cưng phải là số",
@@ -145,7 +147,21 @@ class ProductController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('products')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('products')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Product::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Tên thú cưng đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
+
                 ],
                 'category_id' => 'required',
                 'gender_id' => 'required',
@@ -224,6 +240,8 @@ class ProductController extends Controller
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
             'name.unique' => "Tên thú cưng đã tồn tại",
+            'name.regex' => "Tên thú cưng không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên thú cưng ít nhất 3 kí tự",
             'category_id.required' => "Hãy chọn danh mục",
             'price.required' => "Hãy nhập giá thú cưng",
             'price.numeric' => "Giá thú cưng phải là số",
@@ -237,13 +255,27 @@ class ProductController extends Controller
             'gender_id.required' => "Hãy chọn giới tính thú cưng",
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'image.max' => 'File ảnh không được quá 2MB',
+
         ];
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
-                    Rule::unique('products')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('products')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Product::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Tên thú cưng đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
                 'category_id' => 'required',
                 'gender_id' => 'required',
@@ -259,7 +291,7 @@ class ProductController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index')]);
         } else {
             $model->user_id = Auth::id();
             $model->fill($request->all());
@@ -320,20 +352,6 @@ class ProductController extends Controller
         return view('admin.product.detail', compact('category', 'model', 'breed', 'gender'));
     }
 
-    public function remove($id)
-    {
-        $product = Product::find($id);
-
-        if ($product->count() == 0) {
-            return response()->json(['success' => 'Xóa danh mục thất bại !', 'undo' => "Hoàn tác thất bại !"]);
-        }
-
-        $product->galleries()->delete();
-        $product->delete();
-
-        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
-    }
-
     public function backUp()
     {
         $categories = Category::all();
@@ -377,7 +395,7 @@ class ProductController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('product.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
+                    <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('product.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
                     <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('product.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
             })
@@ -414,6 +432,23 @@ class ProductController extends Controller
             ->make(true);
     }
 
+    public function remove($id)
+    {
+        $product = Product::find($id);
+
+        if ($product->count() == 0) {
+            return response()->json(['success' => 'Xóa thú cưng thất bại !', 'undo' => "Hoàn tác thất bại !"]);
+        }
+
+        $product->galleries()->delete();
+        $product->orderDetails()->delete();
+        $product->carts()->delete();
+        $product->reviews()->delete();
+        $product->delete();
+
+        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
+    }
+
     public function restore($id)
     {
         $product = Product::withTrashed()->find($id);
@@ -424,6 +459,9 @@ class ProductController extends Controller
 
         $product->galleries()->restore();
         $product->category()->restore();
+        $product->orderDetails()->restore();
+        $product->carts()->restore();
+        $product->reviews()->restore();
         $product->restore();
 
         return response()->json(['success' => 'Khôi phục thành công !']);
@@ -438,6 +476,9 @@ class ProductController extends Controller
         }
 
         $product->galleries()->forceDelete();
+        $product->orderDetails()->forceDelete();
+        $product->carts()->forceDelete();
+        $product->reviews()->forceDelete();
         $product->forceDelete();
 
         return response()->json(['success' => 'Xóa sản phẩm thành công !']);
@@ -466,8 +507,11 @@ class ProductController extends Controller
             return response()->json(['success' => 'Xóa danh mục thất bại !']);
         }
 
-        $product->each(function ($gallery) {
-            $gallery->galleries()->delete();
+        $product->each(function ($related) {
+            $related->galleries()->delete();
+            $related->orderDetails()->delete();
+            $related->carts()->delete();
+            $related->reviews()->delete();
         });
         $product->delete();
 
@@ -483,9 +527,12 @@ class ProductController extends Controller
             return response()->json(['success' => 'Xóa danh mục thất bại !']);
         }
 
-        $product->each(function ($gallery) {
-            $gallery->galleries()->restore();
-            $gallery->category()->restore();
+        $product->each(function ($related) {
+            $related->galleries()->restore();
+            $related->category()->restore();
+            $related->orderDetails()->restore();
+            $related->carts()->restore();
+            $related->reviews()->restore();
         });
         $product->restore();
 
@@ -501,8 +548,11 @@ class ProductController extends Controller
             return response()->json(['success' => 'Xóa sản phẩm thất bại !']);
         }
 
-        $product->each(function ($gallery) {
-            $gallery->galleries()->forceDelete();
+        $product->each(function ($related) {
+            $related->galleries()->forceDelete();
+            $related->orderDetails()->forceDelete();
+            $related->carts()->forceDelete();
+            $related->reviews()->forceDelete();
         });
         $product->forceDelete();
 
