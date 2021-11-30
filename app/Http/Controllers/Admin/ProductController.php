@@ -127,6 +127,9 @@ class ProductController extends Controller
             'name.unique' => "Tên thú cưng đã tồn tại",
             'name.regex' => "Tên thú cưng không chứa kí tự đặc biệt và số",
             'name.min' => "Tên thú cưng ít nhất 3 kí tự",
+            'discount.unique' => "Giảm giá đã tồn tại",
+            'discount.regex' => "Giảm giá không chứa kí tự đặc biệt và số",
+            'discount.min' => "Giảm giá bé nhất là 1",
             'category_id.required' => "Hãy chọn danh mục",
             'price.required' => "Hãy nhập giá thú cưng",
             'price.numeric' => "Giá thú cưng phải là số",
@@ -134,6 +137,8 @@ class ProductController extends Controller
             'age_id.required' => "Hãy nhập tuổi thú cưng",
             'quantity.required' => "Hãy nhập số lượng thú cưng",
             'quantity.numeric' => "Số lượng thú cưng phải là số",
+            'discount_start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'discount_end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'weight.required' => "Hãy nhập cân nặng thú cưng",
             'weight.numeric' => "Cân nặng thú cưng phải là số",
             'breed_id.required' => "Hãy chọn giống loài",
@@ -163,6 +168,19 @@ class ProductController extends Controller
                     },
 
                 ],
+                'discount' => [
+                    'nullable',
+                    'numeric',
+                    'min:1',
+                    Rule::unique('accessories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        if ($value > 100 && $request->discount_type == 2) {
+                            return $fail('Giảm giá không vượt quá 100%');
+                        }
+                    },
+                ],
+                'discount_start_date' => 'nullable|date_format:Y-m-d H:i',
+                'discount_end_date' => 'nullable|date_format:Y-m-d H:i|after:discount_start_date',
                 'category_id' => 'required',
                 'gender_id' => 'required',
                 'price' => 'required|numeric',
@@ -183,7 +201,7 @@ class ProductController extends Controller
             $model->fill($request->all());
             if ($request->has('image')) {
                 $model->image = $request->file('image')->storeAs(
-                    'uploads/products/' . $model->id,
+                    'uploads/products/',
                     uniqid() . '-' . $request->image->getClientOriginalName()
                 );
             }
@@ -242,6 +260,9 @@ class ProductController extends Controller
             'name.unique' => "Tên thú cưng đã tồn tại",
             'name.regex' => "Tên thú cưng không chứa kí tự đặc biệt và số",
             'name.min' => "Tên thú cưng ít nhất 3 kí tự",
+            'discount.unique' => "Giảm giá đã tồn tại",
+            'discount.regex' => "Giảm giá không chứa kí tự đặc biệt và số",
+            'discount.min' => "Giảm giá bé nhất là 1",
             'category_id.required' => "Hãy chọn danh mục",
             'price.required' => "Hãy nhập giá thú cưng",
             'price.numeric' => "Giá thú cưng phải là số",
@@ -249,6 +270,8 @@ class ProductController extends Controller
             'age_id.required' => "Hãy nhập tuổi thú cưng",
             'quantity.required' => "Hãy nhập số lượng thú cưng",
             'quantity.numeric' => "Số lượng thú cưng phải là số",
+            'discount_start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'discount_end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'weight.required' => "Hãy nhập cân nặng thú cưng",
             'weight.numeric' => "Cân nặng thú cưng phải là số",
             'breed_id.required' => "Hãy chọn giống loài",
@@ -277,6 +300,19 @@ class ProductController extends Controller
                         }
                     },
                 ],
+                'discount' => [
+                    'nullable',
+                    'numeric',
+                    'min:1',
+                    Rule::unique('accessories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        if ($value > 100 && $request->discount_type == 2) {
+                            return $fail('Giảm giá không vượt quá 100%');
+                        }
+                    },
+                ],
+                'discount_start_date' => 'nullable|date_format:Y-m-d H:i',
+                'discount_end_date' => 'nullable|date_format:Y-m-d H:i|after:discount_start_date',
                 'category_id' => 'required',
                 'gender_id' => 'required',
                 'price' => 'required|numeric',
@@ -296,8 +332,9 @@ class ProductController extends Controller
             $model->user_id = Auth::id();
             $model->fill($request->all());
             if ($request->image != '') {
+                Storage::delete($model->image);
                 $model->image = $request->file('image')->storeAs(
-                    'uploads/products/' . $model->id,
+                    'uploads/products/',
                     uniqid() . '-' . $request->image->getClientOriginalName()
                 );
             }
@@ -337,19 +374,23 @@ class ProductController extends Controller
     public function detail($id)
     {
         $model = Product::find($id);
+
         if (!$model) {
-            $model = Product::onlyTrashed()->find($id);
-            if (!$model) {
-                return redirect()->back()->with('BadState', 'Sản phẩm có id là ' . $id . ' không tồn tại');
-            }
-        } else {
-            $model->load('category', 'breed', 'gender');
+            return redirect()->back()->with('BadState', 'Sản phẩm có id là ' . $id . ' không tồn tại');
         }
+        $image = '';
+        if (strpos($model->image, 'storage/uploads/')) {
+            $image = asset('storage/' . $model->image);
+        } else {
+            $image = $model->image;
+        }
+        dd($image);
+        $model->load('category', 'breed', 'gender');
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
 
-        return view('admin.product.detail', compact('category', 'model', 'breed', 'gender'));
+        return view('admin.product.detail', compact('category', 'model', 'breed', 'gender', 'image'));
     }
 
     public function backUp()
