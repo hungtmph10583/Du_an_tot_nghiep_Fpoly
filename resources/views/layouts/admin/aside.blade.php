@@ -153,7 +153,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-swatchbook"></i>
+                        <i class="fas fa-percent"></i>
                         <p>
                             Loại phiếu giảm giá
                             <i class="right fas fa-angle-left"></i>
@@ -199,7 +199,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-swatchbook"></i>
+                        <i class="fas fa-seedling"></i>
                         <p>
                             Tuổi
                             <i class="right fas fa-angle-left"></i>
@@ -222,7 +222,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-swatchbook"></i>
+                        <i class="fas fa-cat"></i>
                         <p>
                             Danh mục
                             <i class="right fas fa-angle-left"></i>
@@ -327,7 +327,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-user-friends"></i>
+                        <i class="fas fa-globe-europe"></i>
                         <p>
                             Quốc Gia
                             <i class="right fas fa-angle-left"></i>
@@ -356,7 +356,7 @@
                 </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
-                        <i class="fas fa-user-friends"></i>
+                        <i class="fas fa-transgender-alt"></i>
                         <p>
                             Giới tính
                             <i class="right fas fa-angle-left"></i>
