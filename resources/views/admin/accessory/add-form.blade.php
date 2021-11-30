@@ -15,7 +15,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
@@ -95,6 +95,7 @@
                     <div class="row">
                         <div class="col"><label for="">Giảm giá</label>
                             <input type="text" class="form-control" name="discount" placeholder="Giảm giá">
+                            <span class="text-danger error_text discount_error"></span>
                         </div>
                         <div class="col">
                             <div class="form-group">
@@ -105,6 +106,7 @@
                                     <option value="{{$dt->id}}">{{$dt->name}}</option>
                                     @endforeach
                                 </select>
+                                <span class="text-danger error_text discount_type_error"></span>
                             </div>
                         </div>
                     </div>
@@ -112,13 +114,15 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" name="discount_start_date">
+                                <input type="datetime-local" class="form-control" name="discount_start_date" id="start">
+                                <span class="text-danger error_text discount_start_date_error"></span>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày kết thúc</label>
-                                <input type="date" class="form-control" name="discount_end_date">
+                                <input type="datetime-local" class="form-control" name="discount_end_date" id="end">
+                                <span class="text-danger error_text discount_end_date_error"></span>
                             </div>
                         </div>
                     </div>
@@ -267,6 +271,8 @@ $(".btn-info").click(function(e) {
     let name = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
     formData.set('name', name);
     formData.append('slug', $('input[name="slug"]').val())
+    formData.set('discount_start_date', dateTime($("#start").val()))
+    formData.set('discount_end_date', dateTime($("#end").val()))
     $.ajax({
         url: "{{route('accessory.saveAdd')}}",
         type: 'POST',
@@ -280,12 +286,24 @@ $(".btn-info").click(function(e) {
         },
         success: function(data) {
             console.log(data)
+            $('#realize').attr('href', data.url)
+            $('#realize').text('Phụ kiện')
+            $("#myModal").modal('show');
             if (data.status == 0) {
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
+                    showErr +=
+                        '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                        value[0] +
+                        '<br>';
                     $('span.' + key + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
             } else {
-                window.location.href = data.url;
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
+                $(document).find('input.form-control').val(null);
             }
         },
     });

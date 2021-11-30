@@ -152,8 +152,8 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col"><label for="">Giảm giá</label>
-                            <input type="text" class="form-control" name="discount" placeholder="Giảm giá"
-                                value="{{old('discount')}}">
+                            <input type="text" class="form-control" name="discount" placeholder="Giảm giá">
+                            <span class="text-danger error_text discount_error"></span>
                         </div>
                         <div class="col">
                             <div class="form-group">
@@ -164,6 +164,7 @@
                                     <option value="{{$dt->id}}">{{$dt->name}}</option>
                                     @endforeach
                                 </select>
+                                <span class="text-danger error_text discount_type_error"></span>
                             </div>
                         </div>
                     </div>
@@ -172,12 +173,14 @@
                             <div class="form-group">
                                 <label for="">Ngày bắt đầu</label>
                                 <input type="date" class="form-control" name="discount_start_date">
+                                <span class="text-danger error_text discount_start_date_error"></span>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày kết thúc</label>
                                 <input type="date" class="form-control" name="discount_end_date">
+                                <span class="text-danger error_text discount_end_date_error"></span>
                             </div>
                         </div>
                     </div>

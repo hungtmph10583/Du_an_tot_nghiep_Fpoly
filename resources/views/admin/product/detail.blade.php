@@ -27,7 +27,7 @@
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="">Ảnh sản phẩm</label>
-                                <img class="img-custom-edit" src="{{asset( 'storage/' . $model->image)}}"
+                                <img class="img-custom-edit" src="{{$image}}"
                                     alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                             </div>
                         </div>

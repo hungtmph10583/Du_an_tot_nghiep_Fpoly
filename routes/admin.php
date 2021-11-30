@@ -167,8 +167,16 @@ Route::prefix('phu-kien')->group(function () {
 
     Route::get('chi-tiet/{id}', [AccessoryController::class, 'detail'])->name('accessory.detail');
 
-    Route::get('xoa/{id}', [AccessoryController::class, 'remove'])->name('accessory.remove');
-    // Route::get('xoa/{id}', [AccessoryController::class, 'remove'])->middleware('permission:remove product')->name('product.remove');
+    Route::delete('xoa/{id}', [AccessoryController::class, 'remove'])->name('accessory.remove');
+
+    Route::get('dataProduct', [AccessoryController::class, 'getData'])->name('accessory.filter');
+    Route::get('trash', [AccessoryController::class, 'backUp'])->name('accessory.backup');
+    Route::get('dataBackUp', [AccessoryController::class, 'getBackUp'])->name('accessory.getBackup');
+    Route::get('trash/restore/{id}', [AccessoryController::class, 'restore'])->name('accessory.restore');
+    Route::delete('trash/deleteForver/{id}', [AccessoryController::class, 'delete'])->name('accessory.delete');
+    Route::delete('trash/remove', [AccessoryController::class, 'removeMultiple'])->name('accessory.removeMul');
+    Route::get('trash/restore', [AccessoryController::class, 'restoreMultiple'])->name('accessory.restoreMul');
+    Route::delete('trash/deleteForeverMul', [AccessoryController::class, 'deleteMultiple'])->name('accessory.deleteMul');
 });
 
 Route::prefix('giam-gia')->group(function () {

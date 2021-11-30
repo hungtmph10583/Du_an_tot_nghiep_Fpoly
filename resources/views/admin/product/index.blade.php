@@ -276,6 +276,15 @@ $(document).ready(function() {
         ]
     });
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
+
+    $(document).on("click", "#undoIndex", function() {
+        id = $('#undoIndex').data('id');
+        var url = '{{route("product.restore",":id")}}';
+        url = url.replace(':id', id);
+        undoIndex(url, id)
+        table.ajax.reload();
+    })
+
     $('select').map(function(i, dom) {
         var idSelect = $(dom).attr('id');
         $('#' + idSelect).change(function() {
