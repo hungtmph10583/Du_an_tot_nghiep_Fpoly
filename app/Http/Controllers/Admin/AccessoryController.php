@@ -329,6 +329,64 @@ class AccessoryController extends Controller
         return view('admin.accessory.detail', compact('model', 'category'));
     }
 
+    public function backUp()
+    {
+        $categories = Category::all();
+        $admin = Auth::user()->hasanyrole('admin|manager');
+        return view('admin.accessory.back-up', compact('categories', 'admin'));
+    }
+
+    public function getBackUp(Request $request)
+    {
+        $accessory = Accessory::onlyTrashed()->select('accessories.*')->with('category');
+        return dataTables::of($accessory)
+            //thêm id vào tr trong datatable
+            ->setRowId(function ($row) {
+                return $row->id;
+            })
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
+            })
+            ->orderColumn('category_id', function ($row, $order) {
+                return $row->orderBy('category_id', $order);
+            })
+            ->orderColumn('status', function ($row, $order) {
+                return $row->orderBy('status', $order);
+            })
+            ->addColumn('category_id', function ($row) {
+                return $row->category->name;
+            })
+            ->addColumn('status', function ($row) {
+                if ($row->status == 1) {
+                    return '<span class="badge badge-primary">Active</span>';
+                } elseif ($row->status == 0) {
+                    return '<span class="badge badge-danger">Deactive</span>';
+                } else {
+                    return '<span class="badge badge-danger">Sắp ra mắt</span>';
+                }
+            })
+            ->addColumn('action', function ($row) {
+                return '
+                <span class="float-right">
+                    <a href="' . route('accessory.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                    <a  class="btn btn-success" href="' . route('accessory.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('accessory.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                </span>';
+            })
+            ->filter(function ($instance) use ($request) {
+
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('description', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['status', 'action', 'checkbox'])
+            ->make(true);
+    }
+
     public function remove($id)
     {
         $accessory = Accessory::find($id);

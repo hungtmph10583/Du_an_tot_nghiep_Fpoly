@@ -68,12 +68,6 @@ class CategoryController extends Controller
 
     public function saveAdd(Request $request, $id = null)
     {
-        if ($request->name) {
-            $dupicate = Category::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
-        }
 
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
@@ -115,7 +109,7 @@ class CategoryController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index')]);
         } else {
             $model = new Category();
             $model->fill($request->all());
@@ -264,8 +258,11 @@ class CategoryController extends Controller
         }
 
         $pro = $category->products();
-        $pro->each(function ($galleries) {
-            $galleries->galleries()->delete();
+        $pro->each(function ($related) {
+            $related->galleries()->delete();
+            $related->orderDetails()->delete();
+            $related->carts()->delete();
+            $related->reviews()->delete();
         });
         $pro->delete();
         $category->delete();
@@ -282,8 +279,11 @@ class CategoryController extends Controller
         }
 
         $pro = $category->products();
-        $pro->each(function ($galleries) {
-            $galleries->galleries()->restore();
+        $pro->each(function ($related) {
+            $related->galleries()->delete();
+            $related->orderDetails()->delete();
+            $related->carts()->delete();
+            $related->reviews()->delete();
         });
         $pro->restore();
         $category->restore();
@@ -300,11 +300,13 @@ class CategoryController extends Controller
         }
 
         $category->each(function ($product) {
-            $pro = $product->products();
-            $pro->each(function ($galleries) {
-                $galleries->galleries()->forceDelete();
+            $product->products()->each(function ($related) {
+                $related->galleries()->forceDelete();
+                $related->orderDetails()->forceDelete();
+                $related->carts()->forceDelete();
+                $related->reviews()->forceDelete();
             });
-            $pro->forceDelete();
+            $product->products()->forceDelete();
         });
         $category->forceDelete();
 
@@ -322,8 +324,11 @@ class CategoryController extends Controller
 
         $category->each(function ($product) {
             $pro = $product->products();
-            $pro->each(function ($galleries) {
-                $galleries->galleries()->delete();
+            $pro->each(function ($related) {
+                $related->galleries()->delete();
+                $related->orderDetails()->delete();
+                $related->carts()->delete();
+                $related->reviews()->delete();
             });
             $pro->delete();
         });
@@ -342,11 +347,13 @@ class CategoryController extends Controller
         }
 
         $category->each(function ($product) {
-            $pro = $product->products();
-            $pro->each(function ($galleries) {
-                $galleries->galleries()->restore();
+            $product->products()->each(function ($related) {
+                $related->galleries()->restore();
+                $related->orderDetails()->restore();
+                $related->carts()->restore();
+                $related->reviews()->restore();
             });
-            $pro->restore();
+            $product->products()->restore();
         });
         $category->restore();
 
@@ -363,11 +370,13 @@ class CategoryController extends Controller
         }
 
         $category->each(function ($product) {
-            $pro = $product->products();
-            $pro->each(function ($galleries) {
-                $galleries->galleries()->forceDelete();
+            $product->products()->each(function ($related) {
+                $related->galleries()->forceDelete();
+                $related->orderDetails()->forceDelete();
+                $related->carts()->forceDelete();
+                $related->reviews()->forceDelete();
             });
-            $pro->forceDelete();
+            $product->products()->forceDelete();
         });
         $category->forceDelete();
 

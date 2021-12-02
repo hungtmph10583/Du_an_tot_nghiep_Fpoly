@@ -194,7 +194,7 @@ class CouponTypeController extends Controller
         $couponType = CouponType::withTrashed()->find($id);
         $couponType->with('coupons');
         if (empty($couponType)) {
-            return response()->json(['success' => 'Giảm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
+            return response()->json(['success' => 'Giảm giá không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
         }
         if ($couponType->coupons()->count() !== 0) {
             $couponType->coupons()->each(function ($coupon) {

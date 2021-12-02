@@ -378,19 +378,14 @@ class ProductController extends Controller
         if (!$model) {
             return redirect()->back()->with('BadState', 'Sản phẩm có id là ' . $id . ' không tồn tại');
         }
-        $image = '';
-        if (strpos($model->image, 'storage/uploads/')) {
-            $image = asset('storage/' . $model->image);
-        } else {
-            $image = $model->image;
-        }
-        dd($image);
+
+
         $model->load('category', 'breed', 'gender');
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
 
-        return view('admin.product.detail', compact('category', 'model', 'breed', 'gender', 'image'));
+        return view('admin.product.detail', compact('category', 'model', 'breed', 'gender'));
     }
 
     public function backUp()

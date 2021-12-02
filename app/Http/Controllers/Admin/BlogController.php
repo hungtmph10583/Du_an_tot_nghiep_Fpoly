@@ -79,6 +79,7 @@ class BlogController extends Controller
         $message = [
             'title.required' => "Hãy nhập vào chủ đề bài viết",
             'title.unique' => "Tên chủ đề bài viết đã tồn tại",
+            'title.regex' => "Tên chủ đề không chứa kí tự đặc biệt",
             'title.min' => "Tên chủ đề bài viết ít nhất 3 kí tự",
             'slug.required' => "Slug không được trống",
             'category_blog_id.required' => "Hãy chọn bài viết",
@@ -94,6 +95,7 @@ class BlogController extends Controller
                 'title' => [
                     'required',
                     'min:3',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
                     Rule::unique('blogs')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
                         $dupicate = Blog::onlyTrashed()

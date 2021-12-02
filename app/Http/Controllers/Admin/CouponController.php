@@ -98,7 +98,7 @@ class CouponController extends Controller
         $message = [
             'code.required' => "Hãy nhập vào mã khuyến mãi",
             'code.unique' => "Mã khuyến mãi đã tồn tại",
-            'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt và số",
+            'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt",
             'code.min' => "Mã khuyến mãi ít nhất 3 kí tự",
             'type.required' => "Hãy chọn loại giảm giá",
             'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
@@ -116,7 +116,7 @@ class CouponController extends Controller
             [
                 'code' => [
                     'required',
-                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
                     'min:3',
                     Rule::unique('coupons')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
@@ -200,7 +200,7 @@ class CouponController extends Controller
         $message = [
             'code.required' => "Hãy nhập vào mã khuyến mãi",
             'code.unique' => "Mã khuyến mãi đã tồn tại",
-            'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt và số",
+            'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt",
             'code.min' => "Mã khuyến mãi ít nhất 3 kí tự",
             'type.required' => "Hãy chọn loại giảm giá",
             'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
@@ -218,7 +218,7 @@ class CouponController extends Controller
             [
                 'code' => [
                     'required',
-                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
                     'min:3',
                     Rule::unique('coupons')->ignore($id)->whereNull('deleted_at'),
                     function ($attribute, $value, $fail) use ($request) {
