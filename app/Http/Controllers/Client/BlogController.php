@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Blog;
 use App\Models\BlogCategory;
+use App\Models\GeneralSetting;
 
 class BlogController extends Controller
 {
@@ -20,19 +21,23 @@ class BlogController extends Controller
             $blogQuery = Blog::where('title', 'like', "%" . $request->keyword . "%");
             $blog = $blogQuery->paginate($pagesize)->appends($searchData);
         }
+
+        $generalSetting = GeneralSetting::first();
         
         return view('client.blog.index', [
             'blog' => $blog,
-            'searchData' => $searchData
+            'searchData' => $searchData,
+            'generalSetting' => $generalSetting
         ]);
     }
 
     public function detail($id, Request $request){
         $blog = Blog::find($id);
+        $blog = Blog::where('slug', $id)->first();
         $blog->load('blogCategory');
 
         $blogCategory = BlogCategory::all();
-
-        return view('client.blog.detail', compact('blog', 'blogCategory'));
+        $generalSetting = GeneralSetting::first();
+        return view('client.blog.detail', compact('blog', 'blogCategory', 'generalSetting'));
     }
 }

@@ -18,15 +18,16 @@ class RegisterController extends Controller
         $users = User::all();
         $request->validate(
         [
-            'name' => 'required|string|max:50',
+            'name' => 'required|string|max:50|alpha',
             'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|max:40|confirmed',
+            'password' => 'required|string|min:6|max:40',
             'cfpassword' => 'required|same:password|'
         ],
         [
             'name.required' => "Hãy nhập vào tên!",
             'name.string' => "Kiểm tra string name",
             'name.max' => "Tên không được quá 50 ký tự",
+            'name.alpha' => "Tên không được chứa ký tự số",
             'email.required' => "Hãy nhập vào email",
             'email.string' => "Kiểm tra string email",
             'email.email' => "Không đúng định dạng email",
@@ -41,9 +42,10 @@ class RegisterController extends Controller
         
         $model = new User();
         $model->fill($request->all());
+        $model->name = ucwords($request->name);
         $model->password = Hash::make($request->password);
         $model->save();
 
-        return redirect()->back()->with("success","Tạo tài khoản thành công. Quay lại trang Sign in để đăng nhập!");
+        return redirect('/login')->with('success', 'Tạo tài khoản thành công!');
     }
 }

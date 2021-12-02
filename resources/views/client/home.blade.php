@@ -1,19 +1,25 @@
 @section('title', 'Trang chủ')
 @extends('layouts.client.main')
 @section('content')
+@section('pageStyle')
+@endsection
+    <!-- <div class="supper">
+        <div class="alert">
+
+        </div>
+    </div> -->
 	<!-- content -->
-	<div class="section-mt"></div>
     <div class="sliders">
         <div class="swiper slider-container">
             <div class="swiper-wrapper wrapper">
                 @foreach($slide as $sl)
-                @if($sl->status == 1)
-                <div class="swiper-slide slide">
-                    <div class="image">
-                        <img src="{{asset( 'storage/' . $sl->image)}}" alt="slide này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                    @if($sl->status == 1)
+                    <div class="swiper-slide slide">
+                        <div class="image">
+                            <img src="{{asset( 'storage/' . $sl->image)}}" alt="slide này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                        </div>
                     </div>
-                </div>
-                @endif
+                    @endif
                 @endforeach
             </div>
             <div class="swiper-button-next"></div>
@@ -21,23 +27,8 @@
             <div class="swiper-pagination"></div>
         </div>
     </div>
-    <section class="search">
-        <div class="container">
-            <form action="" class="search-form">
-                <div class="form-field">
-                    <input type="search" class="form-input" id="search-box" placeholder=" ">
-                    <label for="search" class="form-label"><i class="fas fa-search"></i> search here...</label>
-                </div>
-                <!-- <button for="search-box">
-                    <i class="fas fa-search"></i>
-                </button> -->
-            </form>
-        </div>
-    </section>
     <!-- section category -->
     <section class="categories">
-        <!-- <h1 class="heading">Danh mục thú cưng của chúng tôi</h1>
-        <div class="heading-hr"></div> -->
         <div class="category-container">
             @foreach($category as $category)
                 @if($category->show_slide == 1 && $category->category_type_id == 1)
@@ -55,40 +46,32 @@
         </div> -->
     </section>
     <!-- banner -->
-    <div class="banner">
-        <div class="banner-container">
-            <div class="banner-image">
-                <img src="{{ asset('client-theme/images/banner.jpg')}}" alt="">
-            </div>
-            <div class="banner-content">
-                <!-- <h2 class="title">
-                    our slogan is <span>( Thịt chó muôn năm )</span>
-                </h2>
-                <sapn class="description">Giả cầy bảy món Lorem ipsum dolor, sit amet consectetur adipisicing elit. Beatae, ratione sed vero deserunt voluptatibus eius molestiae non doloribus voluptate architecto error reprehenderit labore ullam adipisci, eligendi eveniet. Qui,
-                    exercitationem odit!</sapn>
-                <a href="#"></a> -->
-            </div>
-        </div>
+    <div class="banner" style="background-image: url({{ asset('client-theme/images/banner.jpg')}});">
+        <h6 class="title"><a href="#">LoliPetVn@gmail.com</a></h6>
+        <h4> Chào Mừng Đến Với Website Của Chúng Tôi </h4>
+        <p class="description">Giả cầy bảy món Lorem ipsum dolor, sit amet consectetur adipisicing elit.</p>
+        <p class="description">Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequatur aliquam ullam ipsum autem labore odio illum reiciendis.</p>
+        <a href="#"></a>
     </div>
     <!-- section product -->
-    <section class="products">
-        <div class="heading">
-            <span class="heading-title">Sản phẩm</span>
-        </div>
+    <section class="products" id="product">
+        <h1 class="heading-center"> Shop bán các loại thú cưng </h1>
         <div class="product-container">
-            @foreach($product as $product)
+            @foreach($product as $p)
             <div class="product-item">
                 <div class="item-top">
+                    <div class="product-lable">
+                    </div>
                     <div class="product-thumbnail">
-                    <a href="{{route('client.product.detail', ['id' => $product->slug])}}">
-                        <img src="{{asset( 'storage/' . $product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
-                    </a>
+                        <a href="{{route('client.product.detail', ['id' => $p->slug])}}">
+                            <img src="{{asset( 'storage/' . $p->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                        </a>
                     </div>
                     <div class="product-extra">
                         <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
                         @csrf
-                            <input type="hidden" name="product_id_hidden" value="{{$product->id}}">
-                            <input type="hidden" name="discount_price" value="{{$product->discount}}">
+                            <input type="hidden" name="product_id_hidden" value="{{$p->id}}">
+                            <input type="hidden" name="discount_price" value="{{$p->discount}}">
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit" class="btn-buyNow">Mua hàng</button>
                         </form>
@@ -96,13 +79,14 @@
                 </div>
                 <div class="item-bottom">
                     <div class="product-info">
-                        <a href="{{route('client.product.detail', ['id' => $product->id])}}" class="name">{{$product->name}}</a>
-                        @if($product->discount == '')
-                            <span class="price">{{number_format($product->price)}}đ</span>
+                        <a href="{{route('client.product.detail', ['id' => $p->slug])}}" class="name">{{$p->name}}</a>
+                        @if($p->discount == '')
+                            <span class="price">{{number_format($p->price)}}đ</span>
                         @else
+                            <span class="discount">{{number_format($p->price)}}đ</span>
                             <span class="price">
                                 <?php
-                                    echo number_format($product->price - $product->discount).'đ';
+                                    echo number_format($p->price - $p->discount).'đ';
                                 ?>
                             </span>
                         @endif
@@ -110,32 +94,52 @@
                 </div>
             </div>
             @endforeach
-            <!-- <div class="product-item">
+        </div>
+        <div class="details">
+            <button><a href="{{route('client.product.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
+        </div>
+    </section>
+    <!-- section acsesory -->
+    <section class="products">
+        <h1 class="heading-center"> Phụ kiện thú cưng </h1>
+        <div class="product-container">
+            @foreach($accessory as $ac)
+            <div class="product-item">
                 <div class="item-top">
                     <div class="product-lable">
-                        <p class="sale">
-                            <span>Giảm: 155.000 vnd</span>
-                        </p>
                     </div>
                     <div class="product-thumbnail">
-                        <a href="./detail.html">
-                            <img src="{{ asset('client-theme/images/cate-bird.jpg')}}" alt="">
+                        <a href="{{route('client.accessory.detail', ['id' => $ac->slug])}}">
+                            <img src="{{asset( 'storage/' . $ac->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                         </a>
                     </div>
                     <div class="product-extra">
-                        <a href="#" class="fas fa-heart"></a>
-                        <a href="#" class="fas fa-eye"></a>
-                        <a href="#" class="fas fa-shopping-cart"></a>
+                        <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                            <input type="hidden" name="product_id_hidden" value="{{$ac->id}}">
+                            <input type="hidden" name="discount_price" value="{{$ac->discount}}">
+                            <input type="hidden" name="quantity" value="1">
+                            <button type="submit" class="btn-buyNow">Mua hàng</button>
+                        </form>
                     </div>
                 </div>
                 <div class="item-bottom">
                     <div class="product-info">
-                        <a href="#" class="name">Vẹt bảy màu</a>
-                        <span class="category">Danh mục<a href="#" class="link-ct">Bird</a></span>
-                        <span class="price">30.000.000 VND</span>
+                        <a href="{{route('client.accessory.detail', ['id' => $ac->slug])}}" class="name">{{$ac->name}}</a>
+                        @if($p->discount == '')
+                            <span class="price">{{number_format($ac->price)}}đ</span>
+                        @else
+                            <span class="discount">{{number_format($ac->price)}}đ</span>
+                            <span class="price">
+                                <?php
+                                    echo number_format($ac->price - $ac->discount).'đ';
+                                ?>
+                            </span>
+                        @endif
                     </div>
                 </div>
-            </div> -->
+            </div>
+            @endforeach
         </div>
         <div class="details">
             <button><a href="{{route('client.product.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
@@ -143,103 +147,34 @@
     </section>
     <!-- member -->
     <!-- <section class="members" id="members">
-        <div class="member-container">
+        <div class="swiper members member-container">
             <div class="member-item">
-                <div class="avatar"><img src="{{ asset('client-theme/images/cold.jpg')}}" alt=""></div>
-                <h3 class="name">Mạnh Hùng</h3>
+                <div class="avatar"><img src="{{ asset('client-theme/images/hotboy.jpg')}}" alt=""></div>
                 <div class="member-extra">
+                    <h3 class="name">Mạnh Hùng</h3>
                     <span>Trưởng nhóm</span>
                     <span>Back-end</span>
                     <span>Front-end</span>
-                </div>
-                <div class="item-extra">
-                    <ul>
-                        <li>
-                            <a href="#" class="fab fa-facebook-f"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-at"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-phone-alt"></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-            <div class="member-item">
-                <div class="avatar"><img src="{{ asset('client-theme/images/cold.jpg')}}" alt=""></div>
-                <h3 class="name">Mạnh Hùng</h3>
-                <div class="member-extra">
-                    <span>Trưởng nhóm</span>
-                    <span>Back-end</span>
-                    <span>Front-end</span>
-                </div>
-                <div class="item-extra">
-                    <ul>
-                        <li>
-                            <a href="#" class="fab fa-facebook-f"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-at"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-phone-alt"></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="member-item">
-                <div class="avatar"><img src="{{ asset('client-theme/images/cold.jpg')}}" alt=""></div>
-                <h3 class="name">Mạnh Hùng</h3>
-                <div class="member-extra">
-                    <span>Trưởng nhóm</span>
-                    <span>Back-end</span>
-                    <span>Front-end</span>
-                </div>
-                <div class="item-extra">
-                    <ul>
-                        <li>
-                            <a href="#" class="fab fa-facebook-f"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-at"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-phone-alt"></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="member-item">
-                <div class="avatar"><img src="{{ asset('client-theme/images/cold.jpg')}}" alt=""></div>
-                <h3 class="name">Mạnh Hùng</h3>
-                <div class="member-extra">
-                    <span>Trưởng nhóm</span>
-                    <span>Back-end</span>
-                    <span>Front-end</span>
-                </div>
-                <div class="item-extra">
-                    <ul>
-                        <li>
-                            <a href="#" class="fab fa-facebook-f"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-at"></a>
-                        </li>
-                        <li>
-                            <a href="#" class="fas fa-phone-alt"></a>
-                        </li>
-                    </ul>
+                    <div class="item-extra">
+                        <ul>
+                            <li>
+                                <a href="#" class="fab fa-facebook-f"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="fas fa-at"></a>
+                            </li>
+                            <li>
+                                <a href="#" class="fas fa-phone-alt"></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </section> -->
     <!-- section new&new -->
     <section class="blogs">
-        <h1 class="heading">Bài viết & tin tức</h1>
-        <div class="heading-hr"></div>
+        <h1 class="heading-center">Bài viết mới nhất</h1>
         <div class="blog-container">
             <div class="blog-item">
                 <div class="item-top">
@@ -248,6 +183,7 @@
                     </div>
                 </div>
                 <div class="item-bottom">
+                    <h1 class="title">the lone bird in snow</h1>
                     <div class="item-extra">
                         <ul>
                             <li>
@@ -266,8 +202,6 @@
                             </li>
                         </ul>
                     </div>
-                    <h1 class="title">the lone bird in snow</h1>
-                    <a href="#" class="btn">Chi tiết</a>
                 </div>
             </div>
             <div class="blog-item">
@@ -275,8 +209,12 @@
                     <div class="thumbnail">
                         <a href="#"><img src="{{ asset('client-theme/images/blog12.jpg')}}" alt=""></a>
                     </div>
+                    <div class="link_blog">
+                        <a href="#" class="btn-gray">Chi tiết</a>
+                    </div>
                 </div>
                 <div class="item-bottom">
+                    <h1 class="title">the lone bird in snow</h1>
                     <div class="item-extra">
                         <ul>
                             <li>
@@ -295,13 +233,11 @@
                             </li>
                         </ul>
                     </div>
-                    <h1 class="title">the lone bird in snow</h1>
-                    <a href="#" class="btn">Chi tiết</a>
                 </div>
             </div>
         </div>
         <div class="details">
-            <button><a href="./category.html">xem thêm <i class="fas fa-chevron-right"></i></a></button>
+            <button><a href="{{route('client.product.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
         </div>
     </section>
 	<!-- content -->

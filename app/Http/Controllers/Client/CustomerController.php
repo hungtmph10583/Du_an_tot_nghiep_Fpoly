@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\City;
@@ -14,20 +15,28 @@ use App\Models\Review;
 use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\GeneralSetting;
 
 class CustomerController extends Controller
 {
 
     public function accountInfo (){
         $model = User::find(Auth::user()->id);
-        return view('client.customer.account-info', compact('model'));
+        $order = Order::where('user_id', Auth::user()->id)->get();
+        $order->load('orderDetails');
+        
+        $orderDetail = OrderDetail::all();
+        $generalSetting = GeneralSetting::first();
+        return view('client.customer.account-info', compact('model', 'order', 'orderDetail', 'generalSetting'));
     }
 
     public function updateinfo(){
         $model = User::find(Auth::user()->id);
+        $generalSetting = GeneralSetting::first();
 
         return view('client.customer.updateinfo', [
-            'model' => $model
+            'model' => $model,
+            'generalSetting' => $generalSetting
         ]);
     }
 
@@ -87,18 +96,52 @@ class CustomerController extends Controller
 
     public function orderHistory(){
         $user_id = Auth::user()->id;
-        $order = Order::where('user_id', $user_id)->get();
-        // $product = Product::where('product', $user_id)->firstOrFail();
+        $order = Order::where('user_id', $user_id)->orderBy('created_at', 'DESC')->get();
+
+        $generalSetting = GeneralSetting::first();
         $order->load('orderDetails');
 
         $orderDetail = OrderDetail::all();
 
-        // dd($order);
-
         return view('client.customer.order-history', compact(
-            'order',
-            'orderDetail'
+            'order','orderDetail','generalSetting'
         ));
+    }
+
+    public function order_history_detail($code){
+        $order = Order::where('code', $code)->first();
+        $generalSetting = GeneralSetting::first();
+        $orderDetail = OrderDetail::where('order_id', $order->id)->get();
+
+        return view('client.customer.order_history_detail', compact(
+            'order','orderDetail','generalSetting'
+        ));
+    }
+
+    public function cancel_order($id){
+        $user_email = Auth::user()->email;
+        $order = Order::find($id);
+        if(!$order || ($order->delivery_status != 1)){
+            return redirect()->back();
+        }
+
+        if ($order->email == $user_email) {
+            $order->delivery_status = '4';
+            $order->cancel_order = $user_email;
+        } else {
+            dd('error');
+        }
+        $order->save();
+
+        $orderDetail = OrderDetail::where('order_id', $order->id)->get();
+        // dd($orderDetail);
+        foreach ($orderDetail as $key => $value) {
+            $save_or_detail = OrderDetail::find($value->id);
+            $save_or_detail->delivery_status = "đã hủy đơn hàng";
+            $save_or_detail->save();
+        }
+
+        return Redirect::to("tai-khoan/chi-tiet-don-hang" . "/" . $order->code)->with('message', "Bạn đã hủy đơn hàng này!");
     }
 
     public function review(){
@@ -106,15 +149,12 @@ class CustomerController extends Controller
         $review = Review::where('user_id', $user_id)->get();
         $review->load('product');
 
-        // dd($review);
-
         $product = Product::all();
-
+        $generalSetting = GeneralSetting::first();
         // $rating = Review::where('product_id', $id)->avg('rating');
         // $rating = (int)round($rating);
         return view('client.customer.review', compact(
-            'review',
-            'product'
+            'review','product','generalSetting'
         ));
     }
 

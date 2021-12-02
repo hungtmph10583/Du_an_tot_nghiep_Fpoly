@@ -53,7 +53,7 @@
 								</small> -->
 	                            <p class="mb-4 text-sm mx-auto">
 	                                Bạn chưa có tài khoản?
-	                                <a href="{{ route('registration') }}" class="text-success text-gradient font-weight-bold">Đăng ký tài khoản</a>
+	                                <a href="{{ route('register') }}" class="text-success text-gradient font-weight-bold">Đăng ký tài khoản</a>
 	                            </p>
 	                        </div>
                         </div>

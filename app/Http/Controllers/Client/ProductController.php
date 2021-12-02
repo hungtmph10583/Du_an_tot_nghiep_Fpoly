@@ -12,6 +12,7 @@ use App\Models\Gender;
 use App\Models\Age;
 use App\Models\ProductGallery;
 use App\Models\Review;
+use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller
@@ -31,6 +32,7 @@ class ProductController extends Controller
         $categories = Category::all();
         $gender = Gender::all();
         $breed = Breed::all();
+        $generalSetting = GeneralSetting::first();
         
         // trả về cho người dùng 1 giao diện + dữ liệu products vừa lấy đc 
         return view('client.product.index', [
@@ -38,7 +40,8 @@ class ProductController extends Controller
             'category' => $categories,
             'gender' => $gender,
             'breed' => $breed,
-            'searchData' => $searchData
+            'searchData' => $searchData,
+            'generalSetting' => $generalSetting
         ]);
     }
 
@@ -52,13 +55,14 @@ class ProductController extends Controller
         $category = Category::all();
         $breed = Breed::all();
         $gender = Gender::all();
-
+        $product_slide = Product::paginate(5);
+        $generalSetting = GeneralSetting::first();
 
         $review = Review::where('product_id',$model->id)->paginate($pagesize);
         $countReview = Review::where('product_id',$model->id)->count();
         $rating = Review::where('product_id', $model->id)->avg('rating');
         $rating = (int)round($rating);
-        return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview'));
+        return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
     }
 
     public function saveReview($id, Request $request){

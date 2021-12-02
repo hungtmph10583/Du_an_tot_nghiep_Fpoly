@@ -11,9 +11,9 @@ class MailController extends Controller
     public function send_mail(){
         // Send mail
         $to_name = "Lolipetfamily";
-        $to_email = "ngoctkph11120@fpt.edu.vn";// send to this email
+        $to_email = "ngoctkph11120@fpt.edu.vn";
 
-        $data = array("name"=>"Website bán thú cưng Lolipetfamily","body"=>'Đơn hàng của bạn đã được gửi'); // body of mail.blade.php
+        $data = array("name"=>"Website bán thú cưng Lolipetfamily","body"=>'Đơn hàng của bạn đã được gửi',"nameClient" => $order->name); // body of mail.blade.php
         Mail::send('mail.send-mail',$data,function($message) use ($to_name,$to_email){
             $message->to($to_email)->subject('Cập nhật trạng thái đơn hàng'); //send this mail with subject
             $message->from($to_email,$to_name);// send from this mail

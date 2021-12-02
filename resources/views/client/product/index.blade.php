@@ -1,41 +1,34 @@
 @section('title', 'Sản phẩm')
 @extends('layouts.client.main')
 @section('content')
-	<!-- content -->
-<div class="section-mt"></div>
-<section class="search">
-    <div class="container">
-        <form action="" class="search-form">
-            <div class="form-field">
-                <input type="search" class="form-input" id="search-box" placeholder=" ">
-                <label for="search" class="form-label"><i class="fas fa-search"></i> search here...</label>
-            </div>
-            <!-- <button for="search-box">
-                <i class="fas fa-search"></i>
-            </button> -->
-        </form>
-    </div>
-</section>
+<!-- content -->
 <!-- section product -->
 <section class="products">
+    <div class="bread-crumb">
+        <a href="{{route('client.home')}}">Trang chủ</a>
+        <span>Thú cưng</span>
+    </div>
+    <h1 id="heading">Thú cưng</h1>
     <div class="product-top">
         <form action="">
             <div class="double">
                 <div class="form-item">
-                    <label for="">Danh mục</label>
+                    <!-- <label for="">Danh mục</label> -->
                     <select name="" id="">
                         <option value="">Tìm kiếm theo danh mục</option>
                         @foreach($category as $cate)
-                        <option value="{{$cate->id}}">{{$cate->name}}t</option>
+                            @if($cate->category_type_id == 1)
+                            <option value="{{$cate->id}}">{{$cate->name}}t</option>
+                            @endif
                         @endforeach
                     </select>
                 </div>
                 <div class="form-item">
-                    <label for="">Sắp xếp theo</label>
+                    <!-- <label for="">Sắp xếp theo</label> -->
                     <select name="" id="">
                         <option value="">Giá cao nhất</option>
                         <option value="">Giá thấp nhất</option>
-                        <option value="">Bán chạy nhất</option>
+                        <option value="">Mua nhiều nhất</option>
                         <option value="">Hàng mới</option>
                     </select>
                 </div>
@@ -72,6 +65,7 @@
                     @if($p->discount == '')
                         <span class="price">{{number_format($p->price)}}đ</span>
                     @else
+                        <span class="discount">{{number_format($p->price)}}đ</span><br>
                         <span class="price">
                             <?php
                                 echo number_format($p->price - $p->discount).'đ';

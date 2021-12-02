@@ -68,161 +68,139 @@
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Giá bán</label>
-                                    <input type="text" name="price" class="form-control" placeholder="Giá bán">
-                                    <span class="text-danger error_text price_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Số lượng sản phẩm</label>
-                                    <input type="text" name="quantity" class="form-control"
-                                        placeholder="Số lượng sản phẩm">
-                                    <span class="text-danger error_text quantity_error"></span>
-                                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-6">
                             <div class="form-group">
                                 <label for="">Giá bán</label>
-                                <input type="text" name="price" class="form-control" value="{{old('price')}}" placeholder="Giá bán">
-                                @error('price')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <input type="text" name="price" class="form-control" placeholder="Giá bán">
+                                <span class="text-danger error_text price_error"></span>
                             </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Trạng thái</label>
-                                    <select name="status" class="form-control" id="status">
-                                        <option value=""></option>
-                                        <option value="1">Còn hàng</option>
-                                        <option value="0">Hết hàng</option>
-                                    </select>
-                                    <span class="text-danger error_text status_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Giới tính</label>
-                                    <select name="gender_id" class="form-control" id="gender">
-                                        <option value=""></option>
-                                        @foreach($gender as $gd)
-                                        <option value="{{$gd->id}}">{{$gd->gender}}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger error_text gender_id_error"></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Cân nặng của thú cưng</label>
-                                    <input type="text" name="weight" class="form-control" placeholder="Kg">
-                                    <span class="text-danger error_text weight_error"></span>
-                                </div>
-                            </div>
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="">Tuổi</label>
-                                    <select name="age_id" class="form-control" id="age">
-                                        <option value=""></option>
-                                        @foreach($age as $ag)
-                                        <option value="{{$ag->id}}">{{$ag->age}}</option>
-                                        @endforeach
-                                    </select>
-                                    <span class="text-danger error_text age_id_error"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">Thông tin thêm</h5>
-                        </div>
-                        <div class="card-body">
                             <div class="form-group">
-                                <label for="">Ảnh sản phẩm</label>
-                                <input type="file" name="uploadfile" class="form-control">
-                                @error('uploadfile')
-                                    <span class="text-danger">{{$message}}</span>
-                                @enderror
+                                <label for="">Cân nặng của thú cưng</label>
+                                <input type="text" name="weight" class="form-control" placeholder="Kg">
+                                <span class="text-danger error_text weight_error"></span>
                             </div>
-                            <div class="col">
-                                <div class="form-group">
-                                    <label for="">Kiểu giảm giá</label>
-                                    <select name="discount_type" id="type" class="form-control">
-                                        <option value="">Kiểu giảm giá</option>
-                                        @foreach($discountType as $dt)
-                                        <option value="{{$dt->id}}">{{$dt->name}}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label for="">Tuổi</label>
+                                <select name="age_id" class="form-control" id="age">
+                                    <option value=""></option>
+                                    @foreach($age as $ag)
+                                    <option value="{{$ag->id}}">{{$ag->age}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger error_text age_id_error"></span>
                             </div>
-                            <div class="row">
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="">Trạng thái</label>
-                                        <select name="status" id="" class="form-control">
-                                            <option value="1">Còn hàng</option>
-                                            <option value="0">Hết hàng</option>
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="col">
-                                    <div class="form-group">
-                                        <label for="">Nổi bật</label>
-                                        <select name="featured " id="" class="form-control">
-                                            <option value="1">Hiển thị</option>
-                                            <option value="0">Không</option>
-                                        </select>
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="">Số lượng sản phẩm</label>
+                                <input type="text" name="quantity" class="form-control"
+                                    placeholder="Số lượng sản phẩm">
+                                <span class="text-danger error_text quantity_error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Trạng thái</label>
+                                <select name="status" class="form-control" id="status">
+                                    <option value=""></option>
+                                    <option value="1">Còn hàng</option>
+                                    <option value="0">Hết hàng</option>
+                                </select>
+                                <span class="text-danger error_text status_error"></span>
+                            </div>
+                            <div class="form-group">
+                                <label for="">Giới tính</label>
+                                <select name="gender_id" class="form-control" id="gender">
+                                    <option value=""></option>
+                                    @foreach($gender as $gd)
+                                    <option value="{{$gd->id}}">{{$gd->gender}}</option>
+                                    @endforeach
+                                </select>
+                                <span class="text-danger error_text gender_id_error"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-stripped">
-                                    <thead>
-                                        <th>File</th>
-                                        <th>Thumbnail</th>
-                                        <th>
-                                            <button class="btn btn-success add-img float-right" type="button">Thêm
-                                                ảnh</button>
-                                        </th>
-                                    </thead>
-                                    <tbody id="gallery">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table class="table table-stripped">
+                                <thead>
+                                    <th>File</th>
+                                    <th>Thumbnail</th>
+                                    <th>
+                                        <button class="btn btn-success add-img float-right" type="button">Thêm
+                                            ảnh</button>
+                                    </th>
+                                </thead>
+                                <tbody id="gallery">
 
-                                    </tbody>
-                                </table>
-                                <span class="text-danger error_text galleries_error"></span>
+                                </tbody>
+                            </table>
+                            <span class="text-danger error_text galleries_error"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="card-title">Thông tin phiếu giảm giá</div>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col"><label for="">Giảm giá</label>
+                            <input type="text" class="form-control" name="discount" placeholder="Giảm giá"
+                                value="{{old('discount')}}">
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Kiểu giảm giá</label>
+                                <select name="discount_type" id="type" class="form-control">
+                                    <option value="">Kiểu giảm giá</option>
+                                    @foreach($discountType as $dt)
+                                    <option value="{{$dt->id}}">{{$dt->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Ngày bắt đầu</label>
+                                <input type="date" class="form-control" name="discount_start_date">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Ngày kết thúc</label>
+                                <input type="date" class="form-control" name="discount_end_date">
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="">Chi tiết sản phẩm:</label>
-                                <textarea name="description" class=form-control rows="10"></textarea>
-                            </div>
-                        </div>
-                        <div class="text-right">
-                            <button type="submit" class="btn btn-info ml-2">Lưu</button>
-                            <a href="{{route('product.index')}}" class="btn btn-danger">Hủy</a>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Chi tiết sản phẩm:</label>
+                            <textarea name="description" class=form-control rows="10"></textarea>
                         </div>
                     </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-info ml-2">Lưu</button>
+                        <a href="{{route('product.index')}}" class="btn btn-danger">Hủy</a>
+                    </div>
+                    </div>
                 </div>
+            </div>
         </form>
     </div><!-- /.container-fluid -->
 </section>

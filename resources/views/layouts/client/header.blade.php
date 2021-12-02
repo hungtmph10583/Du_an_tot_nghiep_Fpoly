@@ -4,22 +4,22 @@
             <div class="row">
                 <ul class="header-item-left">
                     <li>
-                        <a href="#">
+                        <a href="mailto:{{$generalSetting->email}}">
                             <i class="fas fa-envelope"></i>
-                            <span>lolipet@gmail.com</span>
+                            <span>{{$generalSetting->email}}</span>
                         </a>
                     </li>
                     <li>
                         <a href="#">
                             <i class="fas fa-phone-alt"></i>
-                            <span>033 612 6726</span>
+                            <span>{{$generalSetting->phone}}</span>
                         </a>
                     </li>
                 </ul>
                 <div class="header-item none"></div>
                 <ul class="header-item">
                     @if(Auth::check())
-                    @hasanyrole('admin|manage')
+                    @hasanyrole('admin|manage|employee')
                     <li>
                         <a href="{{route('dashboard.index')}}">
                         <i class="fas fa-cogs"></i>
@@ -65,31 +65,28 @@
                 </div>
                 <div class="header-item none"></div>
                 <div class="header-item">
-                    <a href="#" class="logo">
+                    <a href="{{route('client.home')}}" class="logo">
                         <!-- <i class="fas fa-paw"></i> <b> LOLI<span>PET</span></b> -->
-                        <img src="{{ asset('client-theme/images/logo.png')}}" alt=""><b> LOLI<span>PET</span></b>
+                        <img src="{{ asset('client-theme/images/logo_full.png')}}" alt="">
                     </a>
                 </div>
                 <div class="header-item">
                     <nav class="navbar">
                         <ul class="nav-item">
                             <li>
-                                <a href="{{route('client.home')}}">Trang chủ</a>
+                                <a href="{{route('client.home')}}" id="link_home">Trang chủ</a>
                             </li>
                             <li>
-                                <a href="./introduce.html">Giới thiệu</a>
+                                <a href="{{route('client.product.index')}}" id="link_product">Thú cưng</a>
                             </li>
                             <li>
-                                <a href="./index.html">Danh mục</a>
+                                <a href="{{route('client.accessory.index')}}" id="link_accessory">Phụ kiện</a>
                             </li>
                             <li>
-                                <a href="{{route('client.product.index')}}">Sản phẩm</a>
+                                <a href="{{route('client.blog.index')}}" id="link_blog">Tin tức</a>
                             </li>
                             <li>
-                                <a href="{{route('client.blog.index')}}">Tin tức</a>
-                            </li>
-                            <li>
-                                <a href="./contact.html">Liên hệ</a>
+                                <a href="{{route('client.contact')}}" id="link_contact">Liên hệ</a>
                             </li>
                         </ul>
                     </nav>
@@ -111,40 +108,17 @@
                         </a>
                     </div>
                 </div>
-                <!--  -->
-                <!-- <div class="shopping-cart">
-                    <div class="box">
-                        <i class="fas fa-trash-alt"></i>
-                        <img src="{{ asset('client-theme/images/002.jpg')}}" alt="">
-                        <div class="content">
-                            <h3>pit bull</h3>
-                            <span class="price">12.500 VND</span> <br>
-                            <span class="quantity">số lượng : 2</span>
-                        </div>
-                    </div>
-                    <div class="box">
-                        <i class="fas fa-trash-alt"></i>
-                        <img src="{{ asset('client-theme/images/003.jpg')}}" alt="">
-                        <div class="content">
-                            <h3>supper dog pit bull</h3>
-                            <span class="price">12.500 VND</span> <br>
-                            <span class="quantity">số lượng : 2</span>
-                        </div>
-                    </div>
-                    <div class="box">
-                        <i class="fas fa-trash-alt"></i>
-                        <img src="{{ asset('client-theme/images/004.jpg')}}" alt="">
-                        <div class="content">
-                            <h3>pit bull</h3>
-                            <span class="price">12.500 VND</span> <br>
-                            <span class="quantity">số lượng : 2</span>
-                        </div>
-                    </div>
-                    <div class="total">tổng cộng : 24.000 VND</div>
-                    <a href="#" class="btn">xem giỏ hàng</a>
-                    <a href="#" class="btn">thanh toán</a>
-                </div> -->
             </div>
+        </div>
+    </div>
+    <div class="header-bottom-bar">
+        <div class="container">
+            <form action="" class="search-form">
+                <input type="search" class="form-input" id="search-box" placeholder="Tìm kiếm...">
+                <button for="search-box">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
         </div>
     </div>
 </header>
@@ -157,7 +131,7 @@
 </div>
 @endif -->
 @if(session()->has('message'))
-    <div class="msg-alert">
+    <div class="msg-alert @if(session()->has('message')) active @endif">
         <p class="text-alert">
             <span>{{ session()->get('message') }}</span>
             <i class="fas fa-times"></i>
@@ -166,9 +140,8 @@
 @endif
 @section('pagejs')
 <script>
-    // $(".msg-alert i").click(function() {
-    //     $(".msg-alert").removeClass('active');
-    //     $(this).parent().addClass('active');
-    // });
+        $(".msg-alert i").click(function() {
+            $(".msg-alert").removeClass('active');
+        });
 </script>
 @endsection

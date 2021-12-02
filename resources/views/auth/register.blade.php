@@ -96,34 +96,34 @@
                             <form method="POST" role="form text-left">
                             @csrf
                                 <div class="mb-3">
-                                    <input type="text" class="form-control" placeholder="Name" name="name" aria-describedby="email-addon">
-                                    @error('name') <div class="text-danger">{{ $message }}</div> @enderror
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Name" name="name" aria-describedby="email-addon" value="{{old('name')}}">
+                                    @error('name') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <input type="email" class="form-control" placeholder="Email" name="email" aria-describedby="email-addon">
-                                    @error('email') <div class="text-danger">{{ $message }}</div> @enderror
+                                    <input type="email" class="form-control @error('email') is-invalid @enderror" placeholder="Email" name="email" aria-describedby="email-addon" value="{{old('email')}}">
+                                    @error('email') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <input wire:model="password" type="password" class="form-control" placeholder="Password" aria-label="Password" name="password" aria-describedby="password-addon">
-                                    @error('password') <div class="text-danger">{{ $message }}</div> @enderror
+                                    <input wire:model="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" aria-label="Password" name="password" aria-describedby="password-addon" value="{{old('password')}}">
+                                    @error('password') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <input type="password" class="form-control" placeholder="Confirm Password" name="cfpassword">
-                                    @error('cfpassword') <div class="text-danger">{{ $message }}</div> @enderror
+                                    <input type="password" class="form-control @error('cfpassword') is-invalid @enderror" placeholder="Confirm Password" name="cfpassword" value="{{old('cfpassword')}}">
+                                    @error('cfpassword') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
-                                <div class="form-check form-check-info text-left">
+                                <!-- <div class="form-check form-check-info text-left">
                                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
                                     <label class="form-check-label" for="flexCheckDefault">
                                         {{ __('I agree the') }}
                                         <a href="javascript:;" class="text-dark font-weight-bolder">{{ __('Terms and Conditions') }}</a>
                                     </label>
-                                </div>
+                                </div> -->
                                 <div class="text-center">
-                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
+                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Đăng ký</button>
                                 </div>
-                                <p class="text-sm mt-3 mb-0">{{ __('Already have an account? ') }}
+                                <p class="text-sm mt-3 mb-0">{{ __('Bạn đã có tài khoản? ') }}
                                     <a href="{{ route('login') }}" class="text-dark font-weight-bolder">
-                                        {{ __('Sign in') }}
+                                        {{ __('Đăng nhập') }}
                                     </a>
                                 </p>
                             </form>

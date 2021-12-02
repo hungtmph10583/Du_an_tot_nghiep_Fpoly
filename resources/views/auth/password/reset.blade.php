@@ -35,19 +35,14 @@
                             @endif
                             <form method="POST" role="form text-left" action="/reset-password">
                             @csrf
-                            <input type="text" name="token" value="{{ $token }}">
-                                <!-- <div>
-                                    <label for="email" class="h6 mt-2">{{ __('Email') }}</label>
-                                    <input id="email" type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Địa chỉ Email" name="email" value="{{ old('email')}}">
-                                    @error('email') <div class="text-danger">{{ $message }}</div> @enderror
-                                </div> -->
+                            <input type="hidden" name="token" value="{{ $token }}">
                                 <div>
-                                    <label for="password" class="h6 mt-2">{{ __('New password') }}</label>
+                                    <label for="password" class="h6 mt-2">{{ __('Mật khẩu mới') }}</label>
                                     <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mật khẩu mới" name="password" value="{{old('password')}}">
                                     @error('password') <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>
                                 <div>
-                                    <label for="password-confirm" class="h6 mt-2">{{ __('Confirm password') }}</label>
+                                    <label for="password-confirm" class="h6 mt-2">{{ __('Nhập lại mật khẩu') }}</label>
                                     <input id="password-confirm" type="password" class="form-control @error('password_confirmation') is-invalid @enderror" placeholder="Nhập lại mật khẩu" name="password_confirmation" value="{{old('password_confirmation')}}">
                                     @error('password_confirmation') <div class="text-danger">{{ $message }}</div> @enderror
                                 </div>

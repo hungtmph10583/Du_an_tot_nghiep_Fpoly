@@ -1,34 +1,32 @@
-@section('title', 'Giỏ hàng')
+@section('title', 'Bài viết')
 @extends('layouts.client.main')
 @section('content')
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/blog.css')}}">
 @endsection
 	<!-- content -->
-<div class="section-mt"></div>
-<!-- <section class="search">
-    <div class="container">
-        <form action="" class="search-form">
-            <div class="form-field">
-                <input type="search" class="form-input" id="search-box" placeholder=" ">
-                <label for="search" class="form-label"><i class="fas fa-search"></i> search here...</label>
-            </div>
-        </form>
-    </div>
-</section> -->
 <!-- section product -->
 <section class="blogs">
+    <div class="bread-crumb">
+        <a href="{{route('client.home')}}">Trang chủ</a>
+        <span>Bài viết</span>
+    </div>
+    <h1 id="heading">Bài viết</h1>
     <div class="blog-container">
         @foreach($blog as $value)
         <div class="blog-item">
             <div class="item-top">
                 <div class="thumbnail">
-                    <a href="{{route('client.blog.detail', ['id' => $value->id])}}">
+                    <a href="{{route('client.blog.detail', ['id' => $value->slug])}}">
                     <img src="{{asset( 'storage/' . $value->image)}}" alt="Bài viết này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                 </div>
+                <div class="link_blog">
+                    <a href="{{route('client.blog.detail', ['id' => $value->slug])}}" class="btn-gray">Chi tiết</a>
+                </div>
             </div>
             <div class="item-bottom">
+                <h1 class="title">{{$value->title}}</h1>
                 <div class="item-extra">
                     <ul>
                         <li>
@@ -39,7 +37,7 @@
                         <li class="middle">
                             <i class="far fa-calendar-alt"></i>
                             <span>
-                                {{date_format($value->created_at,"d/m/Y H:i:s")}}
+                                {{$value->created_at->format('d/m/Y')}}
                             </span>
                         </li>
                         <li>
@@ -49,8 +47,7 @@
                         </li>
                     </ul>
                 </div>
-                <h1 class="title">{{$value->title}}</h1>
-                <a href="{{route('client.blog.detail', ['id' => $value->id])}}" class="btn">Chi tiết</a>
+                <!-- <a href="{{route('client.blog.detail', ['id' => $value->id])}}" class="btn">Chi tiết</a> -->
             </div>
         </div>
         @endforeach

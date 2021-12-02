@@ -34,4 +34,19 @@ class Accessory extends Model
     {
         return $this->hasMany(AccessoryGallery::class, 'accessory_id');
     }
+
+    public function discountType()
+    {
+        return $this->belongsTo(DiscountType::class, 'discount_type');
+    }
+
+    public function reviews()
+    {
+        return $this->hasOne(Review::class, 'accessory_id');
+    }
+
+    public function orderDetail()
+    {
+        return $this->hasOne(OrderDetail::class, 'product_id');
+    }
 }

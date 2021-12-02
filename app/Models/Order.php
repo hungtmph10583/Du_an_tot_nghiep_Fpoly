@@ -12,6 +12,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'seller_id',
         'name',
         'phone',
         'email',
@@ -22,7 +23,8 @@ class Order extends Model
         'delivery_status',
         'grand_total',
         'coupon_discount',
-        'code'
+        'code',
+        'cancel_order'
     ];
 
     public function orderDetails()

@@ -7,10 +7,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 // hungtmph10583 (21/09/21) end
 use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\AccessoryController;
 use App\Http\Controllers\Client\HomeController;
 use App\Http\Controllers\Client\CartController;
 use App\Http\Controllers\Client\CustomerController;
 use App\Http\Controllers\Client\BlogController;
+use App\Http\Controllers\Client\ContactController;
 use App\Http\Controllers\Client\MailController;
 
 use App\Http\Controllers\Auth\RegisterController;
@@ -43,6 +45,13 @@ Route::prefix('san-pham')->group(function () {
     Route::post('/chi-tiet/{id}', [ProductController::class, 'saveReview']);
 });
 
+Route::prefix('phu-kien')->group(function () {
+    Route::get('/', [AccessoryController::class, 'index'])->name('client.accessory.index');
+
+    Route::get('/chi-tiet/{id}', [AccessoryController::class, 'detail'])->name('client.accessory.detail');
+    Route::post('/chi-tiet/{id}', [AccessoryController::class, 'saveReview']);
+});
+
 Route::prefix('gio-hang')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('client.cart.index');
     
@@ -70,6 +79,8 @@ Route::prefix('tai-khoan')->middleware('auth')->group(function () {
     Route::post('doi-mat-khau/{id}', [CustomerController::class, 'saveChangeP']);
 
     Route::get('lich-su-don-hang', [CustomerController::class, 'orderHistory'])->name('client.customer.orderHistory');
+    Route::get('chi-tiet-don-hang/{code}', [CustomerController::class, 'order_history_detail'])->name('client.customer.order_history_detail');
+    Route::get('huy-don-hang/{id}', [CustomerController::class, 'cancel_order'])->name('cancel_order');
 
     Route::get('danh-gia-san-pham', [CustomerController::class, 'review'])->name('client.customer.review');
     Route::get('xoa-danh-gia/{id}', [CustomerController::class, 'deleteReview'])->name('deleteReview');
@@ -82,6 +93,9 @@ Route::prefix('bai-viet')->group(function () {
     Route::get('/chi-tiet/{id}', [BlogController::class, 'detail'])->name('client.blog.detail');
 });
 
+Route::prefix('lien-he')->group(function () {
+    Route::get('/', [ContactController::class, 'index'])->name('client.contact');
+});
 
 // ------------------------------- Login -------------------------------
     Route::get('login', [AuthController::class, 'loginForm'])->name('login');

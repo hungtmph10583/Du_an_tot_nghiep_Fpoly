@@ -5,7 +5,7 @@
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Danh sách Đơn hàng</a></li>
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Thay đổi trạng thái Đơn hàng</a></li>
                     <li class="breadcrumb-item active">Sửa Đơn hàng</li>
                 </ol>
             </div>
@@ -41,7 +41,7 @@
                             <div class="form-group">
                                 <label for="">Trạng thái đơn hàng</label>
                                 <select name="delivery_status" id="" class="form-control">
-                                    <option value="1" @if($order->delivery_status == 1) selected @endif>Đang chờ xử lý</option>
+                                    <option value="1" @if($order->delivery_status == 1) selected @endif>Đang chờ xử lí</option>
                                     <option value="2" @if($order->delivery_status == 2) selected @endif>Đang giao hàng</option>
                                     <option value="3" @if($order->delivery_status == 3) selected @endif>Giao hàng thành công</option>
                                     <option value="0" @if($order->delivery_status == 0) selected @endif>Hủy đơn hàng</option>
@@ -103,7 +103,7 @@
                                 <div class="row">
                                     <div class="col"></div>
                                     <div class="col">Ngày đặt hàng</div>
-                                    <div class="col">{{$order->created_at}}</div>
+                                    <div class="col">{{$order->created_at->format('d/m/Y')}}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
@@ -139,7 +139,12 @@
                                     <td>{{$value->product->name}}</td>
                                     <td>Giao hàng tận nhà</td>
                                     <td>{{$value->quantity}}</td>
-                                    <td>{{number_format($value->product->price,0,',','.')}} / sản phẩm</td>
+                                    <td>
+                                        <?php
+                                            $tinh = $value->price/$value->quantity;
+                                            echo number_format($tinh,0,',','.');
+                                        ?> / sản phẩm
+                                    </td>
                                     <td>{{number_format($value->price,0,',','.')}}</td>
                                 </tr>
                                 @endforeach
@@ -176,11 +181,13 @@
                     </div>
                     <div class="row">
                         <div class="col-6"></div>
-                        <div class="col-6 mt-2"><br>
-                            <div class="text-right">
-                                <button type="submit" class="btn btn-info">Lưu</button>
-                                <a href="{{route('order.index')}}" class="btn btn-danger">Hủy</a>
+                        <div class="col-6 text-right"><br>
+                            <div class="form-group">
+                                <input type="checkbox" name="send_mail" id="send_mail" value="send_mail">
+                                <label class="form-check-label" for="send_mail">Gửi email cập nhật cho khách hàng</label>
                             </div>
+                            <button type="submit" class="btn btn-info">Lưu</button>
+                            <a href="{{route('order.index')}}" class="btn btn-danger">Hủy</a>
                         </div>
                     </div>
                 </div>

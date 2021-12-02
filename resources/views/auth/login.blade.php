@@ -64,7 +64,7 @@
 								</small>
 	                            <p class="mb-4 text-sm mx-auto">
 	                                Don't have an account?
-	                                <a href="{{ route('registration') }}" class="text-success text-gradient font-weight-bold">'Sign up</a>
+	                                <a href="{{ route('register') }}" class="text-success text-gradient font-weight-bold">'Sign up</a>
 	                            </p>
 								<div class="row px-xl-5 px-sm-4 px-3">
 									<div class="mt-2 position-relative text-center">

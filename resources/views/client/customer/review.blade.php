@@ -2,53 +2,33 @@
 @extends('layouts.client.main')
 @section('content')
 @section('pageStyle')
-<link rel="stylesheet" href="{{ asset('client-theme/css/account-info.css')}}">
+<link rel="stylesheet" href="{{ asset('client-theme/css/account_info.css')}}">
 @endsection
 	<!-- content -->
 <div class="section-mt"></div>
 <section class="account-info">
-    <div class="account-info-container">
-        <div class="account-info-left">
-            <div class="information">
-                <div class="avatar">
-                    <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" alt="User profile picture">
-                </div>
-                <span class="name">{{Auth::user()->name}}</span>
+    <div class="bread-crumb">
+        <a href="{{route('client.home')}}">Trang chủ</a>
+        <span>Lịch sử nhận xét</span>
+    </div>
+    <div class="account_info_container">
+        <div class="info_customer">
+            <div class="avatar">
+                <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" alt="User profile picture">
+                <a href="#" class="setting">Edit</a>
             </div>
-            <ul>
-                <li>
-                    <a href="{{route('client.customer.info')}}">
-                        <i class="fas fa-user"></i>
-                        Thông tin tài khoản
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('client.customer.orderHistory')}}">
-                        <i class="fas fa-swatchbook"></i>
-                        Quản lý đơn hàng
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('client.customer.favoriteProduct')}}">
-                        <i class="fas fa-heart"></i>
-                        Sản phẩm yêu thích
-                    </a>
-                </li>
-                <li>
-                    <a href="{{route('client.customer.review')}}" class="active">
-                        <i class="fas fa-star-half-alt"></i>
-                        Nhận xét của tôi
-                    </a>
-                </li>
-            </ul>
+            <div class="info">
+                <h5>Mạnh Hùng</h5>
+                <p>Trưởng Nhóm</p>
+            </div>
+            @include('client.customer.nav_bar_customer')
         </div>
-        <div class="account-info-right">
-            <div class="title">Đánh giá sản phẩm</div>
+        <div class="content_page">
             <table class="greenTable">
                 <thead>
                     <tr>
                         <th>Sản phẩm</th>
-                        <th>Xếp hạng sp</th>
+                        <th>Rating</th>
                         <th>Nội dung đánh giá</th>
                         <th>Thời gian</th>
                         <td>Hành động</td>
@@ -64,7 +44,7 @@
                                         <img src="{{asset( 'storage/' . $rv->product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" width="100">
                                     </a>
                                 </td>
-                                <td>
+                                <td style="min-width: 103px;">
                                     <span class="star">
                                        @for($count=1; $count<=5; $count++)
                                             @if($count <= $pro->reviews->rating)
@@ -75,15 +55,17 @@
                                         @endfor
                                     </span>
                                 </td>
-                                <td class="comment">{{$rv->comment}}</td>
-                                <td>{{date_format($rv->created_at,"d/m/Y H:i:s")}}</td>
+                                <td style="min-width: 260px;">{{$rv->comment}}</td>
+                                <td style="min-width: 75px;">{{$rv->created_at->diffForHumans()}}</td>
                                 <td>
-                                    <a href="#" class="edit-review">
-                                        <i class="far fa-edit"></i>
-                                    </a>
-                                    <a href="{{route('deleteReview', ['id' => $rv->id])}}" onclick="return confirm('Bạn có chắc muốn xóa review này?')" class="delete-review">
-                                        <i class="far fa-trash-alt"></i>
-                                    </a>
+                                    <div class="flex_R">
+                                        <a href="#" class="edit-review">
+                                            <i class="far fa-edit"></i>
+                                        </a>
+                                        <a href="{{route('deleteReview', ['id' => $rv->id])}}" onclick="return confirm('Bạn có chắc muốn xóa review này?')" class="delete-review">
+                                            <i class="far fa-trash-alt"></i>
+                                        </a>
+                                    </div>
                                 </td>
                             </tr>
                             @endif

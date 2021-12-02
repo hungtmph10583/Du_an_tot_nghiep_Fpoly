@@ -18,7 +18,15 @@
     <section class="content">
         <div class="container-fluid pb-1">
             <div class="card">
-                <div class="card-body">
+                <div class="card-body table-responsive pad">
+                    @if(session('success') != null || session('danger') != null)
+                    <div class="alert @if (session('success')) alert-success @else alert-danger @endif alert-dismissible fade show" role="alert">
+                        <strong>@if (session('success')) Success @else Error @endif</strong> {{session('success') }} {{ session('danger') }}.
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @endif
                     <form action="" method="get">
                         <div class="row">
                             <div class="col">
@@ -32,7 +40,7 @@
                                     <label for="">Sắp xếp theo</label>
                                     <select class="form-control" name="order_by" >
                                         <option value="">Mặc định</option>
-                                        <option value="1">Đơn đang chờ xử lý</option>
+                                        <option value="1">Đơn đang chờ xử lí</option>
                                         <option value="2">Đơn đang giao hàng</option>
                                         <option value="3">Đơn giao thành công</option>
                                         <option value="0">Đơn hàng đã huỷ</option>
@@ -52,9 +60,9 @@
                             <thead>
                                 <th>STT</th>
                                 <th>Mã đơn hàng</th>
-                                <th>Thời gian</th>
                                 <th>Khách hàng</th>
-                                <th>Tổng tiền</th>
+                                <th>Thời gian</th>
+                                <!-- <th>Tổng tiền</th> -->
                                 <th>Trạng thái</th>
                                 <th class="text-center">Thanh toán</th>
                                 <th><span class="float-right mr-4">Lựa chọn</span></th>
@@ -64,9 +72,9 @@
                                 <tr>
                                     <td>{{(($order->currentPage()-1)*7) + $loop->iteration}}</td>
                                     <td>{{$value->code}}</td>
-                                    <td>{{$value->created_at->diffForHumans()}}</td>
                                     <td>{{$value->name}}</td>
-                                    <td>{{number_format($value->grand_total,0,',','.')}}<span>đ</span></td>
+                                    <td>{{$value->created_at->format('d/m/Y')}}</td>
+                                    <!-- <td>{{number_format($value->grand_total,0,',','.')}}<span>đ</span></td> -->
                                     <td>
                                         <span class="btn btn-sm 
                                             @if($value->delivery_status == 1)
@@ -82,11 +90,13 @@
                                             @endif
                                         text-light">
                                             @if($value->delivery_status == 1)
-                                                Đang chờ xử lý
+                                                Đang chờ xử lí
                                             @elseif($value->delivery_status == 2)
                                                 Đang giao hàng
                                             @elseif($value->delivery_status == 3)
                                                 Giao hàng thành công
+                                            @elseif($value->delivery_status == 4)
+                                                Khách đã hủy đơn hàng
                                             @elseif($value->delivery_status == 0)
                                                 Hủy đơn hàng
                                             @else

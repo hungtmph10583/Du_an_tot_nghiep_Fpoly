@@ -9,16 +9,16 @@
  */
 
 .header-wrapper {
-    position: fixed;
-    top: 0;
+    position: relative;
+    /* top: 0;
     left: 0;
-    right: 0;
-    z-index: 1000;
+    right: 0; */
+    z-index: 800;
     /* display: flex;
     align-items: center;
     justify-content: space-between; */
     background: #fff;
-    box-shadow: var(--box-shadow);
+    /* box-shadow: var(--box-shadow); */
 }
 
 .row {
@@ -49,6 +49,9 @@
     padding: 0.6rem;
     font-size: 1.3rem;
     color: var(--gray);
+    font-weight: 700;
+    font-family: 'Dosis', sans-serif;
+    transition: none;
 }
 
 .header-wrapper .header-top-bar ul li a:hover {
@@ -77,8 +80,8 @@
 }
 
 .header-wrapper .header-middle-bar .logo img {
-    width: 30px;
-    height: 30px;
+    width: auto;
+    height: 50px;
 }
 
 .header-wrapper .header-middle-bar .logo i {
@@ -101,10 +104,14 @@
     padding: 0.9rem 1.2rem;
     font-size: 1.4rem;
     color: var(--black);
+    font-weight: 700;
+    font-family: 'Dosis', sans-serif;
     text-transform: uppercase;
     border-radius: 20px;
+    transition: none;
 }
 
+.header-wrapper .header-middle-bar .header-item ul.nav-item a.active,
 .header-wrapper .header-middle-bar .header-item ul.nav-item a:hover {
     color: white;
     background-color: var(--main-color);
@@ -146,6 +153,7 @@
     font-size: 1.4rem;
     text-align: center;
     cursor: pointer;
+    transition: none;
 }
 
 .header-wrapper .header-middle-bar .icon-bars div:hover,
@@ -164,8 +172,46 @@
     line-height: normal;
     color: var(--white);
     background-color: var(--main-color);
-    border: 0.1rem solid var(--main-bg);
+    border: 0.1rem solid var(--main-color-light);
     border-radius: 50px;
+}
+
+.header-wrapper .header-bottom-bar {
+    padding: 0 15% 1rem;
+}
+
+.header-wrapper .header-bottom-bar .container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.header-wrapper .header-bottom-bar form {
+    width: 600px;
+    /* border: 0.1rem solid var(--blue); */
+    position: relative;
+}
+
+.header-wrapper .header-bottom-bar form input {
+    /* padding: 0.6rem 3.9rem 0.6rem 1rem; */
+    padding: 1rem 3.9rem 1rem 1rem;
+    font-size: 1.4rem;
+    width: 100%;
+    border: 0.1rem solid var(--text-color);
+    border-radius: 2rem;
+}
+
+.header-wrapper .header-bottom-bar form button {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.4rem;
+    font-size: 1.6rem;
+    color: var(--white);
+    background-color: var(--main-color);
+    padding: 0.5rem 1rem 0.6rem;
+    /* border-radius: 0 0.5rem 0.5rem 0; */
+    border-radius: 50%;
+    cursor: pointer;
 }
 
 #menu-btn {
@@ -173,7 +219,7 @@
 }
 
 .msg-alert {
-    /* display: none; */
+    display: none;
     position: fixed;
     top: 13rem;
     right: 1.5rem;
@@ -185,10 +231,9 @@
     /* margin-right: 14%; */
 }
 
-
-/* .msg-alert.active {
+.msg-alert.active {
     display: block;
-} */
+}
 
 .msg-alert .text-alert {
     display: flex;
