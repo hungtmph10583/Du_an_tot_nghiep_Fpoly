@@ -115,12 +115,6 @@ class ProductController extends Controller
 
     public function saveAdd(Request $request, $id = null)
     {
-        if ($request->name) {
-            $dupicate = Product::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
-        }
 
         $message = [
             'name.required' => "Hãy nhập vào tên thú cưng",
@@ -194,7 +188,7 @@ class ProductController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('product.index'), 'dupicate' => $dupicate]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('product.index')]);
         } else {
             $model = new Product();
             $model->user_id = Auth::id();
@@ -246,13 +240,6 @@ class ProductController extends Controller
 
         if (!$model) {
             return redirect()->back()->with('BadState', 'Sản phẩm có id là ' . $id . 'không tồn tại');
-        }
-
-        if ($request->name) {
-            $dupicate = Product::onlyTrashed()
-                ->where('name', 'like', $request->name)->first();
-        } else {
-            $dupicate = null;
         }
 
         $message = [

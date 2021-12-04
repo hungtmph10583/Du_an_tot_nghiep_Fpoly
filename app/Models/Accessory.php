@@ -35,4 +35,9 @@ class Accessory extends Model
     {
         return $this->hasMany(AccessoryGallery::class, 'accessory_id')->withTrashed();
     }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id')->withTrashed();
+    }
 }

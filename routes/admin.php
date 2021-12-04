@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\FooterTitleController;
 use App\Http\Controllers\Admin\GenderController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\GeneralSettingController;
+use App\Http\Controllers\Admin\StatisticalController;
 use App\Http\Controllers\Admin\UploadController;
 
 /*
@@ -437,4 +438,24 @@ Route::prefix('chan-trang')->group(function () {
     Route::delete('trash/remove', [FooterController::class, 'removeMultiple'])->name('footer.removeMul');
     Route::get('trash/restore', [FooterController::class, 'restoreMultiple'])->name('footer.restoreMul');
     Route::delete('trash/deleteForeverMul', [FooterController::class, 'deleteMultiple'])->name('footer.deleteMul');
+});
+
+Route::prefix('thong-ke')->group(function () {
+    Route::get('binh-luan/thu-cung', [StatisticalController::class, 'commentPet'])->name('statistical.cmtPet');
+
+    Route::get('binh-luan/phu-kien', [StatisticalController::class, 'commentAccess'])->name('statistical.cmtAccess');
+
+    Route::get('don-hang/thu-cung', [StatisticalController::class, 'orderPet'])->name('statistical.orderPet');
+
+    Route::get('don-hang/phu-kien', [StatisticalController::class, 'orderAccess'])->name('statistical.orderAccess');
+
+    Route::get('thoi-gian', [StatisticalController::class, 'time'])->name('statistical.time');
+
+    Route::get('chi-tiet/{id}', [StatisticalController::class, 'detail'])->name('statistical.detail');
+
+    Route::get('dataDetail/{id}', [StatisticalController::class, 'getDetail'])->name('statistical.getDetail');
+
+    Route::get('bieu-do/{id}', [StatisticalController::class, 'chart'])->name('statistical.chart');
+
+    Route::get('khoa-binh-luan/{id}', [StatisticalController::class, 'block'])->name('statistical.block');
 });

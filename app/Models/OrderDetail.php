@@ -13,7 +13,7 @@ class OrderDetail extends Model
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'product_id')->withTrashed();
+        return $this->belongsTo(Product::class, 'product_id')->withTrashed();
     }
 
     public function order()

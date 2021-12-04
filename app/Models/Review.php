@@ -15,7 +15,8 @@ class Review extends Model
         'user_id',
         'rating',
         'comment',
-        'status'
+        'status',
+        'product_type'
     ];
 
     public function product()
@@ -26,5 +27,10 @@ class Review extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function categoryType()
+    {
+        return $this->belongsTo(CategoryType::class, 'product_type');
     }
 }

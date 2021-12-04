@@ -63,10 +63,64 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
+                            <a href="{{route('statistical.cmtPet')}}" class="nav-link">
+                                <i class="right fas fa-angle-left"></i>
+                                <p>Bình luận</p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.cmtPet')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thú cưng</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.cmtAccess')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Phụ kiện</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('statistical.orderPet')}}" class="nav-link">
+                                <i class="right fas fa-angle-left"></i>
+                                <p>Đơn hàng</p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.orderPet')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thú cưng</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.orderAccess')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Phụ kiện</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Doanh thu</p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.cmtPet')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thú cưng</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.cmtAccess')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Phụ kiện</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="#" class="nav-link">
