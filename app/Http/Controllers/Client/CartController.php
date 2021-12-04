@@ -41,72 +41,97 @@ class CartController extends Controller
         $product_id = $request->product_id_hidden;
         $quantity = $request->quantity;
         
-
         if ($request->product_type == 1) {
             $product_info = Product::where('id', $product_id)->first();
         } elseif($request->product_type == 2){
             $product_info = Accessory::where('id', $product_id)->first();
+        } else {
+            return redirect()->back()->with('danger', "Error!");
         }
-
-        // Check quantity (S)
         $content = Cart::content();
-        if (!empty($content)) {
-            $data['id'] = $product_id;
-            $data['qty'] = $quantity;
-            $data['name'] = $product_info->name;
-            if ($request->discount_price > 0) {
-                $data['price'] = $product_info->price - $request->discount_price;
+        $count = Cart::content()->count();
+        $test = Cart::instance();
+        // dd($test);
+        // foreach(Cart::stored() as $row) {
+        //     // echo 'You have ' . $row->qty . ' items of ' . $row->name . ' with description: "' . $row->description . '" in your cart.';
+        //     echo '<pre>';
+        //     echo print_r($row);
+        //     echo '<br>';
+        //     echo $row->name;
+        //     echo '</pre>';
+        // }
+
+        foreach (Cart::content() as $row) {
+            if ($row->id == $product_info->id) {
+                echo $row->id;
             }else{
-                $data['price'] = $product_info->price;
-            }
-            $data['weight'] = $request->product_type;
-            $data['options']['image'] = $product_info->image;
-            Cart::add($data);
-            Cart::setGlobalTax(10);
-            return redirect()->back()->with('message', "Đã thêm sản phẩm vào giỏ hàng");
-        }else{
-            foreach (Cart::content() as $value) {
-                if ($value->id == $product_info->id) {
-                    if ($value->qty < $product_info->quantity) {
-                        $tinh = $quantity + $value->qty;
-                        if ($tinh > $product_info->quantity) {
-                            return redirect()->back()->with('message', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và giỏ hàng của bạn đang có " . $value->qty . " sản phẩm này.");
-                        }else{
-                            $data['id'] = $product_id;
-                            $data['qty'] = $quantity;
-                            $data['name'] = $product_info->name;
-                            if ($request->discount_price > 0) {
-                                $data['price'] = $product_info->price - $request->discount_price;
-                            }else{
-                                $data['price'] = $product_info->price;
-                            }
-                            $data['weight'] = $product_info->price;
-                            $data['options']['image'] = $product_info->image;
-                            Cart::add($data);
-                            Cart::setGlobalTax(10);
-                            return redirect()->back()->with('message', "Đã thêm sản phẩm vào giỏ hàng");
-                        }
-                    }else{
-                        return redirect()->back()->with('message', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và bạn đang thêm " . $quantity . " vào giỏ hàng.");
-                    }
-                }
+                dd('error');
             }
         }
-        // Check quantity (E)
 
-        // $data['id'] = $product_id;
-        // $data['qty'] = $quantity;
-        // $data['name'] = $product_info->name;
-        // if ($request->discount_price > 0) {
-        //     $data['price'] = $product_info->price - $request->discount_price;
+        // if (empty($count)) {
+        //     $data['id'] = $product_id;
+        //     $data['qty'] = $quantity;
+        //     $data['name'] = $product_info->name;
+        //     if ($request->discount_price > 0) {
+        //         $data['price'] = $product_info->price - $request->discount_price;
+        //     }else{
+        //         $data['price'] = $product_info->price;
+        //     }
+        //     $data['weight'] = $request->product_type;
+        //     $data['options']['image'] = $product_info->image;
+        //     Cart::add($data);
+        //     Cart::setGlobalTax(10);
+        //     return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 1");
         // }else{
-        //     $data['price'] = $product_info->price;
+        //     foreach (Cart::content() as $row) {
+        //         // if ($row->id === $product_info->id) {
+        //         //     return redirect()->back()->with('danger', " thay " . $row->name);
+        //         // }else{
+        //         //     return redirect()->back()->with('danger', "ko thay ");
+        //         // }
+            
+        //         // if ($value->id == $product_info->id) {
+        //         //     if ($value->qty < $product_info->quantity) {
+        //         //         $tinh = $quantity + $value->qty;
+        //         //         if ($tinh > $product_info->quantity) {
+        //         //             return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và giỏ hàng của bạn đang có " . $value->qty . " sản phẩm này (alert danger one).");
+        //         //         }else{
+        //         //             $data['id'] = $product_id;
+        //         //             $data['qty'] = $quantity;
+        //         //             $data['name'] = $product_info->name;
+        //         //             if ($request->discount_price > 0) {
+        //         //                 $data['price'] = $product_info->price - $request->discount_price;
+        //         //             }else{
+        //         //                 $data['price'] = $product_info->price;
+        //         //             }
+        //         //             $data['weight'] = $request->product_type;
+        //         //             $data['options']['image'] = $product_info->image;
+        //         //             Cart::add($data);
+        //         //             Cart::setGlobalTax(10);
+        //         //             return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 2");
+        //         //         }
+        //         //     }else{
+        //         //         return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và bạn đang có " . $value->qty . " sản phẩm này trong giỏ hàng (alert danger two).");
+        //         //     }
+        //         // }else{
+        //         //     $data['id'] = $product_id;
+        //         //     $data['qty'] = $quantity;
+        //         //     $data['name'] = $product_info->name;
+        //         //     if ($request->discount_price > 0) {
+        //         //         $data['price'] = $product_info->price - $request->discount_price;
+        //         //     }else{
+        //         //         $data['price'] = $product_info->price;
+        //         //     }
+        //         //     $data['weight'] = $request->product_type;
+        //         //     $data['options']['image'] = $product_info->image;
+        //         //     Cart::add($data);
+        //         //     Cart::setGlobalTax(10);
+        //         //     return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 3");
+        //         // }
+        //     }
         // }
-        // $data['weight'] = $product_info->price;
-        // $data['options']['image'] = $product_info->image;
-        // Cart::add($data);
-        // Cart::setGlobalTax(10);
-        // return redirect()->back()->with('message', "Đã thêm sản phẩm vào giỏ hàng");
+        
     }
 
     public function buyNow(Request $request){//Giỏ hàng
@@ -145,17 +170,17 @@ class CartController extends Controller
 
     public function deleteToCart($rowId){
         Cart::update($rowId,0);
-        return redirect(route('client.cart.index'))->with('message', "Đã xóa sản phẩm!");
+        return redirect(route('client.cart.index'))->with('success', "Đã xóa sản phẩm khỏi giỏ hàng!");
     }
 
     public function updateCartQty(Request $request){
         if ($request->quantity_cart <= 0) {
-            return redirect()->back();
+            return redirect()->back()->with('danger', "Error!");
         }
         $rowId = $request->rowId_cart;
         $quantity = $request->quantity_cart;
         Cart::update($rowId,$quantity);
-        return redirect(route('client.cart.index'));
+        return redirect(route('client.cart.index'))->with('success', "Cập nhật số lượng sản phẩm thành công!");
     }
 
     public function checkout(Request $request){

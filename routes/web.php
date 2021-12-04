@@ -49,7 +49,7 @@ Route::prefix('phu-kien')->group(function () {
     Route::get('/', [AccessoryController::class, 'index'])->name('client.accessory.index');
 
     Route::get('/chi-tiet/{id}', [AccessoryController::class, 'detail'])->name('client.accessory.detail');
-    Route::post('/chi-tiet/{id}', [AccessoryController::class, 'saveReview']);
+    Route::post('/chi-tiet', [AccessoryController::class, 'saveReview'])->name('client.accessory.post_review');
 });
 
 Route::prefix('gio-hang')->group(function () {
@@ -72,8 +72,8 @@ Route::prefix('gio-hang')->group(function () {
 
 Route::prefix('tai-khoan')->middleware('auth')->group(function () {
     Route::get('/', [CustomerController::class, 'accountInfo'])->name('client.customer.info');
-    Route::get('cap-nhat', [CustomerController::class, 'updateinfo'])->name('client.customer.updateinfo');
-    Route::post('cap-nhat', [CustomerController::class, 'saveUpdateinfo']);
+    // Route::get('cap-nhat', [CustomerController::class, 'updateinfo'])->name('client.customer.updateinfo');
+    Route::post('cap-nhat', [CustomerController::class, 'saveUpdateinfo'])->name('client.customer.updateinfo');
     
     Route::get('doi-mat-khau/{id}', [CustomerController::class, 'changePForm'])->name('client.customer.changeP');
     Route::post('doi-mat-khau/{id}', [CustomerController::class, 'saveChangeP']);

@@ -42,7 +42,7 @@ class Accessory extends Model
 
     public function reviews()
     {
-        return $this->hasOne(Review::class, 'accessory_id');
+        return $this->hasOne(Review::class, 'product_id');
     }
 
     public function orderDetail()

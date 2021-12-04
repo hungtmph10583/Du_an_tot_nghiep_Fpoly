@@ -23,7 +23,7 @@ class Review extends Model
     }
 
     public function accessory(){
-        return $this->belongsTo(Accessory::class, 'accessory_id');
+        return $this->belongsTo(Accessory::class, 'product_id');
     }
 
     public function user(){

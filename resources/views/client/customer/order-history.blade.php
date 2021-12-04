@@ -11,17 +11,7 @@
         <span>Quản lý đơn hàng</span>
     </div>
     <div class="account_info_container">
-        <div class="info_customer">
-            <div class="avatar">
-                <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" alt="User profile picture">
-                <a href="#" class="setting">Edit</a>
-            </div>
-            <div class="info">
-                <h5>Mạnh Hùng</h5>
-                <p>Trưởng Nhóm</p>
-            </div>
-            @include('client.customer.nav_bar_customer')
-        </div>
+        @include('client.customer.nav_bar_customer')
         <div class="content_page">
             <table class="greenTable">
                 <thead>

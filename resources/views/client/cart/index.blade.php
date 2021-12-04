@@ -11,28 +11,6 @@
         <span>Giỏ hàng</span>
     </div>
     <h2 class="heading">Giỏ hàng của tôi</h2>
-    <!-- <div class="steps-to-take">
-        <div class="step active" id="btn-cart">
-            <i class="fas fa-shopping-cart"></i>
-            <span>1. Giỏ hàng của tôi</span>
-        </div>
-        <div class="step" id="btn-address">
-            <i class="fas fa-map-marked-alt"></i>
-            <span>2. Địa chỉ nhận hàng</span>
-        </div>
-        <div class="step" id="btn-truck">
-            <i class="fas fa-truck"></i>
-            <span>3. Thông tin giao hàng</span>
-        </div>
-        <div class="step" id="btn-pay">
-            <i class="fas fa-credit-card"></i>
-            <span>4. Thanh toán</span>
-        </div>
-        <div class="step" id="btn-bill">
-            <i class="far fa-check-circle"></i>
-            <span>5. Xác nhận</span>
-        </div>
-    </div> -->
     <div class="cart-detail-container">
         <div class="carts">
             <div class="carts-container">
@@ -40,7 +18,7 @@
                     $content = Cart::content();
                     $count = Cart::content()->count();
                     // echo '<pre>';
-                    // print_r($count);
+                    // print_r($content);
                     // echo '</pre>';
                 ?>
                 @if(empty($count))
@@ -67,9 +45,15 @@
                 @foreach($content as $value)
                 <div class="cart-item">
                     <div class="product-thumbnail">
-                        <a href="#">
+                        @if($value->weight == 1)
+                        <a href="javascript:;">
                             <img src="{{asset( 'storage/' . $value->options->image)}}" alt="">
                         </a>
+                        @elseif($value->weight == 2)
+                        <a href="javascript:;">
+                            <img src="{{asset( 'storage/' . $value->options->image)}}" alt="">
+                        </a>
+                        @endif
                     </div>
                     <div class="product-info">
                         <h5 class="name">{{$value->name}}</h5>
@@ -87,14 +71,22 @@
                                     @foreach($product as $pro)
                                         @if($pro->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$pro->quantity}}" min="1">
+                                        <input type="text" value="{{$value->weight}}">
+                                        <input type="text" value="{{$pro->quantity}}">
+                                        <input type="text" value="{{$value->rowId}}">
                                         @endif
                                     @endforeach
-                                @else
+                                @elseif($value->weight == 2)
                                     @foreach($accessory as $acs)
                                         @if($acs->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$acs->quantity}}" min="1">
+                                        <input type="text" value="{{$value->weight}}">
+                                        <input type="text" value="{{$acs->quantity}}">
+                                        <input type="text" value="{{$value->rowId}}">
                                         @endif
                                     @endforeach
+                                @else
+                                    error
                                 @endif
                                 <input type="hidden" value="{{$value->rowId}}" name="rowId_cart">
                                 <input type="submit" value="Cập nhật" name="update_qty" class="updateQty">

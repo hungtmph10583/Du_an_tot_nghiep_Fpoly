@@ -19,7 +19,7 @@
                     <img src="{{asset( 'storage/' . $model->avatar)}}" id="blah" alt="User profile picture">
                     <div class="foot-avatar" id="cc">
                         <label for="hidden-avatar">Đổi avatar</label>
-                        <input hidden type="file" name="uploadfile" id="hidden-avatar">
+                        <input type="file" name="uploadfile" id="hidden-avatar">
                     </div>
                     @error('uploadfile')
                         <span class="text-danger">{{$message}}</span>

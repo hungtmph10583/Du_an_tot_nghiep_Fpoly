@@ -11,17 +11,7 @@
         <span>Quản lý tài khoản</span>
     </div>
     <div class="account_info_container">
-        <div class="info_customer">
-            <div class="avatar">
-                <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" alt="User profile picture">
-                <a href="{{route('client.customer.updateinfo')}}" class="setting">Edit</a>
-            </div>
-            <div class="info">
-                <h5>{{Auth::user()->name}}</h5>
-                <p>Trưởng Nhóm</p>
-            </div>
-            @include('client.customer.nav_bar_customer')
-        </div>
+        @include('client.customer.nav_bar_customer')
         <!-- <div class="content_page">
             <div class="title">Thông tin cá nhân</div>
             <div class="group">
@@ -42,11 +32,54 @@
             </div>
         </div> -->
         <div class="content_page_double">
-            <div class="box form"></div>
-            <div class="box info">
+            <div class="box form" id="box_form">
+                <form action="{{route('client.customer.updateinfo')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="box_content">
+                        <div class="avatar">
+                            <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" id="blah2" alt="User profile picture">
+                            <label for="hidden-avatar" class="setting">
+                                <i class="far fa-edit"></i> Edit
+                                <input hidden type="file" name="uploadfile" id="hidden-avatar">
+                            </label>
+                        </div>
+                        <div class="undo">
+                            <a href="javascript:;" style="float:right;" id="undo" class="btn_black_icon"><i class="fas fa-undo-alt"></i></a>
+                        </div>
+                    </div>
+                    <div class="box_content_last">
+                        <div class="box_item">
+                            <label for="name" class="name"><i class="fas fa-user"></i></label>
+                            <input type="text" name="name" id="name" placeholder="Họ và tên" value="{{Auth::user()->name}}">
+                            @error('name')
+                                <span class="text_danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="box_item">
+                            <label for=""><i class="fas fa-at"></i></label>
+                            <input type="text" name="email" placeholder="Emai" value="{{Auth::user()->email}}">
+                            @error('email')
+                                <span class="text_danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="box_item">
+                            <label for=""><i class="fas fa-phone-alt"></i></label>
+                            <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
+                            @error('phone')
+                                <span class="text_danger">{{$message}}</span>
+                            @enderror
+                        </div>
+                        <div class="box_item_last">
+                            <a href="javascript:;" id="cancel_edit">Hủy bỏ</a>
+                            <button type="submit">Cập nhật</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="box info active" id="box_info">
                 <div class="box_top">
                     <h5 class="title">Thông tin cá nhân</h5>
-                    <a href="#"><i class="fas fa-user-edit"></i></a>
+                    <a href="javascript:;" id="edit_info"><i class="fas fa-user-edit"></i></a>
                 </div>
                 <div class="box_middle">
                     <ul>
@@ -158,4 +191,45 @@
     </div>
 </section>
 	<!-- content -->
+@endsection
+@section('pagejs')
+<script>
+
+    $("#edit_info").on('click', function(e){
+        document.getElementById("box_info").style.display = 'none';
+        document.getElementById("box_form").style.display = 'block';
+        e.preventDefault();
+    });
+
+    $("#undo").on('click', function(e){
+        document.getElementById("box_form").style.display = 'none';
+        document.getElementById("box_info").style.display = 'block';
+        e.preventDefault();
+    });
+
+    $("#cancel_edit").on('click', function(e){
+        document.getElementById("box_form").style.display = 'none';
+        document.getElementById("box_info").style.display = 'block';
+        e.preventDefault();
+    });
+
+    var a = '';
+        function readURL(input) {
+			if (input.files && input.files[0]) {
+				var reader = new FileReader();
+					// $('#cc').append(`
+					// 	<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
+					// `);
+					// document.getElementById("cc").style.display = 'block';
+				reader.onload = function(e) {
+					$('#blah').attr('src', e.target.result);
+					$('#blah2').attr('src', e.target.result);
+				}
+				reader.readAsDataURL(input.files[0]);
+				}
+			}
+			$("#hidden-avatar").change(function() {
+				readURL(this);
+		});
+</script>
 @endsection

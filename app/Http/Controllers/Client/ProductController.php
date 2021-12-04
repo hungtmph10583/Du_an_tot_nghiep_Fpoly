@@ -58,22 +58,26 @@ class ProductController extends Controller
         $product_slide = Product::paginate(5);
         $generalSetting = GeneralSetting::first();
 
-        $review = Review::where('product_id',$model->id)->paginate($pagesize);
-        $countReview = Review::where('product_id',$model->id)->count();
-        $rating = Review::where('product_id', $model->id)->avg('rating');
+        $review = Review::where('product_id',$model->id)->where('product_type', '1')->paginate($pagesize);
+        $countReview = Review::where('product_id',$model->id)->where('product_type', '1')->count();
+        $rating = Review::where('product_id', $model->id)->where('product_type', '1')->avg('rating');
         $rating = (int)round($rating);
         return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
     }
 
-    public function saveReview($id, Request $request){
-        $model = new Review(); 
-        if(!$model){
-            return redirect()->back();
+    public function saveReview(Request $request){
+        $user = Auth::user();
+        if($user == null) {
+            return redirect()->back()->with('danger', 'Vui lòng đăng nhập để nhận xét')->withInput();
         }
-        $model->fill($request->all());
-        $model->user_id = Auth::user()->id;
-        $model->product_id = $id;
-        $model->save();
-        return redirect()->back();
+        $review = new Review;
+        $review->product_id =$request->product_id;
+        $review->product_type =$request->product_type;
+        $review->user_id = $user->id;
+        $review->rating = $request->rating;
+        $review->comment = $request->comment;
+        $review->status = true;
+        $review->save();
+        return redirect()->back()->with('success', 'Nhận xét thành công')->withInput();
     }
 }

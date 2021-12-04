@@ -10,12 +10,6 @@
         <a href="{{route('client.product.index')}}">Thú cưng</a>
         <span>{{$model->name}}</span>
     </div>
-    <!-- <div class="msg-alert-product error">
-        <p class="text-alert">
-            <span>hello</span>
-            <i class="fas fa-times"></i>
-        </p>
-    </div> -->
     <div class="product-container">
         <div class="product-item-image">
             <div class="main-image" id="main-image">
@@ -173,6 +167,8 @@
                 <p>Viết đánh giá</p>
                 <form action="" method="POST" enctype="multipart/form-data">
                 @csrf
+                    <input type="hidden" name="product_type" value="1">
+                    <input type="hidden" name="product_id" value="{{$model->id}}">
                     <div class="form-group">
                         <label for="">Name</label>
                         @if(Auth::check())

@@ -5,6 +5,19 @@
     background-color: #34495e;
 } */
 
+.btn_black_icon {
+    font-size: 1.2rem;
+    color: var(--white);
+    padding: 0.5rem 0.8rem 0.5rem 1rem;
+    background-color: #333333;
+    border-radius: 0.5rem;
+    box-shadow: 0 3px 10px rgb(51 51 51 / 20%);
+}
+
+.btn_black_icon:hover {
+    color: var(--main-color-light);
+}
+
 .account_info_container {
     margin: 2rem 0;
 }
@@ -32,22 +45,6 @@
     box-shadow: 0 3px 10px rgb(51 51 51 / 20%);
     display: block;
     object-fit: cover;
-}
-
-.account_info_container .info_customer .avatar .setting {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    padding: 0.7rem 0.7rem;
-    border-radius: 0.5rem;
-    background-color: var(--gray);
-    box-shadow: 0 3px 10px rgb(51 51 51 / 20%);
-    color: var(--white);
-}
-
-.account_info_container .info_customer .avatar .setting:hover {
-    background-color: #333333;
-    color: var(--main-color-light);
 }
 
 .account_info_container .info_customer .info {
@@ -245,6 +242,126 @@ section.account-info .account_info_container .content_page_double {
 
 .account_info_container .content_page_double .box.form {
     display: none;
+    background-color: #f8f8f8;
+}
+
+
+/* .account_info_container .content_page_double .box.form form .box_content_top {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.account_info_container .content_page_double .box.form form .box_content_top a.undo {
+    font-size: 1.2rem;
+    color: var(--white);
+    padding: 0.5rem 0.8rem 0.5rem 1rem;
+    background-color: #333333;
+    border-radius: 0.5rem;
+    display: inline;
+} */
+
+.account_info_container .content_page_double .box.form form .box_content {
+    display: flex;
+}
+
+.account_info_container .content_page_double .box.form form .box_content .avatar {
+    position: relative;
+    padding: 1rem 0;
+}
+
+.account_info_container .content_page_double .box.form form .box_content .avatar img {
+    width: 100px;
+    height: 100px;
+    border-radius: 1rem;
+    box-shadow: 0 3px 10px rgb(51 51 51 / 20%);
+    display: block;
+    object-fit: cover;
+}
+
+.account_info_container .content_page_double .box.form form .box_content .undo {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.account_info_container .content_page_double .box.form form .box_content .avatar .setting {
+    position: absolute;
+    bottom: 0;
+    right: -1rem;
+    padding: 0.7rem 0.7rem 0.7rem 0.9rem;
+    border-radius: 0.5rem;
+    background-color: #333333;
+    box-shadow: 0 3px 10px rgb(51 51 51 / 20%);
+    color: var(--white);
+    cursor: pointer;
+}
+
+.account_info_container .content_page_double .box.form form .box_content .avatar .setting:hover {
+    background-color: #333333;
+    color: var(--main-color-light);
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last {
+    margin: 2rem 0 0;
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item label {
+    width: 50px;
+    padding: 0.8rem 0;
+    font-size: 1.4rem;
+    color: var(--white);
+    font-weight: bold;
+    border-radius: 0.5rem 0 0 0.5rem;
+    text-align: center;
+    background-color: #333333;
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item input {
+    width: 100%;
+    border: 0.1rem solid var(--text-color);
+    border-radius: 0 0.5rem 0.5rem 0;
+    border-left: none;
+    font-size: 1.6rem;
+    padding: 0.5rem 1rem;
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item input:focus {
+    border-color: var(--main-color-light);
+    box-shadow: 0 3px 10px rgb(51 51 51 / 20%);
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item_last {
+    display: flex;
+    justify-content: end;
+    gap: 1rem;
+    margin-top: 4.5rem;
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item_last a {
+    font-size: 1.4rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    color: var(--white);
+    background-color: var(--red);
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item_last button {
+    font-size: 1.4rem;
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    color: var(--white);
+    background-color: var(--main-color);
+    cursor: pointer;
+}
+
+.account_info_container .content_page_double .box.form form .box_content_last .box_item_last button:hover {
+    background-color: var(--main-color-hover);
 }
 
 .account_info_container .content_page_double .box .box_top {
@@ -266,6 +383,7 @@ section.account-info .account_info_container .content_page_double {
     padding: 0.5rem 0.8rem 0.5rem 1rem;
     background-color: #333333;
     border-radius: 0.5rem;
+    box-shadow: 0 3px 10px rgb(51 51 51 / 20%);
 }
 
 .account_info_container .content_page_double .box .box_top a:hover {
@@ -283,11 +401,11 @@ section.account-info .account_info_container .content_page_double {
 
 .account_info_container .content_page_double .box ul li.first_one a,
 .account_info_container .content_page_double .box ul li.first_two a {
-    color: var(--text-color);
+    color: var(--blue);
 }
 
 .account_info_container .content_page_double .box ul li.first_two a:hover {
-    color: var(--blue);
+    text-decoration: underline;
 }
 
 .account_info_container .content_page_double .box ul li.first_one .rtrim:last-child,
@@ -306,7 +424,7 @@ section.account-info .account_info_container .content_page_double {
 
 .account_info_container .content_page_double .box .box_bottom {
     display: flex;
-    justify-content: end;
+    justify-content: start;
     padding: 1rem 0;
 }
 

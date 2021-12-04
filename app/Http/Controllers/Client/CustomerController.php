@@ -30,15 +30,15 @@ class CustomerController extends Controller
         return view('client.customer.account-info', compact('model', 'order', 'orderDetail', 'generalSetting'));
     }
 
-    public function updateinfo(){
-        $model = User::find(Auth::user()->id);
-        $generalSetting = GeneralSetting::first();
+    // public function updateinfo(){
+    //     $model = User::find(Auth::user()->id);
+    //     $generalSetting = GeneralSetting::first();
 
-        return view('client.customer.updateinfo', [
-            'model' => $model,
-            'generalSetting' => $generalSetting
-        ]);
-    }
+    //     return view('client.customer.updateinfo', [
+    //         'model' => $model,
+    //         'generalSetting' => $generalSetting
+    //     ]);
+    // }
 
     public function saveUpdateinfo(Request $request){
         $user = Auth::user()->id;
@@ -66,32 +66,8 @@ class CustomerController extends Controller
             $model->avatar = $request->file('uploadfile')->storeAs('uploads/users', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
         $model->save();
-
-        // if($request->has('address')){
-        //     $check = Address::where('user_id', $user)->get();
-        //     if (!Address::where('user_id', $user)) {
-        //         $city = City::find($request->city);
-        //         $newaddress = new Address();
-        //         $newaddress->user_id = $user;
-        //         $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-        //         $newaddress->city_id = $request->city;
-        //         $newaddress->save();
-        //     }else{
-        //         $city = City::find($request->city);
-        //         $newaddress = Address::fint(Auth::user()->address->id);
-        //         $newaddress->user_id = $user;
-        //         $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-        //         $newaddress->city_id = $request->city;
-        //         $newaddress->save();
-        //     }
-        //     // $city = City::find($request->city);
-        //     // $newaddress = new Address();
-        //     // $newaddress->user_id = $user;
-        //     // $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-        //     // $newaddress->city_id = $request->city;
-        //     // $newaddress->save();
-        // }
-        return redirect(route('client.customer.info'));
+        
+        return redirect()->back()->with('success', "Cập nhật tài khoản thành công!");
     }
 
     public function orderHistory(){
@@ -141,7 +117,7 @@ class CustomerController extends Controller
             $save_or_detail->save();
         }
 
-        return Redirect::to("tai-khoan/chi-tiet-don-hang" . "/" . $order->code)->with('message', "Bạn đã hủy đơn hàng này!");
+        return Redirect::to("tai-khoan/chi-tiet-don-hang" . "/" . $order->code)->with('success', "Bạn đã hủy đơn hàng này!");
     }
 
     public function review(){

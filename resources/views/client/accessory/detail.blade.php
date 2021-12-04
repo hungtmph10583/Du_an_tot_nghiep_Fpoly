@@ -12,12 +12,6 @@
         <a href="{{route('client.accessory.index')}}">Phụ kiện</a>
         <span>{{$model->name}}</span>
     </div>
-    <!-- <div class="msg-alert-product error">
-        <p class="text-alert">
-            <span>hello</span>
-            <i class="fas fa-times"></i>
-        </p>
-    </div> -->
     <div class="product-container">
         <div class="product-item-image">
             <div class="main-image" id="main-image">
@@ -165,8 +159,10 @@
             </div>
             <div class="write-comment">
                 <p>Viết đánh giá</p>
-                <form action="" method="POST" enctype="multipart/form-data">
+                <form action="{{route('client.accessory.post_review')}}" method="POST" enctype="multipart/form-data">
                 @csrf
+                    <input type="hidden" name="product_type" value="2">
+                    <input type="hidden" name="product_id" value="{{$model->id}}">
                     <div class="form-group">
                         <label for="">Name</label>
                         @if(Auth::check())
@@ -199,10 +195,6 @@
                         </span>
                         <div class="clear-both"></div>
                     </div>
-                    <!-- <div class="form-group">
-                        <label for="">Tiêu đề đánh giá</label>
-                        <input type="text" name="title" placeholder="Nhập vào họ tên">
-                    </div> -->
                     <div class="form-group">
                         <label for="">Nội dung đánh giá</label>
                         <textarea name="comment" id="" cols="30" rows="10" placeholder="Viết nội dung dánh giá của bạn tại đây"></textarea>
@@ -211,7 +203,7 @@
                 </form>
             </div>
             @foreach($review as $rv)
-                @if($rv->accessory_id == $model->id)
+                @if($rv->product_id == $model->id)
                 <div class="review-content">
                     <div class="star">
                         @for($count=1; $count<=5; $count++)

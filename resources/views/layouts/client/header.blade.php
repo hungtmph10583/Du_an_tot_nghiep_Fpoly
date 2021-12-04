@@ -130,18 +130,26 @@
     </p>
 </div>
 @endif -->
-@if(session()->has('message'))
-    <div class="msg-alert @if(session()->has('message')) active @endif">
+@if(session('success') || session('danger'))
+<section class="all_alert" id="all_alert">
+    <div class="msg-alert @if(session('success')) success @elseif(session('danger')) danger @endif">
         <p class="text-alert">
-            <span>{{ session()->get('message') }}</span>
-            <i class="fas fa-times"></i>
+            <span>{{ session()->get('success') }}{{ session()->get('danger') }}</span>
+            <button class="close" onclick="$('#all_alert').hide();; return false;">×</button>
         </p>
     </div>
+</section>
 @endif
 @section('pagejs')
 <script>
-        $(".msg-alert i").click(function() {
-            $(".msg-alert").removeClass('active');
-        });
+    // $("#off_alert").on('click', function(e){
+    //     document.getElementById("all_alert").style.display = 'none';
+    //     // $("#all_alert").addClass("active");
+    //     e.preventDefault();
+    // });
+
+    // $(".msg-alert p a").click(function() {
+    //     $(".msg-alert").removeClass('active');
+    // });
 </script>
 @endsection
