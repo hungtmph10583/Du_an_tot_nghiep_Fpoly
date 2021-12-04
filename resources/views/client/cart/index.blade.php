@@ -71,18 +71,18 @@
                                     @foreach($product as $pro)
                                         @if($pro->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$pro->quantity}}" min="1">
-                                        <input type="text" value="{{$value->weight}}">
+                                        <!-- <input type="text" value="{{$value->weight}}">
                                         <input type="text" value="{{$pro->quantity}}">
-                                        <input type="text" value="{{$value->rowId}}">
+                                        <input type="text" value="{{$value->rowId}}"> -->
                                         @endif
                                     @endforeach
                                 @elseif($value->weight == 2)
                                     @foreach($accessory as $acs)
                                         @if($acs->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$acs->quantity}}" min="1">
-                                        <input type="text" value="{{$value->weight}}">
+                                        <!-- <input type="text" value="{{$value->weight}}">
                                         <input type="text" value="{{$acs->quantity}}">
-                                        <input type="text" value="{{$value->rowId}}">
+                                        <input type="text" value="{{$value->rowId}}"> -->
                                         @endif
                                     @endforeach
                                 @else
@@ -103,7 +103,7 @@
                         </div>
                     </div>
                     <div class="delete-product">
-                        <a href="{{route('deleteToCart', ['rowId' => $value->rowId])}}">
+                        <a onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')" href="{{route('deleteToCart', ['rowId' => $value->rowId])}}">
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </div>

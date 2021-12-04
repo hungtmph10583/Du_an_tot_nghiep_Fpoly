@@ -79,6 +79,7 @@
             @csrf
                 <input type="hidden" name="product_id_hidden" value="{{$model->id}}">
                 <input type="hidden" name="discount_price" value="{{$model->discount}}">
+                <input type="hidden" name="category_id" value="{{$model->category_id}}">
                 <div class="item-extra">
                     <h6>Số lượng</h6>
                     <div class="quantity">
