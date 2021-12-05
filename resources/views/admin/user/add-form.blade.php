@@ -90,7 +90,7 @@
                         </div>
                         <div class="row">
                             <div class="col-6">
-                                @hasrole('admin')
+                                @hasrole('Admin')
                                 <div class="form-group">
                                     <label for="">Trạng thái</label>
                                     <div class="form-control">
@@ -105,7 +105,7 @@
                                 @endhasrole
                             </div>
                             <div class="col-6">
-                                @hasrole('admin')
+                                @hasrole('Admin')
                                 <div class="form-group">
                                     <label for="">Quyền hạn</label>
                                     <select name="role_id" class="form-control">

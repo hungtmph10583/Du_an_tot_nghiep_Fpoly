@@ -19,7 +19,7 @@
                 <div class="header-item none"></div>
                 <ul class="header-item">
                     @if(Auth::check())
-                    @hasanyrole('admin|manage|employee')
+                    @hasanyrole('Admin|Manage|Employee')
                     <li>
                         <a href="{{route('dashboard.index')}}">
                         <i class="fas fa-cogs"></i>

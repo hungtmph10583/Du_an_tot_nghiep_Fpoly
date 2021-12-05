@@ -115,12 +115,6 @@ class UserController extends Controller
         if(!$model){
             return redirect()->back();
         }
-
-        // if($id == 1){
-        //     if(Auth::user()->id != '1'){
-        //         return redirect()->back()->with('msg', "Đã bảo là đéo đủ tuổi r còn cố :))");
-        //     }
-        // }
         
         $request->validate(
             [
@@ -165,5 +159,15 @@ class UserController extends Controller
             'mdh_role' => $mdh_role,
             'role' => $role
         ]);
+    }
+
+    public function permission_form()
+    {
+        # code...
+    }
+
+    public function save_form_permission(Request $request)
+    {
+        # code...
     }
 }

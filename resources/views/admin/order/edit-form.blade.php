@@ -135,8 +135,13 @@
                                 @foreach($orderDetail as $value)
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td class="text-center"><img src="{{asset( 'storage/' . $value->product->image)}}" alt="" width="70"></td>
-                                    <td>{{$value->product->name}}</td>
+                                    @if($value->product_type == 1)
+                                        <td class="text-center"><img src="{{asset( 'storage/' . $value->product->image)}}" alt="" width="70"></td>
+                                        <td>{{$value->product->name}}</td>
+                                    @else
+                                        <td class="text-center"><img src="{{asset( 'storage/' . $value->accessory->image)}}" alt="" width="70"></td>
+                                        <td>{{$value->accessory->name}}</td>
+                                    @endif
                                     <td>Giao hàng tận nhà</td>
                                     <td>{{$value->quantity}}</td>
                                     <td>

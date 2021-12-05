@@ -31,9 +31,9 @@ use Carbon\Carbon;
 |
 */
 
-Route::get('/test', function () {
-    return view('auth/password/confirm');
-});
+// Route::get('/linkstorage', function () {
+//     Artisan::call('storage:link');
+// });
 
 Route::get('/', [HomeController::class, 'home'])->name('client.home');
 Route::get('/trang-chu', [HomeController::class, 'home'])->name('client.home');

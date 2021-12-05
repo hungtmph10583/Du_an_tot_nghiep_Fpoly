@@ -109,7 +109,7 @@
 									</div>
 								</div>
 								<div class="col-6">
-									@hasanyrole('admin|manage')
+									@hasanyrole('Admin|Manage')
 									<div class="form-group">
                                         <label for="">Trạng thái</label>
                                         <div class="form-control">
@@ -124,7 +124,7 @@
 									@endhasanyrole
 
 									@if($model->id != 1)
-										@hasrole('admin')
+										@hasrole('Admin')
 										<div class="form-group">
 											<label for="">Vai trò</label>
 											<div class="form-control">

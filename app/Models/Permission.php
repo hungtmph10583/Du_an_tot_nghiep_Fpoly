@@ -15,8 +15,8 @@ class Permission extends Model
      * HungTM
      * start
      */
-    public function roles(){
-        return $this->bolongsToMany(Role::class, 'role_has_permissions');
+    public function role_has_permission(){
+        return $this->hasMany(RoleHasPermission::class, 'permission_id');
     }
     /**
      * 31/8

@@ -178,7 +178,7 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
-                        @hasanyrole('admin|manage')
+                        @hasanyrole('Admin|Manage')
                         <li class="nav-item">
                             <a href="{{route('user.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -188,6 +188,37 @@
                         @endhasanyrole
                     </ul>
                 </li>
+                @hasanyrole('Admin|Manage')
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-project-diagram"></i>
+                        <p>
+                            Phân quyền
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('role.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Role User</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Role Permission</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endhasanyrole
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-newspaper"></i>
@@ -203,7 +234,7 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
-                        @hasanyrole('admin|manage')
+                        @hasanyrole('Admin|Manage')
                         <li class="nav-item">
                             <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>

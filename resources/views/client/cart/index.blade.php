@@ -71,18 +71,16 @@
                                     @foreach($product as $pro)
                                         @if($pro->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$pro->quantity}}" min="1">
-                                        <!-- <input type="text" value="{{$value->weight}}">
-                                        <input type="text" value="{{$pro->quantity}}">
-                                        <input type="text" value="{{$value->rowId}}"> -->
+                                        <label for="">Số lượng trong kho:</label>
+                                        <input type="text" value="{{$pro->quantity}}" disabled>
                                         @endif
                                     @endforeach
                                 @elseif($value->weight == 2)
                                     @foreach($accessory as $acs)
                                         @if($acs->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$acs->quantity}}" min="1">
-                                        <!-- <input type="text" value="{{$value->weight}}">
-                                        <input type="text" value="{{$acs->quantity}}">
-                                        <input type="text" value="{{$value->rowId}}"> -->
+                                        <label for="">Số lượng trong kho:</label>
+                                        <input type="text" value="{{$acs->quantity}}" disabled>
                                         @endif
                                     @endforeach
                                 @else

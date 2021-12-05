@@ -56,29 +56,6 @@ class CartController extends Controller
         }
         $content = Cart::content();
         $count = Cart::content()->count();
-        $test = Cart::instance();
-        // dd($test);
-        // foreach(Cart::stored() as $row) {
-        //     // echo 'You have ' . $row->qty . ' items of ' . $row->name . ' with description: "' . $row->description . '" in your cart.';
-        //     echo '<pre>';
-        //     echo print_r($row);
-        //     echo '<br>';
-        //     echo $row->name;
-        //     echo '</pre>';
-        // }
-        // $s = 0;
-        // foreach (Cart::content() as $row) {
-        //     // echo $id__po;
-        //     // echo $product_info->name;
-        //     // $s += $row->qty;
-        //     // echo $s;
-        //     if($row->id == $id__po){
-        //         echo 'hey';
-        //     }else{
-        //         echo 'ss';
-        //     }
-        //     echo '</br>';
-        // }
 
         if (empty($count)) {
             $data['id'] = $product_id;

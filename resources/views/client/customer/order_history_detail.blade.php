@@ -22,9 +22,10 @@
                             <th></th>
                             <th></th>
                             <th></th>
+                            <th></th>
                             <th>
                                 @if(!empty($order->cancel_order))
-                                    <a href="javascript:;" class="delete_order_success">Bạn đã hủy đơn hàng</a>
+                                    <a href="javascript:;" class="delete_order_success">Error</a>
                                 @else
                                     <a href="{{route('cancel_order', ['id' => $order->id])}}" onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')" class="delete_order">Hủy đơn hàng</a>
                                 @endif

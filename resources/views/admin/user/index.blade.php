@@ -42,11 +42,12 @@
                             <thead>
                                 <th>STT</th>
                                 <th>Name</th>
+                                <th>Role</th>
                                 <th>
-                                    @hasanyrole('admin|manage')
+                                    @hasanyrole('Admin|Manage')
                                         <a href="{{route('user.add')}}" class="btn btn-outline-info float-right">Thêm tài khoản</a>
                                     @else
-                                        <a href="#" onclick="alert('Bạn không được cấp quyền để tạo tài khoản?')" class="btn-outline-info float-right">Thêm tài khoản</a>
+                                        <a href="javascript:;" onclick="alert('Bạn không được cấp quyền để tạo tài khoản?')" class="btn btn-outline-info float-right">Thêm tài khoản</a>
                                     @endhasrole
                                 </th>
                             </thead>
@@ -55,6 +56,11 @@
                                 <tr>
                                     <td>{{(($users->currentPage()-1)*5) + $loop->iteration}}</td>
                                     <td>{{$u->name}}</td>
+                                    <td>
+                                        @foreach($u->roles as $role)
+                                            <span class="badge badge-success">{{$role->name}}</span>
+                                        @endforeach
+                                    </td>
                                     <td>
                                         <span class="float-right">
                                             <a href="{{route('user.profile', ['id' => $u->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
