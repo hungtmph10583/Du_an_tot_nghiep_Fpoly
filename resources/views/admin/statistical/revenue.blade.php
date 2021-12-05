@@ -23,29 +23,14 @@
                     <div class="col">
                         <div class="form-group">
                             <input type="month" id="time" class="form-control">
-                            <div id="data" data-pro="1" data-count=""></div>
                         </div>
                     </div>
+                    <div class="col">
+                        <button class=" btn btn-info" id="reset">Reset</button>
+                    </div>
                 </div>
-                <table class="table table-bordered data-table" style="width:100%">
-                    <thead>
-                        <th>Sản phẩm</th>
-                        <th>Bình luận</th>
-                        <th>Tác vụ</th>
-                    </thead>
-                    <tbody>
-                        @foreach($product as $pro)
-                        <tr>
-                            <td>{{$pro->name}}</td>
-                            <td>{{$pro->reviews()->where('product_type', 1)->count()}}</td>
-                            <td>
-                                <a href="{{route('statistical.detail',['id'=>$pro->id])}}">Detail</a>
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
                 <div class="warpper">
+                    <div class="alert alert-light" id="emptyChart">Không có dữ liệu</div>
                     <canvas id="myChart" style="height: 300px; display: block; box-sizing: border-box;"></canvas>
                 </div>
             </div>
@@ -55,51 +40,42 @@
 <!-- /.content -->
 @endsection
 @section('pagejs')
-<style>
-.warpper {
-    height: 700px;
-}
-</style>
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css')}}">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>.
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 $(document).ready(function() {
-    var product = <?= json_encode($product) ?>;
+    $('#reset').click(function(e) {
+        window.location.reload();
+    });
+
+    $('#emptyChart').hide()
+
+    var datas = <?= json_encode($data) ?>;
     var count = <?= json_encode($count) ?>;
 
-    label = ''
-    $.each(product, function(key, value) {
-        label += value['name'] + ',';
-    });
-    var labels = label.slice(0, -1)
-    var counts = count.slice(0, -1)
+    if (count == '') {
+        $('#emptyChart').show(1500)
+    } else {
+        var max = Math.max.apply(Math, count);
+        if (max == 0) {
+            $('#emptyChart').show(1500)
+        }
+    }
+
+    var color = [];
+    for (i = 0; i <= 11; i++) {
+        color[i] = `rgb(${[1,2,3].map(x=>Math.random()*256|0)})`;
+    }
 
     const data = {
-        labels: labels.split(','),
+        labels: datas,
         datasets: [{
             label: 'My First Dataset',
-            data: counts.split(','),
-            backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 234)',
-                'rgb(255, 205, 83)',
-                'rgb(192,192,192)',
-                'rgb(255,0,255)',
-                'rgb(0,0,255)',
-                'rgb(128,128,0)',
-                'rgb(128,0,128)',
-                'rgb(0,128,128)',
-                'rgb(0,0,128)',
-                'rgb(0,128,128)',
-                'rgb(0,0,0)',
-                'rgb(0,255,0)',
-                'rgb(255,0,0)',
-                'rgb(128,0,0)',
-                'rgb(0,255,255)'
-            ],
+            data: count,
+            backgroundColor: color,
             hoverOffset: 4
         }]
     };
@@ -142,25 +118,23 @@ $(document).ready(function() {
         config
     );
 
-
     $('#time').change(function(e) {
         $.ajax({
-            url: "{{ route('statistical.cmtAccess') }}",
+            url: "{{ route('statistical.revenue',['slug'=>$slug]) }}",
             type: 'GET',
             data: {
                 time: $('#time').val()
             },
             success: function(data) {
-                label = ''
-                $.each(data.product, function(key, value) {
-                    label += value['name'] + ',';
-                });
-                var labels = label.slice(0, -1);
-                var counts = data.review.slice(0, -1);
-
-                myChart.data.labels = labels.split(',')
-                myChart.data.datasets[0].data = counts.split(',')
+                var max = Math.max.apply(Math, data.data);
+                if (max == 0) {
+                    $('#emptyChart').show(1500)
+                } else {
+                    $('#emptyChart').hide(300)
+                }
+                myChart.data.datasets[0].data = data.data
                 myChart.update();
+
             },
         });
     })

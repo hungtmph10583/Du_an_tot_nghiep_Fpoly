@@ -26,10 +26,12 @@
                         </div>
                     </div>
                     <div class="col">
+                        <button class=" btn btn-info" id="reset">Reset</button>
                     </div>
                 </div>
                 <div class="warpper">
                     <canvas id="myChart" style="height: 300px; display: block; box-sizing: border-box;"></canvas>
+                    <div class="alert alert-light" id="emptyChart">Không có dữ liệu</div>
                 </div>
             </div>
         </div>
@@ -38,18 +40,17 @@
 <!-- /.content -->
 @endsection
 @section('pagejs')
-<style>
-.warpper {
-    height: 700px;
-}
-</style>
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css')}}">
 <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
 <script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>.
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 $(document).ready(function() {
+    $('#reset').click(function(e) {
+        window.location.reload();
+    });
 
+    $('#emptyChart').hide()
     let Year = <?= json_encode($year) ?>;
     let count = <?= json_encode(count($year)) ?>;
     let minYear = Math.min.apply(Math, Year);
@@ -67,6 +68,14 @@ $(document).ready(function() {
 
     var datas = <?= json_encode($data) ?>;
 
+    if (datas == '') {
+        $('#emptyChart').show(1500)
+    } else {
+        var max = Math.max.apply(Math, datas);
+        if (max == 0) {
+            $('#emptyChart').show(1500)
+        }
+    }
     var color = [];
     for (i = 0; i <= 11; i++) {
         color[i] = `rgb(${[1,2,3].map(x=>Math.random()*256|0)})`;
@@ -83,7 +92,7 @@ $(document).ready(function() {
     const data = {
         labels: months,
         datasets: [{
-            label: 'Thống kê tổng đơn hàng theo tháng',
+            label: 'Thống kê tổng bình luận theo tháng',
             data: datas,
             backgroundColor: color,
             hoverOffset: 4
@@ -101,7 +110,7 @@ $(document).ready(function() {
                 },
                 title: {
                     display: true,
-                    text: 'Biểu đồ thống kê đơn hàng',
+                    text: 'Biểu đồ thống kê bình luận',
                     font: {
                         size: 14
                     }
@@ -132,12 +141,18 @@ $(document).ready(function() {
     $('#time').change(function(e) {
         console.log($('#time').val())
         $.ajax({
-            url: "{{ route('statistical.orderPet') }}",
+            url: "{{ route('statistical.commentSum') }}",
             type: 'GET',
             data: {
                 time: $('#time').val()
             },
             success: function(data) {
+                var max = Math.max.apply(Math, data.data);
+                if (max == 0) {
+                    $('#emptyChart').show(1500)
+                } else {
+                    $('#emptyChart').hide(300)
+                }
                 myChart.data.datasets[0].data = data.data
                 myChart.update();
             },

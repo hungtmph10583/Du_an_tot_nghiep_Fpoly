@@ -63,63 +63,82 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('statistical.cmtPet')}}" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="right fas fa-angle-left"></i>
                                 <p>Bình luận</p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route('statistical.cmtPet')}}" class="nav-link">
+                                    <a href="{{route('statistical.commentSum')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Thú cưng</p>
+                                        <p>Tổng bình luận</p>
                                     </a>
                                 </li>
+                                @foreach($cateType as $cate)
                                 <li class="nav-item">
-                                    <a href="{{route('statistical.cmtAccess')}}" class="nav-link">
+                                    <a href="{{route('statistical.cmtPet',['slug' => $cate->slug])}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Phụ kiện</p>
+                                        <p>Thống kê {{$cate->name}}</p>
                                     </a>
                                 </li>
+                                @endforeach
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('statistical.orderPet')}}" class="nav-link">
+                            <a href="{{route('statistical.orderSum')}}" class="nav-link">
                                 <i class="right fas fa-angle-left"></i>
                                 <p>Đơn hàng</p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route('statistical.orderPet')}}" class="nav-link">
+                                    <a href="{{route('statistical.orderSum')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Thú cưng</p>
+                                        <p>Tổng đơn hàng</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="{{route('statistical.orderAccess')}}" class="nav-link">
+                                    <a href="{{route('statistical.orderCancel')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Phụ kiện</p>
+                                        <p>Tổng đơn hàng bị hủy</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.compare')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>So sánh thể loại</p>
+                                    </a>
+                                </li>
+                                @foreach($cateType as $cate)
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.compareCate',['slug' => $cate->slug])}}"
+                                        class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>So sánh {{$cate->name}}</p>
+                                    </a>
+                                </li>
+                                @endforeach
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
+                            <a href="{{route('statistical.revenueSum')}}" class="nav-link">
+                                <i class="right fas fa-angle-left"></i>
                                 <p>Doanh thu</p>
                             </a>
                             <ul class="nav nav-treeview">
                                 <li class="nav-item">
-                                    <a href="{{route('statistical.cmtPet')}}" class="nav-link">
+                                    <a href="{{route('statistical.revenueSum')}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Thú cưng</p>
+                                        <p>Tổng doanh thu</p>
                                     </a>
                                 </li>
+                                @foreach($cateType as $cate)
                                 <li class="nav-item">
-                                    <a href="{{route('statistical.cmtAccess')}}" class="nav-link">
+                                    <a href="{{route('statistical.revenue',['slug' => $cate->slug])}}" class="nav-link">
                                         <i class="far fa-circle nav-icon"></i>
-                                        <p>Phụ kiện</p>
+                                        <p>Doanh thu {{$cate->name}}</p>
                                     </a>
                                 </li>
+                                @endforeach
                             </ul>
                         </li>
                         <li class="nav-item">

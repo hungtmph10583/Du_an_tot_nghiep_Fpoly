@@ -441,13 +441,17 @@ Route::prefix('chan-trang')->group(function () {
 });
 
 Route::prefix('thong-ke')->group(function () {
-    Route::get('binh-luan/thu-cung', [StatisticalController::class, 'commentPet'])->name('statistical.cmtPet');
+    Route::get('binh-luan/tong', [StatisticalController::class, 'commentSum'])->name('statistical.commentSum');
 
-    Route::get('binh-luan/phu-kien', [StatisticalController::class, 'commentAccess'])->name('statistical.cmtAccess');
+    Route::get('binh-luan/{slug}', [StatisticalController::class, 'commentPet'])->name('statistical.cmtPet');
 
-    Route::get('don-hang/thu-cung', [StatisticalController::class, 'orderPet'])->name('statistical.orderPet');
+    Route::get('don-hang/tong', [StatisticalController::class, 'orderSum'])->name('statistical.orderSum');
 
-    Route::get('don-hang/phu-kien', [StatisticalController::class, 'orderAccess'])->name('statistical.orderAccess');
+    Route::get('don-hang/huy', [StatisticalController::class, 'orderCancel'])->name('statistical.orderCancel');
+
+    Route::get('don-hang/so-sanh', [StatisticalController::class, 'compare'])->name('statistical.compare');
+
+    Route::get('don-hang/so-sanh/{slug}', [StatisticalController::class, 'compareCate'])->name('statistical.compareCate');
 
     Route::get('thoi-gian', [StatisticalController::class, 'time'])->name('statistical.time');
 
@@ -455,7 +459,7 @@ Route::prefix('thong-ke')->group(function () {
 
     Route::get('dataDetail/{id}', [StatisticalController::class, 'getDetail'])->name('statistical.getDetail');
 
-    Route::get('bieu-do/{id}', [StatisticalController::class, 'chart'])->name('statistical.chart');
+    Route::get('doanh-thu/tong', [StatisticalController::class, 'revenueSum'])->name('statistical.revenueSum');
 
-    Route::get('khoa-binh-luan/{id}', [StatisticalController::class, 'block'])->name('statistical.block');
+    Route::get('doanh-thu/{slug}', [StatisticalController::class, 'revenue'])->name('statistical.revenue');
 });

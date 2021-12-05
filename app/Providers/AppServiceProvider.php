@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\CategoryType;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -40,5 +41,10 @@ class AppServiceProvider extends ServiceProvider
          */
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
+
+        View::composer(['layouts.admin.aside'], function ($view) {
+            $categoryType = CategoryType::get();
+            $view->with('cateType', $categoryType);
+        });
     }
 }

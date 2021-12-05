@@ -100,3 +100,14 @@ div.dt-button-collection a.dt-button {
     height: 42px;
     width: 75px;
 }
+
+.warpper {
+    height: 700px;
+}
+
+#emptyChart {
+    position: relative;
+    top: 35%;
+    left: 42%;
+    width: 50%;
+}
