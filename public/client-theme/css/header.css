@@ -189,7 +189,21 @@
 .header-wrapper .header-bottom-bar form {
     width: 600px;
     /* border: 0.1rem solid var(--blue); */
+    display: flex;
+}
+
+.header-wrapper .header-bottom-bar form .search_box select {
+    padding: 1rem;
+    font-size: 1.4rem;
+    margin-right: 1rem;
+    border: 0.1rem solid var(--text-color);
+    border-radius: 1rem;
+    cursor: pointer;
+}
+
+.header-wrapper .header-bottom-bar form .search_box.input {
     position: relative;
+    width: 100%;
 }
 
 .header-wrapper .header-bottom-bar form input {
@@ -198,7 +212,7 @@
     font-size: 1.4rem;
     width: 100%;
     border: 0.1rem solid var(--text-color);
-    border-radius: 2rem;
+    border-radius: 1rem;
 }
 
 .header-wrapper .header-bottom-bar form button {
@@ -210,7 +224,7 @@
     background-color: var(--main-color);
     padding: 0.5rem 1rem 0.6rem;
     /* border-radius: 0 0.5rem 0.5rem 0; */
-    border-radius: 50%;
+    border-radius: 1rem;
     cursor: pointer;
 }
 
