@@ -184,6 +184,9 @@
     .sliders .slider-container .slide .content h3 {
         font-size: 2.2rem;
     }
+    .products .product-container .product-item .product-thumbnail {
+        min-height: 250px;
+    }
 }
 
 @media(max-width: 680px) {
@@ -238,6 +241,9 @@
     }
     .sliders .slider-container {
         height: 48rem;
+    }
+    .products .product-container .product-item .product-thumbnail {
+        min-height: 154px;
     }
 }
 
