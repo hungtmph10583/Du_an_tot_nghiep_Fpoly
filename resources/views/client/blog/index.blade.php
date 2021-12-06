@@ -36,18 +36,10 @@
                         </li>
                         <li class="middle">
                             <i class="far fa-calendar-alt"></i>
-                            <span>
-                                {{$value->created_at->format('d/m/Y')}}
-                            </span>
-                        </li>
-                        <li>
-                            <i class="far fa-comments"></i>
-                            <span class="comment">1</span>
-                            <span>Bình luận</span>
+                            <span class="author">{{$value->created_at->diffForHumans()}}</span>
                         </li>
                     </ul>
                 </div>
-                <!-- <a href="{{route('client.blog.detail', ['id' => $value->id])}}" class="btn">Chi tiết</a> -->
             </div>
         </div>
         @endforeach
