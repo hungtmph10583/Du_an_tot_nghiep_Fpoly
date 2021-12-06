@@ -240,9 +240,9 @@ class StatisticalController extends Controller
         $labels = [];
 
         if ($categoryType->id == 1) {
-            $petName = Product::select('products.name as name', 'products.id as id')
+            $petName = Product::select('products.name as name', 'products.id as id', 'category_types.id as idType')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('category_types', 'category_types.id', '=', 'categories.category_type_id')
+                ->join('category_types', 'category_types.id', '=', 'categories.category_type_id', 'category_types.id as idType')
                 ->where('category_type_id', $categoryType->id)->get();
         } else {
             $petName = Accessory::select('accessories.name as name', 'accessories.id as id')
@@ -254,7 +254,7 @@ class StatisticalController extends Controller
         if ($request->time) {
             foreach ($petName as $name) {
                 $petPro = OrderDetail::select(DB::raw('COUNT(*) as count'))
-                    ->where('product_type', $categoryType->id)
+                    ->where('product_type', $name->idType)
                     ->where('created_at', 'like', '%' . $request->time . '%')
                     ->where('product_id', $name->id)
                     ->pluck('count');
@@ -270,7 +270,7 @@ class StatisticalController extends Controller
 
         foreach ($petName as $name) {
             $petPro = OrderDetail::select(DB::raw('COUNT(*) as count'))
-                ->where('product_type', $categoryType->id)
+                ->where('product_type', $name->idType)
                 ->where('product_id', $name->id)
                 ->pluck('count');
             foreach ($petPro as $count) {
@@ -350,32 +350,62 @@ class StatisticalController extends Controller
 
     public function revenue($slug, Request $request)
     {
-
         $categoryType = CategoryType::where('slug', $slug)->first();
         $data = [];
         $labels = [];
 
+        $d = [];
+        $count = OrderDetail::select(DB::raw('count(order_details.order_id) as count,order_id'))
+            ->join('orders', 'orders.id', '=', 'order_details.order_id')
+            ->where('orders.payment_status', 2)
+            ->where(function ($query) {
+                $query->where('orders.delivery_status', 2)
+                    ->orWhere('orders.delivery_status', 3);
+            })
+            ->groupBy('order_id')
+            ->get();
+        foreach ($count as $r) {
+            if ($r->count > 1) {
+                array_push($d, array($r->order_id, $r->count));
+            }
+        }
+
         if ($categoryType->id == 1) {
-            $petName = Product::select('products.name as name', 'products.id as id')
+            $petName = Product::select('products.name as name', 'products.id as id', 'category_types.id as idType')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
                 ->join('category_types', 'category_types.id', '=', 'categories.category_type_id')
                 ->where('category_type_id', $categoryType->id)->get();
         } else {
-            $petName = Accessory::select('accessories.name as name', 'accessories.id as id')
+            $petName = Accessory::select('accessories.name as name', 'accessories.id as id', 'category_types.id as idType')
                 ->join('categories', 'categories.id', '=', 'accessories.category_id')
                 ->join('category_types', 'category_types.id', '=', 'categories.category_type_id')
                 ->where('category_type_id', $categoryType->id)->get();
         }
-
         if ($request->time) {
             foreach ($petName as $name) {
-                $petPro = Order::select(DB::raw('COUNT(grand_total) as count'))
-                    ->where('product_type', $categoryType->id)
-                    ->where('created_at', 'like', '%' . $request->time . '%')
-                    ->where('product_id', $name->id)
-                    ->pluck('count');
-                foreach ($petPro as $count) {
-                    array_push($data, $count);
+                $petSum = OrderDetail::select(DB::raw('sum(price) as sum,sum(tax) as sumTax,price', 'order_id'))
+                    ->join('orders', 'orders.id', '=', 'order_details.order_id')
+                    ->where('orders.payment_status', 2)
+                    ->where(function ($query) {
+                        $query->where('orders.delivery_status', 2)
+                            ->orWhere('orders.delivery_status', 3);
+                    })
+                    ->where('order_details.product_type', $name->idType)
+                    ->where('order_details.product_id', $name->id)
+                    ->where('order_details.created_at', 'like', '%' . $request->time . '%')
+                    ->get();
+                foreach ($petSum as $sum) {
+
+                    foreach ($d as $index => $a) {
+                        if ($a[$index] == $sum->order_id) {
+                            if ($a[$index] > 1) {
+                                $sum->sum = ($sum->price + (($sum->price * 10) / 100));
+                            }
+                        } else {
+                            $sum->sum = ($sum->sum + $sum->sumTax);
+                        }
+                    }
+                    array_push($data, $sum->sum);
                 }
 
                 array_push($labels, $name->name);
@@ -385,22 +415,33 @@ class StatisticalController extends Controller
         }
 
         foreach ($petName as $name) {
-            $petPro = Order::select(DB::raw('sum(grand_total) as sum'))
-                ->join('order_details', 'order_details.order_id', '=', 'orders.id')
-                ->where('order_details.product_type', $categoryType->id)
-                ->where('product_id', $name->id)
-                ->pluck('sum');
-            foreach ($petPro as $index => $sum) {
-                if ($sum[$index] == null) {
-                    $sum[$index] = 0;
+
+            $petSum = OrderDetail::select(DB::raw('sum(price) as sum,sum(tax) as sumTax,price,order_id'))
+                ->join('orders', 'orders.id', '=', 'order_details.order_id')
+                ->where('orders.payment_status', 2)
+                ->where(function ($query) {
+                    $query->where('orders.delivery_status', 2)
+                        ->orWhere('orders.delivery_status', 3);
+                })
+                ->where('order_details.product_type', $name->idType)
+                ->where('order_details.product_id', $name->id)
+                ->get();
+
+            foreach ($petSum as $sum) {
+                foreach ($d as $index => $a) {
+                    if ($a[$index] == $sum->order_id) {
+                        if ($a[$index] > 1) {
+                            $sum->sum = ($sum->price + (($sum->price * 10) / 100));
+                        }
+                    } else {
+                        $sum->sum = ($sum->sum + $sum->sumTax);
+                    }
                 }
-                var_dump($sum);
-                array_push($data, $sum);
+                array_push($data, $sum->sum);
             }
 
             array_push($labels, $name->name);
         }
-        dd($data, $labels);
         return view('admin.statistical.revenue', compact('data', 'labels', 'slug'));
     }
 }

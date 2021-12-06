@@ -53,8 +53,8 @@ $(document).ready(function() {
 
     $('#emptyChart').hide()
 
-    var datas = <?= json_encode($data) ?>;
-    var count = <?= json_encode($count) ?>;
+    var datas = <?= json_encode($labels) ?>;
+    var count = <?= json_encode($data) ?>;
 
     if (count == '') {
         $('#emptyChart').show(1500)
@@ -132,6 +132,7 @@ $(document).ready(function() {
                 } else {
                     $('#emptyChart').hide(300)
                 }
+                console.log(data.data)
                 myChart.data.datasets[0].data = data.data
                 myChart.update();
 
