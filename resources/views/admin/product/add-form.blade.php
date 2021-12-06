@@ -192,14 +192,27 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group">
+                                <label for="">Ngày kết thúc</label>
+                                <input type="date" class="form-control" name="discount_end_date">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="form-group">
                                 <label for="">Chi tiết sản phẩm:</label>
                                 <textarea name="description" class=form-control rows="10"></textarea>
                             </div>
                         </div>
-                    </div>
-                    <div class="text-right">
-                        <button type="submit" class="btn btn-info">Lưu</button>
-                        <a href="{{route('product.index')}}" class="btn btn-danger">Hủy</a>
+                        <div class="text-right">
+                            <button type="submit" class="btn btn-info ml-2">Lưu</button>
+                            <a href="{{route('product.index')}}" class="btn btn-danger">Hủy</a>
+                        </div>
                     </div>
                 </div>
             </div>

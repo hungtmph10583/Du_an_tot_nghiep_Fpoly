@@ -1,12 +1,11 @@
 @extends('layouts.admin.main')
 @section('content')
-
 <div class="content-header">
     <div class="container-fluid">
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Danh sách danh mục</li>
+                    <li class="breadcrumb-item card-title">Danh sách đơn hàng</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -20,7 +19,6 @@
         <div class="card">
             <div class="card-body">
                 <div class="alert alert-success" role="alert" style="display: none;">
-
                 </div>
                 @if(session('BadState'))
                 <div class="alert alert-danger" role="alert">
@@ -41,7 +39,6 @@
                                     <th><span class="float-right mr-4">Lựa chọn</span></th>
                                 </thead>
                                 <tbody>
-
                                 </tbody>
                             </table>
                         </div>

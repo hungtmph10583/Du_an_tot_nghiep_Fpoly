@@ -82,4 +82,9 @@ class Product extends Model
     {
         return $this->hasMany(Cart::class, 'product_id')->withTrashed();
     }
+
+    public function orderDetail()
+    {
+        return $this->hasOne(OrderDetail::class, 'product_id');
+    }
 }

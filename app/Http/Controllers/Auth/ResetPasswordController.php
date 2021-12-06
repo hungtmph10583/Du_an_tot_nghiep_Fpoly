@@ -2,51 +2,54 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use app\Models\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\PasswordReset;
 use App\Notifications\ResetPasswordRequest;
+use DB;
+use Illuminate\Support\Facades\Hash;
 
 class ResetPasswordController extends Controller
 {
-    public function forgotPassword(Request $request){
-        return view('auth.forgot-password');
-    }
-    public function sendMail(Request $request)
-    {
-        $user = User::where('email', $request->email)->firstOrFail();
-        $passwordReset = PasswordReset::updateOrCreate([
-            'email' => $user->email,
-        ], [
-            'token' => Str::random(60),
-        ]);
-        if ($passwordReset) {
-            $user->notify(new ResetPasswordRequest($passwordReset->token));
+    public function getPassword($token) {
+        $model = PasswordReset::where('token', $token)->get();
+        if (!$model->isEmpty()) {
+            return view('auth.password.reset', ['token' => $token]);
+        } else {
+            return redirect('/forgot-password')->with('message', 'Đường dẫn cập nhật mật khẩu này đã hết hạn. Vui lòng gửi lại Email yêu cầu!');
         }
-  
-        return response()->json([
-        'message' => 'We have e-mailed your password reset link!'
-        ]);
     }
+ 
+    public function updatePassword(Request $request) {
+    $resetP = PasswordReset::where('token', $request->token)->first();
+    // dd($resetP->email);
+    $request->validate([
+        // 'email' => 'required|email|exists:users',
+        'password' => 'required|string|min:6',
+        'password_confirmation' => 'required|same:password',
+    ],
+    [
+        // 'email.required' => "Hãy nhập vào địa chỉ Email!",
+        // 'email.email' => "Email không đúng định dạng!",
+        // 'email.exists' => "Không tìm thấy tài khoản!",
+        'password.required' => "Hãy nhập vào mật khẩu!",
+        'password.string' => "ss string",
+        'password.min' => "Mật khẩu không được dưới 6 ký tự",
+        'password_confirmation.required' => "Hãy nhập vào xác nhận mật khẩu!",
+        'password_confirmation.same' => "Mật khẩu xác nhận không giống mật khẩu!"
+    ]);
 
-    public function reset(Request $request, $token)
-    {
-        $passwordReset = PasswordReset::where('token', $token)->firstOrFail();
-        if (Carbon::parse($passwordReset->updated_at)->addMinutes(720)->isPast()) {
-            $passwordReset->delete();
+        $updatePassword = DB::table('password_resets')->where(['email' => $resetP->email, 'token' => $request->token])->first();
 
-            return response()->json([
-                'message' => 'This password reset token is invalid.',
-            ], 422);
+        if(!$updatePassword){
+            return back()->withInput()->with('error', 'Vui lòng nhập vào tài khoản của bạn!');
         }
-        $user = User::where('email', $passwordReset->email)->firstOrFail();
-        $updatePasswordUser = $user->update($request->only('password'));
-        $passwordReset->delete();
+        $user = User::where('email', $resetP->email)->update(['password' => Hash::make($request->password)]);
 
-        return response()->json([
-            'success' => $updatePasswordUser,
-        ]);
+        DB::table('password_resets')->where(['email'=> $resetP->email])->delete();
+        return redirect('/login')->with('success', 'Mật khẩu của bạn đã được thay đổi!');
     }
 }

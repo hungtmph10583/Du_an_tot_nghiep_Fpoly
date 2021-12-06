@@ -4,14 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
 
 class Role extends Model
 {
     use HasFactory;
     protected $table = 'roles';
+    protected $fillable = [
+        'name',
+        'guard_name'
+    ];
 
     public function model_has_role(){
         return $this->hasMany(ModelHasRole::class, 'role_id');
+    }
+
+    public function role_has_permission(){
+        return $this->hasMany(RoleHasPermission::class, 'role_id');
     }
 
     /**
@@ -21,7 +30,9 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->belongsToMany('App\User');
+        // return $this->hasManyThrough(ModelHasRole::class,'model_id');
+        return $this->hasManyThrough(User::class);
+        // return $this->belongsToMany(User::class);
     }
 
     public function permissions()

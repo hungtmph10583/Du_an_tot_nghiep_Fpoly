@@ -4,35 +4,41 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
 use App\Models\Role;
-use App\Models\Address;
 use App\Models\City;
+use App\Models\Order;
+use App\Models\Product;
+use App\Models\OrderDetail;
+use App\Models\Review;
 use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use App\Models\GeneralSetting;
 
 class CustomerController extends Controller
 {
 
     public function accountInfo (){
         $model = User::find(Auth::user()->id);
-        $model->load('address');
-        return view('client.customer.account-info', compact('model'));
+        $order = Order::where('user_id', Auth::user()->id)->get();
+        $order->load('orderDetails');
+        
+        $orderDetail = OrderDetail::all();
+        $generalSetting = GeneralSetting::first();
+        return view('client.customer.account-info', compact('model', 'order', 'orderDetail', 'generalSetting'));
     }
 
-    public function updateinfo(){
-        $model = User::find(Auth::user()->id);
+    // public function updateinfo(){
+    //     $model = User::find(Auth::user()->id);
+    //     $generalSetting = GeneralSetting::first();
 
-        $address = Address::all();
-        // dd($address);
-        $city = City::all();
-        return view('client.customer.updateinfo', [
-            'model' => $model,
-            'address' => $address,
-            'city' => $city
-        ]);
-    }
+    //     return view('client.customer.updateinfo', [
+    //         'model' => $model,
+    //         'generalSetting' => $generalSetting
+    //     ]);
+    // }
 
     public function saveUpdateinfo(Request $request){
         $user = Auth::user()->id;
@@ -60,44 +66,81 @@ class CustomerController extends Controller
             $model->avatar = $request->file('uploadfile')->storeAs('uploads/users', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
         $model->save();
-
-        if($request->has('address')){
-            $check = Address::where('user_id', $user)->get();
-            if (!Address::where('user_id', $user)) {
-                $city = City::find($request->city);
-                $newaddress = new Address();
-                $newaddress->user_id = $user;
-                $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-                $newaddress->city_id = $request->city;
-                $newaddress->save();
-            }else{
-                $city = City::find($request->city);
-                $newaddress = Address::fint(Auth::user()->address->id);
-                $newaddress->user_id = $user;
-                $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-                $newaddress->city_id = $request->city;
-                $newaddress->save();
-            }
-            // $city = City::find($request->city);
-            // $newaddress = new Address();
-            // $newaddress->user_id = $user;
-            // $newaddress->address = $request->address.", ".$request->ward.", ".$request->district.", ".$city->name;
-            // $newaddress->city_id = $request->city;
-            // $newaddress->save();
-        }
-        return redirect(route('client.customer.info'));
+        
+        return redirect()->back()->with('success', "Cập nhật tài khoản thành công!");
     }
 
-    public function proFile($id){
-        $user = User::find($id);
-        $user->load('model_has_role');
+    public function orderHistory(){
+        $user_id = Auth::user()->id;
+        $order = Order::where('user_id', $user_id)->orderBy('created_at', 'DESC')->get();
 
-        $mdh_role = ModelHasRole::all();
-        $role = Role::all();
-        return view('admin.user.pro-file', [
-            'user' => $user,
-            'mdh_role' => $mdh_role,
-            'role' => $role
-        ]);
+        $generalSetting = GeneralSetting::first();
+        $order->load('orderDetails');
+
+        $orderDetail = OrderDetail::all();
+
+        return view('client.customer.order-history', compact(
+            'order','orderDetail','generalSetting'
+        ));
+    }
+
+    public function order_history_detail($code){
+        $order = Order::where('code', $code)->first();
+        $generalSetting = GeneralSetting::first();
+        $orderDetail = OrderDetail::where('order_id', $order->id)->get();
+
+        return view('client.customer.order_history_detail', compact(
+            'order','orderDetail','generalSetting'
+        ));
+    }
+
+    public function cancel_order($id){
+        $user_email = Auth::user()->email;
+        $order = Order::find($id);
+        if(!$order || ($order->delivery_status != 1)){
+            return redirect()->back();
+        }
+
+        if ($order->email == $user_email) {
+            $order->delivery_status = '4';
+            $order->cancel_order = $user_email;
+        } else {
+            dd('error');
+        }
+        $order->save();
+
+        $orderDetail = OrderDetail::where('order_id', $order->id)->get();
+        // dd($orderDetail);
+        foreach ($orderDetail as $key => $value) {
+            $save_or_detail = OrderDetail::find($value->id);
+            $save_or_detail->delivery_status = "đã hủy đơn hàng";
+            $save_or_detail->save();
+        }
+
+        return Redirect::to("tai-khoan/chi-tiet-don-hang" . "/" . $order->code)->with('success', "Bạn đã hủy đơn hàng này!");
+    }
+
+    public function review(){
+        $user_id = Auth::user()->id;
+        $review = Review::where('user_id', $user_id)->get();
+        $review->load('product');
+
+        $product = Product::all();
+        $generalSetting = GeneralSetting::first();
+        // $rating = Review::where('product_id', $id)->avg('rating');
+        // $rating = (int)round($rating);
+        return view('client.customer.review', compact(
+            'review','product','generalSetting'
+        ));
+    }
+
+    public function deleteReview($id){
+        $review = Review::find($id);
+        $review->delete();
+        return redirect()->back();
+    }
+
+    public function favoriteProduct(){
+        return view('client.customer.favorite-product');
     }
 }

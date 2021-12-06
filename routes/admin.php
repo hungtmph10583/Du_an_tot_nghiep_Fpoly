@@ -2,10 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-
-
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\BreedController;
@@ -47,10 +46,33 @@ Route::prefix('tai-khoan')->group(function () {
     Route::post('tao-moi', [UserController::class, 'saveAdd'])->name('user.saveAdd');
     Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->name('user.edit');
     Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit'])->name('user.saveEdit');
+    Route::get('phan-quyen', [UserController::class, 'permission_form'])->name('user.permission');
+    Route::post('phan-quyen', [UserController::class, 'save_form_permission']);
     Route::get('ho-so/{id}', [UserController::class, 'proFile'])->name('user.profile');
     Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->name('user.changeP');
     Route::post('doi-mat-khau/{id}', [UserController::class, 'saveChangeP']);
     Route::get('dataUser', [UserController::class, 'getData'])->name('user.filter');
+});
+
+Route::prefix('phan-quyen')->group(function () {
+    Route::get('/', [RoleController::class, 'index'])->name('role.index');
+    Route::get('tao-moi-role', [RoleController::class, 'addForm'])->name('role.user.add');
+    Route::post('tao-moi-role', [RoleController::class, 'saveAdd'])->name('role.saveAdd');
+
+    Route::get('tao-moi-role-user', [RoleController::class, 'addRoleUser'])->name('role.user.add');
+    Route::post('tao-moi-role-user', [RoleController::class, 'saveAddRoleUser'])->name('role.user.saveAdd');
+    Route::get('sua-role-user/{id}', [RoleController::class, 'editRoleUser'])->name('role.user.edit');
+    Route::post('sua-role-user/{id}', [RoleController::class, 'saveEditRoleUser'])->name('role.user.saveEdit');
+    Route::get('xoa-role-user/{id}', [RoleController::class, 'removeRoleUser'])->name('role.user.remove');
+
+    Route::get('add-role-permission', [RoleController::class, 'addRolePermission'])->name('role.permission.add');
+    Route::post('add-role-permission', [RoleController::class, 'saveAddRolePermission']);
+    Route::get('edit-role/{id}', [RoleController::class, 'editRolePermission'])->name('role.edit');
+    Route::post('edit-role/{id}', [RoleController::class, 'saveEditRolePermission']);
+    Route::get('remove-role/{id}', [RoleController::class, 'removeRole'])->name('role.remove');
+
+    Route::get('edit-role-permission', [RoleController::class, 'editRolePermission'])->name('role.permission.edit');
+    Route::post('edit-role-permission', [RoleController::class, 'saveEditRolePermission']);
 });
 
 Route::prefix('danh-muc')->group(function () {
@@ -78,8 +100,8 @@ Route::prefix('danh-muc')->group(function () {
 Route::prefix('don-hang')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('order.index');
 
-    Route::get('cap-nhat', [OrderController::class, 'editForm'])->name('order.edit');
-    // Route::get('cap-nhat/{id}', [OrderController::class, 'editForm'])->name('order.edit');
+    // Route::get('cap-nhat', [OrderController::class, 'editForm'])->name('order.edit');
+    Route::get('cap-nhat/{id}', [OrderController::class, 'editForm'])->name('order.edit');
     Route::post('cap-nhat/{id}', [OrderController::class, 'saveEdit']);;
 
     Route::get('chi-tiet/{id}', [OrderController::class, 'detail'])->name('order.detail');
@@ -304,6 +326,10 @@ Route::prefix('thong-tin-he-thong')->group(function () {
     Route::get('/', [GeneralSettingController::class, 'index'])->name('general.index');
 
     Route::post('tao-moi', [GeneralSettingController::class, 'saveAdd'])->name('general.saveAdd');
+    Route::get('xoa/{id}', [GeneralSettingController::class, 'remove'])->name('generalSetting.remove');
+
+    Route::get('/footer', [GeneralSettingController::class, 'footer'])->name('generalSetting.footer');
+    Route::post('/footer', [GeneralSettingController::class, 'saveFooter']);
 });
 
 Route::prefix('slide')->group(function () {

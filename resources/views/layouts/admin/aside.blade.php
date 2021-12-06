@@ -1,9 +1,9 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="index3.html" class="brand-link">
-        <img src="{{ asset('admin-theme/dist/img/AdminLTELogo.png')}}" alt="AdminLTE Logo"
+    <a href="{{route('client.home')}}" class="brand-link">
+        <img src="{{ asset('client-theme/images/logo.png')}}" alt="LoliPetVN Logo"
             class="brand-image img-circle elevation-3" style="opacity: .8">
-        <span class="brand-text font-weight-light">AdminLTE 3</span>
+        <span class="brand-text font-weight-success">LoliPetVN</span>
     </a>
 
     <!-- Sidebar -->
@@ -388,7 +388,7 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
-                        @hasanyrole('admin|manage')
+                        @hasanyrole('Admin|Manage')
                         <li class="nav-item">
                             <a href="{{route('user.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -398,6 +398,37 @@
                         @endhasanyrole
                     </ul>
                 </li>
+                @hasanyrole('Admin|Manage')
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-project-diagram"></i>
+                        <p>
+                            Phân quyền
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('role.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Role User</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Role Permission</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                @endhasanyrole
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-globe-europe"></i>
@@ -471,7 +502,7 @@
                                 <p>Danh sách</p>
                             </a>
                         </li>
-                        @hasanyrole('admin|manage')
+                        @hasanyrole('Admin|Manage')
                         <li class="nav-item">
                             <a href="{{route('blog.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
@@ -533,30 +564,30 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('footerTitle.add')}}" class="nav-link">
+                            <<<<<<< HEAD <a href="{{route('footerTitle.add')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Footer title</p>
-                            </a>
-                            <ul class="nav nav-treeview">
-                                <li class="nav-item">
-                                    <a href="{{route('footerTitle.index')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Danh sách</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('footerTitle.add')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thêm footer title</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="{{route('footerTitle.backup')}}" class="nav-link">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>Thùng rác footer title</p>
-                                    </a>
-                                </li>
-                            </ul>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <li class="nav-item">
+                                        <a href="{{route('footerTitle.index')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Danh sách</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('footerTitle.add')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Thêm footer title</p>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="{{route('footerTitle.backup')}}" class="nav-link">
+                                            <i class="far fa-circle nav-icon"></i>
+                                            <p>Thùng rác footer title</p>
+                                        </a>
+                                    </li>
+                                </ul>
                         </li>
                         <li class="nav-item">
                             <a href="{{route('blog.add')}}" class="nav-link">

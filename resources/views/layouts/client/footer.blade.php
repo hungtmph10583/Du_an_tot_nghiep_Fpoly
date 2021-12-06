@@ -2,13 +2,25 @@
     <div class="footer-container">
         <div class="footer-top">
             <div class="footer-item">
-                <h3><i class="fas fa-paw"></i> <span>LOLI</span>PET</h3>
+                <h3>Liên lạc</h3>
                 <div class="info">
                     <ul>
-                        <li><i class="fas fa-map-marker-alt"></i> 199 hồ tùng mậu</li>
-                        <li><i class="fas fa-at"></i> hungtmph10582@fpt.edu.vn</li>
-                        <li><i class="fas fa-phone-alt"></i> 0336126726 </li>
-                        <li><i class="fas fa-clock"></i> mở cửa: 8:00AM - 18:00PM</li>
+                        <li>
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>Địa chỉ:</strong> 199 hồ tùng mậu</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-phone-alt"></i>
+                            <span><strong>Điện thoại:</strong> 0336126726</span>
+                        </li>
+                        <li>
+                            <i class="fas fa-at"></i>
+                            <span><strong>Email:</strong> <a href="#">hungtmph10582@fpt.edu.vn</a></span>
+                        </li>
+                        <li>
+                            <i class="fas fa-clock"></i>
+                            <span><strong>Thời gian mở cửa:</strong> 8:00AM - 18:00PM</span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -16,14 +28,14 @@
                 <h3>Hướng dẫn</h3>
                 <div class="menu-link">
                     <ul>
-                        <li><a href="#"><i class="fas fa-arrow-right"></i>hướng đẫn mua hàng</a></li>
-                        <li><a href="#"><i class="fas fa-arrow-right"></i>hướng dẫn lấy lại mật khẩu</a></li>
-                        <li><a href="#"><i class="fas fa-arrow-right"></i>cập nhập thông tin</a></li>
-                        <li><a href="#"><i class="fas fa-arrow-right"></i>hướng dẫn chung</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i>Hướng đẫn mua hàng</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i>Hướng dẫn lấy lại mật khẩu</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i>Hướng dẫn xem đơn hàng</a></li>
+                        <li><a href="#"><i class="fas fa-arrow-right"></i>Hướng dẫn chung</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-item">
+            <!-- <div class="footer-item">
                 <h3>Links</h3>
                 <div class="menu-link">
                     <ul>
@@ -33,22 +45,22 @@
                         <li><a href="#"><i class="fas fa-arrow-right"></i>liên hệ</a></li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
             <div class="footer-item">
                 <h3>Theo dõi chúng tôi</h3>
                 <div class="socials">
                     <ul>
                         <li>
-                            <a href="#" class="fab fa-facebook-f"></a>
+                            <a href="#" class="fab fa-facebook-f" id="fb"></a>
                         </li>
                         <li>
-                            <a href="#" class="fab fa-twitter"></a>
+                            <a href="#" class="fab fa-twitter" id="twit"></a>
                         </li>
                         <li>
-                            <a href="#" class="fab fa-instagram"></a>
+                            <a href="#" class="fab fa-instagram" id="insta"></a>
                         </li>
                         <li>
-                            <a href="#" class="fab fa-youtube"></a>
+                            <a href="#" class="fab fa-youtube" id="yto"></a>
                         </li>
                     </ul>
                 </div>
@@ -58,22 +70,22 @@
             <div class="footer-item-top">
                 <div class="content">
                     <p>Bạn đang gặp vấn đề về việc lựa chọn thú cưng?</p>
-                    <p>Để nhận thông tin tư vấn miễn phí về các loại thú cưng phù hợp với mình. Bạn hãy để lại cho chúng tôi thông tin liên lạc</p>
+                    <span>Để nhận thông tin tư vấn miễn phí về các loại thú cưng phù hợp với mình. Bạn hãy để lại cho chúng tôi thông tin liên lạc.</span>
                 </div>
                 <div class="thumbnail">
                     <img src="{{ asset('client-theme/images/introduce.png')}}" alt="">
                 </div>
             </div>
             <div class="footer-item">
-                <h3>đăng ký tư vấn miễn phí</h3>
+                <h3>Đăng Ký Tư Vấn Mua Hàng Miễn Phí</h3>
                 <form action="">
                     <div class="group-form">
-                        <input type="text" placeholder="Họ tên" name="name">
-                        <input type="text" placeholder="Số điện thoại" name="sdt">
+                        <input type="text" placeholder="Họ tên*" name="name">
+                        <input type="text" placeholder="Số điện thoại*" name="sdt">
                     </div>
-                    <input type="email" placeholder="Email" class="email">
-                    <textarea name="note" id="" cols="30" rows="4" placeholder="Nội dung"></textarea>
-                    <button type="submit" class="btn">Đăng ký ngay</button>
+                    <input type="email" placeholder="Email*" class="email">
+                    <textarea name="note" id="" cols="30" rows="4" placeholder="Nội dung*"></textarea>
+                    <button type="submit" class="btn-blue">Đăng ký ngay</button>
                 </form>
             </div>
         </div>

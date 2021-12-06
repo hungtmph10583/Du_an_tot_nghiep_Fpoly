@@ -16,15 +16,17 @@ class AuthController extends Controller
     }
 
     public function postLogin(Request $request){
+        $user = User::where('email', $request->email)->first();
         // thực hiện validate bằng $request
         $request->validate(
             [
-                'email' => 'required|email',
+                'email' => 'required|email|exists:users',
                 'password' => 'required'
             ],
             [
-                'email.required' => "Hãy nhập vào Email!",
+                'email.required' => "Hãy nhập vào tài khoản!",
                 'email.email' => "Email không đúng định dạng!",
+                'email.exists' => "Không tìm thấy tài khoản!",
                 'password.required' => "Hãy nhập vào mật khẩu!"
             ]
         );
@@ -37,51 +39,10 @@ class AuthController extends Controller
         }elseif(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1])) {
             return redirect(route('client.home'));
         } else {
-            return redirect()->back()->with('msg', "Email hoặc mật khẩu không chính xác!");
+            return back()->withInput()->with('msg', "Mật khẩu không chính xác. Vui lòng thử lại!");
         }
     }
 
-    public function registrationForm(){
-        return view('auth.registration');
-    }
-
-    public function saveRegistration(Request $request){
-        $users = User::all();
-        $request->validate(
-            [
-                'name' => 'required|min:3|max:32',
-                'email' => 'required|email|unique:users',
-                'password' => 'required|min:6|max:32',
-                'cfpassword' => 'required|same:password|'
-            ],
-            [
-                'name.required' => "Hãy nhập vào tên",
-                'email.required' => "Hãy nhập email",
-                'email.email' => "Không đúng định dạng email",
-                'email.unique' => "Email này đã được sử dụng",
-                'password.required' => "Hãy nhập mật khẩu",
-                'password.min' => "Mật khẩu phải hơn 6 ký tự",
-                'password.max' => "Mật khẩu phải dưới 32 ký tự",
-                'cfpassword.required' => "Hãy nhập xác nhận mật khẩu",
-                'cfpassword.same' => "Mật khẩu xác nhận không giống mật khẩu"
-            ]
-        );
-        $model = new User();
-        $model->fill($request->all());
-        $model->password = Hash::make($request->password);
-        $model->save();
-
-        //return redirect(route('login'));
-        return redirect()->back()->with("success","Tạo tài khoản thành công. Quay lại trang Sign in để đăng nhập!");
-    }
-
-    // public function forgotPassword(Request $request){
-    //     return view('auth.forgot-password');
-    // }
-
-    public function saveForgotPassword(){
-        return redirect(route('login'));
-    }
 
     public function changePassword(Request $request){
         return view('auth.change-password');

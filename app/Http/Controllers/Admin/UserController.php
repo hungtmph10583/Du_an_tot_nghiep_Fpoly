@@ -846,4 +846,14 @@ class UserController extends Controller
 
         return response()->json(['success' => 'Xóa người dùng thành công !']);
     }
+
+    public function permission_form()
+    {
+        # code...
+    }
+
+    public function save_form_permission(Request $request)
+    {
+        # code...
+    }
 }

@@ -17,7 +17,6 @@ class CreateOrdersTable extends Migration
             $table->id();
             $table->integer('user_id');
             $table->text('shipping_address');
-            $table->string('delibery_status'); // Tinh trang giao hang
             $table->string('payment_type'); // Hinh thuc thanh toan
             $table->string('payment_status'); // Trang thai thanh toan
             //$table->string('payment_details');

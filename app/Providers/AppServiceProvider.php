@@ -3,13 +3,8 @@
 namespace App\Providers;
 
 use App\Models\CategoryType;
+use Carbon\Carbon;
 use Illuminate\Support\ServiceProvider;
-
-/**
- * hungtm
- * @date: 28/09/21
- */
-
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use App\Models\User;
@@ -42,9 +37,17 @@ class AppServiceProvider extends ServiceProvider
         Schema::defaultStringLength(191);
         Paginator::useBootstrap();
 
+
         View::composer(['layouts.admin.aside'], function ($view) {
             $categoryType = CategoryType::get();
             $view->with('cateType', $categoryType);
         });
+
+        /**
+         * @name: hungtm/
+         * @date: 18/11/21
+         * @note: seting datetime Carbon 
+         */
+        Carbon::setLocale('vi');
     }
 }

@@ -172,37 +172,104 @@ function changeImage(id) {
 
 
 
+var swiper = new Swiper(".product-slider", {
+    spaceBetween: 10,
+    centeredSlides: true,
+    autoplay: {
+        delay: 7500,
+        disableOnInteraction: false,
+    },
+    loop: true,
+    breakpoints: {
+        769: {
+            slidesPerView: 2,
+            spaceBetween: 20,
+        },
+        950: {
+            slidesPerView: 3,
+            spaceBetween: 30,
+        },
+        1390: {
+            slidesPerView: 4,
+            spaceBetween: 40,
+        },
+        1660: {
+            slidesPerView: 5,
+            spaceBetween: 50,
+        },
+    },
+});
 
-function backQuantity() {
-    var max = document.getElementById('maxQuantityProduct');
-    var next = document.getElementById('nextQty');
-    var maxQty = max.value;
-    let maxquantity = --maxQty;
-    var result = document.getElementById('quantity');
-    var qty = result.value;
-    if (qty > 1) result.value--;
-    if (qty > maxquantity) {
-        next.removeAttribute('disabled');
-    }
-    return false;
+var currentLocation = window.location.pathname;
+var end = currentLocation.length;
+
+var start = currentLocation.lastIndexOf("\/");
+
+var cut_one = currentLocation.slice(0, start);
+
+var count = cut_one.lastIndexOf("\/");
+
+
+if (count == -1) {
+    var cut_two = currentLocation.slice(0, end);
+} else {
+    var cut_two = currentLocation.slice(0, count);
 }
 
-function nextQuantity() {
-    var max = document.getElementById('maxQuantityProduct');
-    var next = document.getElementById('nextQty');
-    var maxQty = max.value;
-    let maxquantity = --maxQty;
-    var result = document.getElementById('quantity');
-    var qty = result.value;
-    console.log(maxQty);
-    console.log(qty);
+var home = document.getElementById('link_home');
+var category = document.getElementById('link_category');
+var product = document.getElementById('link_product');
+var accessory = document.getElementById('link_accessory');
+var blog = document.getElementById('link_blog');
+var contact = document.getElementById('link_contact');
 
-    if (!isNaN(qty)) {
-        result.value++;
-        if (qty == maxquantity) {
-            console.log('fuck')
-            next.setAttribute('disabled', 'disabled');
-        }
-    }
-    return false;
+if (cut_two == '/trang-chu') {
+    home.classList.add('active');
+}
+if (cut_two == '/') {
+    home.classList.add('active');
+}
+
+if (cut_two == '/san-pham') {
+    product.classList.add('active');
+}
+
+if (cut_two == '/phu-kien') {
+    accessory.classList.add('active');
+}
+
+if (cut_two == '/bai-viet') {
+    blog.classList.add('active');
+}
+
+if (cut_two == '/lien-he') {
+    contact.classList.add('active');
+}
+
+var info = document.getElementById('link_info');
+var order = document.getElementById('link_order');
+var review = document.getElementById('link_review');
+
+
+if (count == -1) {
+    var nav_bar_C = currentLocation.slice(start, count);
+} else {
+    var nav_bar_C = currentLocation.slice(start, end);
+}
+
+if (cut_two == '/tai-khoan') {
+    info.classList.add('active');
+}
+
+if (nav_bar_C == '/lich-su-don-hang') {
+    order.classList.add('active');
+}
+
+if (cut_one == '/tai-khoan/chi-tiet-don-hang') {
+    info.classList.remove('active');
+    order.classList.add('active');
+}
+
+if (nav_bar_C == '/danh-gia-san-pham') {
+    review.classList.add('active');
 }

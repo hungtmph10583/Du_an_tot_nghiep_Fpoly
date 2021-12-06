@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title')</title>
     <!-- Css -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('client-theme/images/star-trophy.png')}}">
     @include('layouts.admin.style')
     @yield('pageStyle')
 </head>

@@ -72,10 +72,24 @@
                     <div class="text-right">
                         <button type="submit" class="btn btn-info">Lưu</button>
                         <a href="{{route('gender.index')}}" class="btn btn-danger">Hủy</a>
+                        <label for="">Trạng thái</label>
+                        <select name="status" class="form-control">
+                            <option value="1">Hiển thị</option>
+                            <option value="0">Không</option>
+                        </select>
                     </div>
                 </div>
             </div>
-        </form>
+            <div class="row">
+                <div class="col-6"></div>
+                <div class="col-6">
+                    <button type="submit" class="btn btn-info ml-2">Lưu</button>
+                    <a href="{{route('slide.index')}}" class="btn btn-danger">Hủy</a>
+                </div>
+            </div>
+    </div>
+    </div>
+    </form>
     </div>
     <!-- /.container-fluid -->
 </section>

@@ -33,19 +33,26 @@
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="">Trạng thái thanh toán</label>
-                                <select name="" id="" class="form-control">
-                                    <option value="">Đã thanh toán</option>
-                                    <option value="">Chưa thanh toán</option>
+                                <select name="payment_status" id="" class="form-control">
+                                    <option value="1" @if($order->payment_status == 1) selected @endif>Chưa thanh toán
+                                    </option>
+                                    <option value="2" @if($order->payment_status == 2) selected @endif>Đã thanh toán
+                                    </option>
                                 </select>
                             </div>
                         </div>
                         <div class="col-3">
                             <div class="form-group">
-                                <label for="">Trạng thái giao hàng</label>
-                                <select name="" id="" class="form-control">
-                                    <option value="">Đã giao hàng</option>
-                                    <option value="">Đang giao hàng</option>
-                                    <option value="">Chưa giao hàng</option>
+                                <label for="">Trạng thái đơn hàng</label>
+                                <select name="delivery_status" id="" class="form-control">
+                                    <option value="1" @if($order->delivery_status == 1) selected @endif>Đang chờ xử lí
+                                    </option>
+                                    <option value="2" @if($order->delivery_status == 2) selected @endif>Đang giao hàng
+                                    </option>
+                                    <option value="3" @if($order->delivery_status == 3) selected @endif>Giao hàng thành
+                                        công</option>
+                                    <option value="0" @if($order->delivery_status == 0) selected @endif>Hủy đơn hàng
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -55,23 +62,19 @@
                             <div class="form-group">
                                 <div>
                                     <b>Khách hàng: </b>
-                                    <b>Mạnh Hùng</b>
+                                    <b>{{$order->name}}</b>
                                 </div>
                                 <div>
                                     <b>Email: </b>
-                                    <span>hungtmph10583@gmail.com</span>
+                                    <span>{{$order->email}}</span>
                                 </div>
                                 <div>
                                     <b>Số điện thoại: </b>
-                                    <span>0336126726</span>
+                                    <span>{{$order->phone}}</span>
                                 </div>
                                 <div>
                                     <b>Địa chỉ giao hàng: </b>
-                                    <span>199 Hồ Tùng Mậu</span>
-                                </div>
-                                <div>
-                                    <b>Quốc gia: </b>
-                                    <span>Vietnam</span>
+                                    <span>{{$order->shipping_address}}</span>
                                 </div>
                             </div>
                         </div>
@@ -80,24 +83,40 @@
                                 <div class="row">
                                     <div class="col"></div>
                                     <div class="col">Mã đơn hàng</div>
-                                    <div class="col">105468-54231</div>
+                                    <div class="col">{{$order->code}}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
-                                    <div class="col">Trạng thái đơn hàng</div>
+                                    <div class="col">Trạng thái thanh toán</div>
                                     <div class="col">
-                                        <span class="btn btn-success btn-sm text-light">Đã thanh toán</span>
+                                        <span class="btn 
+                                            @if($order->payment_status == 1)
+                                                btn-danger
+                                            @elseif($order->payment_status == 2)
+                                                btn-success
+                                            @else
+                                                btn-danger
+                                            @endif
+                                        btn-sm text-light">
+                                            @if($order->payment_status == 1)
+                                            Chưa thanh toán
+                                            @elseif($order->payment_status == 2)
+                                            Đã thanh toán
+                                            @else
+                                            Lỗi code
+                                            @endif
+                                        </span>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
                                     <div class="col">Ngày đặt hàng</div>
-                                    <div class="col">25-10-2021 2:25 AM</div>
+                                    <div class="col">{{$order->created_at->format('d/m/Y')}}</div>
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
                                     <div class="col">Tổng cộng</div>
-                                    <div class="col">8.825.000đ</div>
+                                    <div class="col">{{number_format($order->grand_total,0,',','.')}}đ</div>
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
@@ -117,40 +136,33 @@
                                     <th scope="col">Hình thức giao hàng</th>
                                     <th scope="col">Số lượng</th>
                                     <th scope="col">Giá bán</th>
-                                    <th scope="col">Tổng tiền</th>
+                                    <th scope="col">Thành tiền</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($orderDetail as $value)
                                 <tr>
                                     <th scope="row">1</th>
-                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-dog.jpg')}}"
+                                    @if($value->product_type == 1)
+                                    <td class="text-center"><img src="{{asset( 'storage/' . $value->product->image)}}"
                                             alt="" width="70"></td>
-                                    <td>Chó đốm</td>
-                                    <td>Giao hàng tận nhà</td>
-                                    <td>1</td>
-                                    <td>2.500.000đ / sản phẩm</td>
-                                    <td>2.500.000đ</td>
-                                </tr>
-                                <tr>
-                                    <th scope="row">2</th>
-                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-cat.jpg')}}"
+                                    <td>{{$value->product->name}}</td>
+                                    @else
+                                    <td class="text-center"><img src="{{asset( 'storage/' . $value->accessory->image)}}"
                                             alt="" width="70"></td>
-                                    <td>Mèo trắng mắt xanh</td>
+                                    <td>{{$value->accessory->name}}</td>
+                                    @endif
                                     <td>Giao hàng tận nhà</td>
-                                    <td>1</td>
-                                    <td>4.500.000đ / sản phẩm</td>
-                                    <td>4.500.000đ</td>
+                                    <td>{{$value->quantity}}</td>
+                                    <td>
+                                        <?php
+                                        $tinh = $value->price / $value->quantity;
+                                        echo number_format($tinh, 0, ',', '.');
+                                        ?> / sản phẩm
+                                    </td>
+                                    <td>{{number_format($value->price,0,',','.')}}</td>
                                 </tr>
-                                <tr>
-                                    <th scope="row">1</th>
-                                    <td class="text-center"><img src="{{ asset('client-theme/images/cate-bird.jpg')}}"
-                                            alt="" width="70"></td>
-                                    <td>Vẹt 7 màu</td>
-                                    <td>Giao hàng tận nhà</td>
-                                    <td>1</td>
-                                    <td>1.800.000đ / sản phẩm</td>
-                                    <td>1.800.000đ</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
@@ -160,30 +172,39 @@
                             <div class="form-group">
                                 <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group">Tổng phụ</div>
-                                    <div class="col form-group">8.800000đ</div>
+                                    <div class="col form-group">
+                                        <?php
+                                        $total = $value->order->grand_total - $value->tax;
+                                        echo number_format($total, 0, ',', '.') . 'đ';
+                                        ?>
+                                    </div>
                                 </div>
                                 <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group">Thuế</div>
-                                    <div class="col form-group">0.000đ</div>
+                                    <div class="col form-group">{{number_format($value->tax,0,',','.')}}đ</div>
                                 </div>
                                 <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group">Giao hàng</div>
-                                    <div class="col form-group">25.000đ</div>
+                                    <div class="col form-group">Free</div>
                                 </div>
                                 <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group"><b>Tổng tiền</b></div>
-                                    <div class="col form-group"><b>8.825.000đ</b></div>
+                                    <div class="col form-group">
+                                        <b>{{number_format($value->order->grand_total,0,',','.')}}đ</b></div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-6"></div>
-                        <div class="col-6 mt-2"><br>
-                            <div class="text-right">
-                                <button type="submit" class="btn btn-info">Lưu</button>
-                                <a href="{{route('order.index')}}" class="btn btn-danger">Hủy</a>
+                        <div class="col-6 text-right"><br>
+                            <div class="form-group">
+                                <input type="checkbox" name="send_mail" id="send_mail" value="send_mail">
+                                <label class="form-check-label" for="send_mail">Gửi email cập nhật cho khách
+                                    hàng</label>
                             </div>
+                            <button type="submit" class="btn btn-info">Lưu</button>
+                            <a href="{{route('order.index')}}" class="btn btn-danger">Hủy</a>
                         </div>
                     </div>
                 </div>

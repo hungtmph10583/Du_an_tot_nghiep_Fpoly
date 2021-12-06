@@ -38,7 +38,6 @@
                         </p>
                         @endif
                         @endforeach
-
                         <ul class="list-group list-group-unbordered mb-3">
                             <li class="list-group-item">
                                 <b>Vai trò</b>
@@ -122,7 +121,6 @@
                                         </div>
                                     </div>
                                     @endhasanyrole
-
                                     @if($model->id != 1)
                                     @hasrole('admin')
                                     <div class="form-group">
