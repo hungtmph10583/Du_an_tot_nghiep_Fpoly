@@ -14,6 +14,7 @@ use App\Models\Slide;
 use App\Models\Age;
 use App\Models\ProductGallery;
 use App\Models\Review;
+use App\Models\Blog;
 use App\Models\GeneralSetting;
 
 class HomeController extends Controller
@@ -25,6 +26,7 @@ class HomeController extends Controller
         $gender = Gender::all();
         $breed = Breed::all();
         $slide = Slide::all();
+        $blog = Blog::orderBy('created_at', 'DESC')->paginate(2);
         $generalSetting = GeneralSetting::first();
         
         return view('client.home', [
@@ -34,6 +36,7 @@ class HomeController extends Controller
             'gender' => $gender,
             'breed' => $breed,
             'slide' => $slide,
+            'blog' => $blog,
             'generalSetting' => $generalSetting
         ]);
     }
