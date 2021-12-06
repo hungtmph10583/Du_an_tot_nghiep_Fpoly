@@ -27,8 +27,8 @@
                         <img src="{{ asset('client-theme/images/emptycart.gif')}}" alt="">
                     </div>
                     <div class="text-alert">
-                        <p>Bạn chưa thêm sản phẩm nào vào trong giỏ hàng</p>
-                        <p>Vui lòng thêm sản phẩm để tiếp tục mua hàng</p>
+                        <p>Giỏ hàng trống</p>
+                        <p>Vui lòng thêm sản phẩm vào để tiếp tục mua hàng</p>
                     </div>
                     <div class="redirect">
                         <a href="{{route('client.product.index')}}">
@@ -71,16 +71,12 @@
                                     @foreach($product as $pro)
                                         @if($pro->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$pro->quantity}}" min="1">
-                                        <label for="">Số lượng trong kho:</label>
-                                        <input type="text" value="{{$pro->quantity}}" disabled>
                                         @endif
                                     @endforeach
                                 @elseif($value->weight == 2)
                                     @foreach($accessory as $acs)
                                         @if($acs->id == $value->id)
                                         <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$acs->quantity}}" min="1">
-                                        <label for="">Số lượng trong kho:</label>
-                                        <input type="text" value="{{$acs->quantity}}" disabled>
                                         @endif
                                     @endforeach
                                 @else
@@ -137,7 +133,7 @@
                         @endforeach
                         <!-- (E) vòng lặp sp -->
                         <div class="item">
-                            <span class="both">Tổng thanh toán</span>
+                            <span class="both">Tạm tính</span>
                             <span class="both">
                                 {{Cart::priceTotal(0,',','.')}}đ
                             </span>
