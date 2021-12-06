@@ -17,8 +17,8 @@
                     <select name="" id="">
                         <option value="">Tìm kiếm theo danh mục</option>
                         @foreach($category as $cate)
-                            @if($cate->category_type_id == 1)
-                            <option value="{{$cate->id}}">{{$cate->name}}t</option>
+                            @if($cate->category_type_id == 2)
+                            <option value="{{$cate->id}}">{{$cate->name}}</option>
                             @endif
                         @endforeach
                     </select>
