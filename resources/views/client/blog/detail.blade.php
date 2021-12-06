@@ -18,100 +18,19 @@
             <div class="blog-extra">
                 <ul>
                     <li>
-                        <i class="far fa-calendar-alt"></i>
-                        <span>{{$blog->created_at->format('d/m/Y')}}</span>
-                    </li>
-                    <li class="middle">
-                        <i class="far fa-comments"></i>
-                        <span class="comment">1</span>
-                        <span>Bình luận</span>
-                    </li>
-                    <li>
                         <i class="far fa-user"></i>
                         <span>Tác giả: </span>
                         <strong class="author">{{$blog->user->name}}</strong>
+                    </li>
+                    <li>
+                        <i class="far fa-calendar-alt"></i>
+                        <strong class="author">{{$blog->created_at->diffForHumans()}}</strong>
                     </li>
                 </ul>
             </div>
             <div class="content">
                 {!!$blog->content!!}
             </div>
-            <div class="blog-navigation">
-                <div class="prev">
-                    <a href="#">Bài viết trước</a>
-                </div>
-                <div class="next">
-                    <a href="#">Bài viết khác</a>
-                </div>
-            </div>
-            <!-- <div class="blog-comment">
-                <div class="blog-comment-item">
-                    <h5 class="total">
-                        <i class="far fa-comments"></i>
-                        <span class="number-comment">2</span>
-                        <span>Comment</span>
-                    </h5>
-                    <ul>
-                        <li>
-                            <div class="comments-section">
-                                <div class="comment-extra">
-                                    <ul>
-                                        <li>
-                                            <i class="far fa-calendar-alt"></i>
-                                            <span>15/10/2021</span>
-                                        </li>
-                                        <li>
-                                            <i class="far fa-user"></i>
-                                            <span>Tác giả: </span>
-                                            <span class="author">Big Boss</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="comment-description">
-                                    <p>
-                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam ipsa rem repellendus doloribus incidunt sequi quibusdam placeat dolores, voluptatibus deleniti ipsam soluta sapiente voluptatem pariatur porro modi fugit officiis iste.
-                                    </p>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="comments-section">
-                                <div class="comment-extra">
-                                    <ul>
-                                        <li>
-                                            <i class="far fa-calendar-alt"></i>
-                                            <span>15/10/2021</span>
-                                        </li>
-                                        <li>
-                                            <i class="far fa-user"></i>
-                                            <span>Tác giả: </span>
-                                            <span class="author">Big Boss</span>
-                                        </li>
-                                    </ul>
-                                </div>
-                                <div class="comment-description">
-                                    <p>
-                                        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Veniam ipsa rem repellendus doloribus incidunt sequi quibusdam placeat dolores, voluptatibus deleniti ipsam soluta sapiente voluptatem pariatur porro modi fugit officiis iste.
-                                    </p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <div class="blog-comment-item">
-                    <form action="">
-                        <h5>Viết bình luận</h5>
-                        <div class="form-comment">
-                            <div class="form-comment-item">
-                                <input type="text" name="name" id="" placeholder="Name">
-                                <input type="text" name="email" id="" placeholder="Email">
-                            </div>
-                            <textarea name="comment" id="" cols="30" rows="10" placeholder="Bình luận"></textarea>
-                        </div>
-                        <button class="btn">Gửi bình luận</button>
-                    </form>
-                </div>
-            </div> -->
             <div class="customer_reviews">
                 <h2>Đánh giá từ khách hàng</h2>
                 <div class="container_customer_review">
