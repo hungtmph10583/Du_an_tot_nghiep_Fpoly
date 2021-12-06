@@ -70,7 +70,7 @@ class CartController extends Controller
             $data['options']['image'] = $product_info->image;
             Cart::add($data);
             Cart::setGlobalTax(10);
-            return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng (gio hang rong)");
+            return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng.");
         }else{
             foreach (Cart::content() as $row) {
                 if ($row->id == $id__po && $row->weight == $category_type_id) {
@@ -87,7 +87,7 @@ class CartController extends Controller
                 if ($_qty < $product_info->quantity) { // Số lượng sp từ giở hàng < Số lượng từ DB
                     $tinh = $quantity + $_qty;
                     if ($tinh > $product_info->quantity) {
-                        return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và giỏ hàng của bạn đang có " . $_qty . " sản phẩm này (alert danger one).");
+                        return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và giỏ hàng của bạn đang có " . $_qty . " sản phẩm này!");
                     }else{
                         $data['id'] = $product_id;
                         $data['qty'] = $quantity;
@@ -104,7 +104,7 @@ class CartController extends Controller
                         return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 2");
                     }
                 }else{
-                    return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và bạn đang có " . $_qty . " sản phẩm này trong giỏ hàng (alert danger two).");
+                    return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và bạn đang có " . $_qty . " sản phẩm này trong giỏ hàng!");
                 }
             }else{
                 $data['id'] = $product_id;
@@ -119,35 +119,35 @@ class CartController extends Controller
                     $data['options']['image'] = $product_info->image;
                     Cart::add($data);
                     Cart::setGlobalTax(10);
-                    return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 3");
+                    return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng.");
             }
         }
         
     }
 
-    public function buyNow(Request $request){//Giỏ hàng
-        if ($request->quantity <= 0) {
-            return redirect()->back();
-        }
+    // public function buyNow(Request $request){//Giỏ hàng
+    //     if ($request->quantity <= 0) {
+    //         return redirect()->back();
+    //     }
 
-        $product_id = $request->product_id_hidden;
-        $quantity = $request->quantity;
-        $product_info = Product::where('id', $product_id)->first();
+    //     $product_id = $request->product_id_hidden;
+    //     $quantity = $request->quantity;
+    //     $product_info = Product::where('id', $product_id)->first();
 
-        $data['id'] = $product_id;
-        $data['qty'] = $quantity;
-        $data['name'] = $product_info->name;
-        if ($request->discount_price > 0) {
-            $data['price'] = $product_info->price - $request->discount_price;
-        }else{
-            $data['price'] = $product_info->price;
-        }
-        $data['weight'] = $request->product_type;
-        $data['options']['image'] = $product_info->image;
-        Cart::add($data);
-        Cart::setGlobalTax(10);
-        return redirect('gio-hang/checkout');
-    }
+    //     $data['id'] = $product_id;
+    //     $data['qty'] = $quantity;
+    //     $data['name'] = $product_info->name;
+    //     if ($request->discount_price > 0) {
+    //         $data['price'] = $product_info->price - $request->discount_price;
+    //     }else{
+    //         $data['price'] = $product_info->price;
+    //     }
+    //     $data['weight'] = $request->product_type;
+    //     $data['options']['image'] = $product_info->image;
+    //     Cart::add($data);
+    //     Cart::setGlobalTax(10);
+    //     return redirect('gio-hang/checkout');
+    // }
 
     // public function showCart(Request $request){
     //     $category = Category::all();
@@ -252,6 +252,6 @@ class CartController extends Controller
             Cart::update($rowId,0);
         }
         // return view('client.cart.index');
-        return Redirect::to("gio-hang/");
+        return Redirect::to("gio-hang/")->with('success', "Đặt hàng thành công!");
     }
 }
