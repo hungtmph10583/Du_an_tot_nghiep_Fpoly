@@ -113,11 +113,22 @@
     </div>
     <div class="header-bottom-bar">
         <div class="container">
-            <form action="" class="search-form">
-                <input type="search" class="form-input" id="search-box" placeholder="Tìm kiếm...">
-                <button for="search-box">
-                    <i class="fas fa-search"></i>
-                </button>
+            <form action="#" method="GET" class="search-form">
+            @csrf
+                <div class="search_box select">
+                    <select name="search_type" id="">
+                        <option value="1">Mã đơn hàng</option>
+                        <option value="2">Thú cưng</option>
+                        <option value="3">Phụ kiện</option>
+                        <option value="4">Bài viết</option>
+                    </select>
+                </div>
+                <div class="search_box input">
+                    <input type="search" name="search" class="form-input" id="search-box" placeholder="Tìm kiếm...">
+                    <button for="search-box">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
