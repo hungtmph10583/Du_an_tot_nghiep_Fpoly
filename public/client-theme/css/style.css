@@ -94,7 +94,7 @@ section.product_slide {
 }
 
 .bread-crumb a {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
     /* border-right: 0.1rem solid #ccc; */
     color: var(--text-color);
 }
@@ -265,6 +265,69 @@ h1.heading-center {
     background-color: var(--main-color-hover);
 }
 
+
+/* ---------------------------- paging blue (s--------------------- */
+
+.paging .paging-container_blue {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.paging .paging-container_blue li {
+    list-style: none;
+    margin: 0 0.1rem;
+    cursor: pointer;
+}
+
+.paging .paging-container_blue li span {
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+    border-radius: 0.2rem;
+    color: #337ab7;
+    text-decoration: none;
+    background-color: #fff;
+    border: 0.1rem solid #ddd;
+}
+
+.paging .paging-container_blue li a {
+    padding: 1rem 1.5rem;
+    font-size: 1.4rem;
+    border-radius: 0.2rem;
+    border: 0.1rem solid #ddd;
+    color: #337ab7;
+}
+
+.paging .paging-container_blue li:nth-child(2) a,
+.paging .paging-container_blue li:nth-child(2) span {
+    padding: 1rem 1.7rem;
+}
+
+.paging .paging-container_blue li.active span {
+    background-color: #337ab7;
+    color: var(--white);
+}
+
+.paging .paging-container_blue li a:hover {
+    background-color: #eee;
+}
+
+.paging .paging-container_blue button {
+    padding: 1rem;
+    font-size: 1.4rem;
+    cursor: pointer;
+    border: 0.1rem solid #ddd;
+    background-color: #337ab7;
+    color: #fff;
+}
+
+.paging .paging-container_blue button:hover {
+    background-color: #eee;
+}
+
+
+/* ---------------------------- paging blue (s--------------------- */
+
 .details {
     /* position: relative; */
     display: flex;
@@ -332,7 +395,7 @@ h1.heading-center {
     width: 100%;
     font-size: 1.7rem;
     padding: 1.7rem 3rem 1.5rem;
-    border: 0.2rem solid var(--light-color);
+    border: 0.1rem solid var(--light-color);
     border-radius: 0.5rem;
     line-height: normal;
     outline: none;
@@ -340,7 +403,7 @@ h1.heading-center {
 }
 
 .search .container .search-form .form-field input:focus {
-    border: 0.2rem solid var(--main-color-hover);
+    border: 0.1rem solid var(--main-color-hover);
 }
 
 .search .container .search-form .form-field {
