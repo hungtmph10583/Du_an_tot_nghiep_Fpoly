@@ -68,12 +68,14 @@
                         </a>
                     </div>
                     <div class="product-extra">
-                        <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('saveCart')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                             <input type="hidden" name="product_id_hidden" value="{{$p->id}}">
+                            <input type="hidden" name="product_type" value="1">
                             <input type="hidden" name="discount_price" value="{{$p->discount}}">
+                            <input type="hidden" name="category_id" value="{{$p->category_id}}">
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn-buyNow">Mua hàng</button>
+                            <button type="submit" class="btn-buyNow">Thêm vào giỏ hàng</button>
                         </form>
                     </div>
                 </div>
@@ -114,12 +116,14 @@
                         </a>
                     </div>
                     <div class="product-extra">
-                        <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
+                        <form action="{{route('saveCart')}}" method="POST" enctype="multipart/form-data">
                         @csrf
                             <input type="hidden" name="product_id_hidden" value="{{$ac->id}}">
+                            <input type="hidden" name="product_type" value="2">
                             <input type="hidden" name="discount_price" value="{{$ac->discount}}">
+                            <input type="hidden" name="category_id" value="{{$ac->category_id}}">
                             <input type="hidden" name="quantity" value="1">
-                            <button type="submit" class="btn-buyNow">Mua hàng</button>
+                            <button type="submit" class="btn-buyNow">Thêm vào giỏ hàng</button>
                         </form>
                     </div>
                 </div>
@@ -176,68 +180,44 @@
     <section class="blogs">
         <h1 class="heading-center">Bài viết mới nhất</h1>
         <div class="blog-container">
+            @foreach($blog as $blog)
             <div class="blog-item">
                 <div class="item-top">
                     <div class="thumbnail">
-                        <a href="#"><img src="{{ asset('client-theme/images/blog12.jpg')}}" alt=""></a>
-                    </div>
-                </div>
-                <div class="item-bottom">
-                    <h1 class="title">the lone bird in snow</h1>
-                    <div class="item-extra">
-                        <ul>
-                            <li>
-                                <i class="fas fa-user"></i>
-                                <span>Tác giả: </span>
-                                <span class="author">Big Boss</span>
-                            </li>
-                            <li class="middle">
-                                <i class="far fa-calendar-alt"></i>
-                                <span>15/10/2021</span>
-                            </li>
-                            <li>
-                                <i class="far fa-comments"></i>
-                                <span class="comment">1</span>
-                                <span>Bình luận</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="blog-item">
-                <div class="item-top">
-                    <div class="thumbnail">
-                        <a href="#"><img src="{{ asset('client-theme/images/blog12.jpg')}}" alt=""></a>
+                        <a href="{{route('client.blog.detail', ['id' => $blog->slug])}}">
+                            <img src="{{asset( 'storage/' . $blog->image)}}" alt="Bài viết này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                        </a>
                     </div>
                     <div class="link_blog">
-                        <a href="#" class="btn-gray">Chi tiết</a>
+                        <a href="{{route('client.blog.detail', ['id' => $blog->slug])}}" class="btn-gray">Chi tiết</a>
                     </div>
                 </div>
                 <div class="item-bottom">
-                    <h1 class="title">the lone bird in snow</h1>
+                    <h1 class="title">{{$blog->title}}</h1>
                     <div class="item-extra">
                         <ul>
                             <li>
                                 <i class="fas fa-user"></i>
                                 <span>Tác giả: </span>
-                                <span class="author">Big Boss</span>
+                                <span class="author">{{$blog->user->name}}</span>
                             </li>
                             <li class="middle">
                                 <i class="far fa-calendar-alt"></i>
-                                <span>15/10/2021</span>
+                                <span class="author">{{$blog->created_at->diffForHumans()}}</span>
                             </li>
-                            <li>
+                            <!-- <li>
                                 <i class="far fa-comments"></i>
                                 <span class="comment">1</span>
                                 <span>Bình luận</span>
-                            </li>
+                            </li> -->
                         </ul>
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
         <div class="details">
-            <button><a href="{{route('client.product.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
+            <button><a href="{{route('client.blog.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
         </div>
     </section>
 	<!-- content -->
