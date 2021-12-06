@@ -21,47 +21,53 @@
                         <label for="hidden-avatar">Đổi avatar</label>
                         <input hidden type="file" name="uploadfile" id="hidden-avatar">
                     </div>
+                    @error('uploadfile')
+                        <span class="text-danger">{{$message}}</span>
+                    @enderror
                 </div>
                 <div class="group">
                     <label for="">Họ tên <span class="text-red">*</span></label>
                     <input type="text" name="name" placeholder="Họ và tên" value="{{Auth::user()->name}}">
+                    @error('name')
+                        <span class="text-danger">{{$message}}</span>
+                    @enderror
                 </div>
                 <div class="group">
                     <label for="">Email <span class="text-red">*</span></label>
-                    <input type="text" name="email" placeholder="Emai" value="{{Auth::user()->email}}" disabled>
+                    <input type="text" name="email" placeholder="Emai" value="{{Auth::user()->email}}">
+                    @error('password')
+                        <span class="text-danger">{{$message}}</span>
+                    @enderror
                 </div>
                 <div class="group">
                     <label for="">Số điện thoại <span class="text-red">*</span></label>
                     <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
                 </div>
                 <div class="group">
-                    <label for="">Quốc gia</label>
-                    <select name="country" id="">
-                        <option value="">Việt Nam</option>
-                    </select>
-                </div>
-                <div class="group">
                     <label for="city">Tỉnh/Thành phố</label>
-                    <select name="" id="">
-                        <option value="">Hà Nội</option>
+                    <!--  -->
+                    <select name="city" id="">
+                            <option value="">Chọn thành phố</option>
+                        @foreach($city as $city)
+                            <option value="{{$city->id}}" >{{$city->name}}</option>
+                        @endforeach
                     </select>
                 </div>
                 <div class="group">
                     <label for="">Quận huyện</label>
-                    <select name="" id="">
-                        <option value="">Quận Nam Từ Liêm</option>
-                    </select>
+                    <input type="text" name="district" placeholder="Quận huyện" value="{{$address}}">
                 </div>
                 <div class="group">
                     <label for="">Phường xã</label>
-                    <select name="" id="">
-                        <option value="">Phường cầu diễn</option>
-                    </select>
+                    <input type="text" name="ward" placeholder="Phường xã" value="{{Auth::user()->address->address}}">
                 </div>
                 <div class="group">
                     <label for="">Địa chỉ <span class="text-red">*</span></label>
-                    <textarea name="" id="" cols="30" rows="10" value="{{Auth::user()->address}}"></textarea>
+                    <textarea name="address" id="" cols="30" rows="10" placeholder="Địa chỉ, Phường xã, Quận huyện"></textarea>
                 </div>
+                @error('address')
+                    <span class="text-danger">{{$message}}</span>
+                @enderror
                 <div class="group-last">
                     <a href="{{route('client.customer.info')}}">Hủy bỏ</a>
                     <button type="submit">Cập nhật</button>

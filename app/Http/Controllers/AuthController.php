@@ -75,9 +75,9 @@ class AuthController extends Controller
         return redirect()->back()->with("success","Tạo tài khoản thành công. Quay lại trang Sign in để đăng nhập!");
     }
 
-    public function forgotPassword(Request $request){
-        return view('auth.forgot-password');
-    }
+    // public function forgotPassword(Request $request){
+    //     return view('auth.forgot-password');
+    // }
 
     public function saveForgotPassword(){
         return redirect(route('login'));

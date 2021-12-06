@@ -70,7 +70,7 @@
             </div>
             <div class="group">
                 <label for="">Địa chỉ:</label>
-                <span>199 Hồ Tùng Mậu</span>
+                <span>{{Auth::user()->address->address}}</span>
             </div>
             <div class="group-last">
                 <a href="{{route('client.customer.updateinfo')}}" class="updateinfo">Cập nhật tài khoản</a>

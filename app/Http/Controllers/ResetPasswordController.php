@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Support\Str;
-use app\Models\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\PasswordReset;
 use App\Notifications\ResetPasswordRequest;
