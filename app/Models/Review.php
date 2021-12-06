@@ -13,6 +13,8 @@ class Review extends Model
         'product_id',
         'product_type',
         'user_id',
+        'name',
+        'email',
         'rating',
         'comment',
         'status'
