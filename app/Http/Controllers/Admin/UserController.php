@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Role;
 use App\Models\ModelHasRole;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Yajra\Datatables\Datatables;
 use Illuminate\Support\Facades\Hash;
@@ -17,7 +18,6 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-
         $mdh_role = ModelHasRole::all();
         $role = Role::all();
         return view('admin.user.index', [
@@ -34,7 +34,9 @@ class UserController extends Controller
             ->setRowId(function ($row) {
                 return $row->id;
             })
-            ->addIndexColumn()
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
+            })
             ->addColumn('status', function ($row) {
                 if ($row->status == 1) {
                     return '<span class="badge badge-primary">Active</span>';
@@ -64,7 +66,7 @@ class UserController extends Controller
                     });
                 }
             })
-            ->rawColumns(['status', 'action'])
+            ->rawColumns(['status', 'action', 'checkbox'])
             ->make(true);
     }
 
@@ -379,11 +381,11 @@ class UserController extends Controller
             return response()->json(['success' => 'Người dùng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
         }
         $product = $user->products();
-        $product->each(function ($pro) {
-            $pro->galleries()->restore();
-            $pro->orderDetails()->restore();
-            $pro->carts()->restore();
-            $pro->reviews()->restore();
+        $product->each(function ($related) {
+            $related->galleries()->restore();
+            $related->orderDetails()->restore();
+            $related->carts()->restore();
+            $related->reviews()->restore();
             $related->category()->restore();
         });
         $product->restore();
@@ -765,15 +767,15 @@ class UserController extends Controller
 
         $user->each(function ($user) {
             $user->products()->each(function ($pro) {
-                $pro->galleries()->delete();
-                $pro->orderDetails()->delete();
-                $pro->carts()->delete();
-                $pro->reviews()->delete();
+                $pro->galleries()->forceDelete();
+                $pro->orderDetails()->forceDelete();
+                $pro->carts()->forceDelete();
+                $pro->reviews()->forceDelete();
             });
-            $user->products()->delete();
-            $user->reviews()->delete();
-            $user->slides()->delete();
-            $user->orders()->delete();
+            $user->products()->forceDelete();
+            $user->reviews()->forceDelete();
+            $user->slides()->forceDelete();
+            $user->orders()->forceDelete();
             $user->coupons()->each(function ($couponMul) {
                 if ($couponMul->category()->count() !== 0) {
 
@@ -781,68 +783,68 @@ class UserController extends Controller
 
                         if ($product->breeds()->count() == 0) {
                             $product->products()->each(function ($related) {
-                                $related->galleries()->delete();
-                                $related->orderDetails()->delete();
-                                $related->carts()->delete();
-                                $related->reviews()->delete();
+                                $related->galleries()->forceDelete();
+                                $related->orderDetails()->forceDelete();
+                                $related->carts()->forceDelete();
+                                $related->reviews()->forceDelete();
                             });
-                            $product->products()->delete();
+                            $product->products()->forceDelete();
                         } else {
 
                             $product->breeds()->each(function ($related) {
                                 $related->products()->each(function ($related) {
-                                    $related->galleries()->delete();
-                                    $related->orderDetails()->delete();
-                                    $related->carts()->delete();
-                                    $related->reviews()->delete();
+                                    $related->galleries()->forceDelete();
+                                    $related->orderDetails()->forceDelete();
+                                    $related->carts()->forceDelete();
+                                    $related->reviews()->forceDelete();
                                 });
-                                $related->products()->delete();
+                                $related->products()->forceDelete();
                             });
-                            $product->breeds()->delete();
+                            $product->breeds()->forceDelete();
                             $product->products()->each(function ($related) {
-                                $related->galleries()->delete();
-                                $related->orderDetails()->delete();
-                                $related->carts()->delete();
-                                $related->reviews()->delete();
+                                $related->galleries()->forceDelete();
+                                $related->orderDetails()->forceDelete();
+                                $related->carts()->forceDelete();
+                                $related->reviews()->forceDelete();
                             });
-                            $product->products()->delete();
+                            $product->products()->forceDelete();
                         }
 
                         $product->accessory()->each(function ($related) {
-                            $related->galleries()->delete();
+                            $related->galleries()->forceDelete();
                         });
 
-                        $product->accessory()->delete();
+                        $product->accessory()->forceDelete();
                     });
 
-                    $couponMul->category()->delete();
+                    $couponMul->category()->forceDelete();
                 }
                 $couponMul->products()->each(function ($related) {
-                    $related->galleries()->delete();
-                    $related->orderDetails()->delete();
-                    $related->carts()->delete();
-                    $related->reviews()->delete();
+                    $related->galleries()->forceDelete();
+                    $related->orderDetails()->forceDelete();
+                    $related->carts()->forceDelete();
+                    $related->reviews()->forceDelete();
                 });
 
                 $couponMul->accessory()->each(function ($related) {
-                    $related->galleries()->delete();
+                    $related->galleries()->forceDelete();
                 });
-                $couponMul->accessory()->delete();
-                $couponMul->products()->delete();
-                $couponMul->couponUsage()->delete();
+                $couponMul->accessory()->forceDelete();
+                $couponMul->products()->forceDelete();
+                $couponMul->couponUsage()->forceDelete();
             });
-            $user->coupons()->delete();
-            $user->carts()->delete();
-            $user->breeds()->delete();
-            $user->blogs()->delete();
-            $user->announcements()->delete();
+            $user->coupons()->forceDelete();
+            $user->carts()->forceDelete();
+            $user->breeds()->forceDelete();
+            $user->blogs()->forceDelete();
+            $user->announcements()->forceDelete();
             $accessories = $user->accessories();
             $accessories->each(function ($accessory) {
-                $accessory->galleries()->delete();
+                $accessory->galleries()->forceDelete();
             });
-            $accessories->delete();
+            $accessories->forceDelete();
         });
-        $user->delete();
+        $user->forceDelete();
 
         return response()->json(['success' => 'Xóa người dùng thành công !']);
     }

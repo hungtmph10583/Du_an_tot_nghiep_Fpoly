@@ -16,7 +16,7 @@
         </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-
+@include('layouts.admin.message')
 <!-- END: Subheader -->
 <section class="content">
     <div class="container-fluid pb-1">
@@ -81,7 +81,7 @@
                     </div>
                     <div class="row">
                         <div class="col-6">
-                            @hasrole('admin')
+                            @hasrole('Admin')
                             <div class="form-group">
                                 <label for="">Trạng thái</label>
                                 <div class="form-control">
@@ -97,7 +97,7 @@
                             @endhasrole
                         </div>
                         <div class="col-6">
-                            @hasrole('admin')
+                            @hasrole('Admin')
                             <div class="form-group">
                                 <label for="">Quyền hạn</label>
                                 <select name="role_id" class="form-control" id="role">
@@ -145,12 +145,24 @@ $(".btn-info").click(function(e) {
         },
         success: function(data) {
             console.log(data)
+            $('#realize').attr('href', data.url)
+            $('#realize').text('Sản phẩm')
+            $("#myModal").modal('show');
             if (data.status == 0) {
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
-                    $('span.' + key + '_error').text(value[0]);
+                    showErr +=
+                        '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                        value[0] +
+                        '<br>';
+                    $('span.' + key.replace('.0', '') + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
             } else {
-                window.location.href = data.url;
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
+                $(document).find('input.form-control').val(null);
             }
         },
     });

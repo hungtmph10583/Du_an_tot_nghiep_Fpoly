@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Review;
+use Illuminate\Support\Carbon;
 
 class DashboardController extends Controller
 {
@@ -15,7 +15,6 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         $ss = Carbon::now()->daysInMonth;
-        // dd($ss);
 
         $order = Order::all();
         $countOrderDelivery = Order::where('delivery_status', 1)->count();

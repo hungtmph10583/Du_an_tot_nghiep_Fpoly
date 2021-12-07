@@ -175,13 +175,15 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" name="discount_start_date">
+                                <input type="datetime-local" id="start" class="form-control" name="discount_start_date"
+                                    value="{{\Carbon\Carbon::parse($coupon->discount_start_date)->format('Y-m-d\TH:i')}}">
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày kết thúc</label>
-                                <input type="date" class="form-control" name="discount_end_date">
+                                <input type="datetime-local" id="end" class="form-control" name="discount_end_date"
+                                    value="{{\Carbon\Carbon::parse($coupon->discount_end_date)->format('Y-m-d\TH:i')}}">
                             </div>
                         </div>
                     </div>
@@ -346,6 +348,9 @@ $(".btn-info").click(function(e) {
     let name = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
     formData.set('name', name);
     formData.append('slug', $('input[name="slug"]').val())
+    formData.set('discount_start_date', dateTime($('#start').val()))
+    formData.set('discount_end_date', dateTime($('#end').val()))
+
     $.ajax({
         url: "{{route('product.saveEdit',['id'=>$model->id])}}",
         type: 'POST',

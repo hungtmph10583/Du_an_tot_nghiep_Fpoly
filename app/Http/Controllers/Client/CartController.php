@@ -18,22 +18,26 @@ use App\Models\Review;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\GeneralSetting;
+use App\Models\Statistical;
+use Carbon\Carbon;
 use Cart;
 use SweetAlert;
 use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    public function index(Request $request){
+    public function index(Request $request)
+    {
         $category = Category::all();
         $product = Product::all();
         $accessory = Accessory::all();
         $generalSetting = GeneralSetting::first();
-        
-        return view('client.cart.index', compact('category','accessory','product','generalSetting'));
+
+        return view('client.cart.index', compact('category', 'accessory', 'product', 'generalSetting'));
     }
 
-    public function saveCart(Request $request){//Giỏ hàng
+    public function saveCart(Request $request)
+    { //Giỏ hàng
         // dd($request);
         if ($request->quantity <= 0) {
             return redirect()->back();
@@ -44,11 +48,11 @@ class CartController extends Controller
 
         $category = Category::where('id', $request->category_id)->first();
         $category_type_id = $category->category_type_id;
-        
+
         if ($request->product_type == 1) {
             $product_info = Product::where('id', $product_id)->first();
             $id__po = $product_info->id;
-        } elseif($request->product_type == 2){
+        } elseif ($request->product_type == 2) {
             $product_info = Accessory::where('id', $product_id)->first();
             $id__po = $product_info->id;
         } else {
@@ -63,7 +67,7 @@ class CartController extends Controller
             $data['name'] = $product_info->name;
             if ($request->discount_price > 0) {
                 $data['price'] = $product_info->price - $request->discount_price;
-            }else{
+            } else {
                 $data['price'] = $product_info->price;
             }
             $data['weight'] = $request->product_type;
@@ -71,13 +75,13 @@ class CartController extends Controller
             Cart::add($data);
             Cart::setGlobalTax(10);
             return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng (gio hang rong)");
-        }else{
+        } else {
             foreach (Cart::content() as $row) {
                 if ($row->id == $id__po && $row->weight == $category_type_id) {
                     $_id = $row->id;
                     $_qty = $row->qty;
                     break;
-                }elseif($row->id == $id__po && $row->weight == $category_type_id){
+                } elseif ($row->id == $id__po && $row->weight == $category_type_id) {
                     $_id = $row->id;
                     $_qty = $row->qty;
                     break;
@@ -87,14 +91,14 @@ class CartController extends Controller
                 if ($_qty < $product_info->quantity) { // Số lượng sp từ giở hàng < Số lượng từ DB
                     $tinh = $quantity + $_qty;
                     if ($tinh > $product_info->quantity) {
-                        return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và giỏ hàng của bạn đang có " . $_qty . " sản phẩm này (alert danger one).");
-                    }else{
+                        return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity . " sản phẩm trong kho và giỏ hàng của bạn đang có " . $_qty . " sản phẩm này (alert danger one).");
+                    } else {
                         $data['id'] = $product_id;
                         $data['qty'] = $quantity;
                         $data['name'] = $product_info->name;
                         if ($request->discount_price > 0) {
                             $data['price'] = $product_info->price - $request->discount_price;
-                        }else{
+                        } else {
                             $data['price'] = $product_info->price;
                         }
                         $data['weight'] = $request->product_type;
@@ -103,29 +107,29 @@ class CartController extends Controller
                         Cart::setGlobalTax(10);
                         return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 2");
                     }
-                }else{
-                    return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity ." sản phẩm trong kho và bạn đang có " . $_qty . " sản phẩm này trong giỏ hàng (alert danger two).");
+                } else {
+                    return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity . " sản phẩm trong kho và bạn đang có " . $_qty . " sản phẩm này trong giỏ hàng (alert danger two).");
                 }
-            }else{
+            } else {
                 $data['id'] = $product_id;
-                    $data['qty'] = $quantity;
-                    $data['name'] = $product_info->name;
-                    if ($request->discount_price > 0) {
-                        $data['price'] = $product_info->price - $request->discount_price;
-                    }else{
-                        $data['price'] = $product_info->price;
-                    }
-                    $data['weight'] = $request->product_type;
-                    $data['options']['image'] = $product_info->image;
-                    Cart::add($data);
-                    Cart::setGlobalTax(10);
-                    return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 3");
+                $data['qty'] = $quantity;
+                $data['name'] = $product_info->name;
+                if ($request->discount_price > 0) {
+                    $data['price'] = $product_info->price - $request->discount_price;
+                } else {
+                    $data['price'] = $product_info->price;
+                }
+                $data['weight'] = $request->product_type;
+                $data['options']['image'] = $product_info->image;
+                Cart::add($data);
+                Cart::setGlobalTax(10);
+                return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 3");
             }
         }
-        
     }
 
-    public function buyNow(Request $request){//Giỏ hàng
+    public function buyNow(Request $request)
+    { //Giỏ hàng
         if ($request->quantity <= 0) {
             return redirect()->back();
         }
@@ -139,7 +143,7 @@ class CartController extends Controller
         $data['name'] = $product_info->name;
         if ($request->discount_price > 0) {
             $data['price'] = $product_info->price - $request->discount_price;
-        }else{
+        } else {
             $data['price'] = $product_info->price;
         }
         $data['weight'] = $request->product_type;
@@ -159,35 +163,39 @@ class CartController extends Controller
     //     return view('client.cart.index', compact('category','product','accessory','generalSetting'));
     // }
 
-    public function deleteToCart($rowId){
-        Cart::update($rowId,0);
+    public function deleteToCart($rowId)
+    {
+        Cart::update($rowId, 0);
         return redirect(route('client.cart.index'))->with('success', "Đã xóa sản phẩm khỏi giỏ hàng!");
     }
 
-    public function updateCartQty(Request $request){
+    public function updateCartQty(Request $request)
+    {
         if ($request->quantity_cart <= 0) {
             return redirect()->back()->with('danger', "Error!");
         }
         $rowId = $request->rowId_cart;
         $quantity = $request->quantity_cart;
-        Cart::update($rowId,$quantity);
+        Cart::update($rowId, $quantity);
         return redirect(route('client.cart.index'))->with('success', "Cập nhật số lượng sản phẩm thành công!");
     }
 
-    public function checkout(Request $request){
+    public function checkout(Request $request)
+    {
         $category = Category::all();
         $generalSetting = GeneralSetting::first();
 
         $content = Cart::content()->count();
         //dd($content);
         if ($content > 0) {
-            return view('client.checkout.payment', compact('category','generalSetting'));
-        }else{
+            return view('client.checkout.payment', compact('category', 'generalSetting'));
+        } else {
             return redirect()->back();
         }
     }
 
-    public function saveCheckout(Request $request){
+    public function saveCheckout(Request $request)
+    {
         // dd($request);
         $model = new Order();
         $request->validate(
@@ -215,7 +223,7 @@ class CartController extends Controller
         if (Auth::check()) {
             $model->user_id = Auth::user()->id;
         }
-        $model->shipping_address = $request->address.", ".$request->ward.", ".$request->district.", ".$request->city;
+        $model->shipping_address = $request->address . ", " . $request->ward . ", " . $request->district . ", " . $request->city;
         $model->payment_type = "Trả tiền khi nhận hàng";
         $model->payment_status = 1;
         $model->delivery_status = 1;
@@ -244,12 +252,21 @@ class CartController extends Controller
 
             $orderDetail->quantity = $value->qty;
             $orderDetail->save();
+
+            $models = Statistical::where('product_id', 1)
+                ->where('created_at', 'like', '%' . Carbon::now()->format('Y-m') . '%')->first();
+            if ($models) {
+                $models->quantity += 11;
+                $models->save();
+            } else {
+                $model = new Statistical();
+            }
         }
-        
+
         $content = Cart::content();
         foreach ($content as $key => $value) {
             $rowId = $value->rowId;
-            Cart::update($rowId,0);
+            Cart::update($rowId, 0);
         }
         // return view('client.cart.index');
         return Redirect::to("gio-hang/");

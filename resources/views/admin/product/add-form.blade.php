@@ -172,34 +172,20 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" name="discount_start_date">
+                                <input type="datetime-local" id="start" class="form-control" name="discount_start_date">
                                 <span class="text-danger error_text discount_start_date_error"></span>
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày kết thúc</label>
-                                <input type="date" class="form-control" name="discount_end_date">
+                                <input type="datetime-local" id="end" class="form-control" name="discount_end_date">
                                 <span class="text-danger error_text discount_end_date_error"></span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-12">
-                            <div class="form-group">
-                                <label for="">Ngày kết thúc</label>
-                                <input type="date" class="form-control" name="discount_end_date">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="card">
                 <div class="card-body">
                     <div class="row">
@@ -321,8 +307,12 @@ $(".btn-info").click(function(e) {
     var formData = new FormData($('form')[0]);
     let nameValue = $('#name').val();
     let name = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
+
     formData.set('name', name);
     formData.append('slug', $('input[name="slug"]').val())
+    formData.set('discount_start_date', dateTime($('#start').val()))
+    formData.set('discount_end_date', dateTime($('#end').val()))
+
     $.ajax({
         url: "{{route('product.saveAdd')}}",
         type: 'POST',
@@ -346,7 +336,7 @@ $(".btn-info").click(function(e) {
                         '<span class="fas fa-times-circle text-danger mr-2"></span>' +
                         value[0] +
                         '<br>';
-                    $('span.' + key + '_error').text(value[0]);
+                    $('span.' + key.replace('.0', '') + '_error').text(value[0]);
                 });
                 $('.modal-body').html(showErr);
             } else {

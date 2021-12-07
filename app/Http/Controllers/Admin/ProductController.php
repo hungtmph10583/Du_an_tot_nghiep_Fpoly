@@ -13,6 +13,7 @@ use App\Models\Breed;
 use App\Models\Gender;
 use App\Models\Age;
 use App\Models\ProductGallery;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -28,7 +29,7 @@ class ProductController extends Controller
         $gender = Gender::all();
         $breed = Breed::all();
         $age = Age::all();
-        $admin = Auth::user()->hasanyrole('admin|manager');
+        $admin = Auth::user()->hasanyrole('Admin|Manager');
 
         return view('admin.product.index', compact('categories', 'gender', 'breed', 'age', 'admin'));
     }
@@ -133,6 +134,7 @@ class ProductController extends Controller
             'quantity.numeric' => "Số lượng thú cưng phải là số",
             'discount_start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'discount_end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'discount_end_date.after' => 'Ngày kết thúc giảm giá không được trước ngày bắt đầu',
             'weight.required' => "Hãy nhập cân nặng thú cưng",
             'weight.numeric' => "Cân nặng thú cưng phải là số",
             'breed_id.required' => "Hãy chọn giống loài",
@@ -140,6 +142,8 @@ class ProductController extends Controller
             'image.required' => 'Hãy chọn ảnh thú cưng',
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'image.max' => 'File ảnh không được quá 2MB',
+            'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'galleries.*.max' => 'File ảnh không được quá 2MB',
         ];
         $validator = Validator::make(
             $request->all(),
@@ -183,7 +187,8 @@ class ProductController extends Controller
                 'quantity' => 'required|numeric',
                 'weight' => 'required|numeric',
                 'breed_id' => 'required',
-                'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
+                'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048',
+                'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
         );
@@ -192,6 +197,8 @@ class ProductController extends Controller
         } else {
             $model = new Product();
             $model->user_id = Auth::id();
+            $model->discount_start_date = Carbon::parse($request->discount_start_date)->format('Y-m-d H:i');
+            $model->discount_end_date = Carbon::parse($request->discount_end_date)->format('Y-m-d H:i');
             $model->fill($request->all());
             if ($request->has('image')) {
                 $model->image = $request->file('image')->storeAs(
@@ -265,7 +272,8 @@ class ProductController extends Controller
             'gender_id.required' => "Hãy chọn giới tính thú cưng",
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'image.max' => 'File ảnh không được quá 2MB',
-
+            'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
+            'galleries.*.max' => 'File ảnh không được quá 2MB',
         ];
         $validator = Validator::make(
             $request->all(),
@@ -308,7 +316,8 @@ class ProductController extends Controller
                 'quantity' => 'required|numeric',
                 'weight' => 'required|numeric',
                 'breed_id' => 'required',
-                'image' => 'mimes:jpg,bmp,png,jpeg|max:2048'
+                'image' => 'mimes:jpg,bmp,png,jpeg|max:2048',
+                'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
         );
@@ -381,7 +390,7 @@ class ProductController extends Controller
         $gender = Gender::all();
         $breed = Breed::all();
         $age = Age::all();
-        $admin = Auth::user()->hasanyrole('admin|manager');
+        $admin = Auth::user()->hasanyrole('Admin|Manager');
         return view('admin.product.back-up', compact('categories', 'gender', 'breed', 'age', 'admin'));
     }
 
@@ -393,7 +402,6 @@ class ProductController extends Controller
             ->setRowId(function ($row) {
                 return $row->id;
             })
-            ->addIndexColumn()
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
             })

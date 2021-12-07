@@ -41,23 +41,35 @@ Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
 
 Route::prefix('tai-khoan')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
+
     Route::delete('xoa/{id}', [UserController::class, 'remove'])->name('user.remove');
+
     Route::get('tao-moi', [UserController::class, 'addForm'])->name('user.add');
     Route::post('tao-moi', [UserController::class, 'saveAdd'])->name('user.saveAdd');
+
     Route::get('cap-nhat/{id}', [UserController::class, 'editForm'])->name('user.edit');
     Route::post('cap-nhat/{id}', [UserController::class, 'saveEdit'])->name('user.saveEdit');
+
     Route::get('phan-quyen', [UserController::class, 'permission_form'])->name('user.permission');
     Route::post('phan-quyen', [UserController::class, 'save_form_permission']);
+
     Route::get('ho-so/{id}', [UserController::class, 'proFile'])->name('user.profile');
+
     Route::get('doi-mat-khau/{id}', [UserController::class, 'changePForm'])->name('user.changeP');
     Route::post('doi-mat-khau/{id}', [UserController::class, 'saveChangeP']);
+
     Route::get('dataUser', [UserController::class, 'getData'])->name('user.filter');
+    Route::get('trash', [UserController::class, 'backUp'])->name('user.backup');
+    Route::get('dataBackUp', [UserController::class, 'getBackUp'])->name('user.getBackup');
+    Route::get('trash/restore/{id}', [UserController::class, 'restore'])->name('user.restore');
+    Route::delete('trash/deleteForver/{id}', [UserController::class, 'delete'])->name('user.delete');
+    Route::delete('trash/remove', [UserController::class, 'removeMultiple'])->name('user.removeMul');
+    Route::get('trash/restore', [UserController::class, 'restoreMultiple'])->name('user.restoreMul');
+    Route::delete('trash/deleteForeverMul', [UserController::class, 'deleteMultiple'])->name('user.deleteMul');
 });
 
 Route::prefix('phan-quyen')->group(function () {
     Route::get('/', [RoleController::class, 'index'])->name('role.index');
-    Route::get('tao-moi-role', [RoleController::class, 'addForm'])->name('role.user.add');
-    Route::post('tao-moi-role', [RoleController::class, 'saveAdd'])->name('role.saveAdd');
 
     Route::get('tao-moi-role-user', [RoleController::class, 'addRoleUser'])->name('role.user.add');
     Route::post('tao-moi-role-user', [RoleController::class, 'saveAddRoleUser'])->name('role.user.saveAdd');
