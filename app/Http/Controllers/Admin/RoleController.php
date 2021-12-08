@@ -56,6 +56,7 @@ class RoleController extends Controller
         foreach ($user_id as $key => $value) {
             $user = User::where('id', $value)->first();
             $user->assignRole($request->role_id);
+            $user->syncPermissions(params);
         }
         return redirect(route('role.index'))->with('success', "ok");
     }

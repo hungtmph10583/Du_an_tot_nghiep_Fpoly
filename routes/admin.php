@@ -57,10 +57,15 @@ Route::prefix('phan-quyen')->group(function () {
     Route::post('sua-role-user/{id}', [RoleController::class, 'saveEditRoleUser'])->name('role.user.saveEdit');
     Route::get('xoa-role-user/{id}', [RoleController::class, 'removeRoleUser'])->name('role.user.remove');
 
-    Route::get('add-role-permission', [RoleController::class, 'addRolePermission'])->name('role.permission.add');
+   
+    Route::get('add-role-permission', [RoleController::class, 'addRolePermission'])->middleware('permission:add roles')->name('role.permission.add');
     Route::post('add-role-permission', [RoleController::class, 'saveAddRolePermission']);
+
+
+
     Route::get('edit-role/{id}', [RoleController::class, 'editRolePermission'])->name('role.edit');
-    Route::post('edit-role/{id}', [RoleController::class, 'saveEditRolePermission']);
+        Route::post('edit-role/{id}', [RoleController::class, 'saveEditRolePermission']);
+    
     Route::get('remove-role/{id}', [RoleController::class, 'removeRole'])->name('role.remove');
 
     Route::get('edit-role-permission', [RoleController::class, 'editRolePermission'])->name('role.permission.edit');
@@ -89,7 +94,6 @@ Route::prefix('danh-muc')->group(function () {
 Route::prefix('don-hang')->group(function () {
     Route::get('/', [OrderController::class, 'index'])->name('order.index');
 
-    // Route::get('cap-nhat', [OrderController::class, 'editForm'])->name('order.edit');
     Route::get('cap-nhat/{id}', [OrderController::class, 'editForm'])->name('order.edit');
     Route::post('cap-nhat/{id}', [OrderController::class, 'saveEdit']);;
 

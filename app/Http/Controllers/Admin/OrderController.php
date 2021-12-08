@@ -121,4 +121,9 @@ class OrderController extends Controller
         }
         return redirect(route('order.index'))->with('success', "Cập nhật thành công");
     }
+
+    public function detail(Request $request){
+        
+        return view('admin.order.detail',);
+    }
 }

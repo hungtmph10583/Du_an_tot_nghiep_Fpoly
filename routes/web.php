@@ -36,7 +36,7 @@ use Carbon\Carbon;
 // });
 
 Route::get('/', [HomeController::class, 'home'])->name('client.home');
-Route::get('/trang-chu', [HomeController::class, 'home'])->name('client.home');
+Route::get('/trang-chu', [HomeController::class, 'home']);
 
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('client.product.index');
@@ -126,7 +126,7 @@ Route::prefix('lien-he')->group(function () {
     // Route::post('reset-password', 'ResetPasswordController@sendMail');
 
     Route::get('forgot-password', [ForgotPasswordController::class, 'getEmail'])->middleware('guest')->name('password.request');
-    Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->middleware('guest')->name('password.request');
+    Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->middleware('guest');
 
     Route::get('reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('resetPassword');
     Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);
