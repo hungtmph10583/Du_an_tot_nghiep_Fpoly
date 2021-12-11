@@ -31,7 +31,7 @@
             <div class="content">
                 {!!$blog->content!!}
             </div>
-            <div class="customer_reviews">
+            <!-- <div class="customer_reviews">
                 <h2>Đánh giá từ khách hàng</h2>
                 <div class="container_customer_review">
                     <div class="see_review">
@@ -139,7 +139,7 @@
                         </form>
                     </div>
                 </div>
-            </div>
+            </div> -->
         </div>
     </div>
 </section>

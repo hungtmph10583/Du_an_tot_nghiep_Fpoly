@@ -55,7 +55,7 @@
     outline: none;
     border: none;
     text-decoration: none;
-    transition: all .2s linear;
+    /* transition: all .2s linear; */
 }
 
 html {
@@ -891,4 +891,29 @@ h1.heading-center {
     width: 100%;
     height: 100%;
     object-fit: cover;
+}
+
+.errors_page {
+    /* margin: auto;
+    position: relative; */
+}
+
+.errors_page .title {
+    font-family: 'Coiny', cursive;
+    color: #333333;
+    /* margin: 3rem 0 0; */
+    font-size: 13rem;
+    font-weight: 700;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.errors_page .note {
+    text-align: center;
+    color: #333333;
+    font-size: 2rem;
+}
+
+.errors_page .note .back {
+    text-decoration: underline;
 }

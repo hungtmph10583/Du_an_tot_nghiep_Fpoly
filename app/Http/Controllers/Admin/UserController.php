@@ -17,6 +17,10 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+    // public function __construct() {
+    //     $this->middleware(['permission: add users|edit users|delete users']); 
+    // }
+
     public function index(Request $request){
         $pagesize = 5;
         $searchData = $request->except('page');

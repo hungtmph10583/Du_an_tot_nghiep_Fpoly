@@ -10,6 +10,16 @@
                 </ol>
             </div>
         </div>
+        <div class="mt-2">
+            @if(session('success') != null || session('danger') != null)
+                <div class="alert @if (session('success')) alert-success @else alert-danger @endif alert-dismissible fade show" role="alert">
+                    <strong>@if (session('success')) Success @else Error @endif</strong> {{session('success') }} {{ session('danger') }}.
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            @endif
+        </div>
         <!-- /.row -->
     </div>
     <!-- /.container-fluid -->
@@ -22,9 +32,9 @@
         <form action="" method="post" enctype="multipart/form-data">
             @csrf
             <div class="card">
-            <div class="card-header">
-                Chi tiết đơn hàng
-            </div>
+                <div class="card-header">
+                    Chi tiết đơn hàng
+                </div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-6"></div>
@@ -40,11 +50,14 @@
                         <div class="col-3">
                             <div class="form-group">
                                 <label for="">Trạng thái đơn hàng</label>
-                                <select name="delivery_status" id="" class="form-control">
+                                <select name="delivery_status" id="" @if($order->delivery_status == 4) disabled @endif class="form-control">
                                     <option value="1" @if($order->delivery_status == 1) selected @endif>Đang chờ xử lí</option>
                                     <option value="2" @if($order->delivery_status == 2) selected @endif>Đang giao hàng</option>
                                     <option value="3" @if($order->delivery_status == 3) selected @endif>Giao hàng thành công</option>
                                     <option value="0" @if($order->delivery_status == 0) selected @endif>Hủy đơn hàng</option>
+                                    @if($order->delivery_status == 4)
+                                    <option value="4" @if($order->delivery_status == 4) selected disabled @endif>Đơn hàng bị hủy</option>
+                                    @endif
                                 </select>
                             </div>
                         </div>
@@ -119,7 +132,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <table class="table table-bordered">
+                        <table class="table table-bordered table-responsive pad">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -147,10 +160,10 @@
                                     <td>
                                         <?php
                                             $tinh = $value->price/$value->quantity;
-                                            echo number_format($tinh,0,',','.');
+                                            echo number_format($tinh,0,',','.') . 'đ';
                                         ?> / sản phẩm
                                     </td>
-                                    <td>{{number_format($value->price,0,',','.')}}</td>
+                                    <td>{{number_format($value->price,0,',','.')}}đ</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -174,10 +187,6 @@
                                     <div class="col form-group">{{number_format($value->tax,0,',','.')}}đ</div>
                                 </div>
                                 <div class="row border-bottom mt-1 mb-1">
-                                    <div class="col form-group">Giao hàng</div>
-                                    <div class="col form-group">Free</div>
-                                </div>
-                                <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group"><b>Tổng tiền</b></div>
                                     <div class="col form-group"><b>{{number_format($value->order->grand_total,0,',','.')}}đ</b></div>
                                 </div>
@@ -185,8 +194,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-6"></div>
-                        <div class="col-6 text-right"><br>
+                        <div class="col-12 text-right"><br>
                             <div class="form-group">
                                 <input type="checkbox" name="send_mail" id="send_mail" value="send_mail">
                                 <label class="form-check-label" for="send_mail">Gửi email cập nhật cho khách hàng</label>

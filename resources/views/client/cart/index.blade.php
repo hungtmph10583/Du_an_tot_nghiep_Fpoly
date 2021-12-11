@@ -145,10 +145,6 @@
                             </span>
                         </div>
                         <div class="item">
-                            <span class="both">Chi phí vận chuyển</span>
-                            <span class="both">Free</span>
-                        </div>
-                        <div class="item">
                             <span class="both">Tổng tiền</span>
                             <span class="both total">
                                 {{Cart::total(0,',','.')}}đ

@@ -1,4 +1,4 @@
-@section('title', 'Lịch sử mua hàng')
+@section('title', 'Lịch sử đặt hàng')
 @extends('layouts.client.main')
 @section('content')
 @section('pageStyle')

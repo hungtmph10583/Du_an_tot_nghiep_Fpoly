@@ -113,7 +113,7 @@ class CustomerController extends Controller
         // dd($orderDetail);
         foreach ($orderDetail as $key => $value) {
             $save_or_detail = OrderDetail::find($value->id);
-            $save_or_detail->delivery_status = "đã hủy đơn hàng";
+            $save_or_detail->delivery_status = "Đơn hàng bị hủy";
             $save_or_detail->save();
         }
 

@@ -10,7 +10,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="javascript:;">
                             <i class="fas fa-phone-alt"></i>
                             <span>{{$generalSetting->phone}}</span>
                         </a>

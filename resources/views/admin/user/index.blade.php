@@ -41,8 +41,8 @@
                         <table class="table table-striped">
                             <thead>
                                 <th>STT</th>
-                                <th>Name</th>
-                                <th>Role</th>
+                                <th>Tài khoản</th>
+                                <th>Vai trò</th>
                                 <th>
                                     @hasanyrole('Admin|Manage')
                                         <a href="{{route('user.add')}}" class="btn btn-outline-info float-right">Thêm tài khoản</a>
@@ -57,9 +57,13 @@
                                     <td>{{(($users->currentPage()-1)*5) + $loop->iteration}}</td>
                                     <td>{{$u->name}}</td>
                                     <td>
-                                        @foreach($u->roles as $role)
+                                        @if(count($u->roles)>0)
+                                            @foreach($u->roles as $role)
                                             <span class="badge badge-success">{{$role->name}}</span>
-                                        @endforeach
+                                            @endforeach
+                                        @else
+                                            <span class="badge badge-info">Khách hàng</span>
+                                        @endif
                                     </td>
                                     <td>
                                         <span class="float-right">

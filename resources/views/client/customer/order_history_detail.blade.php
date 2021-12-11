@@ -35,7 +35,7 @@
                     <tr>
                         <th>Sản phẩm</th>
                         <th>Ảnh</th>
-                        <th>Giá tiền</th>
+                        <th>Thành tiền</th>
                         <th>Số lượng</th>
                         <th style="min-width: 81px;">Ngày mua</th>
                         <th style="min-width: 172px;">Trạng thái thanh toán</th>
@@ -68,9 +68,10 @@
                             </td>
                             <td>
                                 @if($order->delivery_status == 4)
-                                    Bạn
+                                    Bạn đã hủy đơn hàng này
+                                @else
+                                    {{$orD->delivery_status}}
                                 @endif
-                                {{$orD->delivery_status}}
                             </td>
                         </tr>
                     @endforeach

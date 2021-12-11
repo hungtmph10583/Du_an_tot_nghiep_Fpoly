@@ -8,11 +8,16 @@ use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
     public function loginForm(Request $request){
-        return view('auth.login');
+        if (Auth::check()) {
+            return redirect()->back()->with('danger', "Vui lòng đăng xuất tài khoản trước khi vào trang này!");
+        }else{
+            return view('auth.login');
+        }
     }
 
     public function postLogin(Request $request){
@@ -51,14 +56,11 @@ class AuthController extends Controller
     public function saveChangePassword(Request $request){
         $request->validate(
             [
-                'email' => 'required|email',
                 'currentpassword' => 'required',
                 'newpassword' => 'required',
                 'cfpassword' => 'required|same:newpassword|'
             ],
             [
-                'email.required' => "Hãy nhập email",
-                'email.email' => "Không đúng định dạng email",
                 'currentpassword.required' => "Hãy nhập mật khẩu",
                 'newpassword.required' => "Hãy nhập mật khẩu mới",
                 'cfpassword.required' => "Hãy nhập xác nhận mật khẩu",
@@ -67,17 +69,18 @@ class AuthController extends Controller
         );
 
         if (!(Hash::check($request->get('currentpassword'), Auth::user()->password))) {
-            return redirect()->back()->with("error","Mật khẩu hiện tại bạn nhập không khớp. Vui lòng thử lại!");
+            return redirect()->back()->with("error","Mật khẩu hiện tại bạn nhập không đúng. Vui lòng thử lại!")->withInput();
         }
         if(strcmp($request->get('currentpassword'), $request->get('newpassword')) == 0){
-            return redirect()->back()->with("error","Mật khẩu mới không được giống với mật khẩu hiện tại!");
+            return redirect()->back()->with("error","Mật khẩu mới không được giống với mật khẩu hiện tại!")->withInput();
         }
         //Change Password
         $user = Auth::user();
         $user->password = Hash::make($request->newpassword);
         $user->save();
 
-        return redirect()->back()->with("success","Mật khẩu của bạn đã được thay đổi !");
+        // return redirect()->back()->with("success","Mật khẩu của bạn đã được thay đổi !")->withInput();
+        return Redirect::to("tai-khoan/")->with('success', "Mật khẩu của bạn đã được thay đổi.")->withInput();
     }
 
 

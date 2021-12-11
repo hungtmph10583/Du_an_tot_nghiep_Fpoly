@@ -30,13 +30,4 @@ class GeneralSettingController extends Controller
         $model->save();
         return redirect(route('generalSetting.index'));
     }
-
-    public function footer(){
-        $model = GeneralSetting::find(1);
-        // dd($model);
-        if(!$model){
-            return redirect()->back();
-        }
-        return view('admin.generalSetting.footer', compact('model'));
-    }
 }

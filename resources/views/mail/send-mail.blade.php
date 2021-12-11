@@ -147,7 +147,6 @@
                 <tbody>
                    <tr>
                         <td width="25%" valign="top" class="bold">Tên:</td>
-                        <td width="75%" valign="top">{{$name_client}}</td>
                    </tr>
                     <tr>
                         <td valign="top" class="bold">Địa chỉ nhà:</td>

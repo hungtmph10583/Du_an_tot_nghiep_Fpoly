@@ -8,7 +8,7 @@ use Illuminate\Support\Str;
 use App\Models\User;
 use App\Models\PasswordReset;
 use Carbon\Carbon;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use DB;
 
 class ForgotPasswordController extends Controller
@@ -47,6 +47,27 @@ class ForgotPasswordController extends Controller
             $message->to($request->email);
             $message->subject('Xác Nhận Đặt Lại Mật Khẩu Đăng Nhập!');
         });
+        // $mailData = [
+        //     'title' => 'Demo Email',
+        //     'message' => 'akdafjhskfhgskgdgđgshkd'
+        // ];
+        // $toMail = $request->email;
+
+        // // dd($toMail);
+        // mailss::to($toMail)->send(new Mail($mailData));
+
         return back()->with('message', 'Chúng tôi đã sử dụng email liên kết để đặt lại mặt khẩu của bạn. Vui lòng kiểm tra email!');
+    }
+    
+    public function sendmail()
+    {
+        $mailData = [
+            'title' => 'Demo Email',
+            'message' => 'akdafjhskfhgskgdgđgshkd'
+        ];
+        $toMail = "hungtmph10583@fpt.edu.vn";
+        Mail::to($toMail)->send(new Mail($mailData));
+
+        return "Email đã được gửi từ " . $toMail;
     }
 }

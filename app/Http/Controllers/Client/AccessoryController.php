@@ -28,6 +28,21 @@ class AccessoryController extends Controller
         }else{
             $accessoryQuery = Accessory::orderBy('created_at', 'DESC')->where('name', 'like', "%" .$request->keyword . "%");
             $accessories = $accessoryQuery->orderBy('created_at', 'DESC')->paginate($pagesize)->appends($searchData);
+
+            if ($request->has('cate_id') && $request->cate_id != "") {
+                $accessoryQuery = $accessoryQuery->where('category_id', $request->cate_id);
+            }
+
+            if($request->has('order_by') && $request->order_by > 0){
+                if($request->order_by == 1){
+                    $accessoryQuery = $accessoryQuery->orderBy('price');
+                }else if($request->order_by == 2){
+                    $accessoryQuery = $accessoryQuery->orderByDesc('price');
+                }else{
+                    $accessoryQuery = $accessoryQuery->orderBy('created_at', 'DESC');
+                }
+            }
+            $accessories = $accessoryQuery->paginate($pagesize)->appends($searchData);
         }
         $accessories->load('category');
         
@@ -57,7 +72,13 @@ class AccessoryController extends Controller
         $countReview = Review::where('product_id',$model->id)->where('product_type', '2')->count();
         $rating = Review::where('product_id', $model->id)->where('product_type', '2')->avg('rating');
         $rating = (int)round($rating);
-        return view('client.accessory.detail', compact('category', 'model', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
+
+        if (Auth::check()) {
+            $check_rv = Review::where('product_id', $model->id)->where('product_type', '1')->where('user_id', Auth::user()->id)->first();
+            return view('client.accessory.detail', compact('category', 'model', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'check_rv'));
+        }else{
+            return view('client.accessory.detail', compact('category', 'model', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
+        }
     }
 
     public function saveReview(Request $request){

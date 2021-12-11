@@ -122,14 +122,14 @@
                         @enderror
                     <div class="form-group">
                         <label for="" class="group-label">Phường / Xã <span class="text-red">*</span></label>
-                        <input type="text" placeholder="Phường xã (Cầu Diễn)" name="ward" value="Cầu Diễn">
+                        <input type="text" placeholder="Phường xã (Cầu Diễn)" name="ward" value="{{old('ward')}}">
                     </div>
                         @error('ward')
                             <span class="text-danger">{{$message}}</span>
                         @enderror
                     <div class="form-group">
                         <label for="" class="group-label">Địa chỉ <span class="text-red">*</span></label>
-                        <input type="text" placeholder="Địa chỉ nhà (196 Hồ Tùng Mậu)" name="address" value="196 Hồ Tùng Mậu">
+                        <input type="text" placeholder="Địa chỉ nhà (196 Hồ Tùng Mậu)" name="address" value="{{old('address')}}">
                     </div>
                     @error('address')
                         <span class="text-danger">{{$message}}</span>
@@ -183,10 +183,6 @@
                                     <input type="hidden" value="{{Cart::tax(0,',','')}}" name="tax">
                                     {{Cart::tax(0,',','.')}}đ
                                 </span>
-                            </div>
-                            <div class="item">
-                                <span class="both">Chi phí vận chuyển</span>
-                                <span class="both">Free</span>
                             </div>
                             <div class="item">
                                 <span class="both">Tổng tiền</span>

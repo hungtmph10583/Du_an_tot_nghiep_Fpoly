@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Sign-up</title>
+	<title>Đăng ký</title>
 	<!-- Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
@@ -25,7 +25,7 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-5 text-center mx-auto">
-                        <h1 class="text-white mb-2 mt-5">{{ __('Welcome!') }}</h1>
+                        <!-- <h1 class="text-white mb-2 mt-5">{{ __('Welcome!') }}</h1> -->
                         <p class="text-lead text-white">
                             {{ __('Đăng ký sử dụng tài khoản giúp quản lý đơn hàng và trải nghiệm website của bạn được tốt hơn !') }}
                         </p>
@@ -41,7 +41,7 @@
                             <h5>{{ __('Đăng ký với') }}</h5>
                         </div>
                         <div class="row px-xl-5 px-sm-4 px-3">
-                            <div class="col-3 ms-auto px-1">
+                            <!-- <div class="col-3 ms-auto px-1">
                                 <a class="btn btn-outline-light w-100" href="javascript:;">
                                     <svg width="24px" height="32px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink32">
                                         <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -66,8 +66,8 @@
                                         </g>
                                     </svg>
                                 </a>
-                            </div>
-                            <div class="col-3 me-auto px-1">
+                            </div> -->
+                            <div class="col-12 me-auto px-1">
                                 <a class="btn btn-outline-light w-100" href="javascript:;">
                                     <svg width="24px" height="32px" viewBox="0 0 64 64" version="1.1"
                                         xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -96,7 +96,7 @@
                             <form method="POST" role="form text-left">
                             @csrf
                                 <div class="mb-3">
-                                    <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Name" name="name" aria-describedby="email-addon" value="{{old('name')}}">
+                                    <input type="text" class="form-control @error('name') is-invalid @enderror" placeholder="Họ & tên" name="name" aria-describedby="email-addon" value="{{old('name')}}">
                                     @error('name') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="mb-3">
@@ -104,20 +104,13 @@
                                     @error('email') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <input wire:model="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password" aria-label="Password" name="password" aria-describedby="password-addon" value="{{old('password')}}">
+                                    <input wire:model="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mật khẩu" aria-label="Password" name="password" aria-describedby="password-addon" value="{{old('password')}}">
                                     @error('password') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="mb-3">
-                                    <input type="password" class="form-control @error('cfpassword') is-invalid @enderror" placeholder="Confirm Password" name="cfpassword" value="{{old('cfpassword')}}">
+                                    <input type="password" class="form-control @error('cfpassword') is-invalid @enderror" placeholder="Nhập lại mật khẩu" name="cfpassword" value="{{old('cfpassword')}}">
                                     @error('cfpassword') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
-                                <!-- <div class="form-check form-check-info text-left">
-                                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
-                                    <label class="form-check-label" for="flexCheckDefault">
-                                        {{ __('I agree the') }}
-                                        <a href="javascript:;" class="text-dark font-weight-bolder">{{ __('Terms and Conditions') }}</a>
-                                    </label>
-                                </div> -->
                                 <div class="text-center">
                                     <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Đăng ký</button>
                                 </div>

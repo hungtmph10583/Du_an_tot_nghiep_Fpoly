@@ -27,12 +27,12 @@
                             <h3>
                                 {{$countOrderDelivery}}
                             </h3>
-                            <p>Đơn hàng đang chờ xử lý</p>
+                            <p>Đơn hàng chờ xử lý</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-bag"></i>
                         </div>
-                        <a href="#" class="small-box-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
+                        <a href="{{route('order.index')}}" class="small-box-footer">Chi tiết <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
                 <!-- ./col -->
@@ -40,22 +40,9 @@
                     <div class="small-box bg-success">
                         <div class="inner">
                             <h3>
-                                <?php
-                                    $i = 0;
-                                    foreach ($order as $key => $value) {
-                                        if ($value->delivery_status == 3) {
-                                            foreach ($orderDetail as $key => $value2) {
-                                                if ($value->id == $value2->order_id) {
-                                                    $i += $value2->price;
-                                                    break;
-                                                }
-                                            }
-                                        }
-                                    }
-                                    echo number_format($i,0,',','.').'đ';
-                                ?>
+                                {{number_format($doanh_thu,0,',','.')}}VND
                             </h3>
-                            <p>Doanh thu tháng</p>
+                            <p>Tổng doanh thu</p>
                         </div>
                         <div class="icon">
                             <i class="far fa-money-bill-alt"></i>
@@ -68,11 +55,11 @@
                 <!-- small box -->
                     <div class="small-box bg-warning">
                         <div class="inner">
-                            <h3>{{$review}}</h3>
-                            <p>Đánh giá</p>
+                            <h3>{{count($don_hang_dang_trong_thang)}}</h3>
+                            <p>Số đơn đặt hàng</p>
                         </div>
                         <div class="icon">
-                            <i class="ion ion-person-add"></i>
+                            <i class="fas fa-chart-line"></i>
                         </div>
                         <a href="#" class="small-box-footer">Details <i class="fas fa-arrow-circle-right"></i></a>
                     </div>
@@ -82,8 +69,8 @@
                     <!-- small box -->
                     <div class="small-box bg-danger">
                         <div class="inner">
-                            <h3>65</h3>
-                            <p>Unique Visitors</p>
+                            <h3>{{count($don_hang_dang_bi_huy)}}</h3>
+                            <p>Số đơn hàng bị hủy trong tháng</p>
                         </div>
                         <div class="icon">
                             <i class="ion ion-pie-graph"></i>
@@ -117,30 +104,28 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Update software</td>
-                                        <td>5</td>
-                                        <td>3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2.</td>
-                                        <td>Clean database</td>
-                                        <td>10</td>
-                                        <td>7</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3.</td>
-                                        <td>Cron job running</td>
-                                        <td>2</td>
-                                        <td>1</td>
-                                    </tr>
-                                    <tr>
-                                        <td>4.</td>
-                                        <td>Fix and squish bugs</td>
-                                        <td>6</td>
-                                        <td>6</td>
-                                    </tr>
+                                    @foreach($list_order_month as $or)
+                                        @foreach($orderDetail as $orD)
+                                            @if($or->id == $orD->order_id)
+                                                <tr>
+                                                    <td>{{$orD->product_id}}</td>
+                                                    <td>Update software</td>
+                                                    <td>5</td>
+                                                    <td>
+                                                        <?php
+                                                            $isset_id = '';
+                                                            if ($isset_id == '') {
+                                                                $isset_id = $orD->product_id;
+                                                            }else{
+                                                                $isset_id = 'ss';
+                                                            }
+                                                            echo $isset_id;
+                                                        ?>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @endforeach
+                                    @endforeach
                                 </tbody>
                             </table>
                         </div>

@@ -192,7 +192,11 @@
                 </div>
             </div>
             <div class="form_review">
+                @if(!empty($check_rv->rating) && Auth::check())
+                <h3>Cập nhật đánh giá của bạn</h3>
+                @else
                 <h3>Gửi đánh giá của bạn</h3>
+                @endif
                 <span class="note_comment">(Bạn có thể dùng email đã mua hàng để comment nếu không có tài khoản!)</span>
                 <form action="{{route('client.accessory.post_review')}}" method="POST" enctype="multipart/form-data">
                 @csrf
@@ -219,8 +223,22 @@
                         @error('email') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
                     <div class="box">
-                        <div class="col col-star">
+                    <div class="col col-star">
                             <label for="">Đánh giá:</label>
+                            @if(!empty($check_rv->rating) && Auth::check())
+                            <span class="star-widget">
+                                <input type="radio" value="5" name="rating" id="rate-5" @if( $check_rv->rating == 5 ) checked  @endif>
+                                <label for="rate-5" class="fas fa-star"></label>
+                                <input type="radio" value="4" name="rating" id="rate-4" @if( $check_rv->rating == 4 ) checked  @endif>
+                                <label for="rate-4" class="fas fa-star"></label>
+                                <input type="radio" value="3" name="rating" id="rate-3" @if( $check_rv->rating == 3 ) checked  @endif>
+                                <label for="rate-3" class="fas fa-star"></label>
+                                <input type="radio" value="2" name="rating" id="rate-2" @if( $check_rv->rating == 2 ) checked  @endif>
+                                <label for="rate-2" class="fas fa-star"></label>
+                                <input type="radio" value="1" name="rating" id="rate-1" @if( $check_rv->rating == 1 ) checked  @endif>
+                                <label for="rate-1" class="fas fa-star"></label>
+                            </span>
+                            @else
                             <span class="star-widget">
                                 <input type="radio" value="5" name="rating" id="rate-5" @if( old('rating') == 5 ) checked  @endif>
                                 <label for="rate-5" class="fas fa-star"></label>
@@ -233,18 +251,29 @@
                                 <input type="radio" value="1" name="rating" id="rate-1" @if( old('rating') == 1 ) checked  @endif>
                                 <label for="rate-1" class="fas fa-star"></label>
                             </span>
+                            @endif
                             <div class="clear-both"></div>
                         </div>
                         @error('rating') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
                     <div class="box">
-                    <div class="col">
-                            <textarea name="comment" placeholder="Review" id="" cols="30" rows="10">{{ old('comment') }}</textarea>
+                        @if(!empty($check_rv->rating) && Auth::check())
+                        <div class="col">
+                            <textarea name="comment" placeholder="Review" cols="30" rows="10">{{ $check_rv->comment }}</textarea>
                         </div>
+                        @else
+                        <div class="col">
+                            <textarea name="comment" placeholder="Review" cols="30" rows="10">{{ old('comment') }}</textarea>
+                        </div>
+                        @endif
                         @error('comment') <div class="text-danger">{{ $message }}</div> @enderror
                     </div>
                     <div class="box-last">
-                        <button>Gửi đánh giá của bạn</button>
+                    @if(!empty($check_rv->rating) && Auth::check())
+                        <button type="submit">Cập nhật đánh giá của bạn</button>
+                    @else
+                        <button type="submit">Gửi đánh giá của bạn</button>
+                    @endif
                     </div>
                 </form>
             </div>

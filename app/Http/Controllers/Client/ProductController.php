@@ -24,10 +24,25 @@ class ProductController extends Controller
         $searchData = $request->except('page');
         if(count($request->all()) == 0){
             //Lấy ra danh sách sản phẩm & phân trang cho nó
-            $products = Product::orderBy('created_at', 'DESC')->paginate($pagesize);
+            $products = Product::paginate($pagesize);
         }else{
             $productQuery = Product::where('name', 'like', "%" .$request->keyword . "%");
-            $products = $productQuery->orderBy('created_at', 'DESC')->paginate($pagesize)->appends($searchData);
+            $products = $productQuery->paginate($pagesize)->appends($searchData);
+
+            if ($request->has('cate_id') && $request->cate_id != "") {
+                $productQuery = $productQuery->where('category_id', $request->cate_id);
+            }
+
+            if($request->has('order_by') && $request->order_by > 0){
+                if($request->order_by == 1){
+                    $productQuery = $productQuery->orderBy('price');
+                }else if($request->order_by == 2){
+                    $productQuery = $productQuery->orderByDesc('price');
+                }else{
+                    $productQuery = $productQuery->orderBy('created_at', 'DESC');
+                }
+            }
+            $products = $productQuery->paginate($pagesize)->appends($searchData);
         }
         $products->load('category', 'breed', 'gender');
         
@@ -64,8 +79,13 @@ class ProductController extends Controller
         $countReview = Review::where('product_id',$model->id)->where('product_type', '1')->count();
         $rating = Review::where('product_id', $model->id)->where('product_type', '1')->avg('rating');
         $rating = (int)round($rating);
-        
-        return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
+
+        if (Auth::check()) {
+            $check_rv = Review::where('product_id', $model->id)->where('product_type', '1')->where('user_id', Auth::user()->id)->first();
+            return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'check_rv'));
+        }else{
+            return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
+        }
     }
 
     public function saveReview(Request $request){

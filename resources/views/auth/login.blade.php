@@ -25,7 +25,7 @@
 	                <div class="col-xl-4 col-lg-5 col-md-6 d-flex flex-column mx-auto">
 	                    <div class="card card-plain mt-8">
 	                        <div class="card-header pb-0 text-left bg-transparent">
-	                            <h3 class="font-weight-bolder text-success text-gradient">Welcome back</h3>
+	                            <h3 class="font-weight-bolder text-success text-gradient">Đăng nhập</h3>
 	                        </div>
 	                        <div class="card-body">
 	                            <form method="POST" role="form text-left">
@@ -44,8 +44,8 @@
 	                                    @error('email') <div class="text-danger mt-2">{{ $message }}</div> @enderror
 	                                </div>
 	                                <div class="mb-3">
-	                                    <label for="password" class="h6">Password</label>
-	                                        <input id="password" name="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Password">
+	                                    <label for="password" class="h6">Mật khẩu</label>
+	                                        <input id="password" name="password" type="password" class="form-control @error('password') is-invalid @enderror" placeholder="Mật khẩu">
 	                                    @error('password') <div class="text-danger mt-2">{{ $message }}</div> @enderror
 	                                </div>
 	                                <div class="form-check form-switch">
@@ -53,53 +53,27 @@
 	                                    <label class="form-check-label" for="rememberMe">Remember me</label>
 	                                </div>
 	                                <div class="text-center">
-	                                    <button type="submit" class="btn bg-gradient-success w-100 mt-4 mb-0">Sign in</button>
+	                                    <button type="submit" class="btn bg-gradient-success w-100 mt-4 mb-0">Đăng nhập</button>
 	                                </div>
 	                            </form>
 	                        </div>
 	                        <div class="card-footer text-center pt-0 px-lg-2 px-1">
 	                            <small class="text-muted">
-									Forgot you password? Reset you password
-									<a href="{{ route('password.request') }}" class="text-success text-gradient font-weight-bold">here</a>
+									Quên mật khẩu? Đặt lại mật khẩu của bạn
+									<a href="{{ route('password.request') }}" class="text-success text-gradient font-weight-bold">tại đây</a>
 								</small>
-	                            <p class="mb-4 text-sm mx-auto">
-	                                Don't have an account?
-	                                <a href="{{ route('register') }}" class="text-success text-gradient font-weight-bold">'Sign up</a>
+	                            <p class="mb-2 text-sm mx-auto">
+	                                Bạn chưa có tài khoản?
+	                                <a href="{{ route('register') }}" class="text-success text-gradient font-weight-bold">'Đăng ký'</a>
 	                            </p>
 								<div class="row px-xl-5 px-sm-4 px-3">
-									<div class="mt-2 position-relative text-center">
+									<div class="position-relative text-center">
 										<p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
 											or
 										</p>
 									</div>
-									<div class="col-3 ms-auto px-1">
-										<a class="btn btn-outline-light w-100" href="javascript:;">
-											<svg width="24px" height="32px" viewBox="0 0 64 64" version="1.1"
-												xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink32">
-												<g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-													<g id="facebook-3" transform="translate(3.000000, 3.000000)" fill-rule="nonzero">
-														<circle id="Oval" fill="#3C5A9A" cx="29.5091719" cy="29.4927506" r="29.4882047"></circle>
-														<path d="M39.0974944,9.05587273 L32.5651312,9.05587273 C28.6886088,9.05587273 24.3768224,10.6862851 24.3768224,16.3054653 C24.395747,18.2634019 24.3768224,20.1385313 24.3768224,22.2488655 L19.8922122,22.2488655 L19.8922122,29.3852113 L24.5156022,29.3852113 L24.5156022,49.9295284 L33.0113092,49.9295284 L33.0113092,29.2496356 L38.6187742,29.2496356 L39.1261316,22.2288395 L32.8649196,22.2288395 C32.8649196,22.2288395 32.8789377,19.1056932 32.8649196,18.1987181 C32.8649196,15.9781412 35.1755132,16.1053059 35.3144932,16.1053059 C36.4140178,16.1053059 38.5518876,16.1085101 39.1006986,16.1053059 L39.1006986,9.05587273 L39.0974944,9.05587273 L39.0974944,9.05587273 Z"
-															id="Path" fill="#FFFFFF"></path>
-													</g>
-												</g>
-											</svg>
-										</a>
-									</div>
-								<div class="col-3 px-1">
-									<a class="btn btn-outline-light w-100" href="javascript:;">
-										<svg width="24px" height="32px" viewBox="0 0 64 64" version="1.1"
-											xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-											<g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-												<g id="apple-black" transform="translate(7.000000, 0.564551)" fill="#000000" fill-rule="nonzero">
-													<path d="M40.9233048,32.8428307 C41.0078713,42.0741676 48.9124247,45.146088 49,45.1851909 C48.9331634,45.4017274 47.7369821,49.5628653 44.835501,53.8610269 C42.3271952,57.5771105 39.7241148,61.2793611 35.6233362,61.356042 C31.5939073,61.431307 30.2982233,58.9340578 25.6914424,58.9340578 C21.0860585,58.9340578 19.6464932,61.27947 15.8321878,61.4314159 C11.8738936,61.5833617 8.85958554,57.4131833 6.33064852,53.7107148 C1.16284874,46.1373849 -2.78641926,32.3103122 2.51645059,22.9768066 C5.15080028,18.3417501 9.85858819,15.4066355 14.9684701,15.3313705 C18.8554146,15.2562145 22.5241194,17.9820905 24.9003639,17.9820905 C27.275104,17.9820905 31.733383,14.7039812 36.4203248,15.1854154 C38.3824403,15.2681959 43.8902255,15.9888223 47.4267616,21.2362369 C47.1417927,21.4153043 40.8549638,25.1251794 40.9233048,32.8428307 M33.3504628,10.1750144 C35.4519466,7.59650964 36.8663676,4.00699306 36.4804992,0.435448578 C33.4513624,0.558856931 29.7884601,2.48154382 27.6157341,5.05863265 C25.6685547,7.34076135 23.9632549,10.9934525 24.4233742,14.4943068 C27.7996959,14.7590956 31.2488715,12.7551531 33.3504628,10.1750144" id="Shape"></path>
-													</g>
-												</g>
-											</svg>
-										</a>
-									</div>
-									<div class="col-3 me-auto px-1">
-										<a class="btn btn-outline-light w-100" href="javascript:;">
+									<div class="col-12 me-auto px-1">
+										<a class="btn btn-outline-dark w-100" href="javascript:;">
 											<svg width="24px" height="32px" viewBox="0 0 64 64" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
 												<g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
 													<g id="google-icon" transform="translate(3.000000, 2.000000)" fill-rule="nonzero">
@@ -116,12 +90,12 @@
 	                        </div>
 	                    </div>
 	                </div>
-	                <div class="col-md-6">
+	                <!-- <div class="col-md-6">
 	                    <div class="oblique position-absolute top-0 h-100 d-md-block d-none me-n8">
 	                        <div class="oblique-image bg-cover position-absolute fixed-top ms-auto h-100 z-index-0 ms-n6"
 	                            style="background-image:url('{{ asset('theme-bootstrap/assets/img/curved-images/curved14.jpg')}}')"></div>
 	                    </div>
-	                </div>
+	                </div> -->
 	            </div>
 	        </div>
 	    </div>

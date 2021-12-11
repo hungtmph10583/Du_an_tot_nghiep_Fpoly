@@ -21,7 +21,7 @@
         <form action="" method="post" enctype="multipart/form-data">
             @csrf
             <div class="card">
-                <div class="card-body">
+                <div class="card-body table-responsive pad">
                     <div class="row">
                         <table class="table table-striped">
                             <thead>

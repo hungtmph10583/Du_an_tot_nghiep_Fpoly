@@ -31,6 +31,11 @@ use Carbon\Carbon;
 |
 */
 
+// Route::get('/ssd', function(){
+//     $user = \App\Models\User::find(1);
+//     dd($user->roles);
+// });
+
 // Route::get('/linkstorage', function () {
 //     Artisan::call('storage:link');
 // });

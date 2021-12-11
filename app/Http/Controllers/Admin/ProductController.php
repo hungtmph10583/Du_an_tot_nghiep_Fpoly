@@ -20,9 +20,7 @@ use Yajra\Datatables\Datatables;
 
 class ProductController extends Controller
 {
-    public function index(Request $request)
-    {
-
+    public function index(Request $request){
         $categories = Category::all();
         $gender = Gender::all();
         $breed = Breed::all();

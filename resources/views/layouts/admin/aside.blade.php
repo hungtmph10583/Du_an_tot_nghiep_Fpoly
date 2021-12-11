@@ -43,8 +43,6 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <!-- Add icons to the links using the .nav-icon class
-                    with font-awesome or any other icon font library -->
                 <li class="nav-item">
                     <a href="{{route('dashboard.index')}}" class="nav-link">
                         <i class="fa fa-home"></i>
@@ -188,7 +186,7 @@
                         @endhasanyrole
                     </ul>
                 </li>
-                @hasanyrole('Admin|Manage')
+                @hasanyrole('Admin')
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-project-diagram"></i>
@@ -202,18 +200,6 @@
                             <a href="{{route('role.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Danh sách</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:;" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Role User</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="javascript:;" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Role Permission</p>
                             </a>
                         </li>
                     </ul>
@@ -266,27 +252,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('blog.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Header</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{route('slide.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Slide</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('blog.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Banner</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('generalSetting.footer')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Footer</p>
                             </a>
                         </li>
                     </ul>

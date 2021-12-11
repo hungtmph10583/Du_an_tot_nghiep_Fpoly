@@ -31,19 +31,30 @@
                         <div class="row">
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="">Search</label>
+                                    <label for="">Tìm kiếm theo mã đơn hàng</label>
                                     <input class="form-control" placeholder="Search" type="text" name="keyword" @isset($searchData['keyword']) value="{{$searchData['keyword']}}" @endisset>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="form-group">
-                                    <label for="">Sắp xếp theo</label>
-                                    <select class="form-control" name="order_by" >
-                                        <option value="">Mặc định</option>
-                                        <option value="1">Đơn đang chờ xử lí</option>
-                                        <option value="2">Đơn đang giao hàng</option>
-                                        <option value="3">Đơn giao thành công</option>
-                                        <option value="0">Đơn hàng đã huỷ</option>
+                                    <label for="">Lọc theo trạng thái đơn hàng</label>
+                                    <select class="form-control" name="filter">
+                                        <option value="">Tất cả đơn hàng</option>
+                                        <option value="0" @if(isset($searchData['filter']) &&  $searchData['filter'] == 0) selected @endif>
+                                            Đơn hàng đã huỷ
+                                        </option>
+                                        <option value="1" @if(isset($searchData['filter']) &&  $searchData['filter'] == 1) selected @endif>
+                                            Đơn hàng đang chờ xử lí
+                                        </option>
+                                        <option value="2" @if(isset($searchData['filter']) &&  $searchData['filter'] == 2) selected @endif>
+                                            Đơn hàng đang giao
+                                        </option>
+                                        <option value="3" @if(isset($searchData['filter']) &&  $searchData['filter'] == 3) selected @endif>
+                                            Đơn hàng giao thành công
+                                        </option>
+                                        <option value="4" @if(isset($searchData['filter']) &&  $searchData['filter'] == 4) selected @endif>
+                                            Đơn hàng bị hủy
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -96,7 +107,7 @@
                                             @elseif($value->delivery_status == 3)
                                                 Giao hàng thành công
                                             @elseif($value->delivery_status == 4)
-                                                Khách đã hủy đơn hàng
+                                                Đơn hàng bị hủy
                                             @elseif($value->delivery_status == 0)
                                                 Hủy đơn hàng
                                             @else
@@ -109,7 +120,7 @@
                                     </td>
                                     <td>
                                         <span class="float-right">
-                                            <a href="#" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                                            <a href="{{route('order.detail', ['id' => $value->id])}}" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
                                             <a href="{{route('order.edit', ['id' => $value->id])}}" class="btn btn-outline-success"><i class="far fa-edit"></i></a>
                                         </span>
                                     </td>

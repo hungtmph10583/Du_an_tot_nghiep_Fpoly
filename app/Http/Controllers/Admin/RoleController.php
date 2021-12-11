@@ -14,6 +14,12 @@ use Illuminate\Validation\Rule;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+        $this->middleware('permission:add roles|edit roles|delete roles');
+    }
+
     public function index(Request $request){
         $model_has_role = ModelHasRole::all();
 
@@ -58,7 +64,7 @@ class RoleController extends Controller
             $user->assignRole($request->role_id);
             $user->syncPermissions(params);
         }
-        return redirect(route('role.index'))->with('success', "ok");
+        return redirect(route('role.index'))->with('success', "Thêm Vai trò vào Tài khoản thành công!");
     }
 
     public function editRoleUser($id){
@@ -83,7 +89,7 @@ class RoleController extends Controller
         );
         $user->roles()->detach();
         $user->assignRole($request->role_id);
-        return redirect(route('role.index'))->with('success', "Thêm role vào user thành công!");
+        return redirect(route('role.index'))->with('success', "Sửa Vai trò Tài khoản thành công!");
     }
 
     public function removeRoleUser($id){
@@ -95,9 +101,9 @@ class RoleController extends Controller
         if (!empty($model_has_roles)) {
             $user->roles()->detach();
         }else{
-            return redirect(route('role.index'))->with('danger_user', "Tài khoản này không tồn tại Role!");
+            return redirect(route('role.index'))->with('danger_user', "Tài khoản này không tồn tại Vai trò!");
         }
-        return redirect(route('role.index'))->with('success_user', "Xóa role của User thành công!");
+        return redirect(route('role.index'))->with('success_user', "Xóa Vai trò của Tài khoản thành công!");
     }
 
     public function addRolePermission(){
@@ -137,7 +143,7 @@ class RoleController extends Controller
         $new_role->guard_name = 'web';
         $new_role->save();
         $new_role->permissions()->attach($request->permissions_id);
-        return redirect(route('role.index'))->with('success', "Tạo Role mới thành công");
+        return redirect(route('role.index'))->with('success', "Tạo Vai trò mới thành công");
 
     }
 
@@ -163,12 +169,12 @@ class RoleController extends Controller
                 'name'  =>  [ 
                     'required', Rule::unique('roles')->ignore($id)
                 ],
-                'permissions_id' => 'required'
+                // 'permissions_id' => 'required'
             ],
             [
                 'name.required' => "Hãy nhập vào tên role!",
                 'name.unique' => "Tên role này đã tồn tại!",
-                'permissions_id.required' => "Hãy chọn permission!"
+                // 'permissions_id.required' => "Hãy chọn permission!"
             ]
         );
         $permissions = $request->permissions_id;
@@ -181,7 +187,7 @@ class RoleController extends Controller
             $role->permissions()->detach();
         }
         $role->permissions()->attach($request->permissions_id);//add list permissions
-        return redirect(route('role.index'))->with('success', "Cập nhật Role thành công");
+        return redirect(route('role.index'))->with('success', "Cập nhật Vai trò thành công");
     }
 
     public function removeRole($id){
@@ -189,6 +195,6 @@ class RoleController extends Controller
         // dd($role);
         $role->permissions()->detach();//delete all relationship in role_permission
         $role->delete();
-        return redirect(route('role.index'))->with('success', "Xóa Role thành công!");
+        return redirect(route('role.index'))->with('success', "Xóa Vai trò thành công!");
     }
 }

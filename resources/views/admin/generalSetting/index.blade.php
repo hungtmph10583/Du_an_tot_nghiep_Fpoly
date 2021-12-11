@@ -39,12 +39,27 @@
                             </div>
                             <div class="form-group">
                                 <div class="form-control border-0">
-                                    <label for="">Phone</label>
+                                    <label for="">Số điện thoại</label>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="form-control border-0">
-                                    <label for="">Email</label>
+                                    <label for="">Địa chỉ Email</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-control border-0">
+                                    <label for="">Địa chỉ</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-control border-0">
+                                    <label for="">Thời gian mở cửa</label>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-control border-0">
+                                    <label for="">Bản đồ</label>
                                 </div>
                             </div>
                             <div class="form-group">
@@ -82,6 +97,15 @@
                             </div>
                             <div class="form-group">
                                 <input type="text" name="email" class="form-control" value="{{$model->email}}" placeholder="Email liên hệ của cửa hàng">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="address" class="form-control" value="{{$model->address}}" placeholder="Địa chỉ">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="open_time" class="form-control" value="{{$model->open_time}}" placeholder="Thời gian mở cửa">
+                            </div>
+                            <div class="form-group">
+                                <input type="text" name="map" class="form-control" value="{{$model->map}}" placeholder="Mã nhúng bản đồ">
                             </div>
                             <div class="form-group">
                                 <input type="text" name="facebook" class="form-control" value="{{$model->facebook}}" placeholder="Link facebook ( nếu có )">

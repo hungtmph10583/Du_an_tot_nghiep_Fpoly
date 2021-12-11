@@ -101,9 +101,6 @@
     section.product_slide {
         padding: 2rem;
     }
-    /* section.account-info .account_info_container .content_page_double {
-        grid-template-columns: repeat(1, 1fr);
-    } */
 }
 
 @media(max-width: 795px) {
@@ -196,6 +193,9 @@
     .header-wrapper .header-top-bar .header-item-left {
         display: none;
     }
+    section.account-info .account_info_container .content_page_double {
+        grid-template-columns: none;
+    }
 }
 
 @media(max-width: 550px) {
@@ -244,6 +244,10 @@
     }
     .products .product-container .product-item .product-thumbnail {
         min-height: 154px;
+    }
+    .empty_cart img {
+        width: 100%;
+        height: auto;
     }
 }
 

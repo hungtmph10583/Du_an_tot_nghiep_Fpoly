@@ -20,7 +20,7 @@
                         <th>Rating</th>
                         <th>Nội dung đánh giá</th>
                         <th>Thời gian</th>
-                        <td>Hành động</td>
+                        <td>Lực chọn</td>
                     </tr>
                 </thead>
                 <tbody class="list-overflow">
@@ -29,7 +29,7 @@
                             @if($rv->product_id == $pro->id)
                             <tr>
                                 <td>
-                                    <a href="{{route('client.product.detail', ['id' => $rv->product->id])}}">
+                                    <a href="{{route('client.product.detail', ['id' => $rv->product->slug])}}">
                                         <img src="{{asset( 'storage/' . $rv->product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" width="100">
                                     </a>
                                 </td>
@@ -48,10 +48,10 @@
                                 <td style="min-width: 75px;">{{$rv->created_at->diffForHumans()}}</td>
                                 <td>
                                     <div class="flex_R">
-                                        <a href="#" class="edit-review">
+                                        <a href="{{route('client.product.detail', ['id' => $rv->product->slug])}}" class="edit-review">
                                             <i class="far fa-edit"></i>
                                         </a>
-                                        <a href="{{route('deleteReview', ['id' => $rv->id])}}" onclick="return confirm('Bạn có chắc muốn xóa review này?')" class="delete-review">
+                                        <a href="{{route('deleteReview', ['id' => $rv->id])}}" onclick="return confirm('Bạn có chắc muốn xóa đánh giá này?')" class="delete-review">
                                             <i class="far fa-trash-alt"></i>
                                         </a>
                                     </div>
