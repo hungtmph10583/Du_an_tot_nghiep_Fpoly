@@ -225,7 +225,7 @@ class CartController extends Controller
         $id_first = Order::where('phone', $request->phone)->orderBy('created_at', 'DESC')->first();
         $order_Detail = OrderDetail::where('order_id', $id_first->id)->get();
         $product = Product::all();
-        $generalSetting = GeneralSetting::first('logo');
+        $generalSetting = GeneralSetting::first();
         $accessory = Accessory::all();
         // dd($generalSetting);
         $total = 0;
@@ -256,7 +256,7 @@ class CartController extends Controller
             'accessory' => $accessory,
             'tax' => $tax,
             'total' => $total,
-            'generalSetting' => $generalSetting
+            'generalSetting' => $generalSetting->logo
         ];
         $toMail = $to_email;
         Mail::to($toMail)->send(new SendMailOrder($mailData));

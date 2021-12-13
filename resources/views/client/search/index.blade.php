@@ -53,7 +53,7 @@
                                     </a>
                                 </td>
                             @endif
-                            <td>{{number_format($orD->price,0,',','.')}}đ</td>
+                            <td>{{number_format($order->grand_total,0,',','.')}}đ</td>
                             <td>{{$orD->quantity}}</td>
                             <td class="time">{{$orD->order->created_at->diffForHumans()}}</td>
                             <td>
