@@ -107,6 +107,14 @@ Route::prefix('lien-he')->group(function () {
 Route::get('login', [AuthController::class, 'loginForm'])->name('login');
 Route::post('login', [AuthController::class, 'postLogin']);
 
+//-------------------------------- Login with google--------------------
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/auth/redirect', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.login');
+    Route::get('/facebook/auth/redirect', [AuthController::class, 'redirectToFacebook'])->name('auth.facebook');
+    Route::get('/facebook/auth/callback', [AuthController::class, 'handleFacebookCallback'])->name('auth.loginFb');
+});
+
 // ------------------------------- Register -------------------------------
 Route::get('registration', [AuthController::class, 'registrationForm'])->name('registration');
 Route::post('registration', [AuthController::class, 'saveRegistration']);

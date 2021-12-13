@@ -83,7 +83,8 @@
                                         </p>
                                     </div>
                                     <div class="col-12 me-auto px-1">
-                                        <a class="btn btn-outline-dark w-100" href="javascript:;">
+                                        <a class="btn btn-outline-dark w-100" href="/auth/redirect/"
+                                            href="javascript:;">
                                             <svg width="24px" height="32px" viewBox="0 0 64 64" version="1.1"
                                                 xmlns="http://www.w3.org/2000/svg"
                                                 xmlns:xlink="http://www.w3.org/1999/xlink">

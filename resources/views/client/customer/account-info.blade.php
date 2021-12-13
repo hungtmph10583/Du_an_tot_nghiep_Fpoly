@@ -37,8 +37,8 @@
                     @csrf
                     <div class="box_content">
                         <div class="avatar">
-                            <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" id="blah2"
-                                alt="User profile picture">
+                            <img src="{{ (strpos(Auth::user()->avatar, 'uploads/') === false ? Auth::user()->avatar:asset('storage/' . Auth::user()->avatar)) }}"
+                                id="blah2" alt="User profile picture">
                             <label for="hidden-avatar" class="setting">
                                 <i class="far fa-edit"></i> Edit
                                 <input hidden type="file" name="uploadfile" id="hidden-avatar">

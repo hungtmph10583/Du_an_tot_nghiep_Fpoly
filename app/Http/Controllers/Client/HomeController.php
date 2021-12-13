@@ -17,13 +17,12 @@ use App\Models\Review;
 use App\Models\Blog;
 use App\Models\GeneralSetting;
 use App\Models\Order;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
     public function home(Request $request)
     {
-
-
         $category = Category::all();
         $product = Product::paginate(5);
         $accessory = Accessory::paginate(5);

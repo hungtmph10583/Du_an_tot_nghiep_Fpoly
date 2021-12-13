@@ -82,7 +82,7 @@ class AuthController extends Controller
             auth()->login($newUser, true);
         }
 
-        return redirect('admin/products/listProduct');
+        return redirect('/');
     }
 
     public function changePassword(Request $request)
