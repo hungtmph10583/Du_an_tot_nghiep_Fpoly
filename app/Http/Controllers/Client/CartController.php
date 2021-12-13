@@ -20,7 +20,7 @@ use App\Models\OrderDetail;
 use App\Models\GeneralSetting;
 use App\Models\Statistical;
 use Carbon\Carbon;
-use Cart;
+use Gloudemans\Shoppingcart\Facades\Cart;
 use SweetAlert;
 use Illuminate\Support\Facades\Auth;
 
@@ -253,13 +253,31 @@ class CartController extends Controller
             $orderDetail->quantity = $value->qty;
             $orderDetail->save();
 
-            $models = Statistical::where('product_id', 1)
-                ->where('created_at', 'like', '%' . Carbon::now()->format('Y-m') . '%')->first();
+            $models = Statistical::where('product_id', $value->id)
+                ->where('product_type', $value->weight)
+                ->where('updated_at', 'like', '%' . Carbon::now()->format('Y-m') . '%')->first();
+            if ($value->weight == 1) {
+                $product = Product::find($value->id);
+            } else {
+                $product = Accessory::find($value->id);
+            }
+
             if ($models) {
-                $models->quantity += 11;
-                $models->save();
+                if ($product->quantity >= $models->quantity) {
+                    $sum = $models->quantity + $value->qty;
+                    if ($sum <= $models->quantityMonth) {
+                        $models->quantity += $value->qty;
+                        $models->save();
+                    }
+                }
             } else {
                 $model = new Statistical();
+                $model->order_id = 0;
+                $model->product_id = $value->id;
+                $model->product_type = $value->weight;
+                $model->quantity = $value->qty;
+                $model->quantityMonth = $product->quantity;
+                $model->save();
             }
         }
 

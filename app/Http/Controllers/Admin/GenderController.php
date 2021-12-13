@@ -235,7 +235,6 @@ class GenderController extends Controller
         $gender->products()->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();
-            $related->carts()->delete();
             $related->reviews()->delete();
         });
         $gender->products()->delete();
@@ -252,7 +251,6 @@ class GenderController extends Controller
         $gender->products()->each(function ($related) {
             $related->galleries()->restore();
             $related->orderDetails()->restore();
-            $related->carts()->restore();
             $related->reviews()->restore();
             $related->category()->restore();
         });
@@ -270,7 +268,6 @@ class GenderController extends Controller
         $gender->products()->each(function ($related) {
             $related->galleries()->forceDelete();
             $related->orderDetails()->forceDelete();
-            $related->carts()->forceDelete();
             $related->reviews()->forceDelete();
         });
         $gender->products()->forceDelete();
@@ -291,7 +288,6 @@ class GenderController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
-                $related->carts()->delete();
                 $related->reviews()->delete();
             });
             $pro->products()->delete();
@@ -313,7 +309,6 @@ class GenderController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
-                $related->carts()->restore();
                 $related->reviews()->restore();
                 $related->category()->restore();
             });
@@ -336,7 +331,6 @@ class GenderController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
             $pro->products()->forceDelete();

@@ -74,8 +74,10 @@ class CategoryController extends Controller
             'name.unique' => "Tên danh mục đã tồn tại",
             'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
             'name.min' => "Tên danh mục ít nhất 3 kí tự",
-            'category_type_id.required' => "Hãy chọn danh mục",
+            'slug.required' => 'Nhập tên danh mục để slug',
+            'category_type_id.required' => "Hãy chọn loại danh mục",
             'show_slide.required' => "Hãy chọn trạng thái danh mục",
+            'show_slide.numeric' => "Trạng thái danh mục phải là kiểu số",
             'uploadfile.required' => 'Hãy chọn ảnh danh mục',
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
@@ -101,8 +103,18 @@ class CategoryController extends Controller
                         }
                     }
                 ],
-                'category_type_id' => 'required',
-                'show_slide' => 'required',
+                'slug' => 'required',
+                'category_type_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = CategoryType::where('id', $request->category_type_id)
+                            ->first();
+                        if ($categoryId == '') {
+                            return $fail('Loại danh mục không tồn tại');
+                        }
+                    },
+                ],
+                'show_slide' => 'required|numeric',
                 'uploadfile' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
@@ -146,8 +158,10 @@ class CategoryController extends Controller
             'name.unique' => "Tên danh mục đã tồn tại",
             'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
             'name.min' => "Tên danh mục ít nhất 3 kí tự",
+            'slug.required' => 'Nhập tên danh mục để slug',
             'category_type_id.required' => "Hãy chọn danh mục",
             'show_slide.required' => "Hãy chọn trạng thái danh mục",
+            'show_slide.numeric' => "Trạng thái danh mục phải là kiểu số",
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
@@ -171,8 +185,18 @@ class CategoryController extends Controller
                         }
                     }
                 ],
-                'category_type_id' => 'required',
-                'show_slide' => 'required',
+                'category_type_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = CategoryType::where('id', $request->category_type_id)
+                            ->first();
+                        if ($categoryId == '') {
+                            return $fail('Loại danh mục không tồn tại');
+                        }
+                    },
+                ],
+                'slug' => 'required',
+                'show_slide' => 'required|numeric',
                 'uploadfile' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
@@ -261,7 +285,6 @@ class CategoryController extends Controller
         $pro->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();
-            $related->carts()->delete();
             $related->reviews()->delete();
         });
         $pro->delete();
@@ -280,10 +303,9 @@ class CategoryController extends Controller
 
         $pro = $category->products();
         $pro->each(function ($related) {
-            $related->galleries()->delete();
-            $related->orderDetails()->delete();
-            $related->carts()->delete();
-            $related->reviews()->delete();
+            $related->galleries()->restore();
+            $related->orderDetails()->restore();
+            $related->reviews()->restore();
         });
         $pro->restore();
         $category->restore();
@@ -303,7 +325,6 @@ class CategoryController extends Controller
             $product->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
             $product->products()->forceDelete();
@@ -327,7 +348,6 @@ class CategoryController extends Controller
             $pro->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
-                $related->carts()->delete();
                 $related->reviews()->delete();
             });
             $pro->delete();
@@ -350,7 +370,6 @@ class CategoryController extends Controller
             $product->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
-                $related->carts()->restore();
                 $related->reviews()->restore();
             });
             $product->products()->restore();
@@ -373,7 +392,6 @@ class CategoryController extends Controller
             $product->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
             $product->products()->forceDelete();

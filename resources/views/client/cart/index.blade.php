@@ -4,7 +4,7 @@
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/gio-hang.css')}}">
 @endsection
-	<!-- content -->
+<!-- content -->
 <section class="cart-details">
     <div class="bread-crumb">
         <a href="{{route('client.home')}}">Trang chủ</a>
@@ -15,11 +15,11 @@
         <div class="carts">
             <div class="carts-container">
                 <?php
-                    $content = Cart::content();
-                    $count = Cart::content()->count();
-                    // echo '<pre>';
-                    // print_r($content);
-                    // echo '</pre>';
+                $content = Cart::content();
+                $count = Cart::content()->count();
+                // echo '<pre>';
+                // print_r($content);
+                // echo '</pre>';
                 ?>
                 @if(empty($count))
                 <div class="empty_cart">
@@ -27,8 +27,8 @@
                         <img src="{{ asset('client-theme/images/emptycart.gif')}}" alt="">
                     </div>
                     <div class="text-alert">
-                        <p>Bạn chưa thêm sản phẩm nào vào trong giỏ hàng</p>
-                        <p>Vui lòng thêm sản phẩm để tiếp tục mua hàng</p>
+                        <p>Giỏ hàng trống</p>
+                        <p>Vui lòng thêm sản phẩm vào để tiếp tục mua hàng</p>
                     </div>
                     <div class="redirect">
                         <a href="{{route('client.product.index')}}">
@@ -64,27 +64,26 @@
                             Giá tiền: <span>{{number_format($value->price,0,',','.')}}đ</span>
                         </div>
                         <div class="quantity">
-                            <form action="{{route('updateCartQty', ['rowId' => $value->rowId])}}" method="POST" enctype="multipart/form-data">
-                            @csrf
+                            <form action="{{route('updateCartQty', ['rowId' => $value->rowId])}}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
                                 Số lượng:
                                 @if($value->weight == 1)
-                                    @foreach($product as $pro)
-                                        @if($pro->id == $value->id)
-                                        <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$pro->quantity}}" min="1">
-                                        <label for="">Số lượng trong kho:</label>
-                                        <input type="text" value="{{$pro->quantity}}" disabled>
-                                        @endif
-                                    @endforeach
+                                @foreach($product as $pro)
+                                @if($pro->id == $value->id)
+                                <input type="number" value="{{$value->qty}}" name="quantity_cart"
+                                    max="{{$pro->quantity}}" min="1">
+                                @endif
+                                @endforeach
                                 @elseif($value->weight == 2)
-                                    @foreach($accessory as $acs)
-                                        @if($acs->id == $value->id)
-                                        <input type="number" value="{{$value->qty}}" name="quantity_cart" max="{{$acs->quantity}}" min="1">
-                                        <label for="">Số lượng trong kho:</label>
-                                        <input type="text" value="{{$acs->quantity}}" disabled>
-                                        @endif
-                                    @endforeach
+                                @foreach($accessory as $acs)
+                                @if($acs->id == $value->id)
+                                <input type="number" value="{{$value->qty}}" name="quantity_cart"
+                                    max="{{$acs->quantity}}" min="1">
+                                @endif
+                                @endforeach
                                 @else
-                                    error
+                                error
                                 @endif
                                 <input type="hidden" value="{{$value->rowId}}" name="rowId_cart">
                                 <input type="submit" value="Cập nhật" name="update_qty" class="updateQty">
@@ -93,15 +92,16 @@
                         <div class="total">
                             Tổng: <span>
                                 <?php
-                                    $subtotal = $value->price * $value->qty;
-                                    echo number_format($subtotal,0,',','.');
+                                $subtotal = $value->price * $value->qty;
+                                echo number_format($subtotal, 0, ',', '.');
                                 ?>
                                 đ
                             </span>
                         </div>
                     </div>
                     <div class="delete-product">
-                        <a onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')" href="{{route('deleteToCart', ['rowId' => $value->rowId])}}">
+                        <a onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')"
+                            href="{{route('deleteToCart', ['rowId' => $value->rowId])}}">
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </div>
@@ -128,8 +128,8 @@
                             <span>{{$value->name}}</span>
                             <span>
                                 <?php
-                                    $subtotal = $value->price * $value->qty;
-                                    echo number_format($subtotal,0,',','.');
+                                $subtotal = $value->price * $value->qty;
+                                echo number_format($subtotal, 0, ',', '.');
                                 ?>
                                 đ
                             </span>
@@ -137,7 +137,7 @@
                         @endforeach
                         <!-- (E) vòng lặp sp -->
                         <div class="item">
-                            <span class="both">Tổng thanh toán</span>
+                            <span class="both">Tạm tính</span>
                             <span class="both">
                                 {{Cart::priceTotal(0,',','.')}}đ
                             </span>
@@ -147,10 +147,6 @@
                             <span class="both">
                                 {{Cart::tax(0,',','.')}}đ
                             </span>
-                        </div>
-                        <div class="item">
-                            <span class="both">Chi phí vận chuyển</span>
-                            <span class="both">Free</span>
                         </div>
                         <div class="item">
                             <span class="both">Tổng tiền</span>

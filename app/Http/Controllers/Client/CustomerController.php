@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Accessory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
@@ -16,15 +17,18 @@ use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GeneralSetting;
+use App\Models\Statistical;
+use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
 
-    public function accountInfo (){
+    public function accountInfo()
+    {
         $model = User::find(Auth::user()->id);
         $order = Order::where('user_id', Auth::user()->id)->get();
         $order->load('orderDetails');
-        
+
         $orderDetail = OrderDetail::all();
         $generalSetting = GeneralSetting::first();
         return view('client.customer.account-info', compact('model', 'order', 'orderDetail', 'generalSetting'));
@@ -40,10 +44,11 @@ class CustomerController extends Controller
     //     ]);
     // }
 
-    public function saveUpdateinfo(Request $request){
+    public function saveUpdateinfo(Request $request)
+    {
         $user = Auth::user()->id;
         $model = User::find($user);
-        if(!$model){
+        if (!$model) {
             return redirect()->back();
         }
         $request->validate(
@@ -62,15 +67,16 @@ class CustomerController extends Controller
 
         $model->fill($request->all());
         // upload ảnh
-        if($request->hasFile('uploadfile')){
+        if ($request->hasFile('uploadfile')) {
             $model->avatar = $request->file('uploadfile')->storeAs('uploads/users', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
         $model->save();
-        
+
         return redirect()->back()->with('success', "Cập nhật tài khoản thành công!");
     }
 
-    public function orderHistory(){
+    public function orderHistory()
+    {
         $user_id = Auth::user()->id;
         $order = Order::where('user_id', $user_id)->orderBy('created_at', 'DESC')->get();
 
@@ -80,24 +86,31 @@ class CustomerController extends Controller
         $orderDetail = OrderDetail::all();
 
         return view('client.customer.order-history', compact(
-            'order','orderDetail','generalSetting'
+            'order',
+            'orderDetail',
+            'generalSetting'
         ));
     }
 
-    public function order_history_detail($code){
+    public function order_history_detail($code)
+    {
         $order = Order::where('code', $code)->first();
         $generalSetting = GeneralSetting::first();
         $orderDetail = OrderDetail::where('order_id', $order->id)->get();
 
         return view('client.customer.order_history_detail', compact(
-            'order','orderDetail','generalSetting'
+            'order',
+            'orderDetail',
+            'generalSetting'
         ));
     }
 
-    public function cancel_order($id){
+    public function cancel_order($id)
+    {
+
         $user_email = Auth::user()->email;
         $order = Order::find($id);
-        if(!$order || ($order->delivery_status != 1)){
+        if (!$order || ($order->delivery_status != 1)) {
             return redirect()->back();
         }
 
@@ -113,14 +126,29 @@ class CustomerController extends Controller
         // dd($orderDetail);
         foreach ($orderDetail as $key => $value) {
             $save_or_detail = OrderDetail::find($value->id);
-            $save_or_detail->delivery_status = "đã hủy đơn hàng";
+            $save_or_detail->delivery_status = "Đơn hàng bị hủy";
             $save_or_detail->save();
+
+            $models = Statistical::where('product_id', $value->product_id)
+                ->where('product_type', $value->product_type)
+                ->where('updated_at', 'like', '%' . Carbon::parse($order->created_at, 'UTC')->format('Y-m') . '%')->first();
+            if ($value->id == 1) {
+                $product = Product::find($value->id);
+            } else {
+                $product = Accessory::find($value->id);
+            }
+
+            if ($models) {
+                $models->quantity -= $value->quantity;
+                $models->save();
+            }
         }
 
         return Redirect::to("tai-khoan/chi-tiet-don-hang" . "/" . $order->code)->with('success', "Bạn đã hủy đơn hàng này!");
     }
 
-    public function review(){
+    public function review()
+    {
         $user_id = Auth::user()->id;
         $review = Review::where('user_id', $user_id)->get();
         $review->load('product');
@@ -130,17 +158,21 @@ class CustomerController extends Controller
         // $rating = Review::where('product_id', $id)->avg('rating');
         // $rating = (int)round($rating);
         return view('client.customer.review', compact(
-            'review','product','generalSetting'
+            'review',
+            'product',
+            'generalSetting'
         ));
     }
 
-    public function deleteReview($id){
+    public function deleteReview($id)
+    {
         $review = Review::find($id);
         $review->delete();
         return redirect()->back();
     }
 
-    public function favoriteProduct(){
+    public function favoriteProduct()
+    {
         return view('client.customer.favorite-product');
     }
 }

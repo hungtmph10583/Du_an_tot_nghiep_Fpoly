@@ -179,8 +179,7 @@
                             <div class="form-group">
                                 <label for="">Chi tiết sản phẩm:</label>
                                 @if($model->description)
-                                <textarea name="description" class=form-control rows="10"
-                                    readonly>{{$model->description}}</textarea>
+                                <p>{!!$model->description!!}</p>
                                 @else
                                 <div class="text-left">
                                     Chưa có thông tin

@@ -41,18 +41,9 @@
                     <div class="inner">
                         <h3>
                             <?php
-                            $i = 0;
-                            foreach ($order as $key => $value) {
-                                if ($value->delivery_status == 3) {
-                                    foreach ($orderDetail as $key => $value2) {
-                                        if ($value->id == $value2->order_id) {
-                                            $i += $value2->price;
-                                            break;
-                                        }
-                                    }
-                                }
+                            foreach ($order as $value) {
+                                echo number_format($value, 0, ',', '.') . 'đ';
                             }
-                            echo number_format($i, 0, ',', '.') . 'đ';
                             ?>
                         </h3>
                         <p>Doanh thu tháng</p>
@@ -103,7 +94,7 @@
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-chart-pie mr-1"></i>
-                            Sản phẩm bán chạy tháng này
+                            Sản phẩm thú cưng bán chạy tháng này
                         </h3>
                     </div><!-- /.card-header -->
                     <div class="card-body p-0">
@@ -117,56 +108,78 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach($dataPet as $key => $sell)
                                 <tr>
-                                    <td>1.</td>
-                                    <td>Update software</td>
-                                    <td>5</td>
-                                    <td>3</td>
+                                    <td>{{$key}}</td>
+                                    <td>
+                                        @foreach($namePet as $key1 => $sel)
+                                        @if($key == $key1)
+                                        {{$sel}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        {{$sell}}
+                                    </td>
+                                    <td>
+                                        @foreach($userPet as $key1 => $sel)
+                                        @if($key == $key1)
+                                        {{$sel}}
+                                        @endif
+                                        @endforeach
+                                    </td>
                                 </tr>
-                                <tr>
-                                    <td>2.</td>
-                                    <td>Clean database</td>
-                                    <td>10</td>
-                                    <td>7</td>
-                                </tr>
-                                <tr>
-                                    <td>3.</td>
-                                    <td>Cron job running</td>
-                                    <td>2</td>
-                                    <td>1</td>
-                                </tr>
-                                <tr>
-                                    <td>4.</td>
-                                    <td>Fix and squish bugs</td>
-                                    <td>6</td>
-                                    <td>6</td>
-                                </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </div>
                 </div>
             </section>
             <section class="col-lg-5 connectedSortable">
-                <div class="card card-primary card-outline">
+                <!-- Custom tabs (Charts with tabs)-->
+                <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
-                            <i class="far fa-chart-bar"></i>
-                            Donut Chart
+                            <i class="fas fa-chart-pie mr-1"></i>
+                            Sản phẩm phụ kiện bán chạy tháng này
                         </h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
+                    </div><!-- /.card-header -->
+                    <div class="card-body p-0">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 10px">#</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Số lượng bán</th>
+                                    <th>Người mua</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($dataAcc as $key => $sell)
+                                <tr>
+                                    <td>{{$key}}</td>
+                                    <td>
+                                        @foreach($nameAcc as $key1 => $sel)
+                                        @if($key == $key1)
+                                        {{$sel}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                    <td>
+                                        {{$sell}}
+                                    </td>
+                                    <td>
+                                        @foreach($userAcc as $key1 => $sel)
+                                        @if($key == $key1)
+                                        {{$sel}}
+                                        @endif
+                                        @endforeach
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="card-body">
-                        <div id="donut-chart" style="height: 300px;"></div>
-                    </div>
-                    <!-- /.card-body-->
                 </div>
             </section>
             <!-- right col -->

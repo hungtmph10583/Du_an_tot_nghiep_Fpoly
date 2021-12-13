@@ -3,19 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
 use App\Models\User;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
+use Laravel\Socialite\Facades\Socialite as FacadesSocialite;
 
 class AuthController extends Controller
 {
-    public function loginForm(Request $request){
-        return view('auth.login');
+    public function loginForm(Request $request)
+    {
+        if (Auth::check()) {
+            return redirect()->back()->with('danger', "Vui lòng đăng xuất tài khoản trước khi vào trang này!");
+        } else {
+            return view('auth.login');
+        }
     }
 
-    public function postLogin(Request $request){
+    public function postLogin(Request $request)
+    {
         $user = User::where('email', $request->email)->first();
         // thực hiện validate bằng $request
         $request->validate(
@@ -34,31 +41,64 @@ class AuthController extends Controller
         $email = $request->email;
         $password = $request->password;
 
-        if(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 0])){    
+        if (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 0])) {
             return redirect()->back()->with('msg', "Tài khoản của bạn đang bị khóa, liên hệ Huy Phan để mở!");
-        }elseif(Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1])) {
+        } elseif (Auth::attempt(['email' => $email, 'password' => $password, 'status' => 1])) {
             return redirect(route('client.home'));
         } else {
             return back()->withInput()->with('msg', "Mật khẩu không chính xác. Vui lòng thử lại!");
         }
     }
 
+    public function redirectToGoogle()
+    {
+        return FacadesSocialite::driver('google')->redirect();
+    }
 
-    public function changePassword(Request $request){
+    public function handleGoogleCallback()
+    {
+        try {
+            $user = FacadesSocialite::driver('google')->user();
+        } catch (\Exception $e) {
+            return redirect('login');
+        }
+
+        if (explode('@', $user->email)[1] !== 'gmail.com' && explode('@', $user->email)[1] !== 'fpt.edu.vn') {
+            return redirect('login');
+        }
+        $existingUser = User::where('email', $user->email)->first();
+
+        if ($existingUser) {
+            auth()->login($existingUser, true);
+        } else {
+            $newUser                    = new User;
+            $newUser->google_id         = $user->id;
+            $newUser->name              = $user->name;
+            $newUser->email             = $user->email;
+            $newUser->avatar            = $user->avatar;
+            $newUser->avatar_original   = $user->avatar_original;
+            $newUser->save();
+
+            auth()->login($newUser, true);
+        }
+
+        return redirect('admin/products/listProduct');
+    }
+
+    public function changePassword(Request $request)
+    {
         return view('auth.change-password');
     }
 
-    public function saveChangePassword(Request $request){
+    public function saveChangePassword(Request $request)
+    {
         $request->validate(
             [
-                'email' => 'required|email',
                 'currentpassword' => 'required',
                 'newpassword' => 'required',
                 'cfpassword' => 'required|same:newpassword|'
             ],
             [
-                'email.required' => "Hãy nhập email",
-                'email.email' => "Không đúng định dạng email",
                 'currentpassword.required' => "Hãy nhập mật khẩu",
                 'newpassword.required' => "Hãy nhập mật khẩu mới",
                 'cfpassword.required' => "Hãy nhập xác nhận mật khẩu",
@@ -67,24 +107,25 @@ class AuthController extends Controller
         );
 
         if (!(Hash::check($request->get('currentpassword'), Auth::user()->password))) {
-            return redirect()->back()->with("error","Mật khẩu hiện tại bạn nhập không khớp. Vui lòng thử lại!");
+            return redirect()->back()->with("error", "Mật khẩu hiện tại bạn nhập không đúng. Vui lòng thử lại!")->withInput();
         }
-        if(strcmp($request->get('currentpassword'), $request->get('newpassword')) == 0){
-            return redirect()->back()->with("error","Mật khẩu mới không được giống với mật khẩu hiện tại!");
+        if (strcmp($request->get('currentpassword'), $request->get('newpassword')) == 0) {
+            return redirect()->back()->with("error", "Mật khẩu mới không được giống với mật khẩu hiện tại!")->withInput();
         }
         //Change Password
         $user = Auth::user();
         $user->password = Hash::make($request->newpassword);
         $user->save();
 
-        return redirect()->back()->with("success","Mật khẩu của bạn đã được thay đổi !");
+        // return redirect()->back()->with("success","Mật khẩu của bạn đã được thay đổi !")->withInput();
+        return Redirect::to("tai-khoan/")->with('success', "Mật khẩu của bạn đã được thay đổi.")->withInput();
     }
 
 
     /*
      * 28/29/21
     */
-    
+
     // public function regeister(Request $request) {
     //     $fields = $request->validate([
     //         'name' => 'required|string',

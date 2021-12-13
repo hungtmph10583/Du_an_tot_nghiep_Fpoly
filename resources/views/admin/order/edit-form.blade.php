@@ -144,9 +144,9 @@
                                 <tr>
                                     <th scope="row">1</th>
                                     @if($value->product_type == 1)
-                                    <td class="text-center"><img src="{{asset( 'storage/' . $value->product->image)}}"
+                                    <td class="text-center"><img src="{{asset( 'storage/' . $value->products->image)}}"
                                             alt="" width="70"></td>
-                                    <td>{{$value->product->name}}</td>
+                                    <td>{{$value->products->name}}</td>
                                     @else
                                     <td class="text-center"><img src="{{asset( 'storage/' . $value->accessory->image)}}"
                                             alt="" width="70"></td>
@@ -190,7 +190,8 @@
                                 <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group"><b>Tổng tiền</b></div>
                                     <div class="col form-group">
-                                        <b>{{number_format($value->order->grand_total,0,',','.')}}đ</b></div>
+                                        <b>{{number_format($value->order->grand_total,0,',','.')}}đ</b>
+                                    </div>
                                 </div>
                             </div>
                         </div>

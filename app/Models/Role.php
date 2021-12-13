@@ -15,11 +15,13 @@ class Role extends Model
         'guard_name'
     ];
 
-    public function model_has_role(){
+    public function model_has_role()
+    {
         return $this->hasMany(ModelHasRole::class, 'role_id');
     }
 
-    public function role_has_permission(){
+    public function role_has_permission()
+    {
         return $this->hasMany(RoleHasPermission::class, 'role_id');
     }
 
@@ -28,12 +30,6 @@ class Role extends Model
      * HungTM
      * start
      */
-    public function users()
-    {
-        // return $this->hasManyThrough(ModelHasRole::class,'model_id');
-        return $this->hasManyThrough(User::class);
-        // return $this->belongsToMany(User::class);
-    }
 
     public function permissions()
     {

@@ -27,6 +27,31 @@
                     {{session('BadState')}}
                 </div>
                 @endif
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">Trạng thái</label>
+                            <select class="form-control" name="status" id="status">
+                                <option value="">Chọn trạng thái</option>
+                                <option value="0">Hết hàng</option>
+                                <option value="1">Còn hàng</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">Danh mục</label>
+                            <select class="form-control" name="cate" id="cate">
+                                <option value="">Lấy tất cả</option>
+                                @foreach($categories as $c)
+                                @if($c->category_type_id == 2)
+                                <option value="{{$c->id}}">{{$c->name}}</option>
+                                @endif
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
@@ -90,6 +115,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                             })
@@ -101,6 +127,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                                 deleteMul('{{route("accessory.removeMul")}}', allId);
@@ -169,9 +196,6 @@ $(document).ready(function() {
             url: "{{ route('accessory.filter') }}",
             data: function(d) {
                 d.cate = $('#cate').val();
-                d.breed = $('#breed').val();
-                d.age = $('#age').val();
-                d.gender = $('#gender').val();
                 d.status = $('#status').val();
                 d.search = $('input[type="search"]').val();
             }
@@ -209,11 +233,28 @@ $(document).ready(function() {
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
 
     $(document).on("click", "#undoIndex", function() {
-        id = $('#undoIndex').data('id');
-        var url = '{{route("accessory.restore",":id")}}';
-        url = url.replace(':id', id);
-        undoIndex(url, id)
-        table.ajax.reload();
+        $("#myModal").modal('show');
+        $('.modal-body').html(
+            `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khôi phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+        $('#realize').click(function(e) {
+            e.stopImmediatePropagation()
+            $("#realize").unbind('click');
+            $('#myModal').modal('toggle');
+            id = $('#undoIndex').data('id');
+            var url = '{{route("accessory.restore",":id")}}';
+            url = url.replace(':id', id);
+            undoIndex(url, id)
+            table.ajax.reload();
+        })
+        $('#cancel').click(function(e) {
+            $("#cancel").unbind('click');
+            $('#myModal').modal('toggle');
+        })
+
     })
 
     $('select').map(function(i, dom) {

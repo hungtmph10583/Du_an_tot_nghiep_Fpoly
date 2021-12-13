@@ -176,43 +176,37 @@ function removeForever(id) {
 }
 //undo trash data table
 function undoTrash(route, id) {
-    if (confirm('Bạn có chắc chắn muốn hoàn tác mục này ?')) {
-        $.ajax({
-            url: route,
-            type: 'DELETE',
-            method: 'DELETE',
-            data: {
-                _token: $("input[name=_token]").val()
-            },
-            success: function(data) {
-                console.log(data)
-                $('div.alert-success').text(data.undo);
-                $('div.alert-success').css('display', 'block');
-                $('#' + id).remove();
-            },
-        });
-    }
+    $.ajax({
+        url: route,
+        type: 'DELETE',
+        method: 'DELETE',
+        data: {
+            _token: $("input[name=_token]").val()
+        },
+        success: function(data) {
+            console.log(data)
+            $('div.alert-success').text(data.undo);
+            $('div.alert-success').css('display', 'block');
+            $('#' + id).remove();
+        },
+    });
 }
-
 //undo index data table
 function undoIndex(route, id) {
-    if (confirm('Bạn có chắc chắn muốn hoàn tác mục này ?')) {
-        $.ajax({
-            url: route,
-            type: 'GET',
-            data: {
-                _token: $("input[name=_token]").val()
-            },
-            success: function(data) {
-                console.log(data)
-                $('div.alert-success').text(data.success);
-                $('div.alert-success').css('display', 'block');
-                $('#' + id).remove();
-            },
-        });
-    }
+    $.ajax({
+        url: route,
+        type: 'GET',
+        data: {
+            _token: $("input[name=_token]").val()
+        },
+        success: function(data) {
+            console.log(data)
+            $('div.alert-success').text(data.success);
+            $('div.alert-success').css('display', 'block');
+            $('#' + id).remove();
+        },
+    });
 }
-
 // datetime
 function dateTime(time) {
     return time.replace('T', ' ');

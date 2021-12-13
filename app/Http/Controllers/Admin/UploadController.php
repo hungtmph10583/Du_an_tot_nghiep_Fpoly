@@ -10,9 +10,8 @@ class UploadController extends Controller
 {
     public function upload(Request $request)
     {
-        $uploadImg = $request->file('file');
-        $filename = time() . '.' . $uploadImg->extension();
-        Image::make($uploadImg)->save(public_path('images/' . $filename));
-        return json_encode(['location' => asset('images/' . $filename)]);
+        $file = $request->file('file');
+        $uploadImg = $file->store('images', 'public', uniqid() . '-' . $request->file->getClientOriginalName());
+        return json_encode(['location' => "/storage/$uploadImg"]);
     }
 }

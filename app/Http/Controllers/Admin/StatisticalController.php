@@ -10,6 +10,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\Statistical;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -24,14 +25,14 @@ class StatisticalController extends Controller
             ->pluck('year');
 
         $reviewData = Review::get();
-        $month = Review::select(DB::raw('Month(created_at) as month'));
+        $month = Review::select(DB::raw('Month(updated_at) as month'));
         $review = Review::select(DB::raw('COUNT(*) as count'));
-        if ($request->time) {
-            $review = $review->whereYear('created_at', $request->time)
-                ->groupBy(DB::raw("Month(created_at)"))
+        if ($request->time && $request->time > 0) {
+            $review = $review->whereYear('updated_at', $request->time)
+                ->groupBy(DB::raw("Month(updated_at)"))
                 ->pluck('count');
-            $month = $month->whereYear('created_at', $request->time)
-                ->groupBy(DB::raw("Month(created_at)"))
+            $month = $month->whereYear('updated_at', $request->time)
+                ->groupBy(DB::raw("Month(updated_at)"))
                 ->pluck('month');
 
             $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -44,15 +45,15 @@ class StatisticalController extends Controller
                     $data[$mon - 1] = $review[$index];
                 }
             }
-            return response()->json(['data' => $data, 'year' => $month]);
+            return response()->json(['data' => $data, 'year' => $month, 'time' => $request->time]);
         }
 
-        $review = $review->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw("Month(created_at)"))
+        $review = $review->whereYear('updated_at', date('Y'))
+            ->groupBy(DB::raw("Month(updated_at)"))
             ->pluck('count');
 
-        $month = $month->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw("Month(created_at)"))
+        $month = $month->whereYear('updated_at', date('Y'))
+            ->groupBy(DB::raw("Month(updated_at)"))
             ->pluck('month');
 
         $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -85,7 +86,7 @@ class StatisticalController extends Controller
         }
         if ($request->time) {
             foreach ($product as $pro) {
-                $prod = $pro->reviews()->where('created_at', 'like', '%' . $request->time . '%')->where('product_type', $categoryType->id)->count();
+                $prod = $pro->reviews()->where('updated_at', 'like', '%' . $request->time . '%')->where('product_type', $categoryType->id)->count();
                 array_push($count, $prod);
             }
             return response()->json(['data' => $count]);
@@ -104,9 +105,10 @@ class StatisticalController extends Controller
             ->groupBy(DB::raw("Year(created_at)"))
             ->pluck('year');
 
-        $orderData = Order::get();
         $month = Order::select(DB::raw('Month(created_at) as month'));
         $order = Order::select(DB::raw('COUNT(*) as count'));
+        $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+
         if ($request->time) {
             $order = $order->whereYear('created_at', $request->time)
                 ->groupBy(DB::raw("Month(created_at)"))
@@ -114,8 +116,6 @@ class StatisticalController extends Controller
             $month = $month->whereYear('created_at', $request->time)
                 ->groupBy(DB::raw("Month(created_at)"))
                 ->pluck('month');
-
-            $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
             foreach ($month as $index => $mon) {
                 if (!empty($order)) {
@@ -136,9 +136,6 @@ class StatisticalController extends Controller
             ->groupBy(DB::raw("Month(created_at)"))
             ->pluck('month');
 
-
-        $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
-
         foreach ($month as $index => $mon) {
             if (!empty($order)) {
                 if (empty($order[$index])) {
@@ -148,24 +145,24 @@ class StatisticalController extends Controller
             }
         }
 
-        return view('admin.statistical.orderSum', compact('data', 'orderData', 'year'));
+        return view('admin.statistical.orderSum', compact('data', 'year'));
     }
 
     public function orderCancel(Request $request)
     {
-        $year = Order::select(DB::raw('Year(created_at) as year'))
-            ->groupBy(DB::raw("Year(created_at)"))
+        $year = Order::select(DB::raw('Year(updated_at) as year'))
+            ->groupBy(DB::raw("Year(updated_at)"))
             ->pluck('year');
 
         $orderData = Order::get();
-        $month = Order::select(DB::raw('Month(created_at) as month'));
+        $month = Order::select(DB::raw('Month(updated_at) as month'));
         $order = Order::select(DB::raw('COUNT(*) as count'));
         if ($request->time) {
-            $order = $order->whereYear('created_at', $request->time)
-                ->groupBy(DB::raw("Month(created_at)"))
+            $order = $order->whereYear('updated_at', $request->time)
+                ->groupBy(DB::raw("Month(updated_at)"))
                 ->pluck('count');
-            $month = $month->whereYear('created_at', $request->time)
-                ->groupBy(DB::raw("Month(created_at)"))
+            $month = $month->whereYear('updated_at', $request->time)
+                ->groupBy(DB::raw("Month(updated_at)"))
                 ->pluck('month');
 
             $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -182,13 +179,16 @@ class StatisticalController extends Controller
         }
 
         $order = $order
-            ->where('delivery_status', 2)
-            ->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw("Month(created_at)"))
+            ->where(function ($query) {
+                $query->where('delivery_status', 0)
+                    ->orWhere('delivery_status', 4);
+            })
+            ->whereYear('updated_at', date('Y'))
+            ->groupBy(DB::raw("Month(updated_at)"))
             ->pluck('count');
 
-        $month = $month->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw("Month(created_at)"))
+        $month = $month->whereYear('updated_at', date('Y'))
+            ->groupBy(DB::raw("Month(updated_at)"))
             ->pluck('month');
 
         $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -201,7 +201,6 @@ class StatisticalController extends Controller
                 $data[$mon - 1] = $order[$index];
             }
         }
-
         return view('admin.statistical.orderCancel', compact('data', 'orderData', 'year'));
     }
 
@@ -242,13 +241,13 @@ class StatisticalController extends Controller
         if ($categoryType->id == 1) {
             $petName = Product::select('products.name as name', 'products.id as id', 'category_types.id as idType')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
-                ->join('category_types', 'category_types.id', '=', 'categories.category_type_id', 'category_types.id as idType')
-                ->where('category_type_id', $categoryType->id)->get();
+                ->join('category_types', 'category_types.id', '=', 'categories.category_type_id')
+                ->where('categories.category_type_id', $categoryType->id)->get();
         } else {
-            $petName = Accessory::select('accessories.name as name', 'accessories.id as id')
+            $petName = Accessory::select('accessories.name as name', 'accessories.id as id', 'category_types.id as idType')
                 ->join('categories', 'categories.id', '=', 'accessories.category_id')
                 ->join('category_types', 'category_types.id', '=', 'categories.category_type_id')
-                ->where('category_type_id', $categoryType->id)->get();
+                ->where('categories.category_type_id', $categoryType->id)->get();
         }
 
         if ($request->time) {
@@ -285,12 +284,12 @@ class StatisticalController extends Controller
 
     public function revenueSum(Request $request)
     {
-        $year = Order::select(DB::raw('Year(created_at) as year'))
-            ->groupBy(DB::raw("Year(created_at)"))
+        $year = Order::select(DB::raw('Year(updated_at) as year'))
+            ->groupBy(DB::raw("Year(updated_at)"))
             ->pluck('year');
 
         $orderData = Order::get();
-        $month = Order::select(DB::raw('Month(created_at) as month'));
+        $month = Order::select(DB::raw('Month(updated_at) as month'));
         $order = Order::select(DB::raw('sum(grand_total) as sum'));
         if ($request->time) {
             $order = $order
@@ -299,11 +298,11 @@ class StatisticalController extends Controller
                     $status->where('delivery_status', 2)
                         ->orWhere('delivery_status', 3);
                 })
-                ->whereYear('created_at', $request->time)
-                ->groupBy(DB::raw("Month(created_at)"))
+                ->whereYear('updated_at', $request->time)
+                ->groupBy(DB::raw("Month(updated_at)"))
                 ->pluck('sum');
-            $month = $month->whereYear('created_at', $request->time)
-                ->groupBy(DB::raw("Month(created_at)"))
+            $month = $month->whereYear('updated_at', $request->time)
+                ->groupBy(DB::raw("Month(updated_at)"))
                 ->pluck('month');
 
             $data = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
@@ -325,12 +324,12 @@ class StatisticalController extends Controller
                 $status->where('delivery_status', 2)
                     ->orWhere('delivery_status', 3);
             })
-            ->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw("Month(created_at)"))
+            ->whereYear('updated_at', date('Y'))
+            ->groupBy(DB::raw("Month(updated_at)"))
             ->pluck('sum');
 
-        $month = $month->whereYear('created_at', date('Y'))
-            ->groupBy(DB::raw("Month(created_at)"))
+        $month = $month->whereYear('updated_at', date('Y'))
+            ->groupBy(DB::raw("Month(updated_at)"))
             ->pluck('month');
 
 
@@ -374,12 +373,12 @@ class StatisticalController extends Controller
             $petName = Product::select('products.name as name', 'products.id as id', 'category_types.id as idType')
                 ->join('categories', 'categories.id', '=', 'products.category_id')
                 ->join('category_types', 'category_types.id', '=', 'categories.category_type_id')
-                ->where('category_type_id', $categoryType->id)->get();
+                ->where('categories.category_type_id', $categoryType->id)->get();
         } else {
             $petName = Accessory::select('accessories.name as name', 'accessories.id as id', 'category_types.id as idType')
                 ->join('categories', 'categories.id', '=', 'accessories.category_id')
                 ->join('category_types', 'category_types.id', '=', 'categories.category_type_id')
-                ->where('category_type_id', $categoryType->id)->get();
+                ->where('categories.category_type_id', $categoryType->id)->get();
         }
         if ($request->time) {
             foreach ($petName as $name) {
@@ -392,10 +391,9 @@ class StatisticalController extends Controller
                     })
                     ->where('order_details.product_type', $name->idType)
                     ->where('order_details.product_id', $name->id)
-                    ->where('order_details.created_at', 'like', '%' . $request->time . '%')
+                    ->where('order_details.updated_at', 'like', '%' . $request->time . '%')
                     ->get();
                 foreach ($petSum as $sum) {
-
                     foreach ($d as $index => $a) {
                         if ($a[$index] == $sum->order_id) {
                             if ($a[$index] > 1) {

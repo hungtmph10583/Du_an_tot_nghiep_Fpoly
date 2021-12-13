@@ -57,19 +57,11 @@ class CouponController extends Controller
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
-                    $instance->where('status', $request->get('status'));
-                }
-
-                if ($request->get('cate') != '') {
-                    $instance->where('category_id', $request->get('cate'));
-                }
 
                 if (!empty($request->get('search'))) {
                     $instance->where(function ($w) use ($request) {
                         $search = $request->get('search');
-                        $w->orWhere('name', 'LIKE', "%$search%")
-                            ->orWhere('slug', 'LIKE', "%$search%");
+                        $w->orWhere('code', 'LIKE', "%$search%");
                     });
                 }
             })
@@ -101,15 +93,12 @@ class CouponController extends Controller
             'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt",
             'code.min' => "Mã khuyến mãi ít nhất 3 kí tự",
             'type.required' => "Hãy chọn loại giảm giá",
-            'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
-            'category_id.required_without' => "Hãy chọn danh mục hoặc sản phẩm giảm giá",
             'discount.required' => 'Hãy nhập vào giá trị giảm giá',
             'discount.numeric' => 'Giá trị giảm giá phải là số',
             'start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'end_date.after' => 'Ngày kết thúc giảm phải sau ngày bắt đầu',
             'discount_type.required' => 'Hãy chọn kiểu giảm giá',
-            'details.required' => 'Hãy nhập vào chi tiết giảm giá',
         ];
         $validator = Validator::make(
             $request->all(),
@@ -131,8 +120,34 @@ class CouponController extends Controller
                         }
                     },
                 ],
-                'product_id' => 'required_without:category_id',
-                'category_id' => 'required_without:product_id',
+                'product_id' => [
+                    function ($attribute, $value, $fail) use ($request) {
+                        $message = '';
+                        foreach ($request->product_id as $pro) {
+                            $product = Product::where('id', $pro)->first();
+                            if ($product == '') {
+                                $message .= 'Sản phẩm không tồn tại';
+                            }
+                        }
+                        if ($message !== '') {
+                            return $fail($message);
+                        }
+                    },
+                ],
+                'category_id' => [
+                    function ($attribute, $value, $fail) use ($request) {
+                        $message = '';
+                        foreach ($request->category_id as $pro) {
+                            $category = Category::where('id', $pro)->first();
+                            if ($category == '') {
+                                $message .= 'Danh mục không tồn tại';
+                            }
+                        }
+                        if ($message !== '') {
+                            return $fail($message);
+                        }
+                    },
+                ],
                 'discount' => [
                     'required',
                     'numeric',
@@ -145,9 +160,24 @@ class CouponController extends Controller
                 //nullable cho phép validate không bắt buộc trừ khi có dữ liệu nhập vào
                 'start_date' => 'nullable|date_format:Y-m-d H:i',
                 'end_date' => 'nullable|date_format:Y-m-d H:i|after:start_date',
-                'discount_type' => 'required',
-                'details' => 'required',
-                'type' => 'required'
+                'discount_type' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $discountType = DiscountType::where('id', $request->discount_type)->first();
+                        if ($discountType == '') {
+                            return $fail('Kiểu giảm giá không tồn tại');
+                        }
+                    },
+                ],
+                'type' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $couponType = CouponType::where('id', $request->type)->first();
+                        if ($couponType == '') {
+                            return $fail('Loại giảm giá không tồn tại');
+                        }
+                    },
+                ]
             ],
             $message
         );
@@ -203,15 +233,12 @@ class CouponController extends Controller
             'code.regex' => "Mã khuyến mãi không chứa kí tự đặc biệt",
             'code.min' => "Mã khuyến mãi ít nhất 3 kí tự",
             'type.required' => "Hãy chọn loại giảm giá",
-            'product_id.required_without' => "Hãy chọn sản phẩm hoặc danh mục giảm giá",
-            'category_id.required_without' => "Hãy chọn danh mục hoặc sản phẩm giảm giá",
             'discount.required' => 'Hãy nhập vào giá trị giảm giá',
             'discount.numeric' => 'Giá trị giảm giá phải là số',
             'start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'end_date.after' => 'Ngày kết thúc giảm phải sau ngày bắt đầu',
             'discount_type.required' => 'Hãy chọn kiểu giảm giá',
-            'details.required' => 'Hãy nhập vào chi tiết giảm giá',
         ];
         $validator = Validator::make(
             $request->all(),
@@ -233,8 +260,34 @@ class CouponController extends Controller
                         }
                     },
                 ],
-                'product_id' => 'required_without:category_id',
-                'category_id' => 'required_without:product_id',
+                'product_id' => [
+                    function ($attribute, $value, $fail) use ($request) {
+                        $message = '';
+                        foreach ($request->product_id as $pro) {
+                            $product = Product::where('id', $pro)->first();
+                            if ($product == '') {
+                                $message .= 'Sản phẩm không tồn tại';
+                            }
+                        }
+                        if ($message !== '') {
+                            return $fail($message);
+                        }
+                    },
+                ],
+                'category_id' => [
+                    function ($attribute, $value, $fail) use ($request) {
+                        $message = '';
+                        foreach ($request->category_id as $pro) {
+                            $category = Category::where('id', $pro)->first();
+                            if ($category == '') {
+                                $message .= 'Danh mục không tồn tại';
+                            }
+                        }
+                        if ($message !== '') {
+                            return $fail($message);
+                        }
+                    },
+                ],
                 'discount' => [
                     'required',
                     'numeric',
@@ -247,9 +300,24 @@ class CouponController extends Controller
                 //nullable cho phép validate không bắt buộc trừ khi có dữ liệu nhập vào
                 'start_date' => 'nullable|date_format:Y-m-d H:i',
                 'end_date' => 'nullable|date_format:Y-m-d H:i|after:start_date',
-                'discount_type' => 'required',
-                'details' => 'required',
-                'type' => 'required'
+                'discount_type' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $discountType = DiscountType::where('id', $request->discount_type)->first();
+                        if ($discountType == '') {
+                            return $fail('Kiểu giảm giá không tồn tại');
+                        }
+                    },
+                ],
+                'type' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $couponType = CouponType::where('id', $request->type)->first();
+                        if ($couponType == '') {
+                            return $fail('Loại giảm giá không tồn tại');
+                        }
+                    },
+                ]
             ],
             $message
         );
@@ -357,7 +425,6 @@ class CouponController extends Controller
                     $product->products()->each(function ($related) {
                         $related->galleries()->delete();
                         $related->orderDetails()->delete();
-                        $related->carts()->delete();
                         $related->reviews()->delete();
                     });
                     $product->products()->delete();
@@ -367,7 +434,6 @@ class CouponController extends Controller
                         $related->products()->each(function ($related) {
                             $related->galleries()->delete();
                             $related->orderDetails()->delete();
-                            $related->carts()->delete();
                             $related->reviews()->delete();
                         });
                         $related->products()->delete();
@@ -376,7 +442,6 @@ class CouponController extends Controller
                     $product->products()->each(function ($related) {
                         $related->galleries()->delete();
                         $related->orderDetails()->delete();
-                        $related->carts()->delete();
                         $related->reviews()->delete();
                     });
                     $product->products()->delete();
@@ -395,7 +460,6 @@ class CouponController extends Controller
         $coupon->products()->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();
-            $related->carts()->delete();
             $related->reviews()->delete();
         });
 
@@ -406,7 +470,7 @@ class CouponController extends Controller
         $coupon->products()->delete();
         $coupon->couponUsage()->delete();
         $coupon->delete();
-        return response()->json(['success' => 'Xóa giảm giá thành công !', 'undo' => "Hoàn tác thành công !"]);
+        return response()->json(['success' => 'Xóa giảm giá thành công !']);
     }
 
     public function restore($id)
@@ -423,7 +487,6 @@ class CouponController extends Controller
                     $product->products()->each(function ($related) {
                         $related->galleries()->restore();
                         $related->orderDetails()->restore();
-                        $related->carts()->restore();
                         $related->reviews()->restore();
                         $related->category()->restore();
                     });
@@ -434,7 +497,6 @@ class CouponController extends Controller
                         $related->products()->each(function ($related) {
                             $related->galleries()->restore();
                             $related->orderDetails()->restore();
-                            $related->carts()->restore();
                             $related->reviews()->restore();
                             $related->category()->restore();
                         });
@@ -444,7 +506,6 @@ class CouponController extends Controller
                     $product->products()->each(function ($related) {
                         $related->galleries()->restore();
                         $related->orderDetails()->restore();
-                        $related->carts()->restore();
                         $related->reviews()->restore();
                         $related->category()->restore();
                     });
@@ -465,7 +526,6 @@ class CouponController extends Controller
         $coupon->products()->each(function ($related) {
             $related->galleries()->restore();
             $related->orderDetails()->restore();
-            $related->carts()->restore();
             $related->reviews()->restore();
             $related->category()->restore();
         });
@@ -495,7 +555,6 @@ class CouponController extends Controller
                     $product->products()->each(function ($related) {
                         $related->galleries()->forceDelete();
                         $related->orderDetails()->forceDelete();
-                        $related->carts()->forceDelete();
                         $related->reviews()->forceDelete();
                     });
                     $product->products()->forceDelete();
@@ -505,7 +564,6 @@ class CouponController extends Controller
                         $related->products()->each(function ($related) {
                             $related->galleries()->forceDelete();
                             $related->orderDetails()->forceDelete();
-                            $related->carts()->forceDelete();
                             $related->reviews()->forceDelete();
                         });
                         $related->products()->forceDelete();
@@ -514,7 +572,6 @@ class CouponController extends Controller
                     $product->products()->each(function ($related) {
                         $related->galleries()->forceDelete();
                         $related->orderDetails()->forceDelete();
-                        $related->carts()->forceDelete();
                         $related->reviews()->forceDelete();
                     });
                     $product->products()->forceDelete();
@@ -533,7 +590,6 @@ class CouponController extends Controller
         $coupon->products()->each(function ($related) {
             $related->galleries()->forceDelete();
             $related->orderDetails()->forceDelete();
-            $related->carts()->forceDelete();
             $related->reviews()->forceDelete();
         });
 
@@ -564,7 +620,6 @@ class CouponController extends Controller
                         $product->products()->each(function ($related) {
                             $related->galleries()->delete();
                             $related->orderDetails()->delete();
-                            $related->carts()->delete();
                             $related->reviews()->delete();
                         });
                         $product->products()->delete();
@@ -574,7 +629,6 @@ class CouponController extends Controller
                             $related->products()->each(function ($related) {
                                 $related->galleries()->delete();
                                 $related->orderDetails()->delete();
-                                $related->carts()->delete();
                                 $related->reviews()->delete();
                             });
                             $related->products()->delete();
@@ -583,7 +637,6 @@ class CouponController extends Controller
                         $product->products()->each(function ($related) {
                             $related->galleries()->delete();
                             $related->orderDetails()->delete();
-                            $related->carts()->delete();
                             $related->reviews()->delete();
                         });
                         $product->products()->delete();
@@ -601,7 +654,6 @@ class CouponController extends Controller
             $couponMul->products()->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
-                $related->carts()->delete();
                 $related->reviews()->delete();
             });
 
@@ -634,7 +686,6 @@ class CouponController extends Controller
                         $product->products()->each(function ($related) {
                             $related->galleries()->restore();
                             $related->orderDetails()->restore();
-                            $related->carts()->restore();
                             $related->reviews()->restore();
                             $related->category()->restore();
                         });
@@ -645,7 +696,6 @@ class CouponController extends Controller
                             $related->products()->each(function ($related) {
                                 $related->galleries()->restore();
                                 $related->orderDetails()->restore();
-                                $related->carts()->restore();
                                 $related->reviews()->restore();
                                 $related->category()->restore();
                             });
@@ -655,7 +705,6 @@ class CouponController extends Controller
                         $product->products()->each(function ($related) {
                             $related->galleries()->restore();
                             $related->orderDetails()->restore();
-                            $related->carts()->restore();
                             $related->reviews()->restore();
                             $related->category()->restore();
                         });
@@ -675,7 +724,6 @@ class CouponController extends Controller
             $couponMul->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
-                $related->carts()->restore();
                 $related->reviews()->restore();
                 $related->category()->restore();
             });
@@ -710,7 +758,6 @@ class CouponController extends Controller
                         $product->products()->each(function ($related) {
                             $related->galleries()->forceDelete();
                             $related->orderDetails()->forceDelete();
-                            $related->carts()->forceDelete();
                             $related->reviews()->forceDelete();
                         });
                         $product->products()->forceDelete();
@@ -720,7 +767,6 @@ class CouponController extends Controller
                             $related->products()->each(function ($related) {
                                 $related->galleries()->forceDelete();
                                 $related->orderDetails()->forceDelete();
-                                $related->carts()->forceDelete();
                                 $related->reviews()->forceDelete();
                             });
                             $related->products()->forceDelete();
@@ -729,7 +775,6 @@ class CouponController extends Controller
                         $product->products()->each(function ($related) {
                             $related->galleries()->forceDelete();
                             $related->orderDetails()->forceDelete();
-                            $related->carts()->forceDelete();
                             $related->reviews()->forceDelete();
                         });
                         $product->products()->forceDelete();
@@ -747,7 +792,6 @@ class CouponController extends Controller
             $couponMul->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
 

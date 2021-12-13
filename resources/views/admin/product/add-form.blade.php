@@ -261,7 +261,7 @@ $(document).ready(function() {
             var xhr, formData;
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
-            xhr.open('POST', "");
+            xhr.open('POST', "{{route('product.upload')}}");
             var token = '{{csrf_token()}}';
             xhr.setRequestHeader("X-CSRF-Token", token);
             xhr.onload = function() {

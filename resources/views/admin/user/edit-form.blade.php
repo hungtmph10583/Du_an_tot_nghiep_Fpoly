@@ -17,6 +17,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- END: Subheader -->
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -106,7 +107,7 @@
                                     </div>
                                 </div>
                                 <div class="col-6">
-                                    @hasanyrole('admin|manage')
+                                    @hasanyrole('Admin|Manage')
                                     <div class="form-group">
                                         <label for="">Trạng thái</label>
                                         <div class="form-control">
@@ -122,7 +123,7 @@
                                     </div>
                                     @endhasanyrole
                                     @if($model->id != 1)
-                                    @hasrole('admin')
+                                    @hasrole('Admin')
                                     <div class="form-group">
                                         <label for="">Quyền hạn</label>
                                         <select name="role_id" class="form-control" id="role">
@@ -141,7 +142,7 @@
                                         @endif
                                         <span class="text-danger error_text role_id_error"></span>
                                     </div>
-                                    <div class="text-right pl-2">
+                                    <div class="text-right">
                                         <button type="submit" class="btn btn-info">Lưu</button>
                                         <a href="{{route('user.index')}}" class="btn btn-danger">Hủy</a>
                                     </div>
@@ -180,12 +181,23 @@ $(".btn-info").click(function(e) {
         },
         success: function(data) {
             console.log(data)
+            $('#realize').attr('href', data.url)
+            $('#realize').text('Người dùng')
             if (data.status == 0) {
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
+                    showErr +=
+                        '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                        value[0] +
+                        '<br>';
                     $('span.' + key + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
             } else {
-                window.location.href = data.url;
+                $("#myModal").modal('show');
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
             }
         },
     });

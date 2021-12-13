@@ -147,6 +147,7 @@ $(document).ready(function() {
                 time: $('#time').val()
             },
             success: function(data) {
+                console.log(data)
                 var max = Math.max.apply(Math, data.data);
                 if (max == 0) {
                     $('#emptyChart').show(1500)
@@ -161,9 +162,6 @@ $(document).ready(function() {
 
     $('select').map(function(i, dom) {
         var idSelect = $(dom).attr('id');
-        $('#' + idSelect).change(function() {
-            table.draw();
-        });
         $('#' + idSelect).select2({});
     })
 });

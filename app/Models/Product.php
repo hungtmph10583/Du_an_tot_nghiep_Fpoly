@@ -40,7 +40,7 @@ class Product extends Model
 
     public function breed()
     {
-        return $this->belongsTo(Breed::class, 'id')->withTrashed();
+        return $this->belongsTo(Breed::class, 'breed_id')->withTrashed();
     }
 
     public function gender()
@@ -76,10 +76,5 @@ class Product extends Model
     public function coupon()
     {
         return $this->belongsTo(Coupons::class, 'coupon_id')->withTrashed();
-    }
-
-    public function carts()
-    {
-        return $this->hasMany(Cart::class, 'product_id')->withTrashed();
     }
 }

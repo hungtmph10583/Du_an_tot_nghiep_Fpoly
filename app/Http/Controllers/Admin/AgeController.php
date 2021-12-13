@@ -29,18 +29,18 @@ class AgeController extends Controller
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
             })
-            ->orderColumn('product', function ($row, $order) {
-                return $row
-                    ->withTrashed()
-                    ->join('products', 'products.age_id', '=', 'ages.id')
-                    ->groupBy('ages.id')
-                    ->orderByRaw("count(ages.id)$order");
-            })
-            ->addColumn('product', function (Age $row) {
-                return $row->products->map(function ($pro) {
-                    return '<a href="' . route('product.detail', ['id' => $pro->id]) . '" class="btn btn-outline-primary">' . $pro->name . '</a>';
-                })->implode(' ');
-            })
+            // ->orderColumn('product', function ($row, $order) {
+            //     return $row
+            //         ->withTrashed()
+            //         ->join('products', 'products.age_id', '=', 'ages.id')
+            //         ->groupBy('ages.id')
+            //         ->orderByRaw("count(ages.id)$order");
+            // })
+            // ->addColumn('product', function (Age $row) {
+            //     return $row->products->map(function ($pro) {
+            //         return '<a href="' . route('product.detail', ['id' => $pro->id]) . '" class="btn btn-outline-primary">' . $pro->name . '</a>';
+            //     })->implode(' ');
+            // })
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
@@ -50,23 +50,14 @@ class AgeController extends Controller
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
-                    $instance->where('status', $request->get('status'));
-                }
-
-                if ($request->get('cate') != '') {
-                    $instance->where('category_id', $request->get('cate'));
-                }
-
                 if (!empty($request->get('search'))) {
                     $instance->where(function ($w) use ($request) {
                         $search = $request->get('search');
-                        $w->orWhere('name', 'LIKE', "%$search%")
-                            ->orWhere('slug', 'LIKE', "%$search%");
+                        $w->orWhere('age', 'LIKE', "%$search%");
                     });
                 }
             })
-            ->rawColumns(['status', 'action', 'checkbox', 'product'])
+            ->rawColumns(['status', 'action', 'checkbox'])
             ->make(true);
     }
 
@@ -196,18 +187,18 @@ class AgeController extends Controller
             ->addColumn('checkbox', function ($row) {
                 return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
             })
-            ->orderColumn('product', function ($row, $order) {
-                return $row
-                    ->onlyTrashed()
-                    ->join('products', 'products.age_id', '=', 'ages.id')
-                    ->groupBy('ages.id')
-                    ->orderByRaw("count(ages.id)$order");
-            })
-            ->addColumn('product', function (Age $row) {
-                return $row->products->map(function ($pro) {
-                    return '<a href="' . route('product.detail', ['id' => $pro->id]) . '" class="btn btn-outline-primary">' . $pro->name . '</a>';
-                })->implode(' ');
-            })
+            // ->orderColumn('product', function ($row, $order) {
+            //     return $row
+            //         ->onlyTrashed()
+            //         ->join('products', 'products.age_id', '=', 'ages.id')
+            //         ->groupBy('ages.id')
+            //         ->orderByRaw("count(ages.id)$order");
+            // })
+            // ->addColumn('product', function (Age $row) {
+            //     return $row->products->map(function ($pro) {
+            //         return '<a href="' . route('product.detail', ['id' => $pro->id]) . '" class="btn btn-outline-primary">' . $pro->name . '</a>';
+            //     })->implode(' ');
+            // })
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
@@ -216,23 +207,14 @@ class AgeController extends Controller
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
-                    $instance->where('status', $request->get('status'));
-                }
-
-                if ($request->get('cate') != '') {
-                    $instance->where('category_id', $request->get('cate'));
-                }
-
                 if (!empty($request->get('search'))) {
                     $instance->where(function ($w) use ($request) {
                         $search = $request->get('search');
-                        $w->orWhere('name', 'LIKE', "%$search%")
-                            ->orWhere('slug', 'LIKE', "%$search%");
+                        $w->orWhere('age', 'LIKE', "%$search%");
                     });
                 }
             })
-            ->rawColumns(['status', 'action', 'checkbox', 'product'])
+            ->rawColumns(['status', 'action', 'checkbox'])
             ->make(true);
     }
 
@@ -240,13 +222,12 @@ class AgeController extends Controller
     {
         $age = Age::withTrashed()->find($id);
         if (empty($age)) {
-            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
+            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại tuổi']);
         }
 
         $age->products()->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();
-            $related->carts()->delete();
             $related->reviews()->delete();
         });
         $age->products()->delete();
@@ -258,12 +239,11 @@ class AgeController extends Controller
     {
         $age = Age::withTrashed()->find($id);
         if (empty($age)) {
-            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
+            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại tuổi']);
         }
         $age->products()->each(function ($related) {
             $related->galleries()->restore();
             $related->orderDetails()->restore();
-            $related->carts()->restore();
             $related->reviews()->restore();
             $related->category()->restore();
         });
@@ -276,12 +256,11 @@ class AgeController extends Controller
     {
         $age = Age::withTrashed()->find($id);
         if (empty($age)) {
-            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại bài viết']);
+            return response()->json(['success' => 'Tuổi không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại tuổi']);
         }
         $age->products()->each(function ($related) {
             $related->galleries()->forceDelete();
             $related->orderDetails()->forceDelete();
-            $related->carts()->forceDelete();
             $related->reviews()->forceDelete();
         });
         $age->products()->forceDelete();
@@ -302,7 +281,6 @@ class AgeController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
-                $related->carts()->delete();
                 $related->reviews()->delete();
             });
             $pro->products()->delete();
@@ -324,7 +302,6 @@ class AgeController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
-                $related->carts()->restore();
                 $related->reviews()->restore();
                 $related->category()->restore();
             });
@@ -347,7 +324,6 @@ class AgeController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
             $pro->products()->forceDelete();

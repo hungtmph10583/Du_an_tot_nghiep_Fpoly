@@ -179,8 +179,15 @@ class FooterController extends Controller
                     },
                 ],
                 'type' => 'required|numeric',
-                'footer_title_id' => 'required',
-                'general_setting_id' => 'required',
+                'general_setting_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $general_setting = GeneralSetting::where('id', $request->general_setting_id)->first();
+                        if ($general_setting == '') {
+                            return $fail('Cài đặt hệ thống không tồn tại');
+                        }
+                    },
+                ],
                 'icon' => 'mimes:jpg,bmp,png,jpeg|max:2048',
                 'url' => 'nullable|url'
             ],

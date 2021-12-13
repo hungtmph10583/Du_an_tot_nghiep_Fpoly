@@ -4,7 +4,7 @@
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/blog.css')}}">
 @endsection
-	<!-- content -->
+<!-- content -->
 <!-- section product -->
 <section class="blogs">
     <div class="bread-crumb">
@@ -18,7 +18,8 @@
             <div class="item-top">
                 <div class="thumbnail">
                     <a href="{{route('client.blog.detail', ['id' => $value->slug])}}">
-                    <img src="{{asset( 'storage/' . $value->image)}}" alt="Bài viết này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                        <img src="{{asset( 'storage/' . $value->image)}}"
+                            alt="Bài viết này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                 </div>
                 <div class="link_blog">
@@ -36,24 +37,16 @@
                         </li>
                         <li class="middle">
                             <i class="far fa-calendar-alt"></i>
-                            <span>
-                                {{$value->created_at->format('d/m/Y')}}
-                            </span>
-                        </li>
-                        <li>
-                            <i class="far fa-comments"></i>
-                            <span class="comment">1</span>
-                            <span>Bình luận</span>
+                            <span class="author">{{$value->created_at->diffForHumans()}}</span>
                         </li>
                     </ul>
                 </div>
-                <!-- <a href="{{route('client.blog.detail', ['id' => $value->id])}}" class="btn">Chi tiết</a> -->
             </div>
         </div>
         @endforeach
     </div>
     <div class="paging">
-    {{ $blog->links('vendor.pagination.custom') }}
+        {{ $blog->links('vendor.pagination.custom') }}
     </div>
 </section>
 <!-- scroll to top -->

@@ -24,7 +24,6 @@ class ProductController extends Controller
 {
     public function index(Request $request)
     {
-
         $categories = Category::all();
         $gender = Gender::all();
         $breed = Breed::all();
@@ -72,7 +71,7 @@ class ProductController extends Controller
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
+                if ($request->get('status') == '0' || $request->get('status') == '1') {
                     $instance->where('status', $request->get('status'));
                 }
 
@@ -129,6 +128,7 @@ class ProductController extends Controller
             'price.required' => "Hãy nhập giá thú cưng",
             'price.numeric' => "Giá thú cưng phải là số",
             'status.required' => "Hãy chọn trạng thái thú cưng",
+            'status.numeric' => "Trạng thái thú cưng phải là số",
             'age_id.required' => "Hãy nhập tuổi thú cưng",
             'quantity.required' => "Hãy nhập số lượng thú cưng",
             'quantity.numeric' => "Số lượng thú cưng phải là số",
@@ -144,6 +144,7 @@ class ProductController extends Controller
             'image.max' => 'File ảnh không được quá 2MB',
             'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'galleries.*.max' => 'File ảnh không được quá 2MB',
+            'slug.required' => "Nhập tên sản phẩm để tạo slug",
         ];
         $validator = Validator::make(
             $request->all(),
@@ -177,16 +178,60 @@ class ProductController extends Controller
                         }
                     },
                 ],
+                'slug' => 'required',
                 'discount_start_date' => 'nullable|date_format:Y-m-d H:i',
                 'discount_end_date' => 'nullable|date_format:Y-m-d H:i|after:discount_start_date',
-                'category_id' => 'required',
-                'gender_id' => 'required',
+                'category_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = Category::where(function ($query) use ($request) {
+                            $query->where('category_type_id', 1)
+                                ->where('id', $request->category_id);
+                        })->first();
+
+                        if ($categoryId == '') {
+                            return $fail('Danh mục thú cưng không tồn tại');
+                        }
+
+                        if ($request->breed_id) {
+                            $breed = Breed::where('id', $request->breed_id)->first();
+                            if ($breed->category_id !== $categoryId->id) {
+                                return $fail('Danh mục thú cưng không thuộc giống loài');
+                            }
+                        }
+                    },
+                ],
+                'gender_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $gender = Gender::where('id', $value)->first();
+                        if ($gender == '') {
+                            return $fail('Giới tính thú cưng không tồn tại');
+                        }
+                    },
+                ],
                 'price' => 'required|numeric',
-                'status' => 'required',
-                'age_id' => 'required',
+                'status' => 'required|numeric',
+                'age_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $age = Age::where('id', $value)->first();
+                        if ($age == '') {
+                            return $fail('Tuổi thú cưng không tồn tại');
+                        }
+                    },
+                ],
                 'quantity' => 'required|numeric',
                 'weight' => 'required|numeric',
-                'breed_id' => 'required',
+                'breed_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $breed = Breed::where('id', $value)->first();
+                        if ($breed == '') {
+                            return $fail('Giống loài thú cưng không tồn tại');
+                        }
+                    },
+                ],
                 'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048',
                 'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
@@ -261,11 +306,13 @@ class ProductController extends Controller
             'price.required' => "Hãy nhập giá thú cưng",
             'price.numeric' => "Giá thú cưng phải là số",
             'status.required' => "Hãy chọn trạng thái thú cưng",
+            'status.numeric' => "Trạng thái thú cưng phải là số",
             'age_id.required' => "Hãy nhập tuổi thú cưng",
             'quantity.required' => "Hãy nhập số lượng thú cưng",
             'quantity.numeric' => "Số lượng thú cưng phải là số",
             'discount_start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'discount_end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'discount_end_date.after' => 'Ngày kết thúc giảm giá không được trước ngày bắt đầu',
             'weight.required' => "Hãy nhập cân nặng thú cưng",
             'weight.numeric' => "Cân nặng thú cưng phải là số",
             'breed_id.required' => "Hãy chọn giống loài",
@@ -274,6 +321,7 @@ class ProductController extends Controller
             'image.max' => 'File ảnh không được quá 2MB',
             'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'galleries.*.max' => 'File ảnh không được quá 2MB',
+            'slug.required' => "Nhập tên sản phẩm để tạo slug",
         ];
         $validator = Validator::make(
             $request->all(),
@@ -306,16 +354,59 @@ class ProductController extends Controller
                         }
                     },
                 ],
+                'slug' => 'required',
                 'discount_start_date' => 'nullable|date_format:Y-m-d H:i',
                 'discount_end_date' => 'nullable|date_format:Y-m-d H:i|after:discount_start_date',
-                'category_id' => 'required',
-                'gender_id' => 'required',
+                'category_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = Category::where(function ($query) use ($request) {
+                            $query->where('category_type_id', 1)
+                                ->where('id', $request->category_id);
+                        })->first();
+
+                        if ($categoryId == '') {
+                            return $fail('Danh mục thú cưng không tồn tại');
+                        }
+                        if ($request->breed_id) {
+                            $breed = Breed::where('id', $request->breed_id)->first();
+                            if ($breed->category_id !== $categoryId->id) {
+                                return $fail('Danh mục thú cưng không thuộc giống loài');
+                            }
+                        }
+                    },
+                ],
+                'gender_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $gender = Gender::where('id', $value)->first();
+                        if ($gender == '') {
+                            return $fail('Giới tính thú cưng không tồn tại');
+                        }
+                    },
+                ],
                 'price' => 'required|numeric',
-                'status' => 'required',
-                'age_id' => 'required',
+                'status' => 'required|numeric',
+                'age_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $age = Age::where('id', $value)->first();
+                        if ($age == '') {
+                            return $fail('Tuổi thú cưng không tồn tại');
+                        }
+                    },
+                ],
                 'quantity' => 'required|numeric',
                 'weight' => 'required|numeric',
-                'breed_id' => 'required',
+                'breed_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $breed = Breed::where('id', $value)->first();
+                        if ($breed == '') {
+                            return $fail('Giống loài thú cưng không tồn tại');
+                        }
+                    },
+                ],
                 'image' => 'mimes:jpg,bmp,png,jpeg|max:2048',
                 'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
@@ -323,7 +414,7 @@ class ProductController extends Controller
         );
 
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index')]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('product.index')]);
         } else {
             $model->user_id = Auth::id();
             $model->fill($request->all());
@@ -465,19 +556,18 @@ class ProductController extends Controller
 
     public function remove($id)
     {
-        $product = Product::find($id);
+        $product = Product::withTrashed()->find($id);
 
         if ($product->count() == 0) {
             return response()->json(['success' => 'Xóa thú cưng thất bại !', 'undo' => "Hoàn tác thất bại !"]);
         }
 
         $product->galleries()->delete();
-        $product->orderDetails()->delete();
-        $product->carts()->delete();
-        $product->reviews()->delete();
+        $product->orderDetails()->where('product_type', 1)->delete();
+        $product->reviews()->where('product_type', 1)->delete();
         $product->delete();
 
-        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
+        return response()->json(['success' => 'Xóa thú cưng thành công !']);
     }
 
     public function restore($id)
@@ -485,17 +575,16 @@ class ProductController extends Controller
         $product = Product::withTrashed()->find($id);
 
         if ($product->count() == 0) {
-            return response()->json(['success' => 'Sản phẩm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại sản phẩm']);
+            return response()->json(['success' => 'Thú cưng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại sản phẩm']);
         }
 
         $product->galleries()->restore();
         $product->category()->restore();
-        $product->orderDetails()->restore();
-        $product->carts()->restore();
-        $product->reviews()->restore();
+        $product->orderDetails()->where('product_type', 1)->restore();
+        $product->reviews()->where('product_type', 1)->restore();
         $product->restore();
 
-        return response()->json(['success' => 'Khôi phục thành công !']);
+        return response()->json(['success' => 'Khôi phục thú cưng thành công !']);
     }
 
     public function delete($id)
@@ -503,16 +592,15 @@ class ProductController extends Controller
         $product = Product::withTrashed()->find($id);
 
         if ($product->count() == 0) {
-            return response()->json(['success' => 'Sản phẩm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại sản phẩm']);
+            return response()->json(['success' => 'thú cưng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại thú cưng']);
         }
 
         $product->galleries()->forceDelete();
-        $product->orderDetails()->forceDelete();
-        $product->carts()->forceDelete();
-        $product->reviews()->forceDelete();
+        $product->orderDetails()->where('product_type', 1)->forceDelete();
+        $product->reviews()->where('product_type', 1)->forceDelete();
         $product->forceDelete();
 
-        return response()->json(['success' => 'Xóa sản phẩm thành công !']);
+        return response()->json(['success' => 'Xóa thú cưng thành công !']);
     }
 
     public function store(Request $request)
@@ -535,14 +623,13 @@ class ProductController extends Controller
         $product = Product::withTrashed()->whereIn('id', $idAll);
 
         if ($product->count() == 0) {
-            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+            return response()->json(['success' => 'Xóa thú cưng thất bại !']);
         }
 
         $product->each(function ($related) {
             $related->galleries()->delete();
-            $related->orderDetails()->delete();
-            $related->carts()->delete();
-            $related->reviews()->delete();
+            $related->orderDetails()->where('product_type', 1)->delete();
+            $related->reviews()->where('product_type', 1)->delete();
         });
         $product->delete();
 
@@ -555,19 +642,18 @@ class ProductController extends Controller
         $product = Product::withTrashed()->whereIn('id', $idAll);
 
         if ($product->count() == 0) {
-            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+            return response()->json(['success' => 'Xóa thú cưng thất bại !']);
         }
 
         $product->each(function ($related) {
             $related->galleries()->restore();
             $related->category()->restore();
-            $related->orderDetails()->restore();
-            $related->carts()->restore();
-            $related->reviews()->restore();
+            $related->orderDetails()->where('product_type', 1)->restore();
+            $related->reviews()->where('product_type', 1)->restore();
         });
         $product->restore();
 
-        return response()->json(['success' => 'Khôi phục sản phẩm thành công !']);
+        return response()->json(['success' => 'Khôi phục thú cưng thành công !']);
     }
 
     public function deleteMultiple(Request $request)
@@ -576,17 +662,16 @@ class ProductController extends Controller
         $product = Product::withTrashed()->whereIn('id', $idAll);
 
         if ($product->count() == 0) {
-            return response()->json(['success' => 'Xóa sản phẩm thất bại !']);
+            return response()->json(['success' => 'Xóa thú cưng thất bại !']);
         }
 
         $product->each(function ($related) {
             $related->galleries()->forceDelete();
-            $related->orderDetails()->forceDelete();
-            $related->carts()->forceDelete();
-            $related->reviews()->forceDelete();
+            $related->orderDetails()->where('product_type', 1)->forceDelete();
+            $related->reviews()->where('product_type', 1)->forceDelete();
         });
         $product->forceDelete();
 
-        return response()->json(['success' => 'Xóa sản phẩm thành công !']);
+        return response()->json(['success' => 'Xóa thú cưng thành công !']);
     }
 }

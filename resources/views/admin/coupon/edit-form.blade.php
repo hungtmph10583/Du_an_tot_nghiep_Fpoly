@@ -122,7 +122,7 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <input type="datetime-local" name="end_date" id="end" class="form-control"
-                                            value="{{\Carbon\Carbon::parse($coupon->start_date)->format('Y-m-d\TH:i')}}">
+                                            value="{{\Carbon\Carbon::parse($coupon->end_date)->format('Y-m-d\TH:i')}}">
                                     </div>
                                 </div>
                             </div>
@@ -168,20 +168,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label for="">Nội dung giảm giá</label>
-                            </div>
-                        </div>
-                        <div class="col-9">
-                            <div class="form-group">
-                                <textarea name="details" class="form-control" cols="30"
-                                    rows="10">{{$coupon->details}}</textarea>
-                            </div>
-                            <span class="text-danger error_text details_error"></span>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-6"></div>
                         <div class="col-6 mt-2"><br>
                             <div class="text-right">
@@ -201,71 +187,52 @@
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">
 <script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
 <script>
-// $(document).ready(function() {
-//     $('#discountPro').keyup(function(e) {
-//         setTimeout(function() {
-//             console.log($('#discountPro').val())
-//         }, 1000)
+$(document).ready(function() {
+    $(".btn-info").click(function(e) {
+        e.preventDefault();
+        var formData = new FormData($('form')[0]);
+        if ($('#forever').is(':checked')) {
+            formData.set('start_date', ' ');
+            formData.set('end_date', ' ');
+        }
 
+        formData.set('start_date', dateTime($("#start").val()))
+        formData.set('end_date', dateTime($("#end").val()))
 
-//     })
-// });
-$(".btn-info").click(function(e) {
-    e.preventDefault();
-    var formData = new FormData($('form')[0]);
-    if ($('#forever').is(':checked')) {
-        formData.set('start_date', ' ');
-        formData.set('end_date', ' ');
-    }
-
-    formData.set('start_date', dateTime($("#start").val()))
-    formData.set('end_date', dateTime($("#end").val()))
-
-    $.ajax({
-        url: "{{ route('coupon.saveEdit',['id'=>$coupon->id]) }}",
-        type: 'POST',
-        data: formData,
-        dataType: 'json',
-        cache: false,
-        contentType: false,
-        processData: false,
-        beforeSend: function(data) {
-            $(document).find('span.error_text').text('');
-        },
-        success: function(data) {
-            console.log(data)
-            $('#realize').attr('href', data.url)
-            $('#realize').text('Giảm giá');
-            if (data.status == 0) {
+        $.ajax({
+            url: "{{ route('coupon.saveEdit',['id'=>$coupon->id]) }}",
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function(data) {
+                $(document).find('span.error_text').text('');
+            },
+            success: function(data) {
+                console.log(data)
+                $('#realize').attr('href', data.url)
+                $('#realize').text('Giảm giá');
                 $("#myModal").modal('show');
-                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
-                $.each(data.error, function(key, value) {
-                    if (data.dupicate != null) {
-                        if (key == 'code') {
-                            value = [
-                                'Mã giảm giá đã tồn tại trong thùng rác . Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác'
-                            ];
-                        }
+                if (data.status == 0) {
+                    showErr = '<div class="alert alert-danger" role="alert" id="danger">';
+                    $.each(data.error, function(key, value) {
                         showErr +=
                             '<span class="fas fa-times-circle text-danger mr-2"></span>' +
                             value[0] +
                             '<br>';
-                    } else {
-                        showErr +=
-                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
-                            value[0] +
-                            '<br>';
-                    }
-                    $('span.' + key + '_error').text(value[0]);
-                });
-                $('.modal-body').html(showErr);
-            } else {
-                $("#myModal").modal('show');
-                $('.modal-body').html(
-                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
-                    data.message + '</div>')
-            }
-        },
+                        $('span.' + key.replace('.0', '') + '_error').text(value[
+                            0]);
+                    });
+                    $('.modal-body').html(showErr);
+                } else {
+                    $('.modal-body').html(
+                        '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                        data.message + '</div>')
+                }
+            },
+        });
     });
 });
 $('select').map(function(i, dom) {

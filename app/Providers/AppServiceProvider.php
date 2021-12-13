@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\View;
 use App\Models\User;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
@@ -30,11 +31,12 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+
         /**
          * hungtm
          * @date: 28/09/21
          */
-        Schema::defaultStringLength(191);
+        Schema::defaultStringLength(125);
         Paginator::useBootstrap();
 
 

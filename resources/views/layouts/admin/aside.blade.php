@@ -141,12 +141,6 @@
                                 @endforeach
                             </ul>
                         </li>
-                        <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Lịch sử nhập hàng</p>
-                            </a>
-                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -396,6 +390,12 @@
                             </a>
                         </li>
                         @endhasanyrole
+                        <li class="nav-item">
+                            <a href="{{route('user.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác tài khoản</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @hasanyrole('Admin|Manage')
@@ -429,35 +429,6 @@
                     </ul>
                 </li>
                 @endhasanyrole
-                <li class="nav-item">
-                    <a href="#" class="nav-link">
-                        <i class="fas fa-globe-europe"></i>
-                        <p>
-                            Quốc Gia
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview">
-                        <li class="nav-item">
-                            <a href="{{route('country.index')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Danh sách</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('country.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thêm quốc gia</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('country.backup')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Thùng rác quốc gia</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-transgender-alt"></i>
@@ -546,48 +517,10 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('blog.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Header</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
                             <a href="{{route('slide.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Slide</p>
                             </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{route('blog.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Banner</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <<<<<<< HEAD <a href="{{route('footerTitle.add')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Footer title</p>
-                                </a>
-                                <ul class="nav nav-treeview">
-                                    <li class="nav-item">
-                                        <a href="{{route('footerTitle.index')}}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Danh sách</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('footerTitle.add')}}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Thêm footer title</p>
-                                        </a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a href="{{route('footerTitle.backup')}}" class="nav-link">
-                                            <i class="far fa-circle nav-icon"></i>
-                                            <p>Thùng rác footer title</p>
-                                        </a>
-                                    </li>
-                                </ul>
                         </li>
                         <li class="nav-item">
                             <a href="{{route('blog.add')}}" class="nav-link">

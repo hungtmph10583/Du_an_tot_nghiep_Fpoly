@@ -81,9 +81,10 @@ class BlogController extends Controller
             'title.unique' => "Tên chủ đề bài viết đã tồn tại",
             'title.regex' => "Tên chủ đề không chứa kí tự đặc biệt",
             'title.min' => "Tên chủ đề bài viết ít nhất 3 kí tự",
-            'slug.required' => "Slug không được trống",
+            'slug.required' => "Viết tiêu đề để tạo slug",
             'category_blog_id.required' => "Hãy chọn bài viết",
             'status.required' => 'Hãy chọn trạng thái bài viết',
+            'status.numeric' => 'Trạng thái bài viết phải là kiểu số',
             'content.required' => 'Hãy nhập nội dung bài viết',
             'image.required' => 'Hãy chọn ảnh bài viết',
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
@@ -110,8 +111,16 @@ class BlogController extends Controller
                     },
                 ],
                 'slug' => 'required',
-                'category_blog_id' => 'required',
-                'status' => 'required',
+                'category_blog_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $blogCate = BlogCategory::where('id', $value)->first();
+                        if ($blogCate == '') {
+                            return $fail('Danh mục bài viết không tồn tại');
+                        }
+                    },
+                ],
+                'status' => 'required|numeric',
                 'content' => 'required',
                 'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
             ],
@@ -165,8 +174,12 @@ class BlogController extends Controller
         $message = [
             'title.required' => "Hãy nhập vào chủ đề bài viết",
             'title.unique' => "Tên chủ đề bài viết đã tồn tại",
+            'title.regex' => "Tên chủ đề không chứa kí tự đặc biệt",
+            'title.min' => "Tên chủ đề bài viết ít nhất 3 kí tự",
+            'slug.required' => "Viết tiêu đề để tạo slug",
             'category_blog_id.required' => "Hãy chọn bài viết",
             'status.required' => 'Hãy chọn trạng thái bài viết',
+            'status.numeric' => 'Trạng thái bài viết phải là kiểu số',
             'content.required' => 'Hãy nhập nội dung bài viết',
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'image.max' => 'File ảnh không được quá 2MB',
@@ -176,10 +189,32 @@ class BlogController extends Controller
             [
                 'title' => [
                     'required',
-                    Rule::unique('blogs')->ignore($id)
+                    'min:3',
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_]*$/',
+                    Rule::unique('blogs')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Blog::onlyTrashed()
+                            ->where('title', 'like', '%' . $request->title . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->title) {
+                                return $fail('Loại danh mục đã tồn tại trong thùng rác .
+                                 Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    },
                 ],
-                'category_blog_id' => 'required',
-                'status' => 'required',
+                'slug' => 'required',
+                'category_blog_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $blogCate = BlogCategory::where('id', $value)->first();
+                        if ($blogCate == '') {
+                            return $fail('Danh mục bài viết không tồn tại');
+                        }
+                    },
+                ],
+                'status' => 'required|numeric',
                 'content' => 'required',
                 'image' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],

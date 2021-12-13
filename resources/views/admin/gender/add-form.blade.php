@@ -74,8 +74,8 @@ $(document).ready(function() {
                 console.log(data)
                 $('#realize').attr('href', data.url)
                 $('#realize').text('Giới tính');
+                $("#myModal").modal('show');
                 if (data.status == 0) {
-                    $("#myModal").modal('show');
                     showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                     $.each(data.error, function(key, value) {
                         showErr +=
@@ -87,7 +87,6 @@ $(document).ready(function() {
                     $('.modal-body').html(showErr);
 
                 } else {
-                    $("#myModal").modal('show');
                     $('.modal-body').html(
                         '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
                         data.message + '</div>')

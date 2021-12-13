@@ -34,7 +34,9 @@
                             <select class="form-control" name="cate" id="cate">
                                 <option value="">Lấy tất cả</option>
                                 @foreach($categories as $c)
+                                @if($c->category_type_id == 1)
                                 <option value="{{$c->id}}">{{$c->name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         </div>
@@ -83,7 +85,6 @@
                                 <option value="">Chọn trạng thái</option>
                                 <option value="0">Hết hàng</option>
                                 <option value="1">Còn hàng</option>
-                                <option value="3">Sắp ra mắt</option>
                             </select>
                         </div>
                     </div>
@@ -159,6 +160,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                             })
@@ -170,6 +172,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                                 deleteMul('{{route("product.removeMul")}}', allId);
@@ -278,11 +281,28 @@ $(document).ready(function() {
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
 
     $(document).on("click", "#undoIndex", function() {
-        id = $('#undoIndex').data('id');
-        var url = '{{route("product.restore",":id")}}';
-        url = url.replace(':id', id);
-        undoIndex(url, id)
-        table.ajax.reload();
+        $("#myModal").modal('show');
+        $('.modal-body').html(
+            `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khôi phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+        $('#realize').click(function(e) {
+            e.stopImmediatePropagation()
+            $("#realize").unbind('click');
+            $('#myModal').modal('toggle');
+            id = $('#undoIndex').data('id');
+            var url = '{{route("product.restore",":id")}}';
+            url = url.replace(':id', id);
+            undoIndex(url, id)
+            table.ajax.reload();
+        })
+        $('#cancel').click(function(e) {
+            $("#cancel").unbind('click');
+            $('#myModal').modal('toggle');
+        })
+
     })
 
     $('select').map(function(i, dom) {

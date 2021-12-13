@@ -193,6 +193,8 @@ return [
          * @name: huypqph11301
          */
         Intervention\Image\ImageServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
     ],
 
     /*
@@ -253,6 +255,12 @@ return [
          */
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Image' => Intervention\Image\Facades\Image::class,
+        /**
+         * @note: login with google
+         * @date: 10/12/2021
+         * @name: huypqph11301
+         */
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

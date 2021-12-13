@@ -10,7 +10,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#">
+                        <a href="javascript:;">
                             <i class="fas fa-phone-alt"></i>
                             <span>{{$generalSetting->phone}}</span>
                         </a>
@@ -22,7 +22,7 @@
                     @hasanyrole('Admin|Manage|Employee')
                     <li>
                         <a href="{{route('dashboard.index')}}">
-                        <i class="fas fa-cogs"></i>
+                            <i class="fas fa-cogs"></i>
                             <span>Đăng nhập quản trị</span>
                         </a>
                     </li>
@@ -101,9 +101,9 @@
                             <span class="title">Giỏ hàng</span>
                             <span class="btn-number">
                                 <?php
-                                    $count = Cart::content()->count();
+                                $count = Cart::content()->count();
                                 ?>
-                                    {{$count}}
+                                {{$count}}
                             </span>
                         </a>
                     </div>
@@ -113,11 +113,27 @@
     </div>
     <div class="header-bottom-bar">
         <div class="container">
-            <form action="" class="search-form">
-                <input type="search" class="form-input" id="search-box" placeholder="Tìm kiếm...">
-                <button for="search-box">
-                    <i class="fas fa-search"></i>
-                </button>
+            <form action="{{route('client.search')}}" method="GET" class="search-form">
+                @csrf
+                <div class="search_box select">
+                    <select name="search_type" id="">
+                        <option @if(isset($searchData['search_type']) && $searchData['search_type']==1) selected @endif
+                            value="1">Mã đơn hàng</option>
+                        <option @if(isset($searchData['search_type']) && $searchData['search_type']==2) selected @endif
+                            value="2">Thú cưng</option>
+                        <option @if(isset($searchData['search_type']) && $searchData['search_type']==3) selected @endif
+                            value="3">Phụ kiện</option>
+                        <option @if(isset($searchData['search_type']) && $searchData['search_type']==4) selected @endif
+                            value="4">Bài viết</option>
+                    </select>
+                </div>
+                <div class="search_box input">
+                    <input type="search" name="search" @isset($searchData['search']) value="{{$searchData['search']}}"
+                        @endisset class="form-input" id="search-box" placeholder="Tìm kiếm...">
+                    <button for="search-box">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
             </form>
         </div>
     </div>
@@ -142,14 +158,13 @@
 @endif
 @section('pagejs')
 <script>
-    // $("#off_alert").on('click', function(e){
-    //     document.getElementById("all_alert").style.display = 'none';
-    //     // $("#all_alert").addClass("active");
-    //     e.preventDefault();
-    // });
-
-    // $(".msg-alert p a").click(function() {
-    //     $(".msg-alert").removeClass('active');
-    // });
+// $("#off_alert").on('click', function(e){
+//     document.getElementById("all_alert").style.display = 'none';
+//     // $("#all_alert").addClass("active");
+//     e.preventDefault();
+// });
+// $(".msg-alert p a").click(function() {
+//     $(".msg-alert").removeClass('active');
+// });
 </script>
 @endsection

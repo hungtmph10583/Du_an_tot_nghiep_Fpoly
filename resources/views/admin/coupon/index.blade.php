@@ -92,6 +92,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                             })
@@ -103,6 +104,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                                 deleteMul('{{route("coupon.removeMul")}}', allId);
@@ -209,12 +211,30 @@ $(document).ready(function() {
         ]
     });
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
+
     $(document).on("click", "#undoIndex", function() {
-        id = $('#undoIndex').data('id');
-        var url = '{{route("coupon.restore",":id")}}';
-        url = url.replace(':id', id);
-        undoIndex(url, id)
-        table.ajax.reload();
+        $("#myModal").modal('show');
+        $('.modal-body').html(
+            `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khôi phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+        $('#realize').click(function(e) {
+            e.stopImmediatePropagation()
+            $("#realize").unbind('click');
+            $('#myModal').modal('toggle');
+            id = $('#undoIndex').data('id');
+            var url = '{{route("coupon.restore",":id")}}';
+            url = url.replace(':id', id);
+            undoIndex(url, id)
+            table.ajax.reload();
+        })
+        $('#cancel').click(function(e) {
+            $("#cancel").unbind('click');
+            $('#myModal').modal('toggle');
+        })
+
     })
 });
 </script>

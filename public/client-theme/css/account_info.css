@@ -59,7 +59,7 @@
 }
 
 .account_info_container .info_customer .info p {
-    font-style: 1.4rem;
+    font-size: 1.4rem;
     font-family: 'Ubuntu', sans-serif;
     color: var(--blue);
 }
@@ -225,7 +225,7 @@ a.delete-review:hover {
     color: var(--white);
 }
 
-section.account-info .account_info_container .content_page_double {
+.account-info .account_info_container .content_page_double {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(460px, 1fr));
     grid-gap: 2rem;
@@ -251,7 +251,6 @@ section.account-info .account_info_container .content_page_double {
     display: flex;
     justify-content: space-between;
 }
-
 .account_info_container .content_page_double .box.form form .box_content_top a.undo {
     font-size: 1.2rem;
     color: var(--white);

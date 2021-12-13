@@ -40,7 +40,7 @@
                                 <select name="category_id" class="form-control" id="category">
                                     <option value=""></option>
                                     @foreach ($category as $c)
-                                    @if ($c->genre_type == 0)
+                                    @if ($c->category_type_id == 1)
                                     <option value="{{ $c->id }}" @if ($c->id == old('category_id')) selected
                                         @endif>{{ $c->name }}</option>
                                     @endif

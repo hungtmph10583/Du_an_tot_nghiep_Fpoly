@@ -176,14 +176,14 @@
                             <div class="form-group">
                                 <label for="">Ngày bắt đầu</label>
                                 <input type="datetime-local" id="start" class="form-control" name="discount_start_date"
-                                    value="{{\Carbon\Carbon::parse($coupon->discount_start_date)->format('Y-m-d\TH:i')}}">
+                                    value="{{\Carbon\Carbon::parse($model->discount_start_date)->format('Y-m-d\TH:i')}}">
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày kết thúc</label>
                                 <input type="datetime-local" id="end" class="form-control" name="discount_end_date"
-                                    value="{{\Carbon\Carbon::parse($coupon->discount_end_date)->format('Y-m-d\TH:i')}}">
+                                    value="{{\Carbon\Carbon::parse($model->discount_end_date)->format('Y-m-d\TH:i')}}">
                             </div>
                         </div>
                     </div>
@@ -298,7 +298,7 @@ $(document).ready(function() {
             var xhr, formData;
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
-            xhr.open('POST', "");
+            xhr.open('POST', "{{route('product.upload')}}");
             var token = '{{csrf_token()}}';
             xhr.setRequestHeader("X-CSRF-Token", token);
             xhr.onload = function() {
@@ -366,6 +366,7 @@ $(".btn-info").click(function(e) {
             console.log(data)
             $('#realize').attr('href', data.url)
             $('#realize').text('Sản phẩm')
+            $("#myModal").modal('show');
             if (data.status == 0) {
                 showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
@@ -373,7 +374,7 @@ $(".btn-info").click(function(e) {
                         '<span class="fas fa-times-circle text-danger mr-2"></span>' +
                         value[0] +
                         '<br>';
-                    $('span.' + key + '_error').text(value[0]);
+                    $('span.' + key.replace('.0', '') + '_error').text(value[0]);
                 });
                 $('.modal-body').html(showErr);
             } else {

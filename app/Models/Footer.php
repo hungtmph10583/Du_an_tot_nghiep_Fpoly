@@ -11,13 +11,8 @@ class Footer extends Model
     use HasFactory, SoftDeletes;
     protected $table = 'footers';
     protected $fillable = [
-        'footer_title_id', 'type', 'content', 'icon', 'url', 'general_setting_id'
+        'type', 'content', 'icon', 'url', 'general_setting_id'
     ];
-
-    public function footerTitle()
-    {
-        return $this->hasMany(FooterTitle::class, 'id', 'footer_title_id')->withTrashed();
-    }
 
     public function generalSetting()
     {

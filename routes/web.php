@@ -31,13 +31,18 @@ use Carbon\Carbon;
 |
 */
 
+// Route::get('/ssd', function(){
+//     $user = \App\Models\User::find(1);
+//     dd($user->roles);
+// });
+
 // Route::get('/linkstorage', function () {
 //     Artisan::call('storage:link');
 // });
 
-// Route::get('/', [HomeController::class, 'home'])->name('client.home');
-Route::get('/', [HomeController::class, 'home']);
-Route::get('/trang-chu', [HomeController::class, 'home'])->name('client.home');
+Route::get('/', [HomeController::class, 'home'])->name('client.home');
+Route::get('/trang-chu', [HomeController::class, 'home']);
+Route::get('search/result', [HomeController::class, 'search'])->name('client.search');
 
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('client.product.index');
@@ -127,7 +132,7 @@ Route::post('change-password', [AuthController::class, 'saveChangePassword']);
 // Route::post('reset-password', 'ResetPasswordController@sendMail');
 
 Route::get('forgot-password', [ForgotPasswordController::class, 'getEmail'])->middleware('guest')->name('password.request');
-Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->middleware('guest')->name('password.request');
+Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->middleware('guest');
 
 Route::get('reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('resetPassword');
 Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);

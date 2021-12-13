@@ -1,3 +1,4 @@
+@section('title', 'Danh sách đơn hàng')
 @extends('layouts.admin.main')
 @section('content')
 <div class="content-header">
@@ -12,7 +13,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
@@ -25,6 +26,30 @@
                     {{session('BadState')}}
                 </div>
                 @endif
+                <div class="row">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">Trạng thái thanh toán</label>
+                            <select class="form-control" name="payment_status" id="payment_status">
+                                <option value="">Chọn trạng thái</option>
+                                <option value="1">Chưa thanh toán</option>
+                                <option value="2">Đã thanh toán</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="">Trạng thái đơn hàng</label>
+                            <select class="form-control" name="delivery_status" id="delivery_status">
+                                <option value="">Chọn trạng thái</option>
+                                <option value="1">Đang chờ xử lý</option>
+                                <option value="2">Đang giao hàng</option>
+                                <option value="3">Giao hàng thành công</option>
+                                <option value="0">Hủy đơn hàng</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
@@ -115,6 +140,8 @@ $(document).ready(function() {
             url: "{{ route('order.filter') }}",
             data: function(d) {
                 d.search = $('input[type="search"]').val();
+                d.delivery_status = $('#delivery_status').val();
+                d.payment_status = $('#payment_status').val();
             },
         },
         columns: [{
@@ -148,6 +175,13 @@ $(document).ready(function() {
     });
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
 
+    $('select').map(function(i, dom) {
+        var idSelect = $(dom).attr('id');
+        $('#' + idSelect).change(function() {
+            table.draw();
+        });
+        $('#' + idSelect).select2({});
+    })
 });
 </script>
 @endsection

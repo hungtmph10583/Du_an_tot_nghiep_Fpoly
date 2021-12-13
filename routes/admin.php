@@ -15,16 +15,15 @@ use App\Http\Controllers\Admin\CouponController;
 use App\Http\Controllers\Admin\BlogController;
 use App\Http\Controllers\Admin\BlogCategoryController;
 use App\Http\Controllers\Admin\CategoryTypeController;
-use App\Http\Controllers\Admin\CountryController;
 use App\Http\Controllers\Admin\CouponTypeController;
 use App\Http\Controllers\Admin\DiscountTypeController;
 use App\Http\Controllers\Admin\FooterController;
-use App\Http\Controllers\Admin\FooterTitleController;
 use App\Http\Controllers\Admin\GenderController;
 use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\GeneralSettingController;
 use App\Http\Controllers\Admin\StatisticalController;
 use App\Http\Controllers\Admin\UploadController;
+use Doctrine\DBAL\Driver\Middleware;
 
 /*
 |--------------------------------------------------------------------------
@@ -71,13 +70,13 @@ Route::prefix('tai-khoan')->group(function () {
 Route::prefix('phan-quyen')->group(function () {
     Route::get('/', [RoleController::class, 'index'])->name('role.index');
 
-    Route::get('tao-moi-role-user', [RoleController::class, 'addRoleUser'])->name('role.user.add');
+    Route::get('tao-moi-role-user', [RoleController::class, 'addRoleUser'])->middleware('permission:add roles')->name('role.user.add');
     Route::post('tao-moi-role-user', [RoleController::class, 'saveAddRoleUser'])->name('role.user.saveAdd');
     Route::get('sua-role-user/{id}', [RoleController::class, 'editRoleUser'])->name('role.user.edit');
     Route::post('sua-role-user/{id}', [RoleController::class, 'saveEditRoleUser'])->name('role.user.saveEdit');
     Route::get('xoa-role-user/{id}', [RoleController::class, 'removeRoleUser'])->name('role.user.remove');
 
-    Route::get('add-role-permission', [RoleController::class, 'addRolePermission'])->name('role.permission.add');
+    Route::get('add-role-permission', [RoleController::class, 'addRolePermission'])->middleware('permission:add roles')->name('role.permission.add');
     Route::post('add-role-permission', [RoleController::class, 'saveAddRolePermission']);
     Route::get('edit-role/{id}', [RoleController::class, 'editRolePermission'])->name('role.edit');
     Route::post('edit-role/{id}', [RoleController::class, 'saveEditRolePermission']);
@@ -179,6 +178,7 @@ Route::prefix('san-pham')->group(function () {
     Route::get('chi-tiet/{id}', [ProductController::class, 'detail'])->name('product.detail');
 
     Route::delete('xoa/{id}', [ProductController::class, 'remove'])->name('product.remove');
+    Route::post('upload', [UploadController::class, 'upload'])->name('product.upload');
 
     Route::get('dataProduct', [ProductController::class, 'getData'])->name('product.filter');
     Route::get('trash', [ProductController::class, 'backUp'])->name('product.backup');
@@ -203,6 +203,7 @@ Route::prefix('phu-kien')->group(function () {
     Route::get('chi-tiet/{id}', [AccessoryController::class, 'detail'])->name('accessory.detail');
 
     Route::delete('xoa/{id}', [AccessoryController::class, 'remove'])->name('accessory.remove');
+    Route::post('upload', [UploadController::class, 'upload'])->name('accessory.upload');
 
     Route::get('dataProduct', [AccessoryController::class, 'getData'])->name('accessory.filter');
     Route::get('trash', [AccessoryController::class, 'backUp'])->name('accessory.backup');
@@ -390,28 +391,6 @@ Route::prefix('loai-danh-muc')->group(function () {
     Route::delete('trash/deleteForeverMul', [CategoryTypeController::class, 'deleteMultiple'])->name('categoryType.deleteMul');
 });
 
-Route::prefix('quoc-gia')->group(function () {
-    Route::get('/', [CountryController::class, 'index'])->name('country.index');
-
-    Route::get('tao-moi', [CountryController::class, 'addForm'])->name('country.add');
-    Route::post('tao-moi', [CountryController::class, 'saveAdd'])->name('country.saveAdd');
-
-    Route::get('cap-nhat/{id}', [CountryController::class, 'editForm'])->name('country.edit');
-    Route::post('cap-nhat/{id}', [CountryController::class, 'saveEdit'])->name('country.saveEdit');
-
-    Route::get('chi-tiet/{id}', [CountryController::class, 'detail'])->name('country.detail');
-
-    Route::delete('xoa/{id}', [CountryController::class, 'remove'])->name('country.remove');
-    Route::get('dataPet', [CountryController::class, 'getData'])->name('country.filter');
-    Route::get('trash', [CountryController::class, 'backUp'])->name('country.backup');
-    Route::get('dataBackUp', [CountryController::class, 'getBackUp'])->name('country.getBackup');
-    Route::get('trash/restore/{id}', [CountryController::class, 'restore'])->name('country.restore');
-    Route::delete('trash/deleteForver/{id}', [CountryController::class, 'delete'])->name('country.delete');
-    Route::delete('trash/remove', [CountryController::class, 'removeMultiple'])->name('country.removeMul');
-    Route::get('trash/restore', [CountryController::class, 'restoreMultiple'])->name('country.restoreMul');
-    Route::delete('trash/deleteForeverMul', [CountryController::class, 'deleteMultiple'])->name('country.deleteMul');
-});
-
 Route::prefix('gioi-tinh')->group(function () {
     Route::get('/', [GenderController::class, 'index'])->name('gender.index');
 
@@ -432,28 +411,6 @@ Route::prefix('gioi-tinh')->group(function () {
     Route::delete('trash/remove', [GenderController::class, 'removeMultiple'])->name('gender.removeMul');
     Route::get('trash/restore', [GenderController::class, 'restoreMultiple'])->name('gender.restoreMul');
     Route::delete('trash/deleteForeverMul', [GenderController::class, 'deleteMultiple'])->name('gender.deleteMul');
-});
-
-Route::prefix('tieu-de-chan-trang')->group(function () {
-    Route::get('/', [FooterTitleController::class, 'index'])->name('footerTitle.index');
-
-    Route::get('tao-moi', [FooterTitleController::class, 'addForm'])->name('footerTitle.add');
-    Route::post('tao-moi', [FooterTitleController::class, 'saveAdd'])->name('footerTitle.saveAdd');
-
-    Route::get('cap-nhat/{id}', [FooterTitleController::class, 'editForm'])->name('footerTitle.edit');
-    Route::post('cap-nhat/{id}', [FooterTitleController::class, 'saveEdit'])->name('footerTitle.saveEdit');
-
-    Route::get('chi-tiet/{id}', [FooterTitleController::class, 'detail'])->name('footerTitle.detail');
-
-    Route::delete('xoa/{id}', [FooterTitleController::class, 'remove'])->name('footerTitle.remove');
-    Route::get('dataPet', [FooterTitleController::class, 'getData'])->name('footerTitle.filter');
-    Route::get('trash', [FooterTitleController::class, 'backUp'])->name('footerTitle.backup');
-    Route::get('dataBackUp', [FooterTitleController::class, 'getBackUp'])->name('footerTitle.getBackup');
-    Route::get('trash/restore/{id}', [FooterTitleController::class, 'restore'])->name('footerTitle.restore');
-    Route::delete('trash/deleteForver/{id}', [FooterTitleController::class, 'delete'])->name('footerTitle.delete');
-    Route::delete('trash/remove', [FooterTitleController::class, 'removeMultiple'])->name('footerTitle.removeMul');
-    Route::get('trash/restore', [FooterTitleController::class, 'restoreMultiple'])->name('footerTitle.restoreMul');
-    Route::delete('trash/deleteForeverMul', [FooterTitleController::class, 'deleteMultiple'])->name('footerTitle.deleteMul');
 });
 
 Route::prefix('chan-trang')->group(function () {

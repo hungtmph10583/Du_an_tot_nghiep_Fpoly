@@ -108,11 +108,13 @@
                                 <div class="col">
                                     <div class="form-group">
                                         <input type="datetime-local" id="start" name="start_date" class="form-control">
+                                        <span class="text-danger error_text discount_start_date_error"></span>
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
                                         <input type="datetime-local" id="end" name="end_date" class="form-control">
+                                        <span class="text-danger error_text discount_end_date_error"></span>
                                     </div>
                                 </div>
                             </div>
@@ -152,20 +154,6 @@
                                     <span class="text-danger error_text discount_type_error"></span>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label for="">Nội dung giảm giá</label>
-                            </div>
-                        </div>
-                        <div class="col-9">
-                            <div class="form-group">
-                                <textarea name="details" id="" class="form-control" cols="30" rows="10"
-                                    placeholder="Nội dung giảm giá"></textarea>
-                            </div>
-                            <span class="text-danger error_text details_error"></span>
                         </div>
                     </div>
                     <div class="row">
@@ -214,32 +202,18 @@ $(".btn-info").click(function(e) {
             console.log(data)
             $('#realize').attr('href', data.url)
             $('#realize').text('Giảm giá');
+            $("#myModal").modal('show');
             if (data.status == 0) {
-                $("#myModal").modal('show');
                 showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
-                    if (data.dupicate != null) {
-                        if (key == 'code') {
-                            value = [
-                                'Mã giảm giá đã tồn tại trong thùng rác . Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác'
-                            ];
-                        }
-                        showErr +=
-                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
-                            value[0] +
-                            '<br>';
-                    } else {
-                        showErr +=
-                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
-                            value[0] +
-                            '<br>';
-                    }
-                    $('span.' + key + '_error').text(value[0]);
+                    showErr +=
+                        '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                        value[0] +
+                        '<br>';
+                    $('span.' + key.replace('.0', '') + '_error').text(value[0]);
                 });
                 $('.modal-body').html(showErr);
-
             } else {
-                $("#myModal").modal('show');
                 $('.modal-body').html(
                     '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
                     data.message + '</div>')

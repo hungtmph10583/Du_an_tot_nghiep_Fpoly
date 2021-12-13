@@ -14,7 +14,7 @@ class SlideController extends Controller
 {
     public function index(Request $request)
     {
-        $admin = Auth::user()->hasanyrole('admin|manager');
+        $admin = Auth::user()->hasanyrole('Admin|Manager');
         return view('admin.slide.index', compact('admin'));
     }
 
@@ -34,7 +34,6 @@ class SlideController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                    <a href="' . route('slide.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
                     <a  class="btn btn-success" href="' . route('slide.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
                     <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('slide.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
                 </span>';
@@ -142,5 +141,30 @@ class SlideController extends Controller
             }
         }
         return response()->json(['status' => 1, 'success' => 'success', 'url' => route('slide.index'), 'message' => 'Sửa slide thành công']);
+    }
+
+    public function remove($id, Request $request)
+    {
+        $model = Slide::find($id);
+
+        if ($model->count() == 0) {
+            return response()->json(['success' => 'Slide không tồn tại !']);
+        }
+        $model->forceDelete();
+
+        return response()->json(['success' => 'Xóa slide thành công !']);
+    }
+
+    public function removeMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $slide = Slide::withTrashed()->whereIn('id', $idAll);
+
+        if ($slide->count() == 0) {
+            return response()->json(['success' => 'Xóa slide thất bại !']);
+        }
+        $slide->forceDelete();
+
+        return response()->json(['success' => 'Xóa slide thành công !']);
     }
 }

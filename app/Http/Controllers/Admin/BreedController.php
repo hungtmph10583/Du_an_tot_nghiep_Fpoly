@@ -57,14 +57,6 @@ class BreedController extends Controller
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
-                    $instance->where('status', $request->get('status'));
-                }
-
-                if ($request->get('cate') != '') {
-                    $instance->where('category_id', $request->get('cate'));
-                }
-
                 if (!empty($request->get('search'))) {
                     $instance->where(function ($w) use ($request) {
                         $search = $request->get('search');
@@ -91,8 +83,10 @@ class BreedController extends Controller
             'name.unique' => "Tên giống loài đã tồn tại",
             'name.regex' => "Tên giống loài không chứa kí tự đặc biệt và số",
             'name.min' => "Tên giống loài ít nhất 3 kí tự",
+            'slug.required' => 'Nhập tên giống loài để tạo slug',
             'category_id.required' => "Hãy chọn danh mục",
             'status.required' => "Hãy chọn trạng thái giống loài",
+            'status.numeric' => "Trạng thái giống loài phải là kiểu số",
             'uploadfile.required' => 'Hãy chọn ảnh giống loài',
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
@@ -117,8 +111,20 @@ class BreedController extends Controller
                         }
                     },
                 ],
-                'category_id' => 'required',
-                'status' => 'required',
+                'category_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = Category::where(function ($query) use ($request) {
+                            $query->where('category_type_id', 1)
+                                ->where('id', $request->category_id);
+                        })->first();
+                        if ($categoryId == '') {
+                            return $fail('Danh mục thú cưng không tồn tại');
+                        }
+                    },
+                ],
+                'slug' => 'required',
+                'status' => 'required|numeric',
                 'uploadfile' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
@@ -165,8 +171,10 @@ class BreedController extends Controller
             'name.unique' => "Tên giống loài đã tồn tại",
             'name.regex' => "Tên giống loài không chứa kí tự đặc biệt và số",
             'name.min' => "Tên giống loài ít nhất 3 kí tự",
+            'slug.required' => "Nhập tên giống loài để tạo slug",
             'category_id.required' => "Hãy chọn danh mục",
             'status.required' => "Hãy chọn trạng thái giống loài",
+            'status.numeric' => "Trạng thái giống loài phải là kiểu số",
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
@@ -190,8 +198,20 @@ class BreedController extends Controller
                         }
                     },
                 ],
-                'category_id' => 'required',
-                'status' => 'required',
+                'category_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = Category::where(function ($query) use ($request) {
+                            $query->where('category_type_id', 1)
+                                ->where('id', $request->category_id);
+                        })->first();
+                        if ($categoryId == '') {
+                            return $fail('Danh mục thú cưng không tồn tại');
+                        }
+                    },
+                ],
+                'slug' => 'required',
+                'status' => 'required|numeric',
                 'uploadfile' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
@@ -266,14 +286,6 @@ class BreedController extends Controller
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
-                if ($request->get('status') == '0' || $request->get('status') == '1' || $request->get('status') == '3') {
-                    $instance->where('status', $request->get('status'));
-                }
-
-                if ($request->get('cate') != '') {
-                    $instance->where('category_id', $request->get('cate'));
-                }
-
                 if (!empty($request->get('search'))) {
                     $instance->where(function ($w) use ($request) {
                         $search = $request->get('search');
@@ -295,7 +307,6 @@ class BreedController extends Controller
         $breed->products()->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();
-            $related->carts()->delete();
             $related->reviews()->delete();
         });
         $breed->products()->delete();
@@ -312,7 +323,6 @@ class BreedController extends Controller
         $breed->products()->each(function ($related) {
             $related->galleries()->restore();
             $related->orderDetails()->restore();
-            $related->carts()->restore();
             $related->reviews()->restore();
             $related->category()->restore();
         });
@@ -330,7 +340,6 @@ class BreedController extends Controller
         $breed->products()->each(function ($related) {
             $related->galleries()->forceDelete();
             $related->orderDetails()->forceDelete();
-            $related->carts()->forceDelete();
             $related->reviews()->forceDelete();
         });
         $breed->products()->forceDelete();
@@ -351,7 +360,6 @@ class BreedController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
-                $related->carts()->delete();
                 $related->reviews()->delete();
             });
             $pro->products()->delete();
@@ -373,7 +381,6 @@ class BreedController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
-                $related->carts()->restore();
                 $related->reviews()->restore();
                 $related->category()->restore();
             });
@@ -396,7 +403,6 @@ class BreedController extends Controller
             $pro->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
             $pro->products()->forceDelete();

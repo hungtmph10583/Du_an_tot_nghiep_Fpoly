@@ -60,6 +60,7 @@ class CategoryTypeController extends Controller
             'name.unique' => "Loại danh mục đã tồn tại",
             'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
             'name.min' => "Tên danh mục ít nhất 3 kí tự",
+            'slug.required' => "Nhập tên danh mục để tạo slug",
         ];
         $validator = Validator::make(
             $request->all(),
@@ -81,6 +82,7 @@ class CategoryTypeController extends Controller
                         }
                     },
                 ],
+                'slug' => 'required',
             ],
             $message
         );
@@ -116,6 +118,7 @@ class CategoryTypeController extends Controller
             'name.unique' => "Loại danh mục đã tồn tại",
             'name.regex' => "Loại danh mục không chứa kí tự đặc biệt và số",
             'name.min' => "Loại danh mục ít nhất 3 kí tự",
+            'slug.required' => "Nhập tên danh mục để tạo slug",
         ];
         $validator = Validator::make(
             $request->all(),
@@ -137,6 +140,7 @@ class CategoryTypeController extends Controller
                         }
                     },
                 ],
+                'slug' => 'required',
             ],
             $message
         );
@@ -195,14 +199,13 @@ class CategoryTypeController extends Controller
             $product->products()->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
-                $related->carts()->delete();
                 $related->reviews()->delete();
             });
             $product->products()->delete();
         });
         $cateType->category()->delete();
         $cateType->delete();
-        return response()->json(['success' => 'Xóa loại danh mục thành công !', 'undo' => "Hoàn tác thành công !"]);
+        return response()->json(['success' => 'Xóa loại danh mục thành công !']);
     }
 
     public function restore($id)
@@ -215,7 +218,6 @@ class CategoryTypeController extends Controller
             $product->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
-                $related->carts()->restore();
                 $related->reviews()->restore();
                 $related->category()->restore();
             });
@@ -236,7 +238,6 @@ class CategoryTypeController extends Controller
             $product->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
             $product->products()->forceDelete();
@@ -259,7 +260,6 @@ class CategoryTypeController extends Controller
                 $product->products()->each(function ($related) {
                     $related->galleries()->delete();
                     $related->orderDetails()->delete();
-                    $related->carts()->delete();
                     $related->reviews()->delete();
                 });
                 $product->products()->delete();
@@ -285,7 +285,6 @@ class CategoryTypeController extends Controller
                 $product->products()->each(function ($related) {
                     $related->galleries()->restore();
                     $related->orderDetails()->restore();
-                    $related->carts()->restore();
                     $related->reviews()->restore();
                     $related->category()->restore();
                 });
@@ -312,7 +311,6 @@ class CategoryTypeController extends Controller
                 $product->products()->each(function ($related) {
                     $related->galleries()->forceDelete();
                     $related->orderDetails()->forceDelete();
-                    $related->carts()->forceDelete();
                     $related->reviews()->forceDelete();
                 });
                 $product->products()->forceDelete();

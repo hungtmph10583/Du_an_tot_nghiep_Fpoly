@@ -33,6 +33,7 @@
                                 <span class="text-danger error_text name_error"></span>
                             </div>
                         </div>
+                        <input type="hidden" name="slug" id="slug" value="{{$model->slug}}">
                         <div class="col-6 mt-2"><br>
                             <div class="float-left">
                                 <button type="submit" class="btn btn-info">Lưu</button>
@@ -50,13 +51,34 @@
 @endsection
 @section('pagejs')
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">
+<script src="{{ asset('admin-theme/custom-js/custom.js') }}"></script>
 <script>
+function slugify(str) {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+    // remove accents, swap ñ for n, etc
+    var from = "ạảầấậẩẫăằắặẳẵãàáäâẹẻềếệểễẽèéëêìíịĩỉïîọỏõồốộổỗơờớợởỡõòóöôụủũưừứựửữùúüûñçỳýỵỷỹđ·/_,:;";
+    var to = "aaaaaaaaaaaaaaaaaaeeeeeeeeeeeeiiiiiiiooooooooooooooooooouuuuuuuuuuuuuncyyyyyd------";
+    for (var i = 0, l = from.length; i < l; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+        .replace(/\s+/g, '-') // collapse whitespace and replace by -
+        .replace(/-+/g, '-'); // collapse dashes
+    return str;
+}
 $(document).ready(function() {
+    var name = $('#name');
+    var slug = $('#slug');
+    name.keyup(function() {
+        slug.val(slugify(name.val()));
+    });
     $(".btn-info").click(function(e) {
         e.preventDefault();
         var formData = new FormData($('form')[0]);
         let nameValue = $('#name').val();
         let name = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
+        formData.append('slug', $('input[name="slug"]').val())
         formData.set('name', name);
         $.ajax({
             url: "{{ route('categoryType.saveEdit',['id'=>$model->id]) }}",

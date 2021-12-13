@@ -155,7 +155,7 @@ $(".btn-info").click(function(e) {
                         '<span class="fas fa-times-circle text-danger mr-2"></span>' +
                         value[0] +
                         '<br>';
-                    $('span.' + key.replace('.0', '') + '_error').text(value[0]);
+                    $('span.' + key + '_error').text(value[0]);
                 });
                 $('.modal-body').html(showErr);
             } else {

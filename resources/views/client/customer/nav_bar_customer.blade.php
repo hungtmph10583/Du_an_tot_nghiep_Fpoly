@@ -4,7 +4,15 @@
     </div>
     <div class="info">
         <h5>{{Auth::user()->name}}</h5>
-        <p>Trưởng Nhóm</p>
+        <p>
+            @if(count(Auth::user()->roles)>0)
+            @foreach(Auth::user()->roles as $role)
+            <span class="badge badge-success">{{$role->name}}</span>
+            @endforeach
+            @else
+            <span class="badge badge-info">Khách hàng</span>
+            @endif
+        </p>
     </div>
     <div class="nav_bar">
         <ul>
@@ -17,13 +25,13 @@
             <li>
                 <a href="{{route('client.customer.orderHistory')}}" id="link_order">
                     <i class="fas fa-swatchbook"></i>
-                    Quản lý đơn hàng
+                    Lịch sử đặt hàng
                 </a>
             </li>
             <li>
                 <a href="{{route('client.customer.review')}}" id="link_review">
                     <i class="fas fa-star-half-alt"></i>
-                    Nhận xét của tôi
+                    Lịch sử nhận xét
                 </a>
             </li>
         </ul>

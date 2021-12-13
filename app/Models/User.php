@@ -63,66 +63,55 @@ class User extends Authenticatable
 
     public function products()
     {
-        return $this->hasMany(Product::class, 'user_id');
+        return $this->hasMany(Product::class, 'user_id')->withTrashed();
         // quan he 
     }
 
     public function reviews()
     {
-        return $this->hasMany(Review::class, 'user_id');
+        return $this->hasMany(Review::class, 'user_id')->withTrashed();
         // quan he 
     }
 
     public function slides()
     {
-        return $this->hasMany(Slide::class, 'user_id');
+        return $this->hasMany(Slide::class, 'user_id')->withTrashed();
     }
 
     public function orders()
     {
-        return $this->hasMany(Order::class, 'user_id');
+        return $this->hasMany(Order::class, 'user_id')->withTrashed();
         // quan he  
     }
 
     public function coupons()
     {
-        return $this->hasMany(Coupons::class, 'user_id');
+        return $this->hasMany(Coupons::class, 'user_id')->withTrashed();
         // quan he 
     }
 
     public function coupon_usage()
     {
-        return $this->hasMany(CouponUsage::class, 'user_id');
+        return $this->hasMany(CouponUsage::class, 'user_id')->withTrashed();
         // quan he 
     }
 
-    public function carts()
-    {
-        return $this->hasMany(Cart::class, 'user_id');
-        // quan he 
-    }
 
     public function breeds()
     {
-        return $this->hasMany(Breed::class, 'user_id');
+        return $this->hasMany(Breed::class, 'user_id')->withTrashed();
         // quan he 
     }
 
     public function blogs()
     {
-        return $this->hasMany(Blog::class, 'user_id');
+        return $this->hasMany(Blog::class, 'user_id')->withTrashed();
         // quan he 
-    }
-
-    public function announcements()
-    {
-        return $this->hasMany(Announcement::class, 'user_id');
-        // quan he
     }
 
     public function accessories()
     {
-        return $this->hasMany(Accessory::class, 'user_id');
+        return $this->hasMany(Accessory::class, 'user_id')->withTrashed();
         // quan he
     }
 }

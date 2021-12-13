@@ -89,6 +89,7 @@ $(document).ready(function() {
 
                             $('#realize').click(function(e) {
                                 // ngăn quá trình thực thi nhiều lần modal bootstrap
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                             })
@@ -100,6 +101,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                                 deleteMul('{{route("slide.removeMul")}}', allId);
@@ -192,14 +194,6 @@ $(document).ready(function() {
         ]
     });
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
-
-    $(document).on("click", "#undoIndex", function() {
-        id = $('#undoIndex').data('id');
-        var url = '{{route("slide.restore",":id")}}';
-        url = url.replace(':id', id);
-        undoIndex(url, id)
-        table.ajax.reload();
-    })
 });
 </script>
 @endsection

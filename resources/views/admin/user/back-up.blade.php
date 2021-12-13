@@ -1,12 +1,13 @@
-@section('title', 'Thùng rác tiêu đề chân trang')
+@section('title', 'Danh sách tài khoản')
 @extends('layouts.admin.main')
 @section('content')
+<!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Thùng rác tiêu đề chân trang</li>
+                    <li class="breadcrumb-item card-title">Danh sách tài khoản</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -17,8 +18,7 @@
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
-        <div class="card">
-            <input type="hidden" name="_token" value="{{ csrf_token() }}" />
+        <div class="card card-success card-outline">
             <div class="card-body">
                 <div class="alert alert-success" role="alert" style="display: none;">
 
@@ -28,19 +28,28 @@
                     {{session('BadState')}}
                 </div>
                 @endif
+                <input type="hidden" name="_token" value="{{ csrf_token() }}" />
                 <div class="row">
                     <div style="width: 100%;">
                         <div class="table-responsive">
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Tên tiêu đề</th>
-                                    <th><a href="{{route('footerTitle.add')}}"
-                                            class="btn btn-outline-info float-right">Thêm danh
-                                            mục</a></th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>
+                                        @hasanyrole('Admin|Manage')
+                                        <a href="{{route('user.add')}}" class="btn btn-outline-info float-right">Thêm
+                                            tài
+                                            khoản</a>
+                                        @else
+                                        <a href="javascript:void(0);"
+                                            onclick="alert('Bạn không được cấp quyền để tạo tài khoản?')"
+                                            class="btn btn-outline-info float-right">Thêm tài khoản</a>
+                                        @endhasrole
+                                    </th>
                                 </thead>
                                 <tbody>
-
                                 </tbody>
                             </table>
                         </div>
@@ -53,8 +62,8 @@
 <!-- /.content -->
 @endsection
 @section('pagejs')
-<link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css')}}">
-<script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
+<link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">
+<script src="{{ asset('admin-theme/custom-js/custom.js') }}"></script>
 <script>
 $(document).ready(function() {
     var table = $('.data-table').DataTable({
@@ -80,8 +89,8 @@ $(document).ready(function() {
                         allId.push($(this).val());
                     })
                     if ('{{$admin}}') {
-                        var IsAjaxExecuting = false;
                         if (allId == '') {
+
                             $('.modal-body').html(
                                 `<div class="alert alert-danger" role="alert">
                         <span class="fas fa-times-circle text-danger mr-2">
@@ -100,10 +109,10 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                restoreMul('{{route("footerTitle.restoreMul")}}',
-                                    allId);
+                                restoreMul('{{route("user.restoreMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -113,6 +122,7 @@ $(document).ready(function() {
                         <span class="fas fa-times-circle text-danger mr-2">
                         Bạn không đủ quyền để dùng chức năng này
                         </span></div>`);
+
                         $('#realize').css('display', 'none')
                         $('#cancel').click(function(e) {
                             $("#cancel").unbind('click');
@@ -139,6 +149,7 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
                             })
@@ -150,9 +161,10 @@ $(document).ready(function() {
                         </span></div>`);
 
                             $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
                                 $("#realize").unbind('click');
                                 $('#myModal').modal('toggle');
-                                removeMul('{{route("footerTitle.deleteMul")}}', allId);
+                                removeMul('{{route("user.deleteMul")}}', allId);
                                 table.ajax.reload();
                             })
                         }
@@ -173,18 +185,22 @@ $(document).ready(function() {
             {
                 extend: 'copyHtml5',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             {
                 extend: 'csvHtml5',
+                charset: 'utf-8',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             {
                 extend: 'excelHtml5',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -194,11 +210,13 @@ $(document).ready(function() {
                 pageSize: 'LEGAL',
                 orientation: 'landscape',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             }, {
                 extend: 'print',
                 exportOptions: {
+                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -210,14 +228,14 @@ $(document).ready(function() {
         }],
         "order": [],
         language: {
-            processing: "<img width='70' src='{{asset('storage/uploads/loading/Dancing_kitty.gif')}}'>",
+            processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },
         serverSide: true,
         ajax: {
-            url: "{{ route('footerTitle.getBackup') }}",
+            url: "{{ route('user.getBackup') }}",
             data: function(d) {
                 d.search = $('input[type="search"]').val();
-            },
+            }
         },
         columns: [{
                 data: 'checkbox',
@@ -230,6 +248,10 @@ $(document).ready(function() {
                 name: 'name',
             },
             {
+                data: 'status',
+                name: 'status',
+            },
+            {
                 data: 'action',
                 name: 'action',
                 orderable: false,
@@ -237,14 +259,40 @@ $(document).ready(function() {
             }
         ]
     });
+
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
 
     $(document).on("click", "#undoTrashed", function() {
-        id = $('#undoTrashed').data('id');
-        var url = '{{route("footerTitle.remove",":id")}}';
-        url = url.replace(':id', id);
-        undoTrash(url, id)
-        table.ajax.reload();
+        $("#myModal").modal('show');
+        $('.modal-body').html(
+            `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khôi phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+        $('#realize').click(function(e) {
+            e.stopImmediatePropagation()
+            $("#realize").unbind('click');
+            $('#myModal').modal('toggle');
+            id = $('#undoTrashed').data('id');
+            var url = '{{route("user.remove",":id")}}';
+            url = url.replace(':id', id);
+            undoTrash(url, id)
+            table.ajax.reload();
+        })
+        $('#cancel').click(function(e) {
+            $("#cancel").unbind('click');
+            $('#myModal').modal('toggle');
+        })
+
+    })
+
+    $('select').map(function(i, dom) {
+        var idSelect = $(dom).attr('id');
+        $('#' + idSelect).change(function() {
+            table.draw();
+        });
+        $('#' + idSelect).select2({});
     })
 });
 </script>

@@ -19,7 +19,8 @@ class AccessoryController extends Controller
     public function index(Request $request)
     {
         $admin = Auth::user()->hasanyrole('admin|manager');
-        return view('admin.accessory.index', compact('admin'));
+        $categories = Category::all();
+        return view('admin.accessory.index', compact('admin', 'categories'));
     }
 
     public function getData(Request $request)
@@ -60,12 +61,19 @@ class AccessoryController extends Controller
                 </span>';
             })
             ->filter(function ($instance) use ($request) {
+                if ($request->get('status') == '0' || $request->get('status') == '1') {
+                    $instance->where('status', $request->get('status'));
+                }
+
+                if ($request->get('cate') != '') {
+                    $instance->where('category_id', $request->get('cate'));
+                }
 
                 if (!empty($request->get('search'))) {
                     $instance->where(function ($w) use ($request) {
                         $search = $request->get('search');
                         $w->orWhere('name', 'LIKE', "%$search%")
-                            ->orWhere('description', 'LIKE', "%$search%");
+                            ->orWhere('slug', 'LIKE', "%$search%");
                     });
                 }
             })
@@ -99,10 +107,12 @@ class AccessoryController extends Controller
             'price.required' => "Hãy nhập giá phụ kiện",
             'price.numeric' => "Giá phụ kiện phải là số",
             'status.required' => "Hãy chọn trạng thái phụ kiện",
+            'status.numeric' => "Trạng thái phụ kiện phải là số",
             'quantity.required' => "Hãy nhập số lượng phụ kiện",
             'quantity.numeric' => "Số lượng phụ kiện phải là số",
             'discount_start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'discount_end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'discount_end_date.after' => 'Ngày kết thúc giảm giá không được trước ngày bắt đầu',
             'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'galleries.*.max' => 'File ảnh không được quá 2MB',
             'image.required' => 'Hãy chọn ảnh phụ kiện',
@@ -140,9 +150,20 @@ class AccessoryController extends Controller
                 ],
                 'discount_start_date' => 'nullable|date_format:Y-m-d H:i',
                 'discount_end_date' => 'nullable|date_format:Y-m-d H:i|after:discount_start_date',
-                'category_id' => 'required',
+                'category_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = Category::where(function ($query) use ($request) {
+                            $query->where('category_type_id', 2)
+                                ->where('id', $request->category_id);
+                        })->first();
+                        if ($categoryId == '') {
+                            return $fail('Danh mục phụ kiện không tồn tại');
+                        }
+                    },
+                ],
                 'price' => 'required|numeric',
-                'status' => 'required',
+                'status' => 'required|numeric',
                 'quantity' => 'required|numeric',
                 'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048',
                 'image' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
@@ -213,14 +234,16 @@ class AccessoryController extends Controller
             'discount.unique' => "Giảm giá đã tồn tại",
             'discount.regex' => "Giảm giá không chứa kí tự đặc biệt và số",
             'discount.min' => "Giảm giá bé nhất là 1",
-            'category_id.required' => "Hãy chọn phụ kiện",
+            'category_id.required' => "Hãy chọn danh mục phụ kiện",
             'price.required' => "Hãy nhập giá phụ kiện",
             'price.numeric' => "Giá phụ kiện phải là số",
             'status.required' => "Hãy chọn trạng thái phụ kiện",
+            'status.numeric' => "Trạng thái phụ kiện phải là số",
             'quantity.required' => "Hãy nhập số lượng phụ kiện",
             'quantity.numeric' => "Số lượng phụ kiện phải là số",
             'discount_start_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
             'discount_end_date.date_format' => 'Ngày tháng giảm giá không hợp lệ',
+            'discount_end_date.after' => 'Ngày kết thúc giảm giá không được trước ngày bắt đầu',
             'galleries.*.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'galleries.*.max' => 'File ảnh không được quá 2MB',
             'image.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
@@ -259,9 +282,20 @@ class AccessoryController extends Controller
                 ],
                 'discount_start_date' => 'nullable|date_format:Y-m-d H:i',
                 'discount_end_date' => 'nullable|date_format:Y-m-d H:i|after:discount_start_date',
-                'category_id' => 'required',
+                'category_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = Category::where(function ($query) use ($request) {
+                            $query->where('category_type_id', 2)
+                                ->where('id', $request->category_id);
+                        })->first();
+                        if ($categoryId == '') {
+                            return $fail('Danh mục phụ kiện không tồn tại');
+                        }
+                    },
+                ],
                 'price' => 'required|numeric',
-                'status' => 'required',
+                'status' => 'required|numeric',
                 'quantity' => 'required|numeric',
                 'galleries.*' => 'mimes:jpg,bmp,png,jpeg|max:2048',
                 'image' => 'mimes:jpg,bmp,png,jpeg|max:2048'
@@ -269,7 +303,7 @@ class AccessoryController extends Controller
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('accessory.index')]);
         } else {
             $model->fill($request->all());
 
@@ -316,7 +350,7 @@ class AccessoryController extends Controller
                 }
             }
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/phu-kien')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('product.index'), 'message' => 'Sửa phụ kiện thành công']);
     }
 
     public function detail($id)
@@ -379,7 +413,7 @@ class AccessoryController extends Controller
                     $instance->where(function ($w) use ($request) {
                         $search = $request->get('search');
                         $w->orWhere('name', 'LIKE', "%$search%")
-                            ->orWhere('description', 'LIKE', "%$search%");
+                            ->orWhere('slug', 'LIKE', "%$search%");
                     });
                 }
             })
@@ -392,16 +426,15 @@ class AccessoryController extends Controller
         $accessory = Accessory::find($id);
 
         if ($accessory->count() == 0) {
-            return response()->json(['success' => 'Xóa thú cưng thất bại !', 'undo' => "Hoàn tác thất bại !"]);
+            return response()->json(['success' => 'Xóa phụ kiện thất bại !', 'undo' => "Hoàn tác thất bại !"]);
         }
 
         $accessory->galleries()->delete();
-        // $accessory->orderDetails()->delete();
-        // $accessory->carts()->delete();
-        // $accessory->reviews()->delete();
+        $accessory->orderDetails()->where('product_type', 2)->delete();
+        $accessory->reviews()->where('product_type', 2)->delete();
         $accessory->delete();
 
-        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
+        return response()->json(['success' => 'Xóa phụ kiện thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function restore($id)
@@ -409,17 +442,16 @@ class AccessoryController extends Controller
         $accessory = Accessory::withTrashed()->find($id);
 
         if ($accessory->count() == 0) {
-            return response()->json(['success' => 'phụ kiện không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại phụ kiện']);
+            return response()->json(['success' => 'Phụ kiện không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại phụ kiện']);
         }
 
         $accessory->galleries()->restore();
         $accessory->category()->restore();
-        // $accessory->orderDetails()->restore();
-        // $accessory->carts()->restore();
-        // $accessory->reviews()->restore();
+        $accessory->orderDetails()->where('product_type', 2)->restore();
+        $accessory->reviews()->where('product_type', 2)->restore();
         $accessory->restore();
 
-        return response()->json(['success' => 'Khôi phục thành công !']);
+        return response()->json(['success' => 'Khôi phục phụ kiện thành công !']);
     }
 
     public function delete($id)
@@ -431,9 +463,8 @@ class AccessoryController extends Controller
         }
 
         $accessory->galleries()->forceDelete();
-        // $accessory->orderDetails()->forceDelete();
-        // $accessory->carts()->forceDelete();
-        // $accessory->reviews()->forceDelete();
+        $accessory->orderDetails()->where('product_type', 2)->forceDelete();
+        $accessory->reviews()->where('product_type', 2)->forceDelete();
         $accessory->forceDelete();
 
         return response()->json(['success' => 'Xóa phụ kiện thành công !']);
@@ -445,14 +476,13 @@ class AccessoryController extends Controller
         $accessory = Accessory::withTrashed()->whereIn('id', $idAll);
 
         if ($accessory->count() == 0) {
-            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+            return response()->json(['success' => 'Xóa phụ thất bại !']);
         }
 
         $accessory->each(function ($related) {
             $related->galleries()->delete();
-            // $related->orderDetails()->delete();
-            // $related->carts()->delete();
-            // $related->reviews()->delete();
+            $related->orderDetails()->where('product_type', 2)->delete();
+            $related->reviews()->where('product_type', 2)->delete();;
         });
         $accessory->delete();
 
@@ -471,9 +501,8 @@ class AccessoryController extends Controller
         $accessory->each(function ($related) {
             $related->galleries()->restore();
             $related->category()->restore();
-            // $related->orderDetails()->restore();
-            // $related->carts()->restore();
-            // $related->reviews()->restore();
+            $related->orderDetails()->where('product_type', 1)->restore();
+            $related->reviews()->where('product_type', 1)->restore();
         });
         $accessory->restore();
 
@@ -491,9 +520,8 @@ class AccessoryController extends Controller
 
         $accessory->each(function ($related) {
             $related->galleries()->forceDelete();
-            // $related->orderDetails()->forceDelete();
-            // $related->carts()->forceDelete();
-            // $related->reviews()->forceDelete();
+            $related->orderDetails()->where('product_type', 2)->forceDelete();
+            $related->reviews()->where('product_type', 2)->forceDelete();
         });
         $accessory->forceDelete();
 

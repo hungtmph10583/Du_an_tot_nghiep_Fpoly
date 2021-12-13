@@ -7,24 +7,25 @@
                     <ul>
                         <li>
                             <i class="fas fa-map-marker-alt"></i>
-                            <span><strong>Địa chỉ:</strong> 199 hồ tùng mậu</span>
+                            <span><strong>Địa chỉ:</strong> {{$generalSetting->address}}</span>
                         </li>
                         <li>
                             <i class="fas fa-phone-alt"></i>
-                            <span><strong>Điện thoại:</strong> 0336126726</span>
+                            <span><strong>Điện thoại:</strong> {{$generalSetting->phone}}</span>
                         </li>
                         <li>
                             <i class="fas fa-at"></i>
-                            <span><strong>Email:</strong> <a href="#">hungtmph10582@fpt.edu.vn</a></span>
+                            <span><strong>Email:</strong> <a
+                                    href="mailto:{{$generalSetting->email}}">{{$generalSetting->email}}</a></span>
                         </li>
                         <li>
                             <i class="fas fa-clock"></i>
-                            <span><strong>Thời gian mở cửa:</strong> 8:00AM - 18:00PM</span>
+                            <span><strong>Thời gian mở cửa:</strong> {{$generalSetting->open_time}}</span>
                         </li>
                     </ul>
                 </div>
             </div>
-            <div class="footer-item">
+            <!-- <div class="footer-item">
                 <h3>Hướng dẫn</h3>
                 <div class="menu-link">
                     <ul>
@@ -34,7 +35,7 @@
                         <li><a href="#"><i class="fas fa-arrow-right"></i>Hướng dẫn chung</a></li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
             <!-- <div class="footer-item">
                 <h3>Links</h3>
                 <div class="menu-link">
@@ -51,22 +52,22 @@
                 <div class="socials">
                     <ul>
                         <li>
-                            <a href="#" class="fab fa-facebook-f" id="fb"></a>
+                            <a href="{{$generalSetting->facebook}}" class="fab fa-facebook-f" id="fb"></a>
                         </li>
                         <li>
-                            <a href="#" class="fab fa-twitter" id="twit"></a>
+                            <a href="{{$generalSetting->twitter}}" class="fab fa-twitter" id="twit"></a>
                         </li>
                         <li>
-                            <a href="#" class="fab fa-instagram" id="insta"></a>
+                            <a href="{{$generalSetting->instagram}}" class="fab fa-instagram" id="insta"></a>
                         </li>
                         <li>
-                            <a href="#" class="fab fa-youtube" id="yto"></a>
+                            <a href="{{$generalSetting->youtube}}" class="fab fa-youtube" id="yto"></a>
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
-        <div class="footer-middle">
+        <!-- <div class="footer-middle">
             <div class="footer-item-top">
                 <div class="content">
                     <p>Bạn đang gặp vấn đề về việc lựa chọn thú cưng?</p>
@@ -88,7 +89,7 @@
                     <button type="submit" class="btn-blue">Đăng ký ngay</button>
                 </form>
             </div>
-        </div>
+        </div> -->
         <div class="footer-bottom">
             <div class="credit"> created by <span> hungtmph10583 </span> | all rights reserved </div>
         </div>

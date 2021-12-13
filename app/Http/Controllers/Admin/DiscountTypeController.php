@@ -196,7 +196,6 @@ class DiscountTypeController extends Controller
                             $product->products()->each(function ($related) {
                                 $related->galleries()->delete();
                                 $related->orderDetails()->delete();
-                                $related->carts()->delete();
                                 $related->reviews()->delete();
                             });
                             $product->products()->delete();
@@ -206,7 +205,6 @@ class DiscountTypeController extends Controller
                                 $related->products()->each(function ($related) {
                                     $related->galleries()->delete();
                                     $related->orderDetails()->delete();
-                                    $related->carts()->delete();
                                     $related->reviews()->delete();
                                 });
                                 $related->products()->delete();
@@ -215,7 +213,6 @@ class DiscountTypeController extends Controller
                             $product->products()->each(function ($related) {
                                 $related->galleries()->delete();
                                 $related->orderDetails()->delete();
-                                $related->carts()->delete();
                                 $related->reviews()->delete();
                             });
                             $product->products()->delete();
@@ -234,7 +231,6 @@ class DiscountTypeController extends Controller
                 $coupon->products()->each(function ($related) {
                     $related->galleries()->delete();
                     $related->orderDetails()->delete();
-                    $related->carts()->delete();
                     $related->reviews()->delete();
                 });
 
@@ -250,7 +246,6 @@ class DiscountTypeController extends Controller
         $discountType->products()->each(function ($related) {
             $related->galleries()->delete();
             $related->orderDetails()->delete();
-            $related->carts()->delete();
             $related->reviews()->delete();
         });
         $discountType->products()->delete();
@@ -277,7 +272,6 @@ class DiscountTypeController extends Controller
                             $product->products()->each(function ($related) {
                                 $related->galleries()->restore();
                                 $related->orderDetails()->restore();
-                                $related->carts()->restore();
                                 $related->reviews()->restore();
                                 $related->category()->restore();
                             });
@@ -288,7 +282,6 @@ class DiscountTypeController extends Controller
                                 $related->products()->each(function ($related) {
                                     $related->galleries()->restore();
                                     $related->orderDetails()->restore();
-                                    $related->carts()->restore();
                                     $related->reviews()->restore();
                                     $related->category()->restore();
                                 });
@@ -298,7 +291,6 @@ class DiscountTypeController extends Controller
                             $product->products()->each(function ($related) {
                                 $related->galleries()->restore();
                                 $related->orderDetails()->restore();
-                                $related->carts()->restore();
                                 $related->reviews()->restore();
                                 $related->category()->restore();
                             });
@@ -319,7 +311,6 @@ class DiscountTypeController extends Controller
                 $coupon->products()->each(function ($related) {
                     $related->galleries()->restore();
                     $related->orderDetails()->restore();
-                    $related->carts()->restore();
                     $related->reviews()->restore();
                     $related->category()->restore();
                 });
@@ -337,7 +328,6 @@ class DiscountTypeController extends Controller
         $discountType->products()->each(function ($related) {
             $related->galleries()->restore();
             $related->orderDetails()->restore();
-            $related->carts()->restore();
             $related->reviews()->restore();
             $related->category()->restore();
         });
@@ -367,7 +357,6 @@ class DiscountTypeController extends Controller
                             $product->products()->each(function ($related) {
                                 $related->galleries()->forceDelete();
                                 $related->orderDetails()->forceDelete();
-                                $related->carts()->forceDelete();
                                 $related->reviews()->forceDelete();
                             });
                             $product->products()->forceDelete();
@@ -377,7 +366,6 @@ class DiscountTypeController extends Controller
                                 $related->products()->each(function ($related) {
                                     $related->galleries()->forceDelete();
                                     $related->orderDetails()->forceDelete();
-                                    $related->carts()->forceDelete();
                                     $related->reviews()->forceDelete();
                                 });
                                 $related->products()->forceDelete();
@@ -386,7 +374,6 @@ class DiscountTypeController extends Controller
                             $product->products()->each(function ($related) {
                                 $related->galleries()->forceDelete();
                                 $related->orderDetails()->forceDelete();
-                                $related->carts()->forceDelete();
                                 $related->reviews()->forceDelete();
                             });
                             $product->products()->forceDelete();
@@ -405,7 +392,6 @@ class DiscountTypeController extends Controller
                 $coupon->products()->each(function ($related) {
                     $related->galleries()->forceDelete();
                     $related->orderDetails()->forceDelete();
-                    $related->carts()->forceDelete();
                     $related->reviews()->forceDelete();
                 });
 
@@ -421,7 +407,6 @@ class DiscountTypeController extends Controller
         $discountType->products()->each(function ($related) {
             $related->galleries()->forceDelete();
             $related->orderDetails()->forceDelete();
-            $related->carts()->forceDelete();
             $related->reviews()->forceDelete();
         });
         $discountType->products()->forceDelete();
@@ -451,7 +436,6 @@ class DiscountTypeController extends Controller
                                 $product->products()->each(function ($related) {
                                     $related->galleries()->delete();
                                     $related->orderDetails()->delete();
-                                    $related->carts()->delete();
                                     $related->reviews()->delete();
                                 });
                                 $product->products()->delete();
@@ -461,7 +445,7 @@ class DiscountTypeController extends Controller
                                     $related->products()->each(function ($related) {
                                         $related->galleries()->delete();
                                         $related->orderDetails()->delete();
-                                        $related->carts()->delete();
+
                                         $related->reviews()->delete();
                                     });
                                     $related->products()->delete();
@@ -470,7 +454,6 @@ class DiscountTypeController extends Controller
                                 $product->products()->each(function ($related) {
                                     $related->galleries()->delete();
                                     $related->orderDetails()->delete();
-                                    $related->carts()->delete();
                                     $related->reviews()->delete();
                                 });
                                 $product->products()->delete();
@@ -489,7 +472,6 @@ class DiscountTypeController extends Controller
                     $coupon->products()->each(function ($related) {
                         $related->galleries()->delete();
                         $related->orderDetails()->delete();
-                        $related->carts()->delete();
                         $related->reviews()->delete();
                     });
 
@@ -505,7 +487,6 @@ class DiscountTypeController extends Controller
             $coupons->products()->each(function ($related) {
                 $related->galleries()->delete();
                 $related->orderDetails()->delete();
-                $related->carts()->delete();
                 $related->reviews()->delete();
             });
             $coupons->products()->delete();
@@ -537,7 +518,6 @@ class DiscountTypeController extends Controller
                                 $product->products()->each(function ($related) {
                                     $related->galleries()->restore();
                                     $related->orderDetails()->restore();
-                                    $related->carts()->restore();
                                     $related->reviews()->restore();
                                     $related->category()->restore();
                                 });
@@ -548,7 +528,6 @@ class DiscountTypeController extends Controller
                                     $related->products()->each(function ($related) {
                                         $related->galleries()->restore();
                                         $related->orderDetails()->restore();
-                                        $related->carts()->restore();
                                         $related->reviews()->restore();
                                         $related->category()->restore();
                                     });
@@ -558,7 +537,6 @@ class DiscountTypeController extends Controller
                                 $product->products()->each(function ($related) {
                                     $related->galleries()->restore();
                                     $related->orderDetails()->restore();
-                                    $related->carts()->restore();
                                     $related->reviews()->restore();
                                     $related->category()->restore();
                                 });
@@ -578,7 +556,6 @@ class DiscountTypeController extends Controller
                     $coupon->products()->each(function ($related) {
                         $related->galleries()->restore();
                         $related->orderDetails()->restore();
-                        $related->carts()->restore();
                         $related->reviews()->restore();
                         $related->category()->restore();
                     });
@@ -596,7 +573,6 @@ class DiscountTypeController extends Controller
             $coupons->products()->each(function ($related) {
                 $related->galleries()->restore();
                 $related->orderDetails()->restore();
-                $related->carts()->restore();
                 $related->reviews()->restore();
                 $related->category()->restore();
             });
@@ -631,7 +607,6 @@ class DiscountTypeController extends Controller
                                 $product->products()->each(function ($related) {
                                     $related->galleries()->forceDelete();
                                     $related->orderDetails()->forceDelete();
-                                    $related->carts()->forceDelete();
                                     $related->reviews()->forceDelete();
                                 });
                                 $product->products()->forceDelete();
@@ -641,7 +616,6 @@ class DiscountTypeController extends Controller
                                     $related->products()->each(function ($related) {
                                         $related->galleries()->forceDelete();
                                         $related->orderDetails()->forceDelete();
-                                        $related->carts()->forceDelete();
                                         $related->reviews()->forceDelete();
                                     });
                                     $related->products()->forceDelete();
@@ -650,7 +624,6 @@ class DiscountTypeController extends Controller
                                 $product->products()->each(function ($related) {
                                     $related->galleries()->forceDelete();
                                     $related->orderDetails()->forceDelete();
-                                    $related->carts()->forceDelete();
                                     $related->reviews()->forceDelete();
                                 });
                                 $product->products()->forceDelete();
@@ -669,7 +642,6 @@ class DiscountTypeController extends Controller
                     $coupon->products()->each(function ($related) {
                         $related->galleries()->forceDelete();
                         $related->orderDetails()->forceDelete();
-                        $related->carts()->forceDelete();
                         $related->reviews()->forceDelete();
                     });
 
@@ -685,7 +657,6 @@ class DiscountTypeController extends Controller
             $coupons->products()->each(function ($related) {
                 $related->galleries()->forceDelete();
                 $related->orderDetails()->forceDelete();
-                $related->carts()->forceDelete();
                 $related->reviews()->forceDelete();
             });
             $coupons->products()->forceDelete();

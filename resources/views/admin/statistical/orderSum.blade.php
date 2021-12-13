@@ -160,9 +160,6 @@ $(document).ready(function() {
 
     $('select').map(function(i, dom) {
         var idSelect = $(dom).attr('id');
-        $('#' + idSelect).change(function() {
-            table.draw();
-        });
         $('#' + idSelect).select2({});
     })
 });
