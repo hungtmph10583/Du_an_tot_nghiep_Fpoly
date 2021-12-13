@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Send mail</title>
+    <title>Send mail Order</title>
     <style>
         * {
             font-family: 'Poppins', sans-serif;
@@ -132,7 +132,7 @@
         <p class="thanks">Cám ơn bạn đã đặt hàng tại LoliPetVN!</p>
         <h2>Xin chào {{$feedback['name_client']}},</h2>
         <p class="title">
-            Cập nhật thông tin trạng thái đơn hàng của bạn - <span style="color: #F62217; font-weight: bold;">{{$feedback['delivery_status']}}</span>
+            Chúng tôi đã nhận được yêu cầu đặt hàng của bạn và đang xử lý. Bạn sẽ nhận được thông báo tiếp theo khi đơn hàng đã sẵn sàng được giao.
         </p>
         <div class="button">
             <a href="{{ route('orderStatus',['code'=>$feedback['order_code']]) }}" class="bold" id="link">TÌNH TRẠNG ĐƠN HÀNG</a>
@@ -150,7 +150,7 @@
                         <td valign="top">{{$feedback['name_client']}}</td>
                    </tr>
                     <tr>
-                        <td valign="top" class="bold">Địa chỉ nhà:</td>
+                        <td valign="top" class="bold">Địa chỉ giao hàng:</td>
                         <td valign="top">{{$feedback['shipping_address']}}</td>
                     </tr>
                     <tr>
@@ -237,7 +237,7 @@
                         </tr>
                         <tr>
                             <td valign="top" class="bold">Thành tiền:</td>
-                            <td align="right" valign="top" class="bold text-red"  style="color: #F62217;">
+                            <td align="right" valign="top" class="bold text-red" style="color: #F62217;">
                                 {{$feedback['grand_total']}} VND
                             </td>
                         </tr>

@@ -133,15 +133,14 @@ class OrderController extends Controller
 
         // Gửi mail cập nhật trạng thái đơn hàng
         if ($request->has('send_mail')) {
-            $OutorderDetail = OrderDetail::where('order_id', $id)->get();
+            $OrderDetail = OrderDetail::where('order_id', $id)->get();
             $product = Product::all();
             $generalSetting = GeneralSetting::first('logo');
             $accessory = Accessory::all();
             // dd($generalSetting);
             $tax = 0;
             $total = 0;
-            foreach ($OutorderDetail as $key => $value) {
-                $tax += $value->tax;
+            foreach ($OrderDetail as $key => $value) {
                 $total += $value->price;
             }
             
@@ -151,7 +150,7 @@ class OrderController extends Controller
             $order_code = $order->code;
             $date_time_order = $order->created_at->format('d/m/Y');
             $shipping_address = $order->shipping_address;
-            $number_quantity_product_order = count($OutorderDetail);
+            $number_quantity_product_order = count($OrderDetail);
             $total = number_format($total,0,',','.');
             $tax = number_format($tax,0,',','.');
             $grand_total = number_format($order->grand_total,0,',','.');
@@ -177,12 +176,13 @@ class OrderController extends Controller
                 'number_quantity_product_order' => $number_quantity_product_order,
                 'shipping_address' => $shipping_address,
                 'grand_total' => $grand_total,
-                'orderDetail' => $OutorderDetail,
+                'orderDetail' => $OrderDetail,
                 'product' => $product,
                 'accessory' => $accessory,
                 'tax' => $tax,
                 'total' => $total,
-                'generalSetting' => $generalSetting
+                'generalSetting' => $generalSetting,
+                'delivery_status' => $delivery_status
             ];
             $toMail = $to_email;
             Mail::to($toMail)->send(new SendMailUpdateStatusOrder($mailData));

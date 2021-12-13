@@ -16,6 +16,8 @@ use App\Models\GeneralSetting;
 use Cart;
 use SweetAlert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SendMailOrder;
 
 class CartController extends Controller
 {
@@ -149,7 +151,7 @@ class CartController extends Controller
     }
 
     public function saveCheckout(Request $request){
-        // dd($content);
+        
         $model = new Order();
         $request->validate(
             [
@@ -186,7 +188,7 @@ class CartController extends Controller
 
         $id_order = $model->id;
         $content = Cart::content();
-        // dd($content);
+        // dd($content, $request);
 
         foreach ($content as $key => $value) {
             $orderDetail = new OrderDetail();
@@ -218,13 +220,51 @@ class CartController extends Controller
                 $update_product->save();
             }
         }
+
+        // ---------------------------------------------------------
+        $id_first = Order::where('phone', $request->phone)->orderBy('created_at', 'DESC')->first();
+        $order_Detail = OrderDetail::where('order_id', $id_first->id)->get();
+        $product = Product::all();
+        $generalSetting = GeneralSetting::first('logo');
+        $accessory = Accessory::all();
+        // dd($generalSetting);
+        $total = 0;
+        foreach ($order_Detail as $key => $value) {
+            $total += $value->price;
+        }
         
-        $content = Cart::content();
-        foreach ($content as $key => $value) {
+        $name_client = $request->name;
+        $number_phone = $request->phone;
+        $to_email = $request->email;
+        $order_code = $id_first->code;
+        $date_time_order = $id_first->created_at->format('d/m/Y');
+        $shipping_address = $request->address.", ".$request->ward.", ".$request->district.", ".$request->city;
+        $total = number_format($total,0,',','.');
+        $tax = number_format($request->tax,0,',','.');
+        $grand_total = number_format($request->grand_total,0,',','.');
+
+        $mailData = [
+            'name_client' => $name_client,
+            'number_phone' => $number_phone,
+            'to_email' => $to_email,
+            'order_code' => $order_code,
+            'date_time_order' => $date_time_order,
+            'shipping_address' => $shipping_address,
+            'grand_total' => $grand_total,
+            'orderDetail' => $order_Detail,
+            'product' => $product,
+            'accessory' => $accessory,
+            'tax' => $tax,
+            'total' => $total,
+            'generalSetting' => $generalSetting
+        ];
+        $toMail = $to_email;
+        Mail::to($toMail)->send(new SendMailOrder($mailData));
+        // Send-mail-order E)
+        foreach ($content as $key => $value) { // Xóa sản phẩm trong giỏ hàng sau khi lưu dữ liệu và gửi mail
             $rowId = $value->rowId;
             Cart::update($rowId,0);
-        }
-        // return view('client.cart.index');
+        } // Xóa sản phẩm trong giỏ hàng sau khi lưu dữ liệu và gửi mail
         return Redirect::to("gio-hang/")->with('success', "Đặt hàng thành công!");
     }
 }
