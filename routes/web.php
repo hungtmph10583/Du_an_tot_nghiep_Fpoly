@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 // hungtmph10583 (21/09/21) end
+use App\Http\Controllers\Client\SearchController;
 use App\Http\Controllers\Client\ProductController;
 use App\Http\Controllers\Client\AccessoryController;
 use App\Http\Controllers\Client\HomeController;
@@ -39,9 +40,20 @@ use Carbon\Carbon;
 // Route::get('/linkstorage', function () {
 //     Artisan::call('storage:link');
 // });
+Route::get('/cache-permission', function () {
+    Artisan::call('cache:forget spatie.permission.cache');
+    return redirect(route('role.index'))->with('success', "Cập nhật Vai trò thành công");
+})->name('cache-permission');
+// Route::get('/clear-cache', function() {
+//     $exitCode = Artisan::call('cache:clear');
+//     $exitCode = Artisan::call('config:cache');
+//     return 'DONE'; //Return anything
+// });
 
 Route::get('/', [HomeController::class, 'home'])->name('client.home');
 Route::get('/trang-chu', [HomeController::class, 'home']);
+
+Route::get('/tim-kiem', [SearchController::class, 'search_query'])->name('client.search');
 
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('client.product.index');
@@ -137,4 +149,6 @@ Route::prefix('lien-he')->group(function () {
     Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);
 
 //Send mail
-    Route::get('send-mail', [MailController::class, 'send_mail'])->name('sendMail');
+    Route::get('send-mail', [SearchController::class, 'send_mail'])->name('sendMail');
+
+    Route::get('tinh-trang-don-hang/{code}', [SearchController::class, 'order_status'])->name('orderStatus');

@@ -34,7 +34,7 @@
                 @if($category->show_slide == 1 && $category->category_type_id == 1)
                 <div class="category-item">
                     <div class="thumbnail">
-                        <a href="#"><img src="{{asset( 'storage/' . $category->image)}}" alt=""></a>
+                        <a href="{{route('client.product.index')}}?cate_id={{$category->id}}"><img src="{{asset( 'storage/' . $category->image)}}" alt=""></a>
                     </div>
                     <span class="category-name">{{$category->name}}</span>
                 </div>
@@ -146,7 +146,7 @@
             @endforeach
         </div>
         <div class="details">
-            <button><a href="{{route('client.product.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
+            <button><a href="{{route('client.accessory.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
         </div>
     </section>
     <!-- member -->

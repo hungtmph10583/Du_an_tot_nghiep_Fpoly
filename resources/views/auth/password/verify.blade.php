@@ -60,9 +60,9 @@
         </div>
         <h2>Đặt lại mật khẩu</h2>
         <div class="content">
-            <p>Kính Gửi: <span class="bold">{{$name_client}}</span>,</p>
+            <p>Kính Gửi: <span class="bold">{{$feedback['name_client']}}</span>,</p>
             <p>Yêu cầu đặt lại mật khẩu của bạn đã được thông qua.</p>
-            <p>Vui lòng <a href="{{ url('/reset-password/'.$token) }}">click here</a> để cập nhật lại mật khẩu của mình.</p>
+            <p>Vui lòng <a href="{{ route('resetPassword',['token'=>$feedback['token']]) }}">click here</a> để cập nhật lại mật khẩu của mình.</p>
         </div>
     </div>
 </body>

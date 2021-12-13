@@ -10,6 +10,7 @@ use App\Models\PasswordReset;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use DB;
+use App\Mail\MailForgotPassword;
 
 class ForgotPasswordController extends Controller
 {
@@ -42,32 +43,25 @@ class ForgotPasswordController extends Controller
         $user = User::where('email', $request->email)->first();
         $name_client = $user->name;
 
-        Mail::send('auth.password.verify',['token' => $token, 'name_client' => $name_client], function($message) use ($request) {
-            $message->from($request->email);
-            $message->to($request->email);
-            $message->subject('Xác Nhận Đặt Lại Mật Khẩu Đăng Nhập!');
-        });
-        // $mailData = [
-        //     'title' => 'Demo Email',
-        //     'message' => 'akdafjhskfhgskgdgđgshkd'
-        // ];
-        // $toMail = $request->email;
-
-        // // dd($toMail);
-        // mailss::to($toMail)->send(new Mail($mailData));
+        $mailData = [
+            'name_client' => $name_client,
+            'token' => $token
+        ];
+        $toMail = $request->email;
+        Mail::to($toMail)->send(new MailForgotPassword($mailData));
 
         return back()->with('message', 'Chúng tôi đã sử dụng email liên kết để đặt lại mặt khẩu của bạn. Vui lòng kiểm tra email!');
     }
     
-    public function sendmail()
-    {
-        $mailData = [
-            'title' => 'Demo Email',
-            'message' => 'akdafjhskfhgskgdgđgshkd'
-        ];
-        $toMail = "hungtmph10583@fpt.edu.vn";
-        Mail::to($toMail)->send(new Mail($mailData));
+    // public function sendmail()
+    // {
+    //     $mailData = [
+    //         'title' => 'Demo Email',
+    //         'message' => 'akdafjhskfhgskgdgđgshkd'
+    //     ];
+    //     $toMail = "hungtmph10583@fpt.edu.vn";
+    //     Mail::to($toMail)->send(new Mail($mailData));
 
-        return "Email đã được gửi từ " . $toMail;
-    }
+    //     return "Email đã được gửi từ " . $toMail;
+    // }
 }

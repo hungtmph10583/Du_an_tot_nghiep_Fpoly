@@ -187,7 +187,7 @@ class RoleController extends Controller
             $role->permissions()->detach();
         }
         $role->permissions()->attach($request->permissions_id);//add list permissions
-        return redirect(route('role.index'))->with('success', "Cập nhật Vai trò thành công");
+        return redirect(route('cache-permission'));
     }
 
     public function removeRole($id){

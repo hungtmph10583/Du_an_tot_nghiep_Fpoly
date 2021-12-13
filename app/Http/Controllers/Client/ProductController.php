@@ -143,10 +143,10 @@ class ProductController extends Controller
                     return redirect()->back()->with('success', 'Nhận xét thành công')->withInput();
                 }
             }else{
-                return redirect()->back()->with('danger', 'Đơn hàng của bạn đang được xử lí. Quay lại bình luận khi bạn đã nhận được hàng!')->withInput();
+                return redirect()->back()->with('danger', 'Đơn hàng của bạn đang được xử lí. Quay lại bình luận khi bạn đã nhận được sản phẩm này!')->withInput();
             }
         }else{
-            return redirect()->back()->with('danger', 'Email này chưa từng dùng để mua sản phẩm này. Vui lòng thử lại')->withInput();
+            return redirect()->back()->with('danger', 'Vui lòng sử dụng Email đã mua sản phẩm này để bình luận.')->withInput();
         }
     }
 }

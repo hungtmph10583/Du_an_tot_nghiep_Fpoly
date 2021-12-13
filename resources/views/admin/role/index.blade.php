@@ -25,7 +25,7 @@
                         Roles
                         <div class="float-right">
                             @hasanyrole('Admin')
-                            <a href="{{route('role.user.add')}}" class="btn btn-success">Tạo vai trò</a>
+                            <a href="{{route('role.user.add')}}" class="btn btn-success">Gán vai trò cho tài khoản</a>
                             <a href="{{route('role.permission.add')}}" class="btn btn-info">Tạo vai trò</a> @endhasanyrole
                         </div>
                     </div>

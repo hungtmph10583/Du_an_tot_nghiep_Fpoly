@@ -53,12 +53,6 @@
 									<b>Trạng thái</b>
 									<i class="{{ $model->status == 1 ? 'fa fa-check text-success' : 'fas fa-user-lock text-danger' }} float-right pr-3"></i>
 								</li>
-								<li class="list-group-item">
-									<b>
-										<i class="fa fa-mobile" aria-hidden="true"></i> Phone
-									</b>
-									<p class="float-right">{{$model->phone}}</p>
-								</li>
 							</ul>
 						</div>
 						<!-- /.card-body -->
@@ -69,7 +63,7 @@
 				<div class="col-md-9">
 					<div class="card card-success card-outline">
 						<div class="card-header">
-							<h5>Personal information</h5>
+							<h5>Thông tin tài khoản</h5>
 						</div>
 						<div class="card-body">
 							@if(session('msg') != null)
@@ -80,7 +74,7 @@
 							<div class="row">
 								<div class="col-6">
 									<div class="form-group">
-										<label for="">Name</label>
+										<label for="">Tên tài khoản</label>
 										<input type="text" name="name" class="form-control" value="{{$model->name}}" placeholder="Tên tài khoản">
 										@error('name')
 											<span class="text-danger">{{$message}}</span>
@@ -92,13 +86,6 @@
 										@error('email')
 											<span class="text-danger">{{$message}}</span>
 										@enderror
-									</div>
-									<div class="form-group">
-										<label for="">Số điện thoại</label>
-										<input type="text" name="phone" class="form-control" value="{{$model->phone}}" placeholder="Nhập vào số điện thoại">
-										@error('phone')
-											<span class="text-danger">{{$message}}</span>
-										@enderror   
 									</div>
 									<div class="form-group">
 										<label for="">Ảnh đại diện</label>
@@ -114,14 +101,22 @@
                                         <label for="">Trạng thái</label>
                                         <div class="form-control">
                                             <label class="pr-1">
-                                                <input type="radio" name="status" value="1" @if($model->status == 1) checked @endif> Hiển thị
+                                                <input type="radio" name="status" value="1" @if($model->status == 1) checked @endif> Hoạt động
                                             </label>
                                             <label class="pl-1">
-                                                <input type="radio" name="status" value="0" @if($model->status == 0) checked @endif> Ẩn
+                                                <input type="radio" name="status" value="0" @if($model->status == 0) checked @endif> Dừng hoạt động
                                             </label>
                                         </div>
                                     </div>
 									@endhasanyrole
+									
+									<div class="form-group">
+										<label for="">Số điện thoại</label>
+										<input type="text" name="phone" class="form-control" value="{{$model->phone}}" placeholder="Nhập vào số điện thoại">
+										@error('phone')
+											<span class="text-danger">{{$message}}</span>
+										@enderror   
+									</div>
 
 									@if($model->id != 1)
 										@hasrole('Admin')

@@ -25,7 +25,7 @@
             <div class="card-header">
                 Chi tiết đơn hàng
             </div>
-                <div class="card-body">
+                <div class="card-body table-responsive pad">
                     <div class="row">
                         <div class="col-6"></div>
                         <div class="col-3">
@@ -124,7 +124,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <table class="table table-bordered table-responsive pad">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">#</th>
@@ -137,9 +137,9 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach($orderDetail as $value)
+                                @foreach($orderDetail as $key => $value)
                                 <tr>
-                                    <th scope="row">1</th>
+                                    <th scope="row">{{++$key}}</th>
                                     @if($value->product_type == 1)
                                         <td class="text-center"><img src="{{asset( 'storage/' . $value->product->image)}}" alt="" width="70"></td>
                                         <td>{{$value->product->name}}</td>
@@ -166,7 +166,7 @@
                         <div class="col-3">
                             <div class="form-group">
                                 <div class="row border-bottom mt-1 mb-1">
-                                    <div class="col form-group">Tổng phụ</div>
+                                    <div class="col form-group">Tạm tính</div>
                                     <div class="col form-group">
                                         <?php
                                             $total = $value->order->grand_total - $value->tax;
@@ -179,7 +179,7 @@
                                     <div class="col form-group">{{number_format($value->tax,0,',','.')}}đ</div>
                                 </div>
                                 <div class="row border-bottom mt-1 mb-1">
-                                    <div class="col form-group"><b>Tổng tiền</b></div>
+                                    <div class="col form-group"><b>Thành tiền</b></div>
                                     <div class="col form-group"><b>{{number_format($value->order->grand_total,0,',','.')}}đ</b></div>
                                 </div>
                             </div>

@@ -17,7 +17,7 @@
                 <thead>
                     @if($order->delivery_status == 1)
                         <tr>
-                            <th></th>
+                            <th>Chi tiết đơn hàng mã: {{$order->code}}</th>
                             <th></th>
                             <th></th>
                             <th></th>

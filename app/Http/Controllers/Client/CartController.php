@@ -10,11 +10,6 @@ use App\Models\Accessory;
 use App\Models\Category;
 use App\Models\CategoryType;
 use App\Models\DiscountType;
-use App\Models\Breed;
-use App\Models\Gender;
-use App\Models\Age;
-use App\Models\ProductGallery;
-use App\Models\Review;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\GeneralSetting;
@@ -125,40 +120,6 @@ class CartController extends Controller
         
     }
 
-    // public function buyNow(Request $request){//Giỏ hàng
-    //     if ($request->quantity <= 0) {
-    //         return redirect()->back();
-    //     }
-
-    //     $product_id = $request->product_id_hidden;
-    //     $quantity = $request->quantity;
-    //     $product_info = Product::where('id', $product_id)->first();
-
-    //     $data['id'] = $product_id;
-    //     $data['qty'] = $quantity;
-    //     $data['name'] = $product_info->name;
-    //     if ($request->discount_price > 0) {
-    //         $data['price'] = $product_info->price - $request->discount_price;
-    //     }else{
-    //         $data['price'] = $product_info->price;
-    //     }
-    //     $data['weight'] = $request->product_type;
-    //     $data['options']['image'] = $product_info->image;
-    //     Cart::add($data);
-    //     Cart::setGlobalTax(10);
-    //     return redirect('gio-hang/checkout');
-    // }
-
-    // public function showCart(Request $request){
-    //     $category = Category::all();
-    //     $product = Product::all();
-    //     $accessory = Accessory::all();
-    //     dd($accessory);
-    //     $generalSetting = GeneralSetting::first();
-
-    //     return view('client.cart.index', compact('category','product','accessory','generalSetting'));
-    // }
-
     public function deleteToCart($rowId){
         Cart::update($rowId,0);
         return redirect(route('client.cart.index'))->with('success', "Đã xóa sản phẩm khỏi giỏ hàng!");
@@ -188,7 +149,7 @@ class CartController extends Controller
     }
 
     public function saveCheckout(Request $request){
-        // dd($request);
+        // dd($content);
         $model = new Order();
         $request->validate(
             [
@@ -221,11 +182,11 @@ class CartController extends Controller
         $model->delivery_status = 1;
         $model->grand_total = $request->grand_total;
         $model->code = date('dmY-His');
-
         $model->save();
 
         $id_order = $model->id;
         $content = Cart::content();
+        // dd($content);
 
         foreach ($content as $key => $value) {
             $orderDetail = new OrderDetail();
@@ -244,6 +205,18 @@ class CartController extends Controller
 
             $orderDetail->quantity = $value->qty;
             $orderDetail->save();
+
+            if ($value->weight == 1) {
+                $update_product = Product::find($value->id);
+                $tru = $update_product->quantity - $value->qty;
+                $update_product->quantity = $tru;
+                $update_product->save();
+            }else{
+                $update_product = Accessory::find($value->id);
+                $tru = $update_product->quantity - $value->qty;
+                $update_product->quantity = $tru;
+                $update_product->save();
+            }
         }
         
         $content = Cart::content();

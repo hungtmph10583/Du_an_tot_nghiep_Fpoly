@@ -4,16 +4,30 @@
             <div class="row">
                 <ul class="header-item-left">
                     <li>
+                        @if(!empty($generalSetting->email))
                         <a href="mailto:{{$generalSetting->email}}">
                             <i class="fas fa-envelope"></i>
                             <span>{{$generalSetting->email}}</span>
                         </a>
+                        @else
+                        <a href="javascript:;">
+                            <i class="fas fa-envelope"></i>
+                            <span></span>
+                        </a>
+                        @endif
                     </li>
                     <li>
+                        @if(!empty($generalSetting->email))
                         <a href="javascript:;">
                             <i class="fas fa-phone-alt"></i>
                             <span>{{$generalSetting->phone}}</span>
                         </a>
+                        @else
+                        <a href="javascript:;">
+                            <i class="fas fa-phone-alt"></i>
+                            <span></span>
+                        </a>
+                        @endif
                     </li>
                 </ul>
                 <div class="header-item none"></div>
@@ -67,7 +81,11 @@
                 <div class="header-item">
                     <a href="{{route('client.home')}}" class="logo">
                         <!-- <i class="fas fa-paw"></i> <b> LOLI<span>PET</span></b> -->
-                        <img src="{{ asset('client-theme/images/logo_full.png')}}" alt="">
+                        @if(!empty($generalSetting->logo))
+                        <img src="{{ asset('storage/' . $generalSetting->logo)}}" alt="">
+                        @else
+                        <img src="{{ asset('client.images.logo_full.png')}}" alt="">
+                        @endif
                     </a>
                 </div>
                 <div class="header-item">
@@ -113,8 +131,8 @@
     </div>
     <div class="header-bottom-bar">
         <div class="container">
-            <form action="#" method="GET" class="search-form">
-            @csrf
+            <form action="{{route('client.search')}}" method="GET" class="search-form">
+            <!-- @csrf -->
                 <div class="search_box select">
                     <select name="search_type" id="">
                         <option value="1">Mã đơn hàng</option>
@@ -124,7 +142,7 @@
                     </select>
                 </div>
                 <div class="search_box input">
-                    <input type="search" name="search" class="form-input" id="search-box" placeholder="Tìm kiếm...">
+                    <input type="search" name="keyword" @isset($searchData['keyword']) value="{{$searchData['keyword']}}" @endisset class="form-input" id="search-box" placeholder="Tìm kiếm...">
                     <button for="search-box">
                         <i class="fas fa-search"></i>
                     </button>

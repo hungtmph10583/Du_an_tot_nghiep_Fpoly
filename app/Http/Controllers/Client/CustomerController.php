@@ -71,8 +71,8 @@ class CustomerController extends Controller
     }
 
     public function orderHistory(){
-        $user_id = Auth::user()->id;
-        $order = Order::where('user_id', $user_id)->orderBy('created_at', 'DESC')->get();
+        $user_id = Auth::user()->email;
+        $order = Order::where('email', $user_id)->orderBy('created_at', 'DESC')->get();
 
         $generalSetting = GeneralSetting::first();
         $order->load('orderDetails');
@@ -115,6 +115,15 @@ class CustomerController extends Controller
             $save_or_detail = OrderDetail::find($value->id);
             $save_or_detail->delivery_status = "Đơn hàng bị hủy";
             $save_or_detail->save();
+
+            if ($value->product_type == 1) {
+                $product = Product::find($value->product_id);
+            }else{
+                $product = Accessory::find($value->product_id);
+            }
+            $cong = $product->quantity + $value->quantity;
+            $product->quantity = $cong;
+            $product->save();
         }
 
         return Redirect::to("tai-khoan/chi-tiet-don-hang" . "/" . $order->code)->with('success', "Bạn đã hủy đơn hàng này!");

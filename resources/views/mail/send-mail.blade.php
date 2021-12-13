@@ -125,17 +125,17 @@
 <body>
     <div class="container">
         <div class="logo">
-            <a href="#">
-                <img src="./public/images/logo_full.png" alt="">
+            <a href="https://lolipet.xyz/">
+                <img src="{{asset('storage/' . $feedback['generalSetting'])}}" alt="">
             </a>
         </div>
         <p class="thanks">Cám ơn bạn đã đặt hàng tại LoliPetVN!</p>
-        <h2>Xin chào Khánh Ngọc,</h2>
+        <h2>Xin chào {{$feedback['name_client']}},</h2>
         <p class="title">
             Chúng tôi đã nhận được yêu cầu đặt hàng của bạn và đang xử lý. Bạn sẽ nhận được thông báo tiếp theo khi đơn hàng đã sẵn sàng được giao.
         </p>
         <div class="button">
-            <a href="#" class="bold" id="link">TÌNH TRẠNG ĐƠN HÀNG</a>
+            <a href="{{ route('orderStatus',['code'=>$feedback['order_code']]) }}" class="bold" id="link">TÌNH TRẠNG ĐƠN HÀNG</a>
         </div>
         <p class="note">
             <span class="bold">*Lưu ý: </span>
@@ -147,67 +147,81 @@
                 <tbody>
                    <tr>
                         <td width="25%" valign="top" class="bold">Tên:</td>
+                        <td valign="top">{{$feedback['name_client']}}</td>
                    </tr>
                     <tr>
                         <td valign="top" class="bold">Địa chỉ nhà:</td>
-                        <td valign="top">Huyện Yên Thuỷ, Hòa Bình, Thị trấn Hàng Trạm, khu 6 thị trấn hàng trạm, yên thủy, hòa bình  - </td>
+                        <td valign="top">{{$feedback['shipping_address']}}</td>
                     </tr>
                     <tr>
                         <td valign="top" class="bold">Điện thoại:</td>
-                        <td valign="top">0961316491</td>
+                        <td valign="top">{{$feedback['number_phone']}}</td>
                     </tr>
                     <tr>
                         <td valign="top" class="bold">Email:</td>
-                        <td valign="top"><a href="mailto:khanhngoc2791@gmail.com" target="_blank">khanhngoc2791@gmail.com</a></td>
+                        <td valign="top"><a href="{{$feedback['to_email']}}" target="_blank">{{$feedback['to_email']}}</a></td>
                     </tr>
                 </tbody>
             </table>
         </div>
         <div class="detail">
-            <p>Kiện hàng #2</p>
+            <p>Mã đơn hàng: {{$feedback['order_code']}}</p>
+            <p>Kiện hàng #{{$feedback['number_quantity_product_order']}}</p>
             <div class="space-between">
-                <span>Đặt vào: 21/11/2021></span>
-                <span>Giao vào: 23/11 - 26/11/2021</span>
+                <span>Đặt vào: {{$feedback['date_time_order']}}></span>
             </div>
             <div class="product">
                 <table cellpadding="0" cellspacing="0" style="width:100%">
                     <tbody>
-                        <tr>
-                            <td style="width:40%">
-                                <div style="padding-right:10px">
-                                    <a href="#" >
-                                        <img src="{{ asset('client-theme/images/logo.png')}}" alt="" style="width:100%;max-width:160px">
-                                    </a>
-                                </div>
-                            </td>
-                            <td style="width:60%">
-                                <div>
-                                    <a href="#">
-                                        <span>Hello kidty</span>
-                                    </a>
-                                </div>
-                                <div><span>VND 254.000</span></div>
-                                <div><span>Số lượng: 1</span></div>
-                              </td>
-                        </tr>
-                        <tr>
-                            <td style="width:40%">
-                                <div style="padding-right:10px">
-                                        <a href="#" >
-                                            <img src="{{ asset('client-theme/images/logo.png')}}" alt="" style="width:100%;max-width:160px">
-                                        </a>
-                                </div>
-                            </td>
-                            <td style="width:60%">
-                                <div>
-                                    <a href="#">
-                                        <span>Hello kidty</span>
-                                    </a>
-                                </div>
-                                <div><span>VND 254.000</span></div>
-                                <div><span>Số lượng: 1</span></div>
-                              </td>
-                        </tr>
+                        @foreach($feedback['orderDetail'] as $value)
+                            @if($value->product_type == 1)
+                                @foreach($feedback['product'] as $valueP)
+                                    @if($value->product_id == $valueP->id)
+                                    <tr>
+                                        <td style="width:40%">
+                                            <div style="padding-right:10px">
+                                                <a href="{{route('client.product.detail', ['id' => $valueP->slug])}}">
+                                                    <img src="{{asset( 'storage/' . $valueP->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" style="width:100%;max-width:160px">
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td style="width:60%">
+                                            <div>
+                                                <a href="{{route('client.product.detail', ['id' => $valueP->slug])}}">
+                                                    <span>{{$valueP->name}}</span>
+                                                </a>
+                                            </div>
+                                            <div><span>{{number_format($valueP->price)}} VND</span></div>
+                                            <div><span>Số lượng: {{$value->quantity}}</span></div>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endforeach
+                            @else
+                                @foreach($feedback['accessory'] as $valueP)
+                                    @if($value->product_id == $valueP->id)
+                                    <tr>
+                                        <td style="width:40%">
+                                            <div style="padding-right:10px">
+                                                <a href="{{route('client.accessory.detail', ['id' => $valueP->slug])}}">
+                                                    <img src="{{asset( 'storage/' . $valueP->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" style="width:100%;max-width:160px">
+                                                </a>
+                                            </div>
+                                        </td>
+                                        <td style="width:60%">
+                                            <div>
+                                                <a href="{{route('client.accessory.detail', ['id' => $valueP->slug])}}">
+                                                    <span>{{$valueP->name}}</span>
+                                                </a>
+                                            </div>
+                                            <div><span>{{number_format($valueP->price)}} VND</span></div>
+                                            <div><span>Số lượng: {{$value->quantity}}</span></div>
+                                        </td>
+                                    </tr>
+                                    @endif
+                                @endforeach
+                            @endif
+                        @endforeach
                     </tbody>
                 </table>
             </div>
@@ -215,21 +229,17 @@
                 <table cellpadding="0" cellspacing="0">
                     <tbody>
                         <tr>
-                            <td valign="top" style="width:49%">Thành tiền:</td>
-                            <td align="right" valign="top">254.000 VND</td>
+                            <td valign="top" style="width:49%">Tạm tính:</td>
+                            <td align="right" valign="top">{{$feedback['total']}} VND</td>
                         </tr>
                         <tr>
-                            <td valign="top">Phí vận chuyển:</td>
-                            <td align="right" valign="top">44.000 VND</td>
+                            <td valign="top">Thuế:</td>
+                            <td align="right" valign="top">{{$feedback['tax']}} VND</td>
                         </tr>
                         <tr>
-                            <td valign="top">Giảm giá:</td>
-                            <td align="right" valign="top">(20.000) VND</td>
-                        </tr>
-                        <tr>
-                            <td valign="top" class="bold">Tổng cộng:</td>
+                            <td valign="top" class="bold">Thành tiền:</td>
                             <td align="right" valign="top" class="bold text-red">
-                                278.000 VND
+                                {{$feedback['grand_total']}} VND
                             </td>
                         </tr>
                     </tbody>
@@ -238,10 +248,10 @@
             <div class="delivery_status">
                 <table cellpadding="0" cellspacing="0">
                     <tbody>
-                        <tr>
+                        <!-- <tr>
                             <td valign="top" style="width:49%">Hình thức vận chuyển:</td>
                             <td align="right" valign="top">Giao hàng nhanh</td>
-                        </tr>
+                        </tr> -->
                         <tr>
                             <td valign="top">Hình thức thanh toán:</td>
                             <td align="right" valign="top">Thanh toán khi nhận hàng</td>

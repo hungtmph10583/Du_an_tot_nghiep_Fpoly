@@ -63,7 +63,7 @@
             </div>
             <div class="item-bottom">
                 <div class="product-info">
-                    <a href="{{route('client.accessory.detail', ['id' => $p->id])}}" class="name">{{$p->name}}</a>
+                    <a href="{{route('client.accessory.detail', ['id' => $p->slug])}}" class="name">{{$p->name}}</a>
                     @if($p->discount == '')
                         <span class="price">{{number_format($p->price)}}đ</span>
                     @else

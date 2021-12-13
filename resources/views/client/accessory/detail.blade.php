@@ -115,13 +115,6 @@
                 <input type="hidden" name="product_type" value="2">
                             <button type="submit" class="btn">Thêm vào giỏ hàng</button>
             </form>
-            <form action="{{route('buyNow')}}" method="POST" enctype="multipart/form-data">
-            @csrf
-                <input type="hidden" name="product_id_hidden" value="{{$model->id}}">
-                <input type="hidden" name="discount_price" value="{{$model->discount}}">
-                <input type="hidden" name="quantity" value="1">
-                <button type="submit" class="btn">Mua hàng</button>
-            </form>
         </div>
     </div>
 </section>
@@ -174,7 +167,10 @@
                                     {{$rv->comment}}
                                 </div>
                                 <div class="review_author">
-                                    {{$rv->user->name}}
+                                    {{$rv->name}}
+                                </div>
+                                <div class="review_author">
+                                    {{$rv->email}}
                                 </div>
                             </div>
                         </div>

@@ -893,10 +893,11 @@ h1.heading-center {
     object-fit: cover;
 }
 
-.errors_page {
-    /* margin: auto;
-    position: relative; */
-}
+
+/* .errors_page {
+    margin: auto;
+    position: relative;
+} */
 
 .errors_page .title {
     font-family: 'Coiny', cursive;
