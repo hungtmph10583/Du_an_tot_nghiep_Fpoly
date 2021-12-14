@@ -269,8 +269,13 @@ Route::prefix('loai-giam-gia')->group(function () {
     Route::get('tao-moi', [DiscountTypeController::class, 'addForm'])->name('discountType.add');
     Route::post('tao-moi', [DiscountTypeController::class, 'saveAdd'])->name('discountType.saveAdd');
 
+<<<<<<< Updated upstream
     Route::get('cap-nhat/{id}', [DiscountTypeController::class, 'editForm'])->name('discountType.edit');
     Route::post('cap-nhat/{id}', [DiscountTypeController::class, 'saveEdit'])->name('discountType.saveEdit');
+=======
+    Route::prefix('phan-quyen')->group(function () {
+        Route::get('/', [RoleController::class, 'index'])->name('role.index');
+>>>>>>> Stashed changes
 
     Route::get('chi-tiet/{id}', [DiscountTypeController::class, 'detail'])->name('discountType.detail');
 
