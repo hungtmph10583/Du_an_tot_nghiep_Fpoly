@@ -6,21 +6,39 @@
                 <div class="info">
                     <ul>
                         <li>
+                            @if(!empty($generalSetting->address))
                             <i class="fas fa-map-marker-alt"></i>
                             <span><strong>Địa chỉ:</strong> {{$generalSetting->address}}</span>
+                            @else
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>Địa chỉ:</strong></span>
+                            @endif
                         </li>
                         <li>
+                            @if(!empty($generalSetting->phone))
                             <i class="fas fa-phone-alt"></i>
                             <span><strong>Điện thoại:</strong> {{$generalSetting->phone}}</span>
+                            @else
+                            <i class="fas fa-phone-alt"></i>
+                            <span><strong>Điện thoại:</strong></span>
+                            @endif
                         </li>
                         <li>
+                            @if(!empty($generalSetting->email))
                             <i class="fas fa-at"></i>
                             <span><strong>Email:</strong> <a
                                     href="mailto:{{$generalSetting->email}}">{{$generalSetting->email}}</a></span>
+                            @else
+                            <i class="fas fa-at"></i>
+                            <span><strong>Email:</strong> <a href="javascript:;"></a></span>
+                            @endif
                         </li>
                         <li>
+                            @if(!empty($generalSetting->open_time))
                             <i class="fas fa-clock"></i>
                             <span><strong>Thời gian mở cửa:</strong> {{$generalSetting->open_time}}</span>
+                            @else
+                            @endif
                         </li>
                     </ul>
                 </div>

@@ -11,6 +11,8 @@ use App\Models\Product;
 use App\Models\Accessory;
 use Illuminate\Support\Facades\Mail;
 use Yajra\Datatables\Datatables;
+use App\Mail\SendMailUpdateStatusOrder;
+use App\Models\GeneralSetting;
 
 class OrderController extends Controller
 {
@@ -116,54 +118,60 @@ class OrderController extends Controller
             } else {
                 $orderDetail->delivery_status = "Lỗi code";
             }
+            $orderDetail->save();
 
-            if ($check_delivery_order <= 1 && $delivery_post_request == 2) {
+            if ($check_delivery_order == 0 && $delivery_post_request == 2) {
                 if ($value->product_type == 1) {
                     $product = Product::find($value->product_id);
                 } else {
                     $product = Accessory::find($value->product_id);
                 }
-                if ($product->quantity < $value->quantity) {
+                if ($product->quantity < $value->quantity || $product->quantity <= 0) {
                     return redirect()->back()->with('danger', "Số lượng của sản phẩm `" . $product->name .  "` hiện tại còn `" . $product->quantity . "` sản phẩm. Không đủ số lượng sản phẩm để nhận đơn hàng này!");
                 }
                 $tru = $product->quantity - $value->quantity;
                 $product->quantity = $tru;
                 $product->save();
-                $test_alert = " Trừ!";
-            } // Trừ đi sản phẩm khi nhận đơn
+            }
 
-            if ($check_delivery_order >= 2 && $delivery_post_request < 2) {
-                if ($delivery_post_request != 2) {
-                    if ($delivery_post_request != 3) {
-                        if ($value->product_type == 1) {
-                            $product = Product::find($value->product_id);
-                        } else {
-                            $product = Accessory::find($value->product_id);
-                        }
-                        if ($product->quantity < $value->quantity) {
-                            return redirect()->back()->with('danger', "Số lượng của sản phẩm `" . $product->name .  "` hiện tại còn `" . $product->quantity . "` sản phẩm. Không đủ số lượng sản phẩm để nhận đơn hàng này!");
-                        }
-                        $cong = $product->quantity + $value->quantity;
-                        $product->quantity = $cong;
-                        $product->save();
-                        $test_alert = "Cộng";
-                    }
+            if ($delivery_post_request == 0 && $check_delivery_order != 0) {
+                if ($value->product_type == 1) {
+                    $product = Product::find($value->product_id);
+                } else {
+                    $product = Accessory::find($value->product_id);
                 }
-            } // Cộng lại sản phẩm khi quay xe
+                $cong = $product->quantity + $value->quantity;
+                $product->quantity = $cong;
+                $product->save();
+            }
         }
-
-        $orderDetail->save();
         $order->save();
 
         // Gửi mail cập nhật trạng thái đơn hàng
         if ($request->has('send_mail')) {
-            $orderDetail = OrderDetail::where('order_id', $id)->first();
-            $OutorderDetail = OrderDetail::where('order_id', $id)->get();
-            $productName = Product::where('id', $orderDetail->product_id)->first();
+            $OrderDetail = OrderDetail::where('order_id', $id)->get();
+            $product = Product::all();
+            $generalSetting = GeneralSetting::first('logo');
+            $accessory = Accessory::all();
+            // dd($generalSetting);
+            $tax = 0;
+            $total = 0;
+            foreach ($OrderDetail as $key => $value) {
+                $total += $value->price;
+            }
 
-            $to_name = "LoliPetVN";
+            $name_client = $order->name;
+            $number_phone = $order->phone;
             $to_email = $order->email;
-            $code_order = $order->code;
+            $order_code = $order->code;
+            $date_time_order = $order->created_at->format('d/m/Y');
+            $shipping_address = $order->shipping_address;
+            $number_quantity_product_order = count($OrderDetail);
+            $total = number_format($total, 0, ',', '.');
+            $tax = number_format($tax, 0, ',', '.');
+            $grand_total = number_format($order->grand_total, 0, ',', '.');
+
+            // dd($name_client, $to_email, $order_code, $date_time_order, $shipping_address, $number_quantity_product_order, $grand_total);
 
             if ($order->delivery_status == 1) {
                 $delivery_status = 'Đã tiếp nhận đơn hàng. Đang chờ xử lý!';
@@ -175,18 +183,25 @@ class OrderController extends Controller
                 $delivery_status = 'Đơn hàng của bạn đã bị hủy!';
             }
 
-            $data = array(
-                "name" => "Website bán thú cưng LoliPetVN",
-                "body" => $order->code,
-                "name_client" => $order->name,
-                "delivery_status" => $delivery_status,
-                "order" => $order,
-                "orderDetail" => $OutorderDetail
-            ); // body of mail.blade.php
-            Mail::send('mail.send-mail', $data, function ($message) use ($to_name, $to_email) {
-                $message->to($to_email)->subject('Cập nhật trạng thái đơn hàng'); //send this mail with subject
-                $message->from($to_email, $to_name); // send from this mail
-            });
+            $mailData = [
+                'name_client' => $name_client,
+                'number_phone' => $number_phone,
+                'to_email' => $to_email,
+                'order_code' => $order_code,
+                'date_time_order' => $date_time_order,
+                'number_quantity_product_order' => $number_quantity_product_order,
+                'shipping_address' => $shipping_address,
+                'grand_total' => $grand_total,
+                'orderDetail' => $OrderDetail,
+                'product' => $product,
+                'accessory' => $accessory,
+                'tax' => $tax,
+                'total' => $total,
+                'generalSetting' => $generalSetting,
+                'delivery_status' => $delivery_status
+            ];
+            $toMail = $to_email;
+            Mail::to($toMail)->send(new SendMailUpdateStatusOrder($mailData));
         }
         return redirect(route('order.index'))->with('success', "Cập nhật đơn hàng " . $order->code . " thành công");
     }

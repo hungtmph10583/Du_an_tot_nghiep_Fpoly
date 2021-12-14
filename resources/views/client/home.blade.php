@@ -34,7 +34,8 @@
         @if($category->show_slide == 1 && $category->category_type_id == 1)
         <div class="category-item">
             <div class="thumbnail">
-                <a href="#"><img src="{{asset( 'storage/' . $category->image)}}" alt=""></a>
+                <a href="{{route('client.product.index')}}?cate_id={{$category->id}}"><img
+                        src="{{asset( 'storage/' . $category->image)}}" alt=""></a>
             </div>
             <span class="category-name">{{$category->name}}</span>
         </div>
@@ -133,7 +134,7 @@
             <div class="item-bottom">
                 <div class="product-info">
                     <a href="{{route('client.accessory.detail', ['id' => $ac->slug])}}" class="name">{{$ac->name}}</a>
-                    @if($ac->discount == '')
+                    @if($p->discount == '')
                     <span class="price">{{number_format($ac->price)}}đ</span>
                     @else
                     <span class="discount">{{number_format($ac->price)}}đ</span>
@@ -149,7 +150,7 @@
         @endforeach
     </div>
     <div class="details">
-        <button><a href="{{route('client.product.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
+        <button><a href="{{route('client.accessory.index')}}">xem thêm <i class="fas fa-chevron-right"></i></a></button>
     </div>
 </section>
 <!-- member -->
@@ -183,31 +184,31 @@
 <section class="blogs">
     <h1 class="heading-center">Bài viết mới nhất</h1>
     <div class="blog-container">
-        @foreach($blog as $blogs)
+        @foreach($blog as $blog)
         <div class="blog-item">
             <div class="item-top">
                 <div class="thumbnail">
-                    <a href="{{route('client.blog.detail', ['id' => $blogs->slug])}}">
-                        <img src="{{asset( 'storage/' . $blogs->image)}}"
+                    <a href="{{route('client.blog.detail', ['id' => $blog->slug])}}">
+                        <img src="{{asset( 'storage/' . $blog->image)}}"
                             alt="Bài viết này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                 </div>
                 <div class="link_blog">
-                    <a href="{{route('client.blog.detail', ['id' => $blogs->slug])}}" class="btn-gray">Chi tiết</a>
+                    <a href="{{route('client.blog.detail', ['id' => $blog->slug])}}" class="btn-gray">Chi tiết</a>
                 </div>
             </div>
             <div class="item-bottom">
-                <h1 class="title">{{$blogs->title}}</h1>
+                <h1 class="title">{{$blog->title}}</h1>
                 <div class="item-extra">
                     <ul>
                         <li>
                             <i class="fas fa-user"></i>
                             <span>Tác giả: </span>
-                            <span class="author">{{$blogs->user->name}}</span>
+                            <span class="author">{{$blog->user->name}}</span>
                         </li>
                         <li class="middle">
                             <i class="far fa-calendar-alt"></i>
-                            <span class="author">{{$blogs->created_at->diffForHumans()}}</span>
+                            <span class="author">{{$blog->created_at->diffForHumans()}}</span>
                         </li>
                         <!-- <li>
                                 <i class="far fa-comments"></i>

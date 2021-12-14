@@ -1,4 +1,4 @@
-@section('title', 'Lịch sử mua hàng')
+@section('title', 'Lịch sử đặt hàng')
 @extends('layouts.client.main')
 @section('content')
 @section('pageStyle')
@@ -11,7 +11,6 @@
         <span>Quản lý đơn hàng</span>
     </div>
     <div class="account_info_container">
-        @include('client.customer.nav_bar_customer')
         <div class="content_page">
             <table class="greenTable">
                 <thead>
@@ -23,15 +22,7 @@
                         <th></th>
                         <th></th>
                         <th></th>
-                        <th>
-                            @if(!empty($order->cancel_order))
-                            <a href="javascript:;" class="delete_order_success">Error</a>
-                            @else
-                            <a href="{{route('cancel_order', ['id' => $order->id])}}"
-                                onclick="return confirm('Bạn có chắc muốn hủy đơn hàng này?')" class="delete_order">Hủy
-                                đơn hàng</a>
-                            @endif
-                        </th>
+                        <th><a href="{{route('client.home')}}" class="delete_order">Quay về trang chủ</a></th>
                     </tr>
                     @endif
                     <tr>

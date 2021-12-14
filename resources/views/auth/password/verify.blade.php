@@ -61,33 +61,16 @@
 <body>
     <div class="container">
         <div class="logo">
-            <a href="javascript:void(0);">
-                <img src="{{asset('storage/' . $feedback['image'])}}" alt="">
+            <a href="#">
+                <img src="http://lolipet.xyz/client-theme/images/logo_full.png" alt="">
             </a>
         </div>
         <h2>Đặt lại mật khẩu</h2>
         <div class="content">
             <p>Kính Gửi: <span class="bold">{{$feedback['name_client']}}</span>,</p>
             <p>Yêu cầu đặt lại mật khẩu của bạn đã được thông qua.</p>
-            <p>Vui lòng <a href="{{route('resetPassword',['token'=>$feedback['token']])}}">click here</a> để cập nhật
-                lại mật
-                khẩu của mình.</p>
-        </div>
-        <div class="content">
-            <table>
-                <thead>
-                    <th>
-
-                    </th>
-                </thead>
-                <tbody>
-                    @foreach($feedback['product'] as $value)
-                    <tr>
-                        <td>{{$value->name}}</td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+            <p>Vui lòng <a href="{{ route('resetPassword',['token'=>$feedback['token']]) }}">click here</a> để cập nhật
+                lại mật khẩu của mình.</p>
         </div>
     </div>
 </body>

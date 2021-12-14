@@ -22,7 +22,6 @@ use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
-
     public function accountInfo()
     {
         $model = User::find(Auth::user()->id);
@@ -77,8 +76,8 @@ class CustomerController extends Controller
 
     public function orderHistory()
     {
-        $user_id = Auth::user()->id;
-        $order = Order::where('user_id', $user_id)->orderBy('created_at', 'DESC')->get();
+        $user_id = Auth::user()->email;
+        $order = Order::where('email', $user_id)->orderBy('created_at', 'DESC')->get();
 
         $generalSetting = GeneralSetting::first();
         $order->load('orderDetails');
@@ -107,7 +106,6 @@ class CustomerController extends Controller
 
     public function cancel_order($id)
     {
-
         $user_email = Auth::user()->email;
         $order = Order::find($id);
         if (!$order || ($order->delivery_status != 1)) {
@@ -129,19 +127,14 @@ class CustomerController extends Controller
             $save_or_detail->delivery_status = "Đơn hàng bị hủy";
             $save_or_detail->save();
 
-            $models = Statistical::where('product_id', $value->product_id)
-                ->where('product_type', $value->product_type)
-                ->where('updated_at', 'like', '%' . Carbon::parse($order->created_at, 'UTC')->format('Y-m') . '%')->first();
-            if ($value->id == 1) {
-                $product = Product::find($value->id);
+            if ($value->product_type == 1) {
+                $product = Product::find($value->product_id);
             } else {
-                $product = Accessory::find($value->id);
+                $product = Accessory::find($value->product_id);
             }
-
-            if ($models) {
-                $models->quantity -= $value->quantity;
-                $models->save();
-            }
+            $cong = $product->quantity + $value->quantity;
+            $product->quantity = $cong;
+            $product->save();
         }
 
         return Redirect::to("tai-khoan/chi-tiet-don-hang" . "/" . $order->code)->with('success', "Bạn đã hủy đơn hàng này!");

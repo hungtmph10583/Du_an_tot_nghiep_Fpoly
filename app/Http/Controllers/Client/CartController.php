@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendMailOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\Product;
@@ -23,6 +24,7 @@ use Carbon\Carbon;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use SweetAlert;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CartController extends Controller
 {
@@ -74,7 +76,7 @@ class CartController extends Controller
             $data['options']['image'] = $product_info->image;
             Cart::add($data);
             Cart::setGlobalTax(10);
-            return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng (gio hang rong)");
+            return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng.");
         } else {
             foreach (Cart::content() as $row) {
                 if ($row->id == $id__po && $row->weight == $category_type_id) {
@@ -91,7 +93,7 @@ class CartController extends Controller
                 if ($_qty < $product_info->quantity) { // Số lượng sp từ giở hàng < Số lượng từ DB
                     $tinh = $quantity + $_qty;
                     if ($tinh > $product_info->quantity) {
-                        return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity . " sản phẩm trong kho và giỏ hàng của bạn đang có " . $_qty . " sản phẩm này (alert danger one).");
+                        return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity . " sản phẩm trong kho và giỏ hàng của bạn đang có " . $_qty . " sản phẩm này!");
                     } else {
                         $data['id'] = $product_id;
                         $data['qty'] = $quantity;
@@ -108,7 +110,7 @@ class CartController extends Controller
                         return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 2");
                     }
                 } else {
-                    return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity . " sản phẩm trong kho và bạn đang có " . $_qty . " sản phẩm này trong giỏ hàng (alert danger two).");
+                    return redirect()->back()->with('danger', "Bạn không thể thêm số lượng đó vào trong giỏ hàng vì chúng tôi chỉ còn " . $product_info->quantity . " sản phẩm trong kho và bạn đang có " . $_qty . " sản phẩm này trong giỏ hàng!");
                 }
             } else {
                 $data['id'] = $product_id;
@@ -123,45 +125,10 @@ class CartController extends Controller
                 $data['options']['image'] = $product_info->image;
                 Cart::add($data);
                 Cart::setGlobalTax(10);
-                return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng 3");
+                return redirect()->back()->with('success', "Đã thêm sản phẩm vào giỏ hàng.");
             }
         }
     }
-
-    public function buyNow(Request $request)
-    { //Giỏ hàng
-        if ($request->quantity <= 0) {
-            return redirect()->back();
-        }
-
-        $product_id = $request->product_id_hidden;
-        $quantity = $request->quantity;
-        $product_info = Product::where('id', $product_id)->first();
-
-        $data['id'] = $product_id;
-        $data['qty'] = $quantity;
-        $data['name'] = $product_info->name;
-        if ($request->discount_price > 0) {
-            $data['price'] = $product_info->price - $request->discount_price;
-        } else {
-            $data['price'] = $product_info->price;
-        }
-        $data['weight'] = $request->product_type;
-        $data['options']['image'] = $product_info->image;
-        Cart::add($data);
-        Cart::setGlobalTax(10);
-        return redirect('gio-hang/checkout');
-    }
-
-    // public function showCart(Request $request){
-    //     $category = Category::all();
-    //     $product = Product::all();
-    //     $accessory = Accessory::all();
-    //     dd($accessory);
-    //     $generalSetting = GeneralSetting::first();
-
-    //     return view('client.cart.index', compact('category','product','accessory','generalSetting'));
-    // }
 
     public function deleteToCart($rowId)
     {
@@ -196,7 +163,7 @@ class CartController extends Controller
 
     public function saveCheckout(Request $request)
     {
-        // dd($request);
+
         $model = new Order();
         $request->validate(
             [
@@ -229,11 +196,11 @@ class CartController extends Controller
         $model->delivery_status = 1;
         $model->grand_total = $request->grand_total;
         $model->code = date('dmY-His');
-
         $model->save();
 
         $id_order = $model->id;
         $content = Cart::content();
+        // dd($content, $request);
 
         foreach ($content as $key => $value) {
             $orderDetail = new OrderDetail();
@@ -253,40 +220,63 @@ class CartController extends Controller
             $orderDetail->quantity = $value->qty;
             $orderDetail->save();
 
-            $models = Statistical::where('product_id', $value->id)
-                ->where('product_type', $value->weight)
-                ->where('updated_at', 'like', '%' . Carbon::now()->format('Y-m') . '%')->first();
             if ($value->weight == 1) {
-                $product = Product::find($value->id);
+                $update_product = Product::find($value->id);
+                $tru = $update_product->quantity - $value->qty;
+                $update_product->quantity = $tru;
+                $update_product->save();
             } else {
-                $product = Accessory::find($value->id);
-            }
-
-            if ($models) {
-                if ($product->quantity >= $models->quantity) {
-                    $sum = $models->quantity + $value->qty;
-                    if ($sum <= $models->quantityMonth) {
-                        $models->quantity += $value->qty;
-                        $models->save();
-                    }
-                }
-            } else {
-                $model = new Statistical();
-                $model->order_id = 0;
-                $model->product_id = $value->id;
-                $model->product_type = $value->weight;
-                $model->quantity = $value->qty;
-                $model->quantityMonth = $product->quantity;
-                $model->save();
+                $update_product = Accessory::find($value->id);
+                $tru = $update_product->quantity - $value->qty;
+                $update_product->quantity = $tru;
+                $update_product->save();
             }
         }
 
-        $content = Cart::content();
-        foreach ($content as $key => $value) {
+        // ---------------------------------------------------------
+        $id_first = Order::where('phone', $request->phone)->orderBy('created_at', 'DESC')->first();
+        $order_Detail = OrderDetail::where('order_id', $id_first->id)->get();
+        $product = Product::all();
+        $generalSetting = GeneralSetting::first('logo');
+        $accessory = Accessory::all();
+        // dd($generalSetting);
+        $total = 0;
+        foreach ($order_Detail as $key => $value) {
+            $total += $value->price;
+        }
+
+        $name_client = $request->name;
+        $number_phone = $request->phone;
+        $to_email = $request->email;
+        $order_code = $id_first->code;
+        $date_time_order = $id_first->created_at->format('d/m/Y');
+        $shipping_address = $request->address . ", " . $request->ward . ", " . $request->district . ", " . $request->city;
+        $total = number_format($total, 0, ',', '.');
+        $tax = number_format($request->tax, 0, ',', '.');
+        $grand_total = number_format($request->grand_total, 0, ',', '.');
+
+        $mailData = [
+            'name_client' => $name_client,
+            'number_phone' => $number_phone,
+            'to_email' => $to_email,
+            'order_code' => $order_code,
+            'date_time_order' => $date_time_order,
+            'shipping_address' => $shipping_address,
+            'grand_total' => $grand_total,
+            'orderDetail' => $order_Detail,
+            'product' => $product,
+            'accessory' => $accessory,
+            'tax' => $tax,
+            'total' => $total,
+            'generalSetting' => $generalSetting
+        ];
+        $toMail = $to_email;
+        Mail::to($toMail)->send(new SendMailOrder($mailData));
+        // Send-mail-order E)
+        foreach ($content as $key => $value) { // Xóa sản phẩm trong giỏ hàng sau khi lưu dữ liệu và gửi mail
             $rowId = $value->rowId;
             Cart::update($rowId, 0);
-        }
-        // return view('client.cart.index');
-        return Redirect::to("gio-hang/");
+        } // Xóa sản phẩm trong giỏ hàng sau khi lưu dữ liệu và gửi mail
+        return Redirect::to("gio-hang/")->with('success', "Đặt hàng thành công!");
     }
 }

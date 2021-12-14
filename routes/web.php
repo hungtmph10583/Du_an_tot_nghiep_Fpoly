@@ -146,4 +146,6 @@ Route::get('reset-password/{token}', [ResetPasswordController::class, 'getPasswo
 Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);
 
 //Send mail
-Route::get('send-mail', [MailController::class, 'send_mail'])->name('sendMail');
+Route::get('send-mail', [SearchController::class, 'send_mail'])->name('sendMail');
+
+Route::get('tinh-trang-don-hang/{code}', [SearchController::class, 'order_status'])->name('orderStatus');
