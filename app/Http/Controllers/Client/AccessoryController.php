@@ -16,10 +16,12 @@ use App\Models\GeneralSetting;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class AccessoryController extends Controller
 {
     public function index(Request $request){
+        $carbon_now = Carbon::now();
         $pagesize = 5;
         $searchData = $request->except('page');
         if(count($request->all()) == 0){
@@ -54,12 +56,14 @@ class AccessoryController extends Controller
             'accessory' => $accessories,
             'category' => $categories,
             'searchData' => $searchData,
+            'carbon_now' => $carbon_now,
             'generalSetting' => $generalSetting
         ]);
     }
 
     public function detail($id){
         $model = Accessory::where('slug', $id)->first();
+        $carbon_now = Carbon::now();
         if (!$model) {
             return redirect()->back();
         }
@@ -75,9 +79,9 @@ class AccessoryController extends Controller
 
         if (Auth::check()) {
             $check_rv = Review::where('product_id', $model->id)->where('product_type', '1')->where('user_id', Auth::user()->id)->first();
-            return view('client.accessory.detail', compact('category', 'model', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'check_rv'));
+            return view('client.accessory.detail', compact('category', 'model', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'check_rv', 'carbon_now'));
         }else{
-            return view('client.accessory.detail', compact('category', 'model', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
+            return view('client.accessory.detail', compact('category', 'model', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'carbon_now'));
         }
     }
 

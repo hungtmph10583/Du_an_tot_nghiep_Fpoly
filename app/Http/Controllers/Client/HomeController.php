@@ -16,10 +16,12 @@ use App\Models\ProductGallery;
 use App\Models\Review;
 use App\Models\Blog;
 use App\Models\GeneralSetting;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
     public function home(Request $request){
+        $carbon_now = Carbon::now();
         $category = Category::all();
         $product = Product::paginate(5);
         $accessory = Accessory::paginate(5);
@@ -37,6 +39,7 @@ class HomeController extends Controller
             'breed' => $breed,
             'slide' => $slide,
             'blog' => $blog,
+            'carbon_now' => $carbon_now,
             'generalSetting' => $generalSetting
         ]);
     }

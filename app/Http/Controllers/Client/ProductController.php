@@ -16,11 +16,13 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\GeneralSetting;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class ProductController extends Controller
 {
     public function index(Request $request){
-        $pagesize = 5;
+        $carbon_now = Carbon::now();
+        $pagesize = 12;
         $searchData = $request->except('page');
         if(count($request->all()) == 0){
             //Lấy ra danh sách sản phẩm & phân trang cho nó
@@ -58,12 +60,14 @@ class ProductController extends Controller
             'gender' => $gender,
             'breed' => $breed,
             'searchData' => $searchData,
+            'carbon_now' => $carbon_now,
             'generalSetting' => $generalSetting
         ]);
     }
 
     public function detail($id){
         $model = Product::where('slug', $id)->first();
+        $carbon_now = Carbon::now();
         if (!$model) {
             return redirect()->back();
         }
@@ -82,9 +86,9 @@ class ProductController extends Controller
 
         if (Auth::check()) {
             $check_rv = Review::where('product_id', $model->id)->where('product_type', '1')->where('user_id', Auth::user()->id)->first();
-            return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'check_rv'));
+            return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'check_rv', 'carbon_now'));
         }else{
-            return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide'));
+            return view('client.product.detail', compact('category', 'model', 'breed', 'gender', 'review', 'rating', 'countReview', 'generalSetting', 'product_slide', 'carbon_now'));
         }
     }
 

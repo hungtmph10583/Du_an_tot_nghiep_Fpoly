@@ -72,7 +72,11 @@
                         @csrf
                             <input type="hidden" name="product_id_hidden" value="{{$p->id}}">
                             <input type="hidden" name="product_type" value="1">
-                            <input type="hidden" name="discount_price" value="{{$p->discount}}">
+                            @if($p->discount_start_date <= $carbon_now && $p->discount_end_date >= $carbon_now || $p->discount_start_date == '' || $p->discount_end_date == '')
+                                <input type="hidden" name="discount_price" value="{{$p->discount}}">
+                            @else
+                                <input type="hidden" name="discount_price" value="0">
+                            @endif
                             <input type="hidden" name="category_id" value="{{$p->category_id}}">
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit" class="btn-buyNow">Thêm vào giỏ hàng</button>
@@ -85,12 +89,16 @@
                         @if($p->discount == '')
                             <span class="price">{{number_format($p->price)}}đ</span>
                         @else
-                            <span class="discount">{{number_format($p->price)}}đ</span>
-                            <span class="price">
-                                <?php
-                                    echo number_format($p->price - $p->discount).'đ';
-                                ?>
-                            </span>
+                            @if($p->discount_start_date <= $carbon_now && $p->discount_end_date >= $carbon_now || $p->discount_start_date == '' || $p->discount_end_date == '')
+                                <span class="discount">{{number_format($p->price)}}đ</span>
+                                <span class="price">
+                                    <?php
+                                        echo number_format($p->price - $p->discount).'đ';
+                                    ?>
+                                </span>
+                            @else
+                                <span class="price">{{number_format($p->price)}}đ</span>
+                            @endif
                         @endif
                     </div>
                 </div>
@@ -121,6 +129,11 @@
                             <input type="hidden" name="product_id_hidden" value="{{$ac->id}}">
                             <input type="hidden" name="product_type" value="2">
                             <input type="hidden" name="discount_price" value="{{$ac->discount}}">
+                            @if($ac->discount_start_date <= $carbon_now && $ac->discount_end_date >= $carbon_now || $ac->discount_start_date == '' || $ac->discount_end_date == '')
+                                <input type="hidden" name="discount_price" value="{{$ac->discount}}">
+                            @else
+                                <input type="hidden" name="discount_price" value="0">
+                            @endif
                             <input type="hidden" name="category_id" value="{{$ac->category_id}}">
                             <input type="hidden" name="quantity" value="1">
                             <button type="submit" class="btn-buyNow">Thêm vào giỏ hàng</button>
@@ -130,15 +143,19 @@
                 <div class="item-bottom">
                     <div class="product-info">
                         <a href="{{route('client.accessory.detail', ['id' => $ac->slug])}}" class="name">{{$ac->name}}</a>
-                        @if($p->discount == '')
+                        @if($ac->discount == '')
                             <span class="price">{{number_format($ac->price)}}đ</span>
                         @else
-                            <span class="discount">{{number_format($ac->price)}}đ</span>
-                            <span class="price">
-                                <?php
-                                    echo number_format($ac->price - $ac->discount).'đ';
-                                ?>
-                            </span>
+                            @if($ac->discount_start_date <= $carbon_now && $ac->discount_end_date >= $carbon_now || $ac->discount_start_date == '' || $ac->discount_end_date == '')
+                                <span class="discount">{{number_format($ac->price)}}đ</span>
+                                <span class="price">
+                                    <?php
+                                        echo number_format($ac->price - $ac->discount).'đ';
+                                    ?>
+                                </span>
+                            @else
+                                <span class="price">{{number_format($ac->price)}}đ</span>
+                            @endif
                         @endif
                     </div>
                 </div>

@@ -63,12 +63,16 @@
                     @if($model->discount == '')
                         <span class="price">{{number_format($model->price)}}đ</span>
                     @else
-                        <span class="discount">{{number_format($model->price)}}đ</span>
-                        <span class="price">
-                            <?php
-                                echo number_format($model->price - $model->discount).'đ';
-                            ?>
-                        </span>
+                        @if($model->discount_start_date <= $carbon_now && $model->discount_end_date >= $carbon_now || $model->discount_start_date == '' || $model->discount_end_date == '')
+                            <span class="discount">{{number_format($model->price)}}đ</span>
+                            <span class="price">
+                                <?php
+                                    echo number_format($model->price - $model->discount).'đ';
+                                ?>
+                            </span>
+                        @else
+                            <span class="price">{{number_format($model->price)}}đ</span>
+                        @endif
                     @endif
                 </div>
                 <div class="item-extra">
@@ -78,7 +82,11 @@
             <form action="{{route('saveCart')}}" method="POST" enctype="multipart/form-data">
             @csrf
                 <input type="hidden" name="product_id_hidden" value="{{$model->id}}">
-                <input type="hidden" name="discount_price" value="{{$model->discount}}">
+                @if($model->discount_start_date <= $carbon_now && $model->discount_end_date >= $carbon_now || $model->discount_start_date == '' || $model->discount_end_date == '')
+                    <input type="hidden" name="discount_price" value="{{$model->discount}}">
+                @else
+                    <input type="hidden" name="discount_price" value="0">
+                @endif
                 <input type="hidden" name="category_id" value="{{$model->category_id}}">
                 <div class="item-extra">
                     <h6>Số lượng</h6>
@@ -295,12 +303,16 @@
                         @if($pro_S->discount == '')
                             <span class="price">{{number_format($pro_S->price)}}đ</span>
                         @else
-                            <span class="discount">{{number_format($pro_S->price)}}đ</span>
-                            <span class="price">
-                                <?php
-                                    echo number_format($pro_S->price - $pro_S->discount).'đ';
-                                ?>
-                            </span>
+                            @if($pro_S->discount_start_date <= $carbon_now && $pro_S->discount_end_date >= $carbon_now || $pro_S->discount_start_date == '' || $pro_S->discount_end_date == '')
+                                <span class="discount">{{number_format($pro_S->price)}}đ</span>
+                                <span class="price">
+                                    <?php
+                                        echo number_format($pro_S->price - $pro_S->discount).'đ';
+                                    ?>
+                                </span>
+                            @else
+                                <span class="price">{{number_format($pro_S->price)}}đ</span>
+                            @endif
                         @endif
                     </div>
                 </div>

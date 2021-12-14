@@ -54,7 +54,11 @@
                     @csrf
                         <input type="hidden" name="product_id_hidden" value="{{$p->id}}">
                         <input type="hidden" name="product_type" value="2">
-                        <input type="hidden" name="discount_price" value="{{$p->discount}}">
+                        @if($p->discount_start_date <= $carbon_now && $p->discount_end_date >= $carbon_now || $p->discount_start_date == '' || $p->discount_end_date == '')
+                            <input type="hidden" name="discount_price" value="{{$p->discount}}">
+                        @else
+                            <input type="hidden" name="discount_price" value="0">
+                        @endif
                         <input type="hidden" name="category_id" value="{{$p->category_id}}">
                         <input type="hidden" name="quantity" value="1">
                         <button type="submit" class="btn-buyNow">Thêm vào giỏ hàng</button>
@@ -67,12 +71,16 @@
                     @if($p->discount == '')
                         <span class="price">{{number_format($p->price)}}đ</span>
                     @else
-                        <span class="discount">{{number_format($p->price)}}đ</span><br>
-                        <span class="price">
-                            <?php
-                                echo number_format($p->price - $p->discount).'đ';
-                            ?>
-                        </span>
+                        @if($p->discount_start_date <= $carbon_now && $p->discount_end_date >= $carbon_now || $p->discount_start_date == '' || $p->discount_end_date == '')
+                            <span class="discount">{{number_format($p->price)}}đ</span>
+                            <span class="price">
+                                <?php
+                                    echo number_format($p->price - $p->discount).'đ';
+                                ?>
+                            </span>
+                        @else
+                            <span class="price">{{number_format($p->price)}}đ</span>
+                        @endif
                     @endif
                 </div>
             </div>

@@ -62,7 +62,7 @@
         <div class="content">
             <p>Kính Gửi: <span class="bold">{{$feedback['name_client']}}</span>,</p>
             <p>Yêu cầu đặt lại mật khẩu của bạn đã được thông qua.</p>
-            <p>Vui lòng <a href="{{ route('resetPassword',['token'=>$feedback['token']]) }}">click here</a> để cập nhật lại mật khẩu của mình.</p>
+            <p>Vui lòng click <a href="{{ route('resetPassword',['token'=>$feedback['token']]) }}">tại đây</a> để cập nhật lại mật khẩu của mình.</p>
         </div>
     </div>
 </body>

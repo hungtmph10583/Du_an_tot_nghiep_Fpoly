@@ -28,12 +28,7 @@ class Role extends Model
      * HungTM
      * start
      */
-    public function users()
-    {
-        // return $this->hasManyThrough(ModelHasRole::class,'model_id');
-        return $this->hasManyThrough(User::class);
-        // return $this->belongsToMany(User::class);
-    }
+    
 
     public function permissions()
     {

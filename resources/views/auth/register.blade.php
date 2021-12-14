@@ -18,7 +18,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </head>
 <body>
-	<section class="h-100-vh mb-8">
+	<section class="mb-8">
         <div class="page-header align-items-start section-height-50 pt-5 pb-11 m-3 border-radius-lg"
             style="background-image: url('{{ asset('theme-bootstrap/assets/img/curved-images/curved14.jpg')}}')">
             <span class="mask bg-gradient-dark opacity-6"></span>
@@ -34,7 +34,7 @@
             </div>
         </div>
         <div class="container">
-            <div class="row mt-lg-n10 mt-md-n11 mt-n10">
+            <div class="row mt-lg-n12 mt-md-n11 mt-n10">
                 <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                     <div class="card z-index-0">
                         <div class="card-header text-center pt-4">
