@@ -4,7 +4,7 @@
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/account_info.css')}}">
 @endsection
-	<!-- content -->
+<!-- content -->
 <section class="account-info">
     <div class="bread-crumb">
         <a href="{{route('client.home')}}">Trang chủ</a>
@@ -44,28 +44,30 @@
                 </thead>
                 <tbody class="list-overflow">
                     @foreach($orderDetail as $orD)
-                        <tr>
-                            @if($orD->product_type == 1)
-                                <td>{{$orD->product->name}}</td>
-                                <td>
-                                    <a href="{{route('client.product.detail', ['id' => $orD->product->slug])}}">
-                                        <img src="{{asset( 'storage/' . $orD->product->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" width="100">
-                                    </a>
-                                </td>
-                            @else
-                                <td>{{$orD->accessory->name}}</td>
-                                <td>
-                                    <a href="{{route('client.accessory.detail', ['id' => $orD->accessory->slug])}}">
-                                        <img src="{{asset( 'storage/' . $orD->accessory->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" width="100">
-                                    </a>
-                                </td>
-                            @endif
-                            <td>{{number_format($orD->price,0,',','.')}}đ</td>
-                            <td>{{$orD->quantity}}</td>
-                            <td class="time">{{$orD->order->created_at->diffForHumans()}}</td>
-                            <td>
-                                {{$orD->payment_status}}
-                            </td>
+                    <tr>
+                        @if($orD->product_type == 1)
+                        <td>{{$orD->product->name}}</td>
+                        <td>
+                            <a href="{{route('client.product.detail', ['id' => $orD->product->slug])}}">
+                                <img src="{{asset( 'storage/' . $orD->product->image)}}"
+                                    alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" width="100">
+                            </a>
+                        </td>
+                        @else
+                        <td>{{$orD->accessory->name}}</td>
+                        <td>
+                            <a href="{{route('client.accessory.detail', ['id' => $orD->accessory->slug])}}">
+                                <img src="{{asset( 'storage/' . $orD->accessory->image)}}"
+                                    alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" width="100">
+                            </a>
+                        </td>
+                        @endif
+                        <td>{{number_format($orD->price,0,',','.')}}đ</td>
+                        <td>{{$orD->quantity}}</td>
+                        <td class="time">{{$orD->order->created_at->diffForHumans()}}</td>
+                        <td>
+                            {{$orD->payment_status}}
+                        </td>
                             <td>
                                 @if($order->delivery_status == 4)
                                     Bạn đã hủy đơn hàng này
@@ -80,5 +82,5 @@
         </div>
     </div>
 </section>
-	<!-- content -->
+<!-- content -->
 @endsection

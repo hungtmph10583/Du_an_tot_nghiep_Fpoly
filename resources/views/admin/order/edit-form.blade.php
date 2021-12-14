@@ -1,11 +1,13 @@
-@extends('layouts.admin.main') @section('content')
+@extends('layouts.admin.main')
+@section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
         <div class="card card-secondary my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Thay đổi trạng thái Đơn hàng</a></li>
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Danh sách Đơn
+                            hàng</a></li>
                     <li class="breadcrumb-item active">Sửa Đơn hàng</li>
                 </ol>
             </div>
@@ -104,11 +106,11 @@
                                             @endif
                                         btn-sm text-light">
                                             @if($order->payment_status == 1)
-                                                Chưa thanh toán
+                                            Chưa thanh toán
                                             @elseif($order->payment_status == 2)
-                                                Đã thanh toán
+                                            Đã thanh toán
                                             @else
-                                                Lỗi code
+                                            Lỗi code
                                             @endif
                                         </span>
                                     </div>
@@ -149,11 +151,13 @@
                                 <tr>
                                     <th scope="row">{{++$key}}</th>
                                     @if($value->product_type == 1)
-                                        <td class="text-center"><img src="{{asset( 'storage/' . $value->product->image)}}" alt="" width="70"></td>
-                                        <td>{{$value->product->name}}</td>
+                                    <td class="text-center"><img src="{{asset( 'storage/' . $value->products->image)}}"
+                                            alt="" width="70"></td>
+                                    <td>{{$value->products->name}}</td>
                                     @else
-                                        <td class="text-center"><img src="{{asset( 'storage/' . $value->accessory->image)}}" alt="" width="70"></td>
-                                        <td>{{$value->accessory->name}}</td>
+                                    <td class="text-center"><img src="{{asset( 'storage/' . $value->accessory->image)}}"
+                                            alt="" width="70"></td>
+                                    <td>{{$value->accessory->name}}</td>
                                     @endif
                                     <td>Giao hàng tận nhà</td>
                                     <td>{{$value->quantity}}</td>
@@ -177,8 +181,8 @@
                                     <div class="col form-group">Tạm tính</div>
                                     <div class="col form-group">
                                         <?php
-                                            $total = $value->order->grand_total - $value->tax;
-                                            echo number_format($total,0,',','.') . 'đ';
+                                        $total = $value->order->grand_total - $value->tax;
+                                        echo number_format($total, 0, ',', '.') . 'đ';
                                         ?>
                                     </div>
                                 </div>
@@ -197,7 +201,8 @@
                         <div class="col-12 text-right"><br>
                             <div class="form-group">
                                 <input type="checkbox" name="send_mail" id="send_mail" value="send_mail">
-                                <label class="form-check-label" for="send_mail">Gửi email cập nhật cho khách hàng</label>
+                                <label class="form-check-label" for="send_mail">Gửi email cập nhật cho khách
+                                    hàng</label>
                             </div>
                             <button type="submit" class="btn btn-info">Lưu</button>
                             <a href="{{route('order.index')}}" class="btn btn-danger">Hủy</a>

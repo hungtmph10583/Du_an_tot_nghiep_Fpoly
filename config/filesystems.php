@@ -17,7 +17,7 @@ return [
      * @date: 28/09/21
      */
     'default' => env('FILESYSTEM_DRIVER', 'public'),
-    
+
     /*
     |--------------------------------------------------------------------------
     | Filesystem Disks

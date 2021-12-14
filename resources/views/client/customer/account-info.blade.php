@@ -4,7 +4,7 @@
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/account_info.css')}}">
 @endsection
-	<!-- content -->
+<!-- content -->
 <section class="account-info">
     <div class="bread-crumb">
         <a href="{{route('client.home')}}">Trang chủ</a>
@@ -37,36 +37,39 @@
                     @csrf
                     <div class="box_content">
                         <div class="avatar">
-                            <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" id="blah2" alt="User profile picture">
+                            <img src="{{ (strpos(Auth::user()->avatar, 'uploads/') === false ? Auth::user()->avatar:asset('storage/' . Auth::user()->avatar)) }}"
+                                id="blah2" alt="User profile picture">
                             <label for="hidden-avatar" class="setting">
                                 <i class="far fa-edit"></i> Edit
                                 <input hidden type="file" name="uploadfile" id="hidden-avatar">
                             </label>
                         </div>
                         <div class="undo">
-                            <a href="javascript:;" style="float:right;" id="undo" class="btn_black_icon"><i class="fas fa-undo-alt"></i></a>
+                            <a href="javascript:;" style="float:right;" id="undo" class="btn_black_icon"><i
+                                    class="fas fa-undo-alt"></i></a>
                         </div>
                     </div>
                     <div class="box_content_last">
                         <div class="box_item">
                             <label for="name" class="name"><i class="fas fa-user"></i></label>
-                            <input type="text" name="name" id="name" placeholder="Họ và tên" value="{{Auth::user()->name}}">
+                            <input type="text" name="name" id="name" placeholder="Họ và tên"
+                                value="{{Auth::user()->name}}">
                             @error('name')
-                                <span class="text_danger">{{$message}}</span>
+                            <span class="text_danger">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="box_item">
                             <label for=""><i class="fas fa-at"></i></label>
                             <input type="text" name="email" placeholder="Emai" value="{{Auth::user()->email}}">
                             @error('email')
-                                <span class="text_danger">{{$message}}</span>
+                            <span class="text_danger">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="box_item">
                             <label for=""><i class="fas fa-phone-alt"></i></label>
                             <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
                             @error('phone')
-                                <span class="text_danger">{{$message}}</span>
+                            <span class="text_danger">{{$message}}</span>
                             @enderror
                         </div>
                         <div class="box_item_last">
@@ -115,21 +118,25 @@
                         <li class="first_two">
                             <strong>Thú cưng đã mua: </strong>
                             @foreach($order as $or)
-                                @foreach($orderDetail as $orD)
-                                    @if($orD->order_id == $or->id && $or->delivery_status == 3 && $orD->product_type == 1)
-                                        <a href="{{route('client.product.detail', ['id' => $orD->product->slug])}}">{{$orD->product->name}}</a><span class="rtrim">,</span>
-                                    @endif
-                                @endforeach
+                            @foreach($orderDetail as $orD)
+                            @if($orD->order_id == $or->id && $or->delivery_status == 3 && $orD->product_type == 1)
+                            <a
+                                href="{{route('client.product.detail', ['id' => $orD->products->slug])}}">{{$orD->products->name}}</a><span
+                                class="rtrim">,</span>
+                            @endif
+                            @endforeach
                             @endforeach
                         </li>
                         <li class="first_two">
                             <strong>Phụ kiện đã mua: </strong>
                             @foreach($order as $or)
-                                @foreach($orderDetail as $orD)
-                                @if($orD->order_id == $or->id && $or->delivery_status == 3 && $orD->product_type == 2)
-                                        <a href="{{route('client.accessory.detail', ['id' => $orD->accessory->slug])}}">{{$orD->accessory->name}}</a><span class="rtrim">,</span>
-                                    @endif
-                                @endforeach
+                            @foreach($orderDetail as $orD)
+                            @if($orD->order_id == $or->id && $or->delivery_status == 3 && $orD->product_type == 2)
+                            <a
+                                href="{{route('client.accessory.detail', ['id' => $orD->accessory->slug])}}">{{$orD->accessory->name}}</a><span
+                                class="rtrim">,</span>
+                            @endif
+                            @endforeach
                             @endforeach
                         </li>
                     </ul>
@@ -138,9 +145,13 @@
                             <strong>Đơn hàng đang chờ xử lí:</strong>
                             <span>
                                 <?php
-                                    $totail = 0;
-                                    foreach($order as $value){ if ($value->delivery_status == 1) { $totail +=1; } }
-                                    echo $totail;
+                                $totail = 0;
+                                foreach ($order as $value) {
+                                    if ($value->delivery_status == 1) {
+                                        $totail += 1;
+                                    }
+                                }
+                                echo $totail;
                                 ?>
                             </span>
                         </li>
@@ -148,9 +159,13 @@
                             <strong>Đơn hàng đang giao:</strong>
                             <span>
                                 <?php
-                                    $totail = 0;
-                                    foreach($order as $value){ if ($value->delivery_status == 2) { $totail +=1; } }
-                                    echo $totail;
+                                $totail = 0;
+                                foreach ($order as $value) {
+                                    if ($value->delivery_status == 2) {
+                                        $totail += 1;
+                                    }
+                                }
+                                echo $totail;
                                 ?>
                             </span>
                         </li>
@@ -158,9 +173,13 @@
                             <strong>Đơn hàng giao thành công:</strong>
                             <span>
                                 <?php
-                                    $totail = 0;
-                                    foreach($order as $value){ if ($value->delivery_status == 3) { $totail +=1; } }
-                                    echo $totail;
+                                $totail = 0;
+                                foreach ($order as $value) {
+                                    if ($value->delivery_status == 3) {
+                                        $totail += 1;
+                                    }
+                                }
+                                echo $totail;
                                 ?>
                             </span>
                         </li>
@@ -168,9 +187,13 @@
                             <strong>Đơn hàng bị hủy:</strong>
                             <span>
                                 <?php
-                                    $totail = 0;
-                                    foreach($order as $value){ if ($value->delivery_status == 0) { $totail +=1; } }
-                                    echo $totail;
+                                $totail = 0;
+                                foreach ($order as $value) {
+                                    if ($value->delivery_status == 0) {
+                                        $totail += 1;
+                                    }
+                                }
+                                echo $totail;
                                 ?>
                             </span>
                         </li>
@@ -178,9 +201,13 @@
                             <strong>Đơn hàng đã hủy:</strong>
                             <span>
                                 <?php
-                                    $totail = 0;
-                                    foreach($order as $value){ if ($value->delivery_status == 4) { $totail +=1; } }
-                                    echo $totail;
+                                $totail = 0;
+                                foreach ($order as $value) {
+                                    if ($value->delivery_status == 4) {
+                                        $totail += 1;
+                                    }
+                                }
+                                echo $totail;
                                 ?>
                             </span>
                         </li>
@@ -190,46 +217,46 @@
         </div>
     </div>
 </section>
-	<!-- content -->
+<!-- content -->
 @endsection
 @section('pagejs')
 <script>
+$("#edit_info").on('click', function(e) {
+    document.getElementById("box_info").style.display = 'none';
+    document.getElementById("box_form").style.display = 'block';
+    e.preventDefault();
+});
 
-    $("#edit_info").on('click', function(e){
-        document.getElementById("box_info").style.display = 'none';
-        document.getElementById("box_form").style.display = 'block';
-        e.preventDefault();
-    });
+$("#undo").on('click', function(e) {
+    document.getElementById("box_form").style.display = 'none';
+    document.getElementById("box_info").style.display = 'block';
+    e.preventDefault();
+});
 
-    $("#undo").on('click', function(e){
-        document.getElementById("box_form").style.display = 'none';
-        document.getElementById("box_info").style.display = 'block';
-        e.preventDefault();
-    });
+$("#cancel_edit").on('click', function(e) {
+    document.getElementById("box_form").style.display = 'none';
+    document.getElementById("box_info").style.display = 'block';
+    e.preventDefault();
+});
 
-    $("#cancel_edit").on('click', function(e){
-        document.getElementById("box_form").style.display = 'none';
-        document.getElementById("box_info").style.display = 'block';
-        e.preventDefault();
-    });
+var a = '';
 
-    var a = '';
-        function readURL(input) {
-			if (input.files && input.files[0]) {
-				var reader = new FileReader();
-					// $('#cc').append(`
-					// 	<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
-					// `);
-					// document.getElementById("cc").style.display = 'block';
-				reader.onload = function(e) {
-					$('#blah').attr('src', e.target.result);
-					$('#blah2').attr('src', e.target.result);
-				}
-				reader.readAsDataURL(input.files[0]);
-				}
-			}
-			$("#hidden-avatar").change(function() {
-				readURL(this);
-		});
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        var reader = new FileReader();
+        // $('#cc').append(`
+        // 	<img class="add-product-preview-img" id="blah" src="#" alt="your image" />
+        // `);
+        // document.getElementById("cc").style.display = 'block';
+        reader.onload = function(e) {
+            $('#blah').attr('src', e.target.result);
+            $('#blah2').attr('src', e.target.result);
+        }
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+$("#hidden-avatar").change(function() {
+    readURL(this);
+});
 </script>
 @endsection

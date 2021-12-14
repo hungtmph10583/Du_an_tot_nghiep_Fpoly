@@ -15,7 +15,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container">
@@ -70,7 +70,7 @@
                                 <select name="product_id[]" class="form-control" id="product" multiple>
                                     <option value=""></option>
                                     @foreach($product as $p)
-                                    @if(!($p->discount) || ($p->coupon_id==$coupon->id))
+                                    @if(!($p->discount || $p->coupon_id) || ($p->coupon_id == $coupon->id))
                                     <option @foreach($coupon->products as $pro)
                                         {{ ($p->id == $pro->id) ? 'selected="selected"' : '' }}
                                         @endforeach value="{{$p->id}}">{{$p->name}}
@@ -85,6 +85,29 @@
                     <div class="row">
                         <div class="col-3">
                             <div class="form-group">
+                                <label for="">Danh mục</label>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="form-group">
+                                <select name="category_id[]" class="form-control" id="category" multiple>
+                                    <option value=""></option>
+                                    @foreach($category as $c)
+                                    @if(!($c->coupon_id) || ($c->coupon_id == $coupon->id))
+                                    <option @foreach($coupon->category as $cate)
+                                        {{ ($c->id == $cate->id) ? 'selected="selected"' : '' }}
+                                        @endforeach value="{{$c->id}}">{{$c->name}}
+                                    </option>
+                                    @endif
+                                    @endforeach
+                                </select>
+                            </div>
+                            <span class="text-danger error_text category_id_error"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-3">
+                            <div class="form-group">
                                 <label for="">Thời gian</label>
                             </div>
                         </div>
@@ -92,14 +115,14 @@
                             <div class="row">
                                 <div class="col">
                                     <div class="form-group">
-                                        <input type="date" name="start_date" class="form-control"
-                                            value="{{\Carbon\Carbon::parse($coupon->start_date)->toDateString()}}">
+                                        <input type="datetime-local" name="start_date" id="start" class="form-control"
+                                            value="{{\Carbon\Carbon::parse($coupon->start_date)->format('Y-m-d\TH:i')}}">
                                     </div>
                                 </div>
                                 <div class="col">
                                     <div class="form-group">
-                                        <input type="date" name="end_date" class="form-control"
-                                            value="{{\Carbon\Carbon::parse($coupon->end_date)->toDateString()}}">
+                                        <input type="datetime-local" name="end_date" id="end" class="form-control"
+                                            value="{{\Carbon\Carbon::parse($coupon->end_date)->format('Y-m-d\TH:i')}}">
                                     </div>
                                 </div>
                             </div>
@@ -145,20 +168,6 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-3">
-                            <div class="form-group">
-                                <label for="">Nội dung giảm giá</label>
-                            </div>
-                        </div>
-                        <div class="col-9">
-                            <div class="form-group">
-                                <textarea name="details" class="form-control" cols="30"
-                                    rows="10">{{$coupon->details}}</textarea>
-                            </div>
-                            <span class="text-danger error_text details_error"></span>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-6"></div>
                         <div class="col-6 mt-2"><br>
                             <div class="text-right">
@@ -176,44 +185,54 @@
 @endsection
 @section('pagejs')
 <link rel="stylesheet" href="{{ asset('admin-theme/custom-css/custom.css') }}">
+<script src="{{ asset('admin-theme/custom-js/custom.js')}}"></script>
 <script>
-// $(document).ready(function() {
-//     $('#discountPro').keyup(function(e) {
-//         setTimeout(function() {
-//             console.log($('#discountPro').val())
-//         }, 1000)
+$(document).ready(function() {
+    $(".btn-info").click(function(e) {
+        e.preventDefault();
+        var formData = new FormData($('form')[0]);
+        if ($('#forever').is(':checked')) {
+            formData.set('start_date', ' ');
+            formData.set('end_date', ' ');
+        }
 
+        formData.set('start_date', dateTime($("#start").val()))
+        formData.set('end_date', dateTime($("#end").val()))
 
-//     })
-// });
-$(".btn-info").click(function(e) {
-    e.preventDefault();
-    var formData = new FormData($('form')[0]);
-    if ($('#forever').is(':checked')) {
-        formData.set('start_date', ' ');
-        formData.set('end_date', ' ');
-    }
-    $.ajax({
-        url: "{{ route('coupon.saveEdit',['id'=>$coupon->id]) }}",
-        type: 'POST',
-        data: formData,
-        dataType: 'json',
-        cache: false,
-        contentType: false,
-        processData: false,
-        beforeSend: function(data) {
-            $(document).find('span.error_text').text('');
-        },
-        success: function(data) {
-            console.log(data)
-            if (data.status == 0) {
-                $.each(data.error, function(key, value) {
-                    $('span.' + key + '_error').text(value[0]);
-                });
-            } else {
-                window.location.href = data.url;
-            }
-        },
+        $.ajax({
+            url: "{{ route('coupon.saveEdit',['id'=>$coupon->id]) }}",
+            type: 'POST',
+            data: formData,
+            dataType: 'json',
+            cache: false,
+            contentType: false,
+            processData: false,
+            beforeSend: function(data) {
+                $(document).find('span.error_text').text('');
+            },
+            success: function(data) {
+                console.log(data)
+                $('#realize').attr('href', data.url)
+                $('#realize').text('Giảm giá');
+                $("#myModal").modal('show');
+                if (data.status == 0) {
+                    showErr = '<div class="alert alert-danger" role="alert" id="danger">';
+                    $.each(data.error, function(key, value) {
+                        showErr +=
+                            '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                            value[0] +
+                            '<br>';
+                        $('span.' + key.replace('.0', '') + '_error').text(value[
+                            0]);
+                    });
+                    $('.modal-body').html(showErr);
+                } else {
+                    $('.modal-body').html(
+                        '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                        data.message + '</div>')
+                }
+            },
+        });
     });
 });
 $('select').map(function(i, dom) {

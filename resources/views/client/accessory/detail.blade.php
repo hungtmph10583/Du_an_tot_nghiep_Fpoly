@@ -15,35 +15,36 @@
     <div class="product-container">
         <div class="product-item-image">
             <div class="main-image" id="main-image">
-                <img src="{{asset( 'storage/' . $model->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" id=featured>
+                <img src="{{asset( 'storage/' . $model->image)}}"
+                    alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!" id=featured>
             </div>
             <div class="thumbnails">
                 <div id="slide_prev_thumbnail"><i class="fas fa-chevron-left"></i></div>
                 <div class="slide-thumbnails" id="slide-thumbnails">
-                <div>
-                    <img src="{{asset( 'storage/' . $model->image)}}" class="thumbnail_gallery_product active" alt="error">
-                </div>    
-                @foreach ($model->galleries as $gl)
-                    <div><img src="{{asset('storage/' . $gl->image_url)}}" class="thumbnail_gallery_product" alt="error"></div>
-                @endforeach    
+                    <div>
+                        <img src="{{asset( 'storage/' . $model->image)}}" class="thumbnail_gallery_product active"
+                            alt="error">
+                    </div>
+                    @foreach ($model->galleries as $gl)
+                    <div><img src="{{asset('storage/' . $gl->image_url)}}" class="thumbnail_gallery_product"
+                            alt="error"></div>
+                    @endforeach
                 </div>
                 <div id="slide_next_thumbnail"><i class="fas fa-chevron-right"></i></div>
             </div>
         </div>
         <div class="product-item-description">
-                <h1 class="name">{{$model->name}}</h1>
-                <div class="product-extra-icons">
-                    <ul>
-                        <li class="product-extra-star">
-                            <span class="star">
-                                @for($count=1; $count<=5; $count++)
-                                    @if($count <= $rating)
-                                        <i class="fas fa-star rating"></i>
-                                    @elseif($countReview == 0)
-                                        <i class="fas fa-star rating"></i>
-                                    @else
-                                        <i class="far fa-star"></i>
-                                    @endif
+            <h1 class="name">{{$model->name}}</h1>
+            <div class="product-extra-icons">
+                <ul>
+                    <li class="product-extra-star">
+                        <span class="star">
+                            @for($count=1; $count<=5; $count++) @if($count <=$rating) <i class="fas fa-star rating"></i>
+                                @elseif($countReview == 0)
+                                <i class="fas fa-star rating"></i>
+                                @else
+                                <i class="far fa-star"></i>
+                                @endif
                                 @endfor
                             </span>
                         </li>
@@ -80,7 +81,7 @@
                     <span class="box">{{$model->category->name}}</span>
                 </div>
             <form action="{{route('saveCart')}}" method="POST" enctype="multipart/form-data">
-            @csrf
+                @csrf
                 <input type="hidden" name="product_id_hidden" value="{{$model->id}}">
                 @if($model->discount_start_date <= $carbon_now && $model->discount_end_date >= $carbon_now || $model->discount_start_date == '' || $model->discount_end_date == '')
                     <input type="hidden" name="discount_price" value="{{$model->discount}}">
@@ -91,26 +92,28 @@
                 <div class="item-extra">
                     <h6>Số lượng</h6>
                     <div class="quantity">
-                        <input class="minus @if($model->quantity > 0) is-form @else is-form-none @endif" type="button" value="-">
+                        <input class="minus @if($model->quantity > 0) is-form @else is-form-none @endif" type="button"
+                            value="-">
                         <input aria-label="quantity" class="input-qty" name="quantity" type="number"
-                            @if($model->quantity > 0) 
-                                max="{{$model->quantity}}" min="1" value="1"
-                            @else
-                                value="0" disabled
-                            @endif >
-                            <input type="hidden" name="maxQuantity" value="{{$model->quantity}}">
-                        <input class="plus @if($model->quantity > 0) is-form @else is-form-none @endif" type="button" value="+">
+                            @if($model->quantity > 0)
+                        max="{{$model->quantity}}" min="1" value="1"
+                        @else
+                        value="0" disabled
+                        @endif >
+                        <input type="hidden" name="maxQuantity" value="{{$model->quantity}}">
+                        <input class="plus @if($model->quantity > 0) is-form @else is-form-none @endif" type="button"
+                            value="+">
                     </div>
                     <span style="padding-left: 2rem;color: var(--text-color);font-size: 1.5rem;">
                         @if($model->quantity > 0)
-                            {{$model->quantity}} sản phẩm có sẵn
+                        {{$model->quantity}} sản phẩm có sẵn
                         @else
-                            Hết hàng
+                        Hết hàng
                         @endif
                     </span>
                 </div>
                 <?php
-                    $content = Cart::content();
+                $content = Cart::content();
                 ?>
                 <!-- @foreach($content as $ct)
                     @if($ct->id == $model->id)
@@ -203,7 +206,7 @@
                 @endif
                 <span class="note_comment">(Bạn có thể dùng email đã mua hàng để comment nếu không có tài khoản!)</span>
                 <form action="{{route('client.accessory.post_review')}}" method="POST" enctype="multipart/form-data">
-                @csrf
+                    @csrf
                     <input type="hidden" name="product_type" value="2">
                     <input type="hidden" name="product_id" value="{{$model->id}}">
                     <div class="box">
@@ -293,7 +296,8 @@
                 <div class="item-lable">
                     <div class="product-thumbnail">
                         <a href="{{route('client.product.detail', ['id' => $pro_S->slug])}}">
-                            <img src="{{asset( 'storage/' . $pro_S->image)}}" alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                            <img src="{{asset( 'storage/' . $pro_S->image)}}"
+                                alt="Sản phẩm này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                         </a>
                     </div>
                     <div class="product-info">
@@ -301,7 +305,7 @@
                             {{$pro_S->name}}
                         </a>
                         @if($pro_S->discount == '')
-                            <span class="price">{{number_format($pro_S->price)}}đ</span>
+                        <span class="price">{{number_format($pro_S->price)}}đ</span>
                         @else
                             @if($pro_S->discount_start_date <= $carbon_now && $pro_S->discount_end_date >= $carbon_now || $pro_S->discount_start_date == '' || $pro_S->discount_end_date == '')
                                 <span class="discount">{{number_format($pro_S->price)}}đ</span>
@@ -323,18 +327,18 @@
 </section>
 @endsection @section('pagejs')
 <script>
-    $('input.input-qty').each(function() {
-        var $this = $(this),
-            qty = $this.parent().find('.is-form'),
-            min = Number($this.attr('min')),
-            max = Number($this.attr('max'))
-        if (min == 0) {
-            var d = 0
-        } else d = min
-        $(qty).on('click', function() {
-            if ($(this).hasClass('minus')) {
+$('input.input-qty').each(function() {
+    var $this = $(this),
+        qty = $this.parent().find('.is-form'),
+        min = Number($this.attr('min')),
+        max = Number($this.attr('max'))
+    if (min == 0) {
+        var d = 0
+    } else d = min
+    $(qty).on('click', function() {
+        if ($(this).hasClass('minus')) {
             if (d > min) d += -1
-            } else if ($(this).hasClass('plus')) {
+        } else if ($(this).hasClass('plus')) {
             var x = Number($this.val()) + 1
             if (x <= max) d += 1
             }

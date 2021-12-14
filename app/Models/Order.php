@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Order extends Model
 {
-    use HasFactory;
-    protected $table = 'orders';
-
+    use HasFactory, SoftDeletes;
+    protected $table = "orders";
     protected $fillable = [
         'user_id',
         'seller_id',
@@ -27,9 +27,8 @@ class Order extends Model
         'cancel_order'
     ];
 
-    public function orderDetails()
+    public function OrderDetails()
     {
-        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
-        // quan he 
+        return $this->hasMany(OrderDetail::class, 'order_id');
     }
 }

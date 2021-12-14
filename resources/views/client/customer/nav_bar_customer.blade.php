@@ -1,6 +1,7 @@
 <div class="info_customer">
     <div class="avatar">
-        <img src="{{asset( 'storage/' . Auth::user()->avatar)}}" id="blah" alt="User profile picture">
+        <img src="{{(strpos(Auth::user()->avatar, 'uploads/') === false ? Auth::user()->avatar:asset('storage/' . Auth::user()->avatar))}}"
+            id="blah" alt="User profile picture">
     </div>
     <div class="info">
         <h5>{{Auth::user()->name}}</h5>

@@ -251,7 +251,6 @@ a.delete-review:hover {
     display: flex;
     justify-content: space-between;
 }
-
 .account_info_container .content_page_double .box.form form .box_content_top a.undo {
     font-size: 1.2rem;
     color: var(--white);

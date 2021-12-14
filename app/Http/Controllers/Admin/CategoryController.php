@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\CategoryType;
 use App\Models\Product;
 use App\Models\Breed;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Yajra\Datatables\Datatables;
@@ -18,7 +19,8 @@ class CategoryController extends Controller
 {
     public function index(Request $request)
     {
-        return view('admin.category.index');
+        $admin = Auth::user()->hasanyrole('admin|manager');
+        return view('admin.category.index', compact('admin'));
     }
 
     public function getData(Request $request)
@@ -28,7 +30,9 @@ class CategoryController extends Controller
             ->setRowId(function ($row) {
                 return $row->id;
             })
-            ->addIndexColumn()
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
+            })
             ->orderColumn('category_type_id', function ($row, $order) {
                 return $row->orderBy('category_type_id', $order);
             })
@@ -38,10 +42,10 @@ class CategoryController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                <a  class="btn btn-success" href="' . route('category.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
-                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
-                                    </span>';
+                    <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                    <a  class="btn btn-success" href="' . route('category.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('category.remove', ["id" => $row->id]) . '" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                </span>';
             })
             ->filter(function ($instance) use ($request) {
                 if (!empty($request->get('search'))) {
@@ -52,7 +56,7 @@ class CategoryController extends Controller
                     });
                 }
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'checkbox'])
             ->make(true);
     }
 
@@ -64,30 +68,60 @@ class CategoryController extends Controller
 
     public function saveAdd(Request $request, $id = null)
     {
+
         $message = [
             'name.required' => "Hãy nhập vào tên danh mục",
-            'name.unique' => "Tên thú cưng đã tồn tại",
-            'category_type_id.required' => "Hãy chọn danh mục",
-            'show_slide.required' => "Hãy chọn trạng thái thú cưng",
-            'uploadfile.required' => 'Hãy chọn ảnh thú cưng',
+            'name.unique' => "Tên danh mục đã tồn tại",
+            'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên danh mục ít nhất 3 kí tự",
+            'slug.required' => 'Nhập tên danh mục để slug',
+            'category_type_id.required' => "Hãy chọn loại danh mục",
+            'show_slide.required' => "Hãy chọn trạng thái danh mục",
+            'show_slide.numeric' => "Trạng thái danh mục phải là kiểu số",
+            'uploadfile.required' => 'Hãy chọn ảnh danh mục',
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
+
         $validator = Validator::make(
             $request->all(),
             [
                 'name' => [
                     'required',
-                    Rule::unique('categories')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('categories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Category::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Danh mục đã tồn tại trong thùng rác .
+                             Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    }
                 ],
-                'category_type_id' => 'required',
-                'show_slide' => 'required',
+                'slug' => 'required',
+                'category_type_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = CategoryType::where('id', $request->category_type_id)
+                            ->first();
+                        if ($categoryId == '') {
+                            return $fail('Loại danh mục không tồn tại');
+                        }
+                    },
+                ],
+                'show_slide' => 'required|numeric',
                 'uploadfile' => 'required|mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
         );
+
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index')]);
         } else {
             $model = new Category();
             $model->fill($request->all());
@@ -99,7 +133,7 @@ class CategoryController extends Controller
             }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/danh-muc')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('category.index'), 'message' => 'Thêm sản phẩm thành công']);
     }
 
     public function editForm($id)
@@ -118,11 +152,16 @@ class CategoryController extends Controller
         if (!$model) {
             return redirect()->back();
         }
+
         $message = [
-            'name.required' => "Hãy nhập vào tên sách",
-            'name.unique' => "Tên thú cưng đã tồn tại",
+            'name.required' => "Hãy nhập vào tên danh mục",
+            'name.unique' => "Tên danh mục đã tồn tại",
+            'name.regex' => "Tên danh mục không chứa kí tự đặc biệt và số",
+            'name.min' => "Tên danh mục ít nhất 3 kí tự",
+            'slug.required' => 'Nhập tên danh mục để slug',
             'category_type_id.required' => "Hãy chọn danh mục",
-            'show_slide.required' => "Hãy chọn trạng thái thú cưng",
+            'show_slide.required' => "Hãy chọn trạng thái danh mục",
+            'show_slide.numeric' => "Trạng thái danh mục phải là kiểu số",
             'uploadfile.mimes' => 'File ảnh không đúng định dạng (jpg, bmp, png, jpeg)',
             'uploadfile.max' => 'File ảnh không được quá 2MB',
         ];
@@ -131,16 +170,39 @@ class CategoryController extends Controller
             [
                 'name' => [
                     'required',
-                    Rule::unique('categories')->ignore($id)
+                    'regex:/^[^\-\!\[\]\{\}\"\'\>\<\%\^\*\?\/\\\|\,\;\:\+\=\(\)\@\$\&\!\.\#\_0-9]*$/',
+                    'min:3',
+                    Rule::unique('categories')->ignore($id)->whereNull('deleted_at'),
+                    function ($attribute, $value, $fail) use ($request) {
+                        $dupicate = Category::onlyTrashed()
+                            ->where('name', 'like', '%' . $request->name . '%')
+                            ->first();
+                        if ($dupicate) {
+                            if ($value == $dupicate->name) {
+                                return $fail('Danh mục đã tồn tại trong thùng rác .
+                             Vui lòng nhập thông tin mới hoặc xóa dữ liệu trong thùng rác');
+                            }
+                        }
+                    }
                 ],
-                'category_type_id' => 'required',
-                'show_slide' => 'required',
+                'category_type_id' => [
+                    'required',
+                    function ($attribute, $value, $fail) use ($request) {
+                        $categoryId = CategoryType::where('id', $request->category_type_id)
+                            ->first();
+                        if ($categoryId == '') {
+                            return $fail('Loại danh mục không tồn tại');
+                        }
+                    },
+                ],
+                'slug' => 'required',
+                'show_slide' => 'required|numeric',
                 'uploadfile' => 'mimes:jpg,bmp,png,jpeg|max:2048'
             ],
             $message
         );
         if ($validator->fails()) {
-            return response()->json(['status' => 0, 'error' => $validator->errors()]);
+            return response()->json(['status' => 0, 'error' => $validator->errors(), 'url' => route('category.index')]);
         } else {
             $model->fill($request->all());
             if ($request->has('uploadfile')) {
@@ -151,7 +213,7 @@ class CategoryController extends Controller
             }
             $model->save();
         }
-        return response()->json(['status' => 1, 'success' => 'success', 'url' => asset('admin/danh-muc')]);
+        return response()->json(['status' => 1, 'success' => 'success', 'url' => route('category.index'), 'message' => 'Sửa sản phẩm thành công']);
     }
 
     public function detail($id)
@@ -159,6 +221,7 @@ class CategoryController extends Controller
         $category = Category::find($id);
         if (!$category) {
             $category = Category::onlyTrashed()->find($id);
+            $category->load('products', 'breeds');
         }
         $category->load('products', 'breeds');
 
@@ -168,27 +231,22 @@ class CategoryController extends Controller
         return view('admin.category.detail', compact('category', 'product', 'breed'));
     }
 
-    public function remove($id)
-    {
-        $category = Category::find($id);
-        $category->products()->delete();
-        $category->delete();
-        return response()->json(['success' => 'Xóa thú cưng thành công !']);
-    }
-
     public function backUp()
     {
-        return view('admin.category.back-up');
+        $admin = Auth::user()->hasanyrole('admin|manager');
+        return view('admin.category.back-up', compact('admin'));
     }
 
     public function getBackUp(Request $request)
     {
-        $category = Category::onlyTrashed();
+        $category = Category::onlyTrashed()->select('categories.*');
         return dataTables::of($category)
             ->setRowId(function ($row) {
                 return $row->id;
             })
-            ->addIndexColumn()
+            ->addColumn('checkbox', function ($row) {
+                return '<input type="checkbox" name="checkPro" class="checkPro" value="' . $row->id . '" />';
+            })
             ->orderColumn('category_type_id', function ($row, $order) {
                 return $row->orderBy('category_type_id', $order);
             })
@@ -198,10 +256,9 @@ class CategoryController extends Controller
             ->addColumn('action', function ($row) {
                 return '
                 <span class="float-right">
-                <a href="' . route('category.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
-                <a  class="btn btn-success" href="javascript:void(0);" onclick="restoreData(' . $row->id . ')"><i class="far fa-edit"></i></a>
-                                    <a class="btn btn-danger" href="javascript:void(0);" onclick="deleteData(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
-                                    </span>';
+                <a  class="btn btn-success" href="javascript:void(0);" id="restoreUrl' . $row->id . '" data-url="' . route('category.restore', ["id" => $row->id]) . '" onclick="restoreData(' . $row->id . ')"><i class="fas fa-trash-restore"></i></a>
+                    <a class="btn btn-danger" href="javascript:void(0);" id="deleteUrl' . $row->id . '" data-url="' . route('category.delete', ["id" => $row->id]) . '" onclick="removeForever(' . $row->id . ')"><i class="far fa-trash-alt"></i></a>
+                </span>';
             })
             ->filter(function ($instance) use ($request) {
                 if (!empty($request->get('search'))) {
@@ -212,19 +269,135 @@ class CategoryController extends Controller
                     });
                 }
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'checkbox'])
             ->make(true);
+    }
+
+    public function remove($id)
+    {
+        $category = Category::find($id);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
+        $pro = $category->products();
+        $pro->each(function ($related) {
+            $related->galleries()->delete();
+            $related->orderDetails()->delete();
+            $related->reviews()->delete();
+        });
+        $pro->delete();
+        $category->delete();
+
+        return response()->json(['success' => 'Xóa thú cưng thành công !', 'undo' => "Hoàn tác thành công !"]);
     }
 
     public function restore($id)
     {
-        $category = Category::withTrashed();
-        $category->find($id)->products()->restore();
+        $category = Category::withTrashed()->find($id);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Sản phẩm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại danh muc']);
+        }
+
+        $pro = $category->products();
+        $pro->each(function ($related) {
+            $related->galleries()->restore();
+            $related->orderDetails()->restore();
+            $related->reviews()->restore();
+        });
+        $pro->restore();
         $category->restore();
-        return response()->json(['success' => 'Xóa thú cưng thành công !']);
+
+        return response()->json(['success' => 'Khôi phục thú cưng thành công !']);
     }
 
     public function delete($id)
     {
+        $category = Category::withTrashed()->where('id', $id);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Sản phẩm không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại danh mucj']);
+        }
+
+        $category->each(function ($product) {
+            $product->products()->each(function ($related) {
+                $related->galleries()->forceDelete();
+                $related->orderDetails()->forceDelete();
+                $related->reviews()->forceDelete();
+            });
+            $product->products()->forceDelete();
+        });
+        $category->forceDelete();
+
+        return response()->json(['success' => 'Xóa danh mục thành công !']);
+    }
+
+    public function removeMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $category = Category::withTrashed()->whereIn('id', $idAll);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
+        $category->each(function ($product) {
+            $pro = $product->products();
+            $pro->each(function ($related) {
+                $related->galleries()->delete();
+                $related->orderDetails()->delete();
+                $related->reviews()->delete();
+            });
+            $pro->delete();
+        });
+        $category->delete();
+
+        return response()->json(['success' => 'Xóa danh mục thành công !']);
+    }
+
+    public function restoreMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $category = Category::withTrashed()->whereIn('id', $idAll);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
+        $category->each(function ($product) {
+            $product->products()->each(function ($related) {
+                $related->galleries()->restore();
+                $related->orderDetails()->restore();
+                $related->reviews()->restore();
+            });
+            $product->products()->restore();
+        });
+        $category->restore();
+
+        return response()->json(['success' => 'Khôi phục danh mục thành công !']);
+    }
+
+    public function deleteMultiple(Request $request)
+    {
+        $idAll = $request->allId;
+        $category = Category::withTrashed()->whereIn('id', $idAll);
+
+        if ($category->count() == 0) {
+            return response()->json(['success' => 'Xóa danh mục thất bại !']);
+        }
+
+        $category->each(function ($product) {
+            $product->products()->each(function ($related) {
+                $related->galleries()->forceDelete();
+                $related->orderDetails()->forceDelete();
+                $related->reviews()->forceDelete();
+            });
+            $product->products()->forceDelete();
+        });
+        $category->forceDelete();
+
+        return response()->json(['success' => 'Xóa danh mục danh mục thành công !']);
     }
 }

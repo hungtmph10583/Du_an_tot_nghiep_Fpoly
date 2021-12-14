@@ -4,7 +4,7 @@
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/gio-hang.css')}}">
 @endsection
-	<!-- content -->
+<!-- content -->
 <div class="section-mt"></div>
 <!-- <section class="search">
     <div class="container">
@@ -22,7 +22,7 @@
         <div class="carts active">
             <div class="carts-container">
                 <?php
-                    $content = Cart::content();
+                $content = Cart::content();
                 ?>
                 @foreach($content as $value)
                 <div class="cart-item">
@@ -45,8 +45,8 @@
                         <div class="total">
                             Tổng: <span>
                                 <?php
-                                    $subtotal = $value->price * $value->qty;
-                                    echo number_format($subtotal,0,',','.');
+                                $subtotal = $value->price * $value->qty;
+                                echo number_format($subtotal, 0, ',', '.');
                                 ?>
                                 đ
                             </span>
@@ -67,23 +67,23 @@
                     <div class="form-group">
                         <label for="" class="group-label">Số điện thoại <span class="text-red">*</span></label>
                         @if(Auth::check())
-                            <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
+                        <input type="text" name="phone" placeholder="Số điện thoại" value="{{Auth::user()->phone}}">
                         @else
-                            <input type="text" name="phone" placeholder="Số điện thoại" value="{{old('phone')}}">
+                        <input type="text" name="phone" placeholder="Số điện thoại" value="{{old('phone')}}">
                         @endif
                         @error('phone')
-                            <span class="text-danger">{{$message}}</span>
+                        <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>
                     <div class="form-group">
                         <label for="" class="group-label">Địa chỉ email <span class="text-red">*</span></label>
                         @if(Auth::check())
-                            <input type="text" name="email" placeholder="Email" value="{{Auth::user()->email}}">
+                        <input type="text" name="email" placeholder="Email" value="{{Auth::user()->email}}">
                         @else
-                            <input type="text" name="email" placeholder="Email" value="{{old('email')}}">
+                        <input type="text" name="email" placeholder="Email" value="{{old('email')}}">
                         @endif
                         @error('email')
-                            <span class="text-danger">{{$message}}</span>
+                        <span class="text-danger">{{$message}}</span>
                         @enderror
                     </div>
                     <div class="cart-detail-heading">
@@ -92,13 +92,13 @@
                     <div class="form-group">
                         <label for="" class="group-label">Họ tên <span class="text-red">*</span></label>
                         @if(Auth::check())
-                            <input type="text" placeholder="Họ & Tên" name="name" value="{{Auth::user()->name}}">
+                        <input type="text" placeholder="Họ & Tên" name="name" value="{{Auth::user()->name}}">
                         @else
-                            <input type="text" placeholder="Họ & Tên" name="name" value="{{old('name')}}">
+                        <input type="text" placeholder="Họ & Tên" name="name" value="{{old('name')}}">
                         @endif
                     </div>
                     @error('name')
-                        <span class="text-danger">{{$message}}</span>
+                    <span class="text-danger">{{$message}}</span>
                     @enderror
                     <div class="form-group">
                         <label for="" class="group-label">Thành phố <span class="text-red">*</span></label>
@@ -108,7 +108,7 @@
                         <input class="billing_address_1" name="city" type="hidden" value="">
                     </div>
                     @error('city')
-                        <span class="text-danger">{{$message}}</span>
+                    <span class="text-danger">{{$message}}</span>
                     @enderror
                     <div class="form-group">
                         <label for="" class="group-label">Quận / Huyện <span class="text-red">*</span></label>
@@ -117,22 +117,22 @@
                         </select>
                         <input class="billing_address_2" name="district" type="hidden" value="">
                     </div>
-                        @error('district')
-                            <span class="text-danger">{{$message}}</span>
-                        @enderror
+                    @error('district')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
                     <div class="form-group">
                         <label for="" class="group-label">Phường / Xã <span class="text-red">*</span></label>
                         <input type="text" placeholder="Phường xã (Cầu Diễn)" name="ward" value="{{old('ward')}}">
                     </div>
-                        @error('ward')
-                            <span class="text-danger">{{$message}}</span>
-                        @enderror
+                    @error('ward')
+                    <span class="text-danger">{{$message}}</span>
+                    @enderror
                     <div class="form-group">
                         <label for="" class="group-label">Địa chỉ <span class="text-red">*</span></label>
                         <input type="text" placeholder="Địa chỉ nhà (196 Hồ Tùng Mậu)" name="address" value="{{old('address')}}">
                     </div>
                     @error('address')
-                        <span class="text-danger">{{$message}}</span>
+                    <span class="text-danger">{{$message}}</span>
                     @enderror
                     <div class="cart-detail-heading">
                         <span>Ghi chú khi giao hàng</span>
@@ -144,7 +144,8 @@
                         <span>Hình thức thanh toán</span>
                     </div>
                     <div class="form-group-type-payment">
-                        <input type="radio" name="ptvc" id="ptvc" value="1" checked><label for="ptvc">Thanh toán khi giao hàng</label>
+                        <input type="radio" name="ptvc" id="ptvc" value="1" checked><label for="ptvc">Thanh toán khi
+                            giao hàng</label>
                     </div>
                 </div>
                 <div class="group-item">
@@ -163,8 +164,8 @@
                                 <span>{{$value->name}}</span>
                                 <span>
                                     <?php
-                                        $subtotal = $value->price * $value->qty;
-                                        echo number_format($subtotal,0,',','.');
+                                    $subtotal = $value->price * $value->qty;
+                                    echo number_format($subtotal, 0, ',', '.');
                                     ?>
                                     đ
                                 </span>
@@ -209,18 +210,20 @@
 </section>
 @endsection
 @section('pagejs')
-<script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'/></script>
-<script>//<![CDATA[
+<script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js' />
+</script>
+<script>
+//<![CDATA[
 if (address_2 = localStorage.getItem('address_2_saved')) {
     $('select[name="calc_shipping_district"] option').each(function() {
         if ($(this).text() == address_2) {
-        $(this).attr('selected', '')
+            $(this).attr('selected', '')
         }
     })
     $('input.billing_address_2').attr('value', address_2)
 }
 if (district = localStorage.getItem('district')) {
-  $('select[name="calc_shipping_district"]').html(district)
+    $('select[name="calc_shipping_district"]').html(district)
     $('select[name="calc_shipping_district"]').on('change', function() {
         var target = $(this).children('option:selected')
         target.attr('selected', '')
@@ -240,21 +243,22 @@ $('select[name="calc_shipping_provinces"]').each(function() {
         stc += '<option value=' + e + '>' + i + '</option>'
         $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
         if (address_1 = localStorage.getItem('address_1_saved')) {
-        $('select[name="calc_shipping_provinces"] option').each(function() {
-            if ($(this).text() == address_1) {
-            $(this).attr('selected', '')
-            }
-        })
+            $('select[name="calc_shipping_provinces"] option').each(function() {
+                if ($(this).text() == address_1) {
+                    $(this).attr('selected', '')
+                }
+            })
             $('input.billing_address_1').attr('value', address_1)
         }
-    $this.on('change', function(i) {
-        i = $this.children('option:selected').index() - 1
-        var str = '',
-            r = $this.val()
+        $this.on('change', function(i) {
+            i = $this.children('option:selected').index() - 1
+            var str = '',
+                r = $this.val()
             if (r != '') {
                 arr[i].forEach(function(el) {
-                str += '<option value="' + el + '">' + el + '</option>'
-                $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>' + str)
+                    str += '<option value="' + el + '">' + el + '</option>'
+                    $('select[name="calc_shipping_district"]').html(
+                        '<option value="">Quận / Huyện</option>' + str)
                 })
                 var address_1 = $this.children('option:selected').text()
                 var district = $('select[name="calc_shipping_district"]').html()
@@ -263,7 +267,8 @@ $('select[name="calc_shipping_provinces"]').each(function() {
                 $('select[name="calc_shipping_district"]').on('change', function() {
                     var target = $(this).children('option:selected')
                     target.attr('selected', '')
-                    $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+                    $('select[name="calc_shipping_district"] option').not(target)
+                        .removeAttr('selected')
                     var address_2 = target.text()
                     $('input.billing_address_2').attr('value', address_2)
                     district = $('select[name="calc_shipping_district"]').html()
@@ -271,7 +276,8 @@ $('select[name="calc_shipping_provinces"]').each(function() {
                     localStorage.setItem('address_2_saved', address_2)
                 })
             } else {
-                $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
+                $('select[name="calc_shipping_district"]').html(
+                    '<option value="">Quận / Huyện</option>')
                 district = $('select[name="calc_shipping_district"]').html()
                 localStorage.setItem('district', district)
                 localStorage.removeItem('address_1_saved', address_1)
@@ -279,5 +285,6 @@ $('select[name="calc_shipping_provinces"]').each(function() {
         })
     })
 })
-//]]></script>
+//]]>
+</script>
 @endsection

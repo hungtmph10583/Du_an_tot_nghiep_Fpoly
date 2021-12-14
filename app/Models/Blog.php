@@ -4,11 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Blog extends Model
 {
-    use HasFactory;
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'blogs';
     protected $fillable = [
         'title',
@@ -20,11 +20,13 @@ class Blog extends Model
         'status'
     ];
 
-    public function blogCategory(){
-        return $this->belongsTo(User::class, 'category_blog_id');
+    public function BlogCategory()
+    {
+        return $this->belongsTo(BlogCategory::class, 'category_blog_id')->withTrashed();
     }
 
-    public function user(){
+    public function User()
+    {
         return $this->belongsTo(User::class, 'user_id');
     }
 }

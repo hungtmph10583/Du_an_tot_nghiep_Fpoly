@@ -46,7 +46,8 @@
                 </div>
                 <div class="product-thumbnail">
                     <a href="{{route('client.accessory.detail', ['id' => $p->slug])}}">
-                        <img src="{{asset( 'storage/' . $p->image)}}" alt="Phụ kiện này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
+                        <img src="{{asset( 'storage/' . $p->image)}}"
+                            alt="Phụ kiện này hiện chưa có ảnh hoặc ảnh bị lỗi hiển thị!">
                     </a>
                 </div>
                 <div class="product-extra">
@@ -69,7 +70,7 @@
                 <div class="product-info">
                     <a href="{{route('client.accessory.detail', ['id' => $p->slug])}}" class="name">{{$p->name}}</a>
                     @if($p->discount == '')
-                        <span class="price">{{number_format($p->price)}}đ</span>
+                    <span class="price">{{number_format($p->price)}}đ</span>
                     @else
                         @if($p->discount_start_date <= $carbon_now && $p->discount_end_date >= $carbon_now || $p->discount_start_date == '' || $p->discount_end_date == '')
                             <span class="discount">{{number_format($p->price)}}đ</span>
@@ -93,8 +94,8 @@
             </div>
         @endif
     <div class="paging">
-    {{ $accessory->links('vendor.pagination.custom') }}
+        {{ $accessory->links('vendor.pagination.custom') }}
     </div>
 </section>
-	<!-- content -->
+<!-- content -->
 @endsection

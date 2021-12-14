@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Accessory extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'accessories';
     protected $fillable = [
         'name',
@@ -32,17 +33,17 @@ class Accessory extends Model
 
     public function galleries()
     {
-        return $this->hasMany(AccessoryGallery::class, 'accessory_id');
+        return $this->hasMany(AccessoryGallery::class, 'accessory_id')->withTrashed();
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class, 'product_id')->withTrashed();
     }
 
     public function discountType()
     {
         return $this->belongsTo(DiscountType::class, 'discount_type');
-    }
-
-    public function reviews()
-    {
-        return $this->hasOne(Review::class, 'product_id');
     }
 
     public function orderDetail()

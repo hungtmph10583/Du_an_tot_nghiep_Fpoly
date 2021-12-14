@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
+use App\Models\Accessory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 use App\Models\User;
@@ -16,15 +17,17 @@ use App\Models\ModelHasRole;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\GeneralSetting;
+use App\Models\Statistical;
+use Carbon\Carbon;
 
 class CustomerController extends Controller
 {
-
-    public function accountInfo (){
+    public function accountInfo()
+    {
         $model = User::find(Auth::user()->id);
         $order = Order::where('user_id', Auth::user()->id)->get();
         $order->load('orderDetails');
-        
+
         $orderDetail = OrderDetail::all();
         $generalSetting = GeneralSetting::first();
         return view('client.customer.account-info', compact('model', 'order', 'orderDetail', 'generalSetting'));
@@ -40,10 +43,11 @@ class CustomerController extends Controller
     //     ]);
     // }
 
-    public function saveUpdateinfo(Request $request){
+    public function saveUpdateinfo(Request $request)
+    {
         $user = Auth::user()->id;
         $model = User::find($user);
-        if(!$model){
+        if (!$model) {
             return redirect()->back();
         }
         $request->validate(
@@ -62,11 +66,11 @@ class CustomerController extends Controller
 
         $model->fill($request->all());
         // upload ảnh
-        if($request->hasFile('uploadfile')){
+        if ($request->hasFile('uploadfile')) {
             $model->avatar = $request->file('uploadfile')->storeAs('uploads/users', uniqid() . '-' . $request->uploadfile->getClientOriginalName());
         }
         $model->save();
-        
+
         return redirect()->back()->with('success', "Cập nhật tài khoản thành công!");
     }
 
@@ -80,7 +84,9 @@ class CustomerController extends Controller
         $orderDetail = OrderDetail::all();
 
         return view('client.customer.order-history', compact(
-            'order','orderDetail','generalSetting'
+            'order',
+            'orderDetail',
+            'generalSetting'
         ));
     }
 
@@ -90,14 +96,16 @@ class CustomerController extends Controller
         $orderDetail = OrderDetail::where('order_id', $order->id)->get();
 
         return view('client.customer.order_history_detail', compact(
-            'order','orderDetail','generalSetting'
+            'order',
+            'orderDetail',
+            'generalSetting'
         ));
     }
 
     public function cancel_order($id){
         $user_email = Auth::user()->email;
         $order = Order::find($id);
-        if(!$order || ($order->delivery_status != 1)){
+        if (!$order || ($order->delivery_status != 1)) {
             return redirect()->back();
         }
 
@@ -118,7 +126,7 @@ class CustomerController extends Controller
 
             if ($value->product_type == 1) {
                 $product = Product::find($value->product_id);
-            }else{
+            } else {
                 $product = Accessory::find($value->product_id);
             }
             $cong = $product->quantity + $value->quantity;
@@ -149,7 +157,8 @@ class CustomerController extends Controller
         return redirect()->back();
     }
 
-    public function favoriteProduct(){
+    public function favoriteProduct()
+    {
         return view('client.customer.favorite-product');
     }
 }

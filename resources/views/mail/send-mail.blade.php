@@ -7,118 +7,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Send mail</title>
     <style>
-        * {
-            font-family: 'Poppins', sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            outline: none;
-            border: none;
-            text-decoration: none;
-        }
-        .container{
-            max-width: 40rem;
-            padding: 1rem;
-            border: 0.1rem solid #f5f6f8;
-            border-radius: 0.5rem;
-            box-shadow: 1px 1px 1px #868080;
-            background-color: #fff;
-            margin: 1rem auto;
-        }
-        .container .logo{
-            text-align: center;
-        }
-        .container .logo img{
-            height: 5rem;
-        }
-        .container .thanks{
-            font-size: 1rem;
-            text-align: center;
-            color: #6bb64a;
-            margin: 1rem 0;
-        }
-        .container h2{
-            line-height: 2;
-        }
+    * {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        outline: none;
+        border: none;
+        text-decoration: none;
+    }
 
-        .container .title{
-            font-size: 1rem;
-            line-height: 1.5;
-            margin-bottom: 1rem;
-        }
+    .container {
+        max-width: 40rem;
+        padding: 1rem;
+        border: 0.1rem solid #f5f6f8;
+        border-radius: 0.5rem;
+        box-shadow: 1px 1px 1px #868080;
+        background-color: #fff;
+        margin: 1rem auto;
+    }
 
-        .container .button{
-            text-align: center;
-        }
-        .container .button a{
-            position: relative;
-            display: inline-block;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-            color: #fff;
-            border-radius: 0.5rem;
-            letter-spacing: 2px;
-            overflow: hidden;
-            background: linear-gradient(90deg,#6bb64a,#ccff33);
-        }
-        .bold{
-            font-weight: bold;
-        }
-        .text-red{
-            color: #F62217;
-        }
+    .container .logo {
+        text-align: center;
+    }
 
-        .container .note{
-            padding: 1rem 0;
-            line-height: 1.5;
-        }
-        .container table tbody tr td{
-            line-height: 2;
-            color: #868080;
-        }
-        .container table tbody tr td a{
-            color: #1155cc;
-        }
-        .detail{
-            padding-top: 1rem;
-        }
-        .detail p{
-            line-height: 1.5;
-        }
-        .detail .space-between{
-            padding-top: 0.5rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .container .product{
-            padding: 1rem 0;
-        }
-        .container .totail table{
-            border-bottom:1px solid #d8d8d8;
-        }
-        .container .delivery_status{
-            padding-top: 1rem;
-        }
-        .container .footer{
-            text-align: center;
-            padding-top: 1rem;
-        }
-        .container .footer a{
-            position: relative;
-            display: block;
-            padding: 1rem 2rem;
-            font-size: 1rem;
-            text-decoration: none;
-            text-transform: uppercase;
-            color: #fff;
-            border-radius: 0.5rem;
-            letter-spacing: 2px;
-            overflow: hidden;
-            background: linear-gradient(90deg,#6bb64a,#ccff33);
-        }
+    .container .logo img {
+        height: 5rem;
+    }
+
+    .container .thanks {
+        font-size: 1rem;
+        text-align: center;
+        color: #6bb64a;
+        margin: 1rem 0;
+    }
+
+    .container h2 {
+        line-height: 2;
+    }
+
+    .container .title {
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 1rem;
+    }
+
+    .container .button {
+        text-align: center;
+    }
+
+    .container .button a {
+        position: relative;
+        display: inline-block;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: #fff;
+        border-radius: 0.5rem;
+        letter-spacing: 2px;
+        overflow: hidden;
+        background: linear-gradient(90deg, #6bb64a, #ccff33);
+    }
+
+    .bold {
+        font-weight: bold;
+    }
+
+    .text-red {
+        color: #F62217;
+    }
+
+    .container .note {
+        padding: 1rem 0;
+        line-height: 1.5;
+    }
+
+    .container table tbody tr td {
+        line-height: 2;
+        color: #868080;
+    }
+
+    .container table tbody tr td a {
+        color: #1155cc;
+    }
+
+    .detail {
+        padding-top: 1rem;
+    }
+
+    .detail p {
+        line-height: 1.5;
+    }
+
+    .detail .space-between {
+        padding-top: 0.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .container .product {
+        padding: 1rem 0;
+    }
+
+    .container .totail table {
+        border-bottom: 1px solid #d8d8d8;
+    }
+
+    .container .delivery_status {
+        padding-top: 1rem;
+    }
+
+    .container .footer {
+        text-align: center;
+        padding-top: 1rem;
+    }
+
+    .container .footer a {
+        position: relative;
+        display: block;
+        padding: 1rem 2rem;
+        font-size: 1rem;
+        text-decoration: none;
+        text-transform: uppercase;
+        color: #fff;
+        border-radius: 0.5rem;
+        letter-spacing: 2px;
+        overflow: hidden;
+        background: linear-gradient(90deg, #6bb64a, #ccff33);
+    }
     </style>
 </head>
 
@@ -139,13 +157,14 @@
         </div>
         <p class="note">
             <span class="bold">*Lưu ý: </span>
-            Bạn chỉ nên nhận hàng khi trạng thái đơn hàng là <span class="bold">Đang giao hàng </span> và nhớ kiểm tra <span class="bold">Mã đơn hàng</span>. Thông tin người gửi để nhận đúng kiện hàng nhé.
+            Bạn chỉ nên nhận hàng khi trạng thái đơn hàng là <span class="bold">Đang giao hàng </span> và nhớ kiểm tra
+            <span class="bold">Mã đơn hàng</span>. Thông tin người gửi để nhận đúng kiện hàng nhé.
         </p>
         <div class="content">
             <p>Đơn hàng được giao đến:</p>
             <table cellpadding="2" cellspacing="0" width="100%">
                 <tbody>
-                   <tr>
+                    <tr>
                         <td width="25%" valign="top" class="bold">Tên:</td>
                         <td valign="top">{{$feedback['name_client']}}</td>
                    </tr>
@@ -250,7 +269,7 @@
                         <tr>
                             <td valign="top">Hình thức thanh toán:</td>
                             <td align="right" valign="top">Thanh toán khi nhận hàng</td>
-                        </tr>                                    
+                        </tr>
                     </tbody>
                 </table>
             </div>

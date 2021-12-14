@@ -61,16 +61,83 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('statistics.revenue')}}" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Doanh thu</p>
+                            <a href="#" class="nav-link">
+                                <i class="right fas fa-angle-left"></i>
+                                <p>Bình luận</p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.commentSum')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tổng bình luận</p>
+                                    </a>
+                                </li>
+                                @foreach($cateType as $cate)
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.cmtPet',['slug' => $cate->slug])}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thống kê {{$cate->name}}</p>
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
                         </li>
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="far fa-circle nav-icon"></i>
-                                <p>Lịch sử nhập hàng</p>
+                            <a href="{{route('statistical.orderSum')}}" class="nav-link">
+                                <i class="right fas fa-angle-left"></i>
+                                <p>Đơn hàng</p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.orderSum')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tổng đơn hàng</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.orderCancel')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tổng đơn hàng bị hủy</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.compare')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>So sánh thể loại</p>
+                                    </a>
+                                </li>
+                                @foreach($cateType as $cate)
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.compareCate',['slug' => $cate->slug])}}"
+                                        class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>So sánh {{$cate->name}}</p>
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('statistical.revenueSum')}}" class="nav-link">
+                                <i class="right fas fa-angle-left"></i>
+                                <p>Doanh thu</p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.revenueSum')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Tổng doanh thu</p>
+                                    </a>
+                                </li>
+                                @foreach($cateType as $cate)
+                                <li class="nav-item">
+                                    <a href="{{route('statistical.revenue',['slug' => $cate->slug])}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Doanh thu {{$cate->name}}</p>
+                                    </a>
+                                </li>
+                                @endforeach
+                            </ul>
                         </li>
                     </ul>
                 </li>
@@ -119,9 +186,9 @@
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{route('coupon.index')}}" class="nav-link">
+                            <a href="{{route('product.backup')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Phiếu giảm giá</p>
+                                <p>Back Up Products</p>
                             </a>
                         </li>
                     </ul>
@@ -129,6 +196,98 @@
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="fas fa-swatchbook"></i>
+                        <p>
+                            Phiếu giảm giá
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('coupon.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('coupon.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác giảm giá</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-percent"></i>
+                        <p>
+                            Loại phiếu giảm giá
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('couponType.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('couponType.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác loại phiếu giảm giá</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-swatchbook"></i>
+                        <p>
+                            Loại giảm giá
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('discountType.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('discountType.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác loại giảm giá</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-seedling"></i>
+                        <p>
+                            Tuổi
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('age.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('age.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác tuổi</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cat"></i>
                         <p>
                             Danh mục
                             <i class="right fas fa-angle-left"></i>
@@ -150,13 +309,58 @@
                         <li class="nav-item">
                             <a href="{{route('breed.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
-                                <p>Giống loài</p>
+                                <p>Giống loài
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
                             </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('breed.index')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('breed.backup')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thùng rác giống loài</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                         <li class="nav-item">
                             <a href="{{route('category.backup')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Back Up Categories</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-user-friends"></i>
+                        <p>
+                            Loại danh mục
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('categoryType.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('categoryType.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm loại danh mục</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('categoryType.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác loại danh mục</p>
                             </a>
                         </li>
                     </ul>
@@ -184,6 +388,12 @@
                             </a>
                         </li>
                         @endhasanyrole
+                        <li class="nav-item">
+                            <a href="{{route('user.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác tài khoản</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 @hasanyrole('Admin')
@@ -205,6 +415,35 @@
                     </ul>
                 </li>
                 @endhasanyrole
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-transgender-alt"></i>
+                        <p>
+                            Giới tính
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
+                        <li class="nav-item">
+                            <a href="{{route('gender.index')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Danh sách</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('gender.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thêm giới tính</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('gender.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác giới tính</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="far fa-newspaper"></i>
@@ -234,6 +473,18 @@
                                 <p>Danh mục bài viết</p>
                             </a>
                         </li>
+                        <li class="nav-item">
+                            <a href="{{route('blogCategory.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác danh mục</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('blog.backup')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Thùng rác bài viết</p>
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item">
@@ -246,7 +497,7 @@
                     </a>
                     <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="{{route('generalSetting.index')}}" class="nav-link">
+                            <a href="{{route('general.index')}}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Thông tin hệ thống</p>
                             </a>
@@ -256,6 +507,32 @@
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>Slide</p>
                             </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{route('blog.add')}}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>Footer</p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('footer.index')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Danh sách</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('footer.add')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thêm footer</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="{{route('footer.backup')}}" class="nav-link">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Thùng rác footer</p>
+                                    </a>
+                                </li>
+                            </ul>
                         </li>
                     </ul>
                 </li>

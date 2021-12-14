@@ -16,7 +16,7 @@
     <!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -47,7 +47,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="">Loại danh mục</label>
-                                <select name="category_type_id" class="form-control">
+                                <select name="category_type_id" class="form-control" id="category">
                                     @foreach($categoryType as $type)
                                     <option value="{{$type->id}}" @if($model->category_type_id == $type->id) selected
                                         @endif>{{$type->name}}</option>
@@ -137,12 +137,24 @@ $(".btn-info").click(function(e) {
         },
         success: function(data) {
             console.log(data)
+            $('#realize').attr('href', data.url)
+            $('#realize').text('Danh mục');
             if (data.status == 0) {
+                $("#myModal").modal('show');
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
+                    showErr +=
+                        '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                        value[0] +
+                        '<br>';
                     $('span.' + key + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
             } else {
-                window.location.href = data.url;
+                $("#myModal").modal('show');
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
             }
         },
     });

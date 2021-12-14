@@ -10,104 +10,120 @@ use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\Accessory;
 use Illuminate\Support\Facades\Mail;
+use Yajra\Datatables\Datatables;
 use App\Mail\SendMailUpdateStatusOrder;
 use App\Models\GeneralSetting;
 
 class OrderController extends Controller
 {
-    public function index(Request $request){
-        $pagesize = 7;
-        $searchData = $request->except('page');
-        if(count($request->all()) == 0){
-            $order = Order::orderBy('created_at', 'DESC')->paginate($pagesize);
-        }else{
-            $orderQuery = Order::where('code', 'like', "%" . $request->keyword . "%")->orderBy('created_at', 'DESC');
-
-            if($request->has('filter') && $request->filter != ""){
-                $orderQuery = $orderQuery->where('delivery_status', $request->filter)->orderBy('created_at', 'DESC');
-            }
-
-            $order = $orderQuery->paginate($pagesize)->appends($searchData);
-        }
-
-        $order->load('orderDetails');
-
-        $orderDetail = OrderDetail::all();
-        // trả về cho người dùng 1 giao diện + dữ liệu categories vừa lấy đc 
-        return view('admin.order.index', [
-            'order' => $order,
-            'orderDetail' => $orderDetail,
-            'searchData' => $searchData
-        ]);
+    public function index(Request $request)
+    {
+        return view('admin.order.index');
     }
 
-    public function editForm($id){
+    public function getData(Request $request)
+    {
+        $order = Order::select('orders.*');
+        return dataTables::of($order)
+            ->addIndexColumn()
+            ->addColumn('action', function ($row) {
+                return '
+                <span class="float-right">
+                    <a href="' . route('order.detail', ['id' => $row->id]) . '" class="btn btn-outline-info"><i class="far fa-eye"></i></a>
+                    <a  class="btn btn-success" href="' . route('order.edit', ["id" => $row->id]) . '"><i class="far fa-edit"></i></a>
+                </span>';
+            })
+            ->filter(function ($instance) use ($request) {
+                if ($request->get('delivery_status') == '0' || $request->get('delivery_status') == '1' || $request->get('delivery_status') == '2' || $request->get('delivery_status') == '3') {
+                    $instance->where('delivery_status', $request->get('delivery_status'));
+                }
+
+                if ($request->get('payment_status') == '1' || $request->get('payment_status') == '2') {
+                    $instance->where('payment_status', $request->get('payment_status'));
+                }
+                if (!empty($request->get('search'))) {
+                    $instance->where(function ($w) use ($request) {
+                        $search = $request->get('search');
+                        $w->orWhere('name', 'LIKE', "%$search%")
+                            ->orWhere('phone', 'LIKE', "%$search%")
+                            ->orWhere('email', 'LIKE', "%$search%");
+                    });
+                }
+            })
+            ->rawColumns(['status', 'action'])
+            ->make(true);
+    }
+
+    public function editForm($id)
+    {
         $order = Order::find($id);
-        
-        if(!$order){
+
+        if (!$order) {
             return redirect()->back();
         }
         $orderDetail = OrderDetail::where('order_id', $id)->get();
         return view('admin.order.edit-form', compact('order', 'orderDetail'));
     }
 
-    public function saveEdit($id, Request $request){
+    public function saveEdit($id, Request $request)
+    {
         $order = Order::find($id);
 
         $check_delivery_order = $order->delivery_status;
         $delivery_post_request = $request->delivery_status;
 
-        if(!$order){
+        if (!$order) {
             return redirect()->back()->with('danger', "Không tìm thấy đơn hàng này!");
         }
-        if($order->delivery_status == 4){
+        if ($order->delivery_status == 4) {
             return redirect(route('order.index'))->with('danger', "Không thể cập nhật đơn hàng này do Khách hàng đã hủy đơn!");
         }
 
-        if($delivery_post_request == 3){
+        if ($delivery_post_request == 3) {
             if ($check_delivery_order == 2) {
                 $order->fill($request->all());
                 $order->seller_id = Auth::user()->id;
-            }elseif($check_delivery_order == 3){
+            } elseif ($check_delivery_order == 3) {
                 $order->fill($request->all());
                 $order->seller_id = Auth::user()->id;
-            }else{
+            } else {
                 return redirect()->back()->with('danger', "Yêu cầu chuyển trạng thái đơn hàng sang `Đang giao hàng` Trước khi cập nhật trạng thái thành `Giao hàng thành công`. Cập nhật thất bại!");
             }
-        }else{
+        } else {
             $order->fill($request->all());
             $order->seller_id = Auth::user()->id;
         }
+
+        $order_detail = OrderDetail::where('order_id', $id)->get();
 
         $order_detail = OrderDetail::where('order_id', $id)->get();
         
         foreach ($order_detail as $key => $value) {
             // Tạo vòng lặp cập nhật lại trạng thái chuyển hàng và thanh toán dạng text cho OrderDetail
             $orderDetail = OrderDetail::find($value->id);
-            if($order->payment_status == 1){
+            if ($order->payment_status == 1) {
                 $orderDetail->payment_status = "Chưa thanh toán";
-            }elseif($order->payment_status == 2){
+            } elseif ($order->payment_status == 2) {
                 $orderDetail->payment_status = "Đã thanh toán";
-            }else{
+            } else {
                 $orderDetail->payment_status = "Lỗi code";
             }
-            if($order->delivery_status == 1){
+            if ($order->delivery_status == 1) {
                 $orderDetail->delivery_status = "Đang chờ xử lý";
-            }elseif($order->delivery_status == 2){
+            } elseif ($order->delivery_status == 2) {
                 $orderDetail->delivery_status = "Đang giao hàng";
-            }elseif($order->delivery_status == 3){
+            } elseif ($order->delivery_status == 3) {
                 $orderDetail->delivery_status = "Giao hàng thành công";
-            }elseif($order->delivery_status == 0){
+            } elseif ($order->delivery_status == 0) {
                 $orderDetail->delivery_status = "Hủy đơn hàng";
-            }else{
+            } else {
                 $orderDetail->delivery_status = "Lỗi code";
             }
             $orderDetail->save();
-
-            if($check_delivery_order == 0 && $delivery_post_request == 2){
+            if ($check_delivery_order == 0 && $delivery_post_request == 2) {
                 if ($value->product_type == 1) {
                     $product = Product::find($value->product_id);
-                }else{
+                } else {
                     $product = Accessory::find($value->product_id);
                 }
                 if ($product->quantity < $value->quantity || $product->quantity <= 0) {
@@ -121,7 +137,7 @@ class OrderController extends Controller
             if ($delivery_post_request == 0 && $check_delivery_order != 0) {
                 if ($value->product_type == 1) {
                     $product = Product::find($value->product_id);
-                }else{
+                } else {
                     $product = Accessory::find($value->product_id);
                 }
                 $cong = $product->quantity + $value->quantity;
@@ -143,7 +159,6 @@ class OrderController extends Controller
             foreach ($OrderDetail as $key => $value) {
                 $total += $value->price;
             }
-            
             $name_client = $order->name;
             $number_phone = $order->phone;
             $to_email = $order->email;
@@ -151,12 +166,11 @@ class OrderController extends Controller
             $date_time_order = $order->created_at->format('d/m/Y');
             $shipping_address = $order->shipping_address;
             $number_quantity_product_order = count($OrderDetail);
-            $total = number_format($total,0,',','.');
-            $tax = number_format($tax,0,',','.');
-            $grand_total = number_format($order->grand_total,0,',','.');
+            $total = number_format($total, 0, ',', '.');
+            $tax = number_format($tax, 0, ',', '.');
+            $grand_total = number_format($order->grand_total, 0, ',', '.');
 
             // dd($name_client, $to_email, $order_code, $date_time_order, $shipping_address, $number_quantity_product_order, $grand_total);
-    
             if ($order->delivery_status == 1) {
                 $delivery_status = 'Đã tiếp nhận đơn hàng. Đang chờ xử lý!';
             } elseif ($order->delivery_status == 2) {
@@ -190,10 +204,10 @@ class OrderController extends Controller
         return redirect(route('order.index'))->with('success', "Cập nhật đơn hàng " . $order->code . " thành công");
     }
 
-    public function detail($id, Request $request){
+    public function detail($id, Request $request)
+    {
         $order = Order::find($id);
-        
-        if(!$order){
+        if (!$order) {
             return redirect()->back();
         }
         $orderDetail = OrderDetail::where('order_id', $id)->get();

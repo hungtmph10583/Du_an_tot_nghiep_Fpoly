@@ -4,7 +4,7 @@
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/gio-hang.css')}}">
 @endsection
-	<!-- content -->
+<!-- content -->
 <section class="cart-details">
     <div class="bread-crumb">
         <a href="{{route('client.home')}}">Trang chủ</a>
@@ -15,11 +15,11 @@
         <div class="carts">
             <div class="carts-container">
                 <?php
-                    $content = Cart::content();
-                    $count = Cart::content()->count();
-                    // echo '<pre>';
-                    // print_r($content);
-                    // echo '</pre>';
+                $content = Cart::content();
+                $count = Cart::content()->count();
+                // echo '<pre>';
+                // print_r($content);
+                // echo '</pre>';
                 ?>
                 @if(empty($count))
                 <div class="empty_cart">
@@ -64,8 +64,9 @@
                             Giá tiền: <span>{{number_format($value->price,0,',','.')}}đ</span>
                         </div>
                         <div class="quantity">
-                            <form action="{{route('updateCartQty', ['rowId' => $value->rowId])}}" method="POST" enctype="multipart/form-data">
-                            @csrf
+                            <form action="{{route('updateCartQty', ['rowId' => $value->rowId])}}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
                                 Số lượng:
                                 @if($value->weight == 1)
                                     @foreach($product as $pro)
@@ -80,7 +81,7 @@
                                         @endif
                                     @endforeach
                                 @else
-                                    error
+                                error
                                 @endif
                                 <input type="hidden" value="{{$value->rowId}}" name="rowId_cart">
                                 <input type="submit" value="Cập nhật" name="update_qty" class="updateQty">
@@ -89,15 +90,16 @@
                         <div class="total">
                             Tổng: <span>
                                 <?php
-                                    $subtotal = $value->price * $value->qty;
-                                    echo number_format($subtotal,0,',','.');
+                                $subtotal = $value->price * $value->qty;
+                                echo number_format($subtotal, 0, ',', '.');
                                 ?>
                                 đ
                             </span>
                         </div>
                     </div>
                     <div class="delete-product">
-                        <a onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')" href="{{route('deleteToCart', ['rowId' => $value->rowId])}}">
+                        <a onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?')"
+                            href="{{route('deleteToCart', ['rowId' => $value->rowId])}}">
                             <i class="far fa-trash-alt"></i>
                         </a>
                     </div>
@@ -124,8 +126,8 @@
                             <span>{{$value->name}}</span>
                             <span>
                                 <?php
-                                    $subtotal = $value->price * $value->qty;
-                                    echo number_format($subtotal,0,',','.');
+                                $subtotal = $value->price * $value->qty;
+                                echo number_format($subtotal, 0, ',', '.');
                                 ?>
                                 đ
                             </span>

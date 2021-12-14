@@ -181,6 +181,20 @@ return [
          * @name: hungtmph
          */
         Spatie\Permission\PermissionServiceProvider::class,
+        /**
+         * @note: import excel database
+         * @date: 10/11/2021
+         * @name: huypqph11301
+         */
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        /**
+         * @note: intervention image
+         * @date: 10/11/2021
+         * @name: huypqph11301
+         */
+        Intervention\Image\ImageServiceProvider::class,
+        Laravel\Socialite\SocialiteServiceProvider::class,
+
     ],
 
     /*
@@ -234,6 +248,19 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        /**
+         * @note: import excel database
+         * @date: 10/11/2021
+         * @name: huypqph11301
+         */
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        'Image' => Intervention\Image\Facades\Image::class,
+        /**
+         * @note: login with google
+         * @date: 10/12/2021
+         * @name: huypqph11301
+         */
+        'Socialite' => Laravel\Socialite\Facades\Socialite::class,
 
     ],
 

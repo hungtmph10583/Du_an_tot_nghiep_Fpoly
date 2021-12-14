@@ -36,7 +36,7 @@
                                 <td style="min-width: 103px;">
                                     <span class="star">
                                        @for($count=1; $count<=5; $count++)
-                                            @if($count <= $pro->reviews->rating)
+                                            @if($count <= $pro->review->rating)
                                                 <i class="fas fa-star rating"></i>
                                             @else
                                                 <i class="far fa-star"></i>

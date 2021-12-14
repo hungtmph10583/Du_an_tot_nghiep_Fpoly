@@ -15,20 +15,15 @@ class Role extends Model
         'guard_name'
     ];
 
-    public function model_has_role(){
+    public function model_has_role()
+    {
         return $this->hasMany(ModelHasRole::class, 'role_id');
     }
 
-    public function role_has_permission(){
+    public function role_has_permission()
+    {
         return $this->hasMany(RoleHasPermission::class, 'role_id');
     }
-
-    /**
-     * 31/8
-     * HungTM
-     * start
-     */
-    
 
     public function permissions()
     {
@@ -39,9 +34,4 @@ class Role extends Model
     {
         return $this->permissions()->save($permission);
     }
-    /**
-     * 31/8
-     * HungTM
-     * end
-     */
 }

@@ -3,18 +3,17 @@
 namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use App\Models\Product;
 use App\Models\Category;
+use App\Models\GeneralSetting;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\GeneralSetting;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Product;
+use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function search_query(Request $request){
+    public function search_query(Request $request)
+    {
         $generalSetting = GeneralSetting::first();
         $searchData = $request->except('page');
         if (!empty($request->keyword)) {
@@ -30,7 +29,7 @@ class SearchController extends Controller
             if ($request->search_type == 1) {
                 $key = $request->keyword;
                 $count = Order::where('code', $key)->get();
-                if (count($count)>0) {
+                if (count($count) > 0) {
                     $order = Order::where('code', $key)->first();
                     $order->load('orderDetails');
                     $orderDetail = OrderDetail::where('order_id', $order->id)->get();
@@ -40,18 +39,17 @@ class SearchController extends Controller
                         'generalSetting' => $generalSetting,
                         'searchData' => $searchData
                     ]);
-                }else{
+                } else {
                     return redirect()->back()->with('danger', "Không tìm thấy mã đơn hàng này. Vui lòng kiểm tra lại!");
                 }
-            }elseif($request->search_type == 2){
-                $productQuery = Product::where('name', 'like', "%" .$request->keyword . "%");
+            } elseif ($request->search_type == 2) {
+                $productQuery = Product::where('name', 'like', "%" . $request->keyword . "%");
                 $products = $productQuery->paginate(5)->appends($searchData);
 
                 $products->load('category');
-        
+
                 $categories = Category::all();
                 $generalSetting = GeneralSetting::first();
-                
                 //trả về cho người dùng 1 giao diện + dữ liệu products vừa lấy đc 
                 // return view('client.product.index', [
                 //     'product' => $products,
@@ -67,15 +65,16 @@ class SearchController extends Controller
                     'searchData' => $searchData
                 ]);
             }
-        }else{
+        } else {
             return redirect()->back()->with('danger', "Vui lòng nhập vào nội dung tìm kiếm!");
         }
     }
 
-    public function order_status($code){
+    public function order_status($code)
+    {
         $generalSetting = GeneralSetting::first();
         $count = Order::where('code', $code)->get();
-        if (count($count)>0) {
+        if (count($count) > 0) {
             $order = Order::where('code', $code)->first();
             $order->load('orderDetails');
             $orderDetail = OrderDetail::where('order_id', $order->id)->get();
@@ -84,7 +83,7 @@ class SearchController extends Controller
                 'orderDetail' => $orderDetail,
                 'generalSetting' => $generalSetting
             ]);
-        }else{
+        } else {
             return redirect()->back()->with('danger', "Không tìm thấy mã đơn hàng này. Vui lòng kiểm tra lại!");
         }
     }

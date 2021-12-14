@@ -4,8 +4,6 @@
 <!-- ajax -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
 <!-- tinymce -->
-<script src="https://cdn.tiny.cloud/1/u8myefzilomjfel4lb6g0k3l3qi13ty75j4lzfl4vz8kg2tw/tinymce/5/tinymce.min.js"
-    referrerpolicy="origin"></script>
 <!-- jQuery UI 1.11.4 -->
 <script src="{{ asset('admin-theme/plugins/jquery-ui/jquery-ui.min.js')}}"></script>
 <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->

@@ -20,6 +20,10 @@ class CreateCategoriesTable extends Migration
             $table->string('image')->nullable();
             $table->integer('show_slide')->default(1);
             $table->integer('category_type_id');
+            $table->integer('discount')->nullable(); // Chiết khẩu
+            $table->integer('discount_type')->nullable(); // Chiết khấu & %
+            $table->timestamp('discount_start_date')->nullable();
+            $table->timestamp('discount_end_date')->nullable();
             $table->timestamps();
         });
     }

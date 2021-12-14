@@ -4,7 +4,7 @@
 @section('pageStyle')
 <link rel="stylesheet" href="{{ asset('client-theme/css/account_info.css')}}">
 @endsection
-	<!-- content -->
+<!-- content -->
 <section class="account-info">
     <div class="bread-crumb">
         <a href="{{route('client.home')}}">Trang chủ</a>

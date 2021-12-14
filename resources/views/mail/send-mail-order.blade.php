@@ -250,7 +250,7 @@
                         <tr>
                             <td valign="top">Hình thức thanh toán:</td>
                             <td align="right" valign="top">Thanh toán khi nhận hàng</td>
-                        </tr>                                    
+                        </tr>
                     </tbody>
                 </table>
             </div>

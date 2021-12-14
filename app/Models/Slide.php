@@ -4,17 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Slide extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
     protected $table = 'slides';
     protected $fillable = [
-        'title',
-        'creator',
-        'url',
-        'short_description',
+        'user_id',
         'image',
+        'url',
         'status'
     ];
 }

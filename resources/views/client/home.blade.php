@@ -5,7 +5,6 @@
 @endsection
     <!-- <div class="supper">
         <div class="alert">
-
         </div>
     </div> -->
 	<!-- content -->

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>Đổi mật khẩu</title>
-	<!-- Fonts and icons     -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Đổi mật khẩu</title>
+    <!-- Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
     <link href="{{ asset('theme-bootstrap/assets/css/nucleo-icons.css')}}" rel="stylesheet" />
@@ -18,7 +19,7 @@
     <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
 </head>
 <body>
-	<section class="h-100-vh mt-8">
+    <section class="h-100-vh mt-8">
         <div class="container">
             <div class="row">
                 <div class="col-xl-4 col-md-7 mx-auto">
@@ -28,29 +29,40 @@
                         </div>
                         <div class="card-body">
                             @if(session('success') || session('error'))
-                                <p class="@if(session('success')) text-success @elseif(session('error')) text-danger @endif">
+                            <p
+                                class="@if(session('success')) text-success @elseif(session('error')) text-danger @endif">
                                 {{ session()->get('success') }}{{ session()->get('error') }}
-                                </p>
+                            </p>
                             @endif
                             <form method="POST" role="form text-left">
-                            @csrf
+                                @csrf
                                 <div class="mb-3">
                                     <label for="">Mật khẩu hiện tại</label>
-                                    <input wire:model="password" type="password" class="form-control @error('currentpassword') is-invalid @enderror" placeholder="Mật khẩu hiện tại" aria-label="Password" name="currentpassword" aria-describedby="password-addon" value="{{old('currentpassword')}}">
-                                    @error('currentpassword') <div class="text-danger mt-2">{{ $message }}</div> @enderror
+                                    <input wire:model="password" type="password"
+                                        class="form-control @error('currentpassword') is-invalid @enderror"
+                                        placeholder="Mật khẩu hiện tại" aria-label="Password" name="currentpassword"
+                                        aria-describedby="password-addon" value="{{old('currentpassword')}}">
+                                    @error('currentpassword') <div class="text-danger mt-2">{{ $message }}</div>
+                                    @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Mật khẩu mới</label>
-                                    <input wire:model="password" type="password" class="form-control @error('newpassword') is-invalid @enderror" placeholder="Mật khẩu mới" aria-label="Password" name="newpassword" aria-describedby="password-addon" value="{{old('newpassword')}}">
+                                    <input wire:model="password" type="password"
+                                        class="form-control @error('newpassword') is-invalid @enderror"
+                                        placeholder="Mật khẩu mới" aria-label="Password" name="newpassword"
+                                        aria-describedby="password-addon" value="{{old('newpassword')}}">
                                     @error('newpassword') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="mb-3">
                                     <label for="">Nhập lại mật khẩu mới</label>
-                                    <input type="password" class="form-control @error('cfpassword') is-invalid @enderror" placeholder="Nhập lại mật khẩu" name="cfpassword" value="{{old('cfpassword')}}">
+                                    <input type="password"
+                                        class="form-control @error('cfpassword') is-invalid @enderror"
+                                        placeholder="Nhập lại mật khẩu" name="cfpassword" value="{{old('cfpassword')}}">
                                     @error('cfpassword') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                                 </div>
                                 <div class="text-center">
-                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Đổi mật khẩu</button>
+                                    <button type="submit" class="btn bg-gradient-dark w-100 my-4 mb-2">Đổi mật
+                                        khẩu</button>
                                 </div>
                                 <p class="text-sm mt-3 mb-0">{{ __('Quay lại ') }}
                                     <a href="{{ route('client.home') }}" class="text-dark font-weight-bolder">

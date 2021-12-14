@@ -14,12 +14,19 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid pb-1">
         <div class="card card-success card-outline">
             <div class="card-body">
+                <div class="alert alert-success" role="alert" style="display: none;">
+                </div>
+                @if(session('BadState'))
+                <div class="alert alert-danger" role="alert">
+                    {{session('BadState')}}
+                </div>
+                @endif
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
@@ -27,7 +34,9 @@
                             <select class="form-control" name="cate" id="cate">
                                 <option value="">Lấy tất cả</option>
                                 @foreach($categories as $c)
+                                @if($c->category_type_id == 1)
                                 <option value="{{$c->id}}">{{$c->name}}</option>
+                                @endif
                                 @endforeach
                             </select>
                         </div>
@@ -76,15 +85,18 @@
                                 <option value="">Chọn trạng thái</option>
                                 <option value="0">Hết hàng</option>
                                 <option value="1">Còn hàng</option>
-                                <option value="3">Sắp ra mắt</option>
                             </select>
                         </div>
                     </div>
                     <div class="col-6">
-                        <label for="file-upload" class="custom-file-upload">
-                            <i class="fas fa-file-import"></i> Import Data
-                        </label>
-                        <input id="file-upload" type="file" />
+                        <form action="" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <label for="file-upload" class="custom-file-upload">
+                                <i class="fas fa-file-import"></i> Import Data
+                            </label>
+                            <input id="file-upload" type="file" />
+                            <button type="submit" class="infor">Import</button>
+                        </form>
                     </div>
                 </div>
                 <input type="hidden" name="_token" value="{{ csrf_token() }}" />
@@ -93,8 +105,11 @@
                         <div class="table-responsive">
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
-                                    <th>STT</th>
+                                    <th><input type="checkbox" id="checkAll"></th>
                                     <th>Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
+                                    <th>Status</th>
                                     <th><a href="{{route('product.add')}}" class="btn btn-outline-info float-right">Thêm
                                             sản phẩm</a></th>
                                 </thead>
@@ -122,9 +137,65 @@ $(document).ready(function() {
         autoWidth: false,
         dom: 'Bfrtip',
         buttons: [{
+                text: 'Reload',
+                action: function(e) {
+                    table.ajax.reload();
+                }
+            },
+            {
+                text: 'Delete',
+                action: function(e) {
+                    e.preventDefault();
+                    $("#myModal").modal('show');
+                    var allId = [];
+                    $('input:checkbox[name=checkPro]:checked').each(function() {
+                        allId.push($(this).val());
+                    })
+                    if ('{{$admin}}') {
+                        if (allId == '') {
+                            $('.modal-body').html(
+                                `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Hãy chọn danh mục để xóa
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                            })
+                        } else {
+                            $('.modal-body').html(
+                                `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện xóa dữ liệu ( Lưu ý : sau khi khối phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+                            $('#realize').click(function(e) {
+                                e.stopImmediatePropagation()
+                                $("#realize").unbind('click');
+                                $('#myModal').modal('toggle');
+                                deleteMul('{{route("product.removeMul")}}', allId);
+                                table.ajax.reload();
+                            })
+                        }
+                    } else {
+                        $('.modal-body').html(
+                            `<div class="alert alert-danger" role="alert">
+                        <span class="fas fa-times-circle text-danger mr-2">
+                        Bạn không đủ quyền để dùng chức năng này
+                        </span></div>`);
+                        $('#realize').css('display', 'none')
+                        $('#cancel').click(function(e) {
+                            $("#cancel").unbind('click');
+                            $('#myModal').modal('toggle');
+                        })
+                    }
+                }
+            },
+            {
                 extend: 'copyHtml5',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -132,14 +203,12 @@ $(document).ready(function() {
                 extend: 'csvHtml5',
                 charset: 'utf-8',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             {
                 extend: 'excelHtml5',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
@@ -149,22 +218,21 @@ $(document).ready(function() {
                 pageSize: 'LEGAL',
                 orientation: 'landscape',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             }, {
                 extend: 'print',
                 exportOptions: {
-                    stripHtml: false,
                     columns: ':visible'
                 }
             },
             "colvis"
         ],
         columnDefs: [{
-            targets: 0,
-            visible: true
+            "orderable": false,
+            "targets": 0
         }],
+        "order": [],
         language: {
             processing: "<img width='70' src='https://cdn.tgdd.vn//GameApp/-1//MemeCheems1-500x500.jpg'>",
         },
@@ -181,13 +249,26 @@ $(document).ready(function() {
             }
         },
         columns: [{
-                data: 'DT_RowIndex',
+                data: 'checkbox',
+                name: 'checkbox',
                 orderable: false,
                 searchable: false,
             },
             {
                 data: 'name',
                 name: 'name',
+            },
+            {
+                data: 'category_id',
+                name: 'category_id',
+            },
+            {
+                data: 'price',
+                name: 'price',
+            },
+            {
+                data: 'status',
+                name: 'status',
             },
             {
                 data: 'action',
@@ -197,9 +278,33 @@ $(document).ready(function() {
             }
         ]
     });
-    let column = table.column(0); // here is the index of the column, starts with 0
-    column.visible(false); // this should be either true or false
     table.buttons().container().appendTo('.row .col-md-6:eq(0)');
+
+    $(document).on("click", "#undoIndex", function() {
+        $("#myModal").modal('show');
+        $('.modal-body').html(
+            `<div class="alert alert-success" role="alert">
+                        <span class="fas fa-check-circle text-success mr-2">
+                        Thực hiện khôi phục dữ liệu ( Lưu ý : sau khi khôi phục dữ liệu tất cả những dữ liệu liên quan sẽ được xóa )
+                        </span></div>`);
+
+        $('#realize').click(function(e) {
+            e.stopImmediatePropagation()
+            $("#realize").unbind('click');
+            $('#myModal').modal('toggle');
+            id = $('#undoIndex').data('id');
+            var url = '{{route("product.restore",":id")}}';
+            url = url.replace(':id', id);
+            undoIndex(url, id)
+            table.ajax.reload();
+        })
+        $('#cancel').click(function(e) {
+            $("#cancel").unbind('click');
+            $('#myModal').modal('toggle');
+        })
+
+    })
+
     $('select').map(function(i, dom) {
         var idSelect = $(dom).attr('id');
         $('#' + idSelect).change(function() {

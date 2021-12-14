@@ -15,7 +15,7 @@
     </div><!-- /.container-fluid -->
 </div>
 <!-- /.content-header -->
-
+@include('layouts.admin.message')
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
@@ -115,13 +115,15 @@
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày bắt đầu</label>
-                                <input type="date" class="form-control" name="discount_start_date">
+                                <input type="datetime-local" id="start" class="form-control" name="discount_start_date"
+                                    value="{{\Carbon\Carbon::parse($model->discount_start_date)->format('Y-m-d\TH:i')}}">
                             </div>
                         </div>
                         <div class="col">
                             <div class="form-group">
                                 <label for="">Ngày kết thúc</label>
-                                <input type="date" class="form-control" name="discount_end_date">
+                                <input type="datetime-local" id="end" class="form-control" name="discount_end_date"
+                                    value="{{\Carbon\Carbon::parse($model->discount_end_date)->format('Y-m-d\TH:i')}}">
                             </div>
                         </div>
                     </div>
@@ -229,7 +231,7 @@ $(document).ready(function() {
             var xhr, formData;
             xhr = new XMLHttpRequest();
             xhr.withCredentials = false;
-            xhr.open('POST', "");
+            xhr.open('POST', "{{route('accessory.upload')}}");
             var token = '{{csrf_token()}}';
             xhr.setRequestHeader("X-CSRF-Token", token);
             xhr.onload = function() {
@@ -277,6 +279,8 @@ $(".btn-info").click(function(e) {
     let name = nameValue.charAt(0).toUpperCase() + nameValue.slice(1);
     formData.set('name', name);
     formData.append('slug', $('input[name="slug"]').val())
+    formData.set('discount_start_date', dateTime($('#start').val()))
+    formData.set('discount_end_date', dateTime($('#end').val()))
     $.ajax({
         url: "{{route('accessory.saveEdit',['id'=>$model->id])}}",
         type: 'POST',
@@ -290,12 +294,24 @@ $(".btn-info").click(function(e) {
         },
         success: function(data) {
             console.log(data)
+            $('#realize').attr('href', data.url)
+            $('#realize').text('phụ kiện')
+            $("#myModal").modal('show');
             if (data.status == 0) {
+                showErr = '<div class="alert alert-danger" role="alert" id="danger">';
                 $.each(data.error, function(key, value) {
-                    $('span.' + key + '_error').text(value[0]);
+                    showErr +=
+                        '<span class="fas fa-times-circle text-danger mr-2"></span>' +
+                        value[0] +
+                        '<br>';
+                    $('span.' + key.replace('.0', '') + '_error').text(value[0]);
                 });
+                $('.modal-body').html(showErr);
             } else {
-                window.location.href = data.url;
+                $("#myModal").modal('show');
+                $('.modal-body').html(
+                    '<div class="alert alert-success" role="alert"><span class="fas fa-check-circle text-success mr-2"></span>' +
+                    data.message + '</div>')
             }
         },
     });

@@ -25,3 +25,5 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+<script src="https://cdn.tiny.cloud/1/u8myefzilomjfel4lb6g0k3l3qi13ty75j4lzfl4vz8kg2tw/tinymce/5/tinymce.min.js"
+    referrerpolicy="origin"></script>

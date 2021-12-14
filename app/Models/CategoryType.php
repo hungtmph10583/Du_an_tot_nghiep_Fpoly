@@ -4,17 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CategoryType extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
+    protected $table = 'category_types';
     protected $fillable = [
-        'name', 'slug'
+        'name'
     ];
-    // Quan hệ category -> blog
-    public function blogs()
+
+    public function category()
     {
-        return $this->hasMany(Blog::class,'category_blog_id');
-        // quan he 
+        return $this->hasMany(Category::class, 'category_type_id')->withTrashed();
     }
 }

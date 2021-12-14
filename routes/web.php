@@ -52,8 +52,7 @@ Route::get('/cache-permission', function () {
 
 Route::get('/', [HomeController::class, 'home'])->name('client.home');
 Route::get('/trang-chu', [HomeController::class, 'home']);
-
-Route::get('/tim-kiem', [SearchController::class, 'search_query'])->name('client.search');
+Route::get('search/result', [HomeController::class, 'search'])->name('client.search');
 
 Route::prefix('san-pham')->group(function () {
     Route::get('/', [ProductController::class, 'index'])->name('client.product.index');
@@ -71,7 +70,7 @@ Route::prefix('phu-kien')->group(function () {
 
 Route::prefix('gio-hang')->group(function () {
     Route::get('/', [CartController::class, 'index'])->name('client.cart.index');
-    
+
     Route::get('/show-cart', [CartController::class, 'showCart'])->name('showCart');
     Route::post('/save-cart', [CartController::class, 'saveCart'])->name('saveCart');
 
@@ -91,7 +90,7 @@ Route::prefix('tai-khoan')->middleware('auth')->group(function () {
     Route::get('/', [CustomerController::class, 'accountInfo'])->name('client.customer.info');
     // Route::get('cap-nhat', [CustomerController::class, 'updateinfo'])->name('client.customer.updateinfo');
     Route::post('cap-nhat', [CustomerController::class, 'saveUpdateinfo'])->name('client.customer.updateinfo');
-    
+
     Route::get('doi-mat-khau/{id}', [CustomerController::class, 'changePForm'])->name('client.customer.changeP');
     Route::post('doi-mat-khau/{id}', [CustomerController::class, 'saveChangeP']);
 
@@ -115,38 +114,46 @@ Route::prefix('lien-he')->group(function () {
 });
 
 // ------------------------------- Login -------------------------------
-    Route::get('login', [AuthController::class, 'loginForm'])->name('login');
-    Route::post('login', [AuthController::class, 'postLogin']);
+Route::get('login', [AuthController::class, 'loginForm'])->name('login');
+Route::post('login', [AuthController::class, 'postLogin']);
+
+//-------------------------------- Login with google--------------------
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/auth/redirect', [AuthController::class, 'redirectToGoogle'])->name('auth.google');
+    Route::get('/auth/callback', [AuthController::class, 'handleGoogleCallback'])->name('auth.login');
+    Route::get('/facebook/auth/redirect', [AuthController::class, 'redirectToFacebook'])->name('auth.facebook');
+    Route::get('/facebook/auth/callback', [AuthController::class, 'handleFacebookCallback'])->name('auth.loginFb');
+});
 
 // ------------------------------- Register -------------------------------
-    Route::get('registration', [AuthController::class, 'registrationForm'])->name('registration');
-    Route::post('registration', [AuthController::class, 'saveRegistration']);
+Route::get('registration', [AuthController::class, 'registrationForm'])->name('registration');
+Route::post('registration', [AuthController::class, 'saveRegistration']);
 
-    Route::get('register', [RegisterController::class, 'register'])->name('register'); // test
-    Route::post('register', [RegisterController::class, 'storeUser']); // test
+Route::get('register', [RegisterController::class, 'register'])->name('register'); // test
+Route::post('register', [RegisterController::class, 'storeUser']); // test
 
 //------------------------------- Logout -------------------------------
-    Route::any('logout', function () {
-        Auth::logout();
-        return redirect(route('login'));
-    })->name('logout');
+Route::any('logout', function () {
+    Auth::logout();
+    return redirect(route('login'));
+})->name('logout');
 
 // ------------------------------- Forget password -------------------------------
-    // Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
-    // Route::post('forgot-password', [AuthController::class, 'saveForgotPassword']);
+// Route::get('forgot-password', [AuthController::class, 'forgotPassword'])->name('forgotPassword');
+// Route::post('forgot-password', [AuthController::class, 'saveForgotPassword']);
 
 // ------------------------------- Change password -------------------------------
-    Route::get('change-password', [AuthController::class, 'changePassword'])->middleware('auth')->name('changePassword');
-    Route::post('change-password', [AuthController::class, 'saveChangePassword']);
+Route::get('change-password', [AuthController::class, 'changePassword'])->middleware('auth')->name('changePassword');
+Route::post('change-password', [AuthController::class, 'saveChangePassword']);
 
 // ------------------------------- Reset password -------------------------------
-    // Route::post('reset-password', 'ResetPasswordController@sendMail');
+// Route::post('reset-password', 'ResetPasswordController@sendMail');
 
     Route::get('forgot-password', [ForgotPasswordController::class, 'getEmail'])->middleware('guest')->name('password.request');
     Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->middleware('guest');
 
-    Route::get('reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('resetPassword');
-    Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);
+Route::get('reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('resetPassword');
+Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);
 
 //Send mail
     Route::get('send-mail', [SearchController::class, 'send_mail'])->name('sendMail');
