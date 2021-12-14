@@ -28,6 +28,11 @@ class OrderDetail extends Model
         return $this->belongsTo(Product::class, 'product_id')->withTrashed();
     }
 
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id')->withTrashed();
+    }
+
     public function order()
     {
         return $this->belongsTo(Order::class, 'order_id')->withTrashed();

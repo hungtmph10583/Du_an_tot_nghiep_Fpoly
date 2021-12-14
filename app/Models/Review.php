@@ -22,9 +22,8 @@ class Review extends Model
         'product_type'
     ];
 
-    public function product()
-    {
-        return $this->belongsTo(Category::class, 'product_id');
+    public function product(){
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
     public function accessory()

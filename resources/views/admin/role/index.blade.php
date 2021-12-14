@@ -22,7 +22,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <div class="card-header">
-                        Roles
+                        Vai trò
                         <div class="float-right">
                             @hasanyrole('Admin')
                             <a href="{{route('role.user.add')}}" class="btn btn-success">Gán vai trò cho tài khoản</a>
