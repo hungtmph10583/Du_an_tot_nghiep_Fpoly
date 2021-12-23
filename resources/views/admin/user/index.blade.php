@@ -1,13 +1,13 @@
-@section('title', 'Danh sách tài khoản')
+@section('title', 'Danh sách khách hàng')
 @extends('layouts.admin.main')
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
-        <div class="card card-secondary my-0">
+        <div class="card card-white my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item card-title">Danh sách tài khoản</li>
+                    <li class="breadcrumb-item card-title">Danh sách tài khoản khách hàng</li>
                 </ol>
             </div>
         </div><!-- /.row -->
@@ -34,17 +34,15 @@
                             <table class="table table-bordered data-table" style="width:100%">
                                 <thead>
                                     <th><input type="checkbox" id="checkAll"></th>
-                                    <th>Name</th>
-                                    <th>Status</th>
+                                    <th>Thông tin</th>
+                                    <th>Trạng thái</th>
                                     <th>
                                         @hasanyrole('Admin|Manage')
-                                        <a href="{{route('user.add')}}" class="btn btn-outline-info float-right">Thêm
-                                            tài
-                                            khoản</a>
+                                            <a href="{{route('user.add')}}" class="btn btn-outline-info float-right">
+                                                Thêm tài khoản
+                                            </a>
                                         @else
-                                        <a href="javascript:void(0);"
-                                            onclick="alert('Bạn không được cấp quyền để tạo tài khoản?')"
-                                            class="btn btn-outline-info float-right">Thêm tài khoản</a>
+                                            Lựa chọn
                                         @endhasrole
                                     </th>
                                 </thead>

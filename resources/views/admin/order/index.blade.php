@@ -3,14 +3,14 @@
 @section('content')
 <div class="content-header">
     <div class="container-fluid">
-        <div class="card card-secondary my-0">
+        <div class="card card-white my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
                     <li class="breadcrumb-item card-title">Danh sách đơn hàng</li>
                 </ol>
             </div>
-        </div><!-- /.row -->
-    </div><!-- /.container-fluid -->
+        </div>
+    </div>
 </div>
 <!-- /.content-header -->
 @include('layouts.admin.message')
@@ -162,7 +162,7 @@ $(document).ready(function() {
                 name: 'email',
             },
             {
-                data: 'grand_total',
+                data: 'grand_total', render: $.fn.dataTable.render.number('.', '.', 3, ''), 
                 name: 'grand_total',
             },
             {

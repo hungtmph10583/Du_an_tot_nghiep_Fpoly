@@ -1,14 +1,15 @@
+@section('title', 'Cập nhật trạng thái đơn hàng')
 @extends('layouts.admin.main')
 @section('content')
 <!-- Content Header (Page header) -->
 <div class="content-header">
     <div class="container-fluid">
-        <div class="card card-secondary my-0">
+        <div class="card card-white my-0">
             <div class="card-header">
                 <ol class="breadcrumb float-sm-left ">
-                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Danh sách Đơn
+                    <li class="breadcrumb-item"><a class="card-title" href="{{route('order.index')}}">Danh sách đơn
                             hàng</a></li>
-                    <li class="breadcrumb-item active">Sửa Đơn hàng</li>
+                    <li class="breadcrumb-item active">Cập nhật trạng thái đơn hàng</li>
                 </ol>
             </div>
         </div>
@@ -123,7 +124,7 @@
                                 <div class="row">
                                     <div class="col"></div>
                                     <div class="col">Tổng cộng</div>
-                                    <div class="col">{{number_format($order->grand_total,0,',','.')}}đ</div>
+                                    <div class="col">{{number_format($order->grand_total,0,',','.')}} VND</div>
                                 </div>
                                 <div class="row">
                                     <div class="col"></div>
@@ -164,10 +165,10 @@
                                     <td>
                                         <?php
                                             $tinh = $value->price/$value->quantity;
-                                            echo number_format($tinh,0,',','.') . 'đ';
+                                            echo number_format($tinh,0,',','.') . ' VND';
                                         ?> / sản phẩm
                                     </td>
-                                    <td>{{number_format($value->price,0,',','.')}}đ</td>
+                                    <td>{{number_format($value->price,0,',','.')}} VND</td>
                                 </tr>
                                 @endforeach
                             </tbody>
@@ -182,17 +183,17 @@
                                     <div class="col form-group">
                                         <?php
                                         $total = $value->order->grand_total - $value->tax;
-                                        echo number_format($total, 0, ',', '.') . 'đ';
+                                        echo number_format($total, 0, ',', '.') . ' VND';
                                         ?>
                                     </div>
                                 </div>
                                 <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group">Thuế</div>
-                                    <div class="col form-group">{{number_format($value->tax,0,',','.')}}đ</div>
+                                    <div class="col form-group">{{number_format($value->tax,0,',','.')}} VND</div>
                                 </div>
                                 <div class="row border-bottom mt-1 mb-1">
                                     <div class="col form-group"><b>Thành tiền</b></div>
-                                    <div class="col form-group"><b>{{number_format($value->order->grand_total,0,',','.')}}đ</b></div>
+                                    <div class="col form-group"><b>{{number_format($value->order->grand_total,0,',','.')}} VND</b></div>
                                 </div>
                             </div>
                         </div>

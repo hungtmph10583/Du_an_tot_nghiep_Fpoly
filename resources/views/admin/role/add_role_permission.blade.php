@@ -1,4 +1,4 @@
-@section('title', 'Add Role')
+@section('title', 'Tạo vai trò')
 @extends('layouts.admin.main')
 @section('content')
 <div class="container-fluid pt-4">
@@ -8,22 +8,23 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">Add Role</div>
+                    <div class="card-header">Tạo vai trò</div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="">Name Role</label>
+                            <label for="">Tên vai trò</label>
                             <input type="text" name="name" class="form-control" value="{{old('name')}}" placeholder="Name role">
                             @error('name') <div class="text-danger mt-2">{{ $message }}</div> @enderror
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-right">Add Role</button>
+                        <a href="{{route('role.index')}}" class="btn btn-danger">Quay lại</a>
+                        <button type="submit" class="btn btn-success float-right">Lưu</button>
                     </div>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">Permissions</div>
+                    <div class="card-header">Quyền hạn</div>
                     <div class="card-body" id="card_body_permission">
                         @error('permissions_id') <div class="text-danger mb-2">{{ $message }}</div> @enderror
                         @foreach($permissions as $permission)

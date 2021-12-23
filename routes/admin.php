@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\SlideController;
 use App\Http\Controllers\Admin\GeneralSettingController;
 use App\Http\Controllers\Admin\StatisticalController;
 use App\Http\Controllers\Admin\UploadController;
+use App\Http\Controllers\Admin\ReviewController;
 use Doctrine\DBAL\Driver\Middleware;
 
 /*
@@ -37,6 +38,8 @@ use Doctrine\DBAL\Driver\Middleware;
 */
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard.index');
+
+Route::get('/test', [DashboardController::class, 'test'])->name('dashboard.test');
 
 Route::prefix('tai-khoan')->group(function () {
     Route::get('/', [UserController::class, 'index'])->name('user.index');
@@ -459,4 +462,9 @@ Route::prefix('thong-ke')->group(function () {
     Route::get('doanh-thu/tong', [StatisticalController::class, 'revenueSum'])->name('statistical.revenueSum');
 
     Route::get('doanh-thu/{slug}', [StatisticalController::class, 'revenue'])->name('statistical.revenue');
+});
+
+Route::prefix('binh-luan')->group(function () {
+    Route::get('danh-sach', [ReviewController::class, 'index'])->name('list.review.index');
+    Route::get('danh-sach/{id}', [ReviewController::class, 'updateStatus'])->name('update.status.review');
 });

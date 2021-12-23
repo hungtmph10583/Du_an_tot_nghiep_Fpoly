@@ -10,6 +10,8 @@ use App\Models\Role;
 use App\Models\ModelHasRole;
 use App\Models\PasswordReset;
 use App\Models\Product;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,8 +25,7 @@ use Illuminate\Support\Str;
 
 class UserController extends Controller
 {
-    public function index(Request $request)
-    {
+    public function index(Request $request) {
         $admin = Auth::user()->hasanyrole('Admin|Manage');
         $mdh_role = ModelHasRole::all();
         $role = Role::all();
@@ -35,8 +36,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function getData(Request $request)
-    {
+    public function getData(Request $request) {
         $user = User::select('users.*');
         return dataTables::of($user)
             //thêm id vào tr trong datatable
@@ -77,16 +77,14 @@ class UserController extends Controller
             ->make(true);
     }
 
-    public function addForm()
-    {
+    public function addForm() {
         $role = Role::all();
         return view('admin.user.add-form', [
             'roles' => $role
         ]);
     }
 
-    public function saveAdd(Request $request, $id = null)
-    {
+    public function saveAdd(Request $request, $id = null) {
         $message = [
             'name.required' => "Hãy nhập vào tên người dùng",
             'name.regex' => "Tên người dùng không chứa kí tự đặc biệt và số",
@@ -218,8 +216,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function saveEdit($id, Request $request)
-    {
+    public function saveEdit($id, Request $request) {
         $model = User::find($id);
 
         if (!$model) {
@@ -311,31 +308,32 @@ class UserController extends Controller
         return response()->json(['status' => 1, 'success' => 'success', 'url' => route('user.index'), 'message' => 'Sửa người dùng thành công']);
     }
 
-    public function proFile($id)
-    {
+    public function proFile($id) {
         $user = User::find($id);
         $user->load('model_has_role');
+        $orders = Order::where('user_id', $user->id)->get();
+        $orderDetail = Order::all();
 
         $mdh_role = ModelHasRole::all();
         $role = Role::all();
         return view('admin.user.pro-file', [
             'user' => $user,
             'mdh_role' => $mdh_role,
-            'role' => $role
+            'role' => $role,
+            'orders' => $orders,
+            'orderDetail' => $orderDetail
         ]);
     }
 
 
-    public function backUp()
-    {
+    public function backUp() {
         $admin = Auth::user()->hasanyrole('Admin|Manage');
         return view('admin.user.back-up', [
             'admin' => $admin
         ]);
     }
 
-    public function getBackUp(Request $request)
-    {
+    public function getBackUp(Request $request) {
         $user = User::onlyTrashed()->select('users.*');
         return dataTables::of($user)
             //thêm id vào tr trong datatable
@@ -375,94 +373,100 @@ class UserController extends Controller
             ->make(true);
     }
 
-    public function remove($id)
-    {
+    public function remove($id) {
         $user = User::find($id);
-        if (empty($user)) {
-            return response()->json(['success' => 'Người dùng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
+        $check = Auth::user()->hasPermissionTo('delete users');
+        if (Auth::user()->id == $id) {
+            return response()->json(['danger' => 'Không thể tự xóa tài khoản !']);
         }
-        $product = $user->products();
-        $product->each(function ($pro) {
-            $pro->galleries()->delete();
-            $pro->orderDetails()->delete();
-            $pro->reviews()->delete();
-        });
-        $product->delete();
-        $user->reviews()->delete();
-        $user->slides()->delete();
-        $user->orders()->delete();
-        $coupon = $user->coupons();
-        $coupon->each(function ($couponMul) {
-            if ($couponMul->category()->count() !== 0) {
-
-                $couponMul->category()->each(function ($product) {
-
-                    if ($product->breeds()->count() == 0) {
-                        $product->products()->each(function ($related) {
-                            $related->galleries()->delete();
-                            $related->orderDetails()->delete();
-                            $related->reviews()->delete();
-                        });
-                        $product->products()->delete();
-                    } else {
-
-                        $product->breeds()->each(function ($related) {
-                            $related->products()->each(function ($related) {
+        if ($check == true) {
+            if (empty($user)) {
+                return response()->json(['success' => 'Người dùng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại tài khoản']);
+            }
+            $product = $user->products();
+            $product->each(function ($pro) {
+                $pro->galleries()->delete();
+                $pro->orderDetails()->delete();
+                $pro->reviews()->delete();
+            });
+            $product->delete();
+            $user->reviews()->delete();
+            $user->slides()->delete();
+            $user->orders()->delete();
+            $coupon = $user->coupons();
+            $coupon->each(function ($couponMul) {
+                if ($couponMul->category()->count() !== 0) {
+    
+                    $couponMul->category()->each(function ($product) {
+    
+                        if ($product->breeds()->count() == 0) {
+                            $product->products()->each(function ($related) {
                                 $related->galleries()->delete();
                                 $related->orderDetails()->delete();
                                 $related->reviews()->delete();
                             });
-                            $related->products()->delete();
-                        });
-                        $product->breeds()->delete();
-                        $product->products()->each(function ($related) {
+                            $product->products()->delete();
+                        } else {
+    
+                            $product->breeds()->each(function ($related) {
+                                $related->products()->each(function ($related) {
+                                    $related->galleries()->delete();
+                                    $related->orderDetails()->delete();
+                                    $related->reviews()->delete();
+                                });
+                                $related->products()->delete();
+                            });
+                            $product->breeds()->delete();
+                            $product->products()->each(function ($related) {
+                                $related->galleries()->delete();
+                                $related->orderDetails()->delete();
+                                $related->reviews()->delete();
+                            });
+                            $product->products()->delete();
+                        }
+    
+                        $product->accessory()->each(function ($related) {
                             $related->galleries()->delete();
-                            $related->orderDetails()->delete();
-                            $related->reviews()->delete();
                         });
-                        $product->products()->delete();
-                    }
-
-                    $product->accessory()->each(function ($related) {
-                        $related->galleries()->delete();
+    
+                        $product->accessory()->delete();
                     });
-
-                    $product->accessory()->delete();
+    
+                    $couponMul->category()->delete();
+                }
+                $couponMul->products()->each(function ($related) {
+                    $related->galleries()->delete();
+                    $related->orderDetails()->delete();
+                    $related->reviews()->delete();
                 });
-
-                $couponMul->category()->delete();
-            }
-            $couponMul->products()->each(function ($related) {
-                $related->galleries()->delete();
-                $related->orderDetails()->delete();
-                $related->reviews()->delete();
+    
+                $couponMul->accessory()->each(function ($related) {
+                    $related->galleries()->delete();
+                });
+                $couponMul->accessory()->delete();
+                $couponMul->products()->delete();
+                $couponMul->couponUsage()->delete();
             });
-
-            $couponMul->accessory()->each(function ($related) {
-                $related->galleries()->delete();
+            $coupon->delete();
+            $user->breeds()->delete();
+            $user->blogs()->delete();
+            $user->coupon_usage()->delete();
+            $accessories = $user->accessories();
+            $accessories->each(function ($accessory) {
+                $accessory->galleries()->delete();
             });
-            $couponMul->accessory()->delete();
-            $couponMul->products()->delete();
-            $couponMul->couponUsage()->delete();
-        });
-        $coupon->delete();
-        $user->breeds()->delete();
-        $user->blogs()->delete();
-        $user->coupon_usage()->delete();
-        $accessories = $user->accessories();
-        $accessories->each(function ($accessory) {
-            $accessory->galleries()->delete();
-        });
-        $accessories->delete();
-        $user->delete();
-        return response()->json(['success' => 'Xóa người dùng thành công !']);
+            $accessories->delete();
+            $user->delete();
+            return response()->json(['success' => 'Xóa người dùng thành công !']);
+        } else {
+            return response()->json(['danger' => 'Bạn không có quyền hạn để xóa tài khoản !']);
+        }
     }
 
-    public function restore($id)
-    {
+    public function restore($id) {
         $user = User::withTrashed()->find($id);
         if (empty($user)) {
-            return response()->json(['success' => 'Người dùng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
+            return response()->json(['success' => 'Người dùng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại tài khoản']);
         }
         $product = $user->products();
         $product->each(function ($related) {
@@ -550,89 +554,96 @@ class UserController extends Controller
         return response()->json(['success' => 'Khôi phục người dùng thành công !']);
     }
 
-    public function delete($id)
-    {
+    public function delete($id) {
         $user = User::find($id);
-        if (empty($user)) {
-            return response()->json(['success' => 'Người dùng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại giảm giá']);
+        $check = Auth::user()->hasPermissionTo('delete users');
+        if (Auth::user()->id == $id) {
+            return response()->json(['danger' => 'Không thể tự xóa tài khoản !']);
         }
-        $product = $user->products();
-        $product->each(function ($pro) {
-            $pro->galleries()->forceDelete();
-            $pro->orderDetails()->forceDelete();
-            $pro->reviews()->forceDelete();
-        });
-        $product->forceDelete();
-        $user->reviews()->forceDelete();
-        $user->slides()->forceDelete();
-        $user->orders()->forceDelete();
-        $coupon = $user->coupons();
-        $coupon->each(function ($couponMul) {
-            if ($couponMul->category()->count() !== 0) {
-
-                $couponMul->category()->each(function ($product) {
-
-                    if ($product->breeds()->count() == 0) {
-                        $product->products()->each(function ($related) {
-                            $related->galleries()->forceDelete();
-                            $related->orderDetails()->forceDelete();
-                            $related->reviews()->forceDelete();
-                        });
-                        $product->products()->forceDelete();
-                    } else {
-
-                        $product->breeds()->each(function ($related) {
-                            $related->products()->each(function ($related) {
+        if ($check == true){
+            if (empty($user)) {
+                return response()->json(['success' => 'Người dùng không tồn tại !', 'undo' => "Hoàn tác thất bại !", "empty" => 'Kiểm tra lại tài khoản']);
+            }
+            $product = $user->products();
+            $product->each(function ($pro) {
+                $pro->galleries()->forceDelete();
+                $pro->orderDetails()->forceDelete();
+                $pro->reviews()->forceDelete();
+            });
+            $product->forceDelete();
+            $user->reviews()->forceDelete();
+            $user->slides()->forceDelete();
+            $user->orders()->forceDelete();
+            $coupon = $user->coupons();
+            $coupon->each(function ($couponMul) {
+                if ($couponMul->category()->count() !== 0) {
+    
+                    $couponMul->category()->each(function ($product) {
+    
+                        if ($product->breeds()->count() == 0) {
+                            $product->products()->each(function ($related) {
                                 $related->galleries()->forceDelete();
                                 $related->orderDetails()->forceDelete();
                                 $related->reviews()->forceDelete();
                             });
-                            $related->products()->forceDelete();
-                        });
-                        $product->breeds()->forceDelete();
-                        $product->products()->each(function ($related) {
+                            $product->products()->forceDelete();
+                        } else {
+    
+                            $product->breeds()->each(function ($related) {
+                                $related->products()->each(function ($related) {
+                                    $related->galleries()->forceDelete();
+                                    $related->orderDetails()->forceDelete();
+                                    $related->reviews()->forceDelete();
+                                });
+                                $related->products()->forceDelete();
+                            });
+                            $product->breeds()->forceDelete();
+                            $product->products()->each(function ($related) {
+                                $related->galleries()->forceDelete();
+                                $related->orderDetails()->forceDelete();
+                                $related->reviews()->forceDelete();
+                            });
+                            $product->products()->forceDelete();
+                        }
+    
+                        $product->accessory()->each(function ($related) {
                             $related->galleries()->forceDelete();
-                            $related->orderDetails()->forceDelete();
-                            $related->reviews()->forceDelete();
                         });
-                        $product->products()->forceDelete();
-                    }
-
-                    $product->accessory()->each(function ($related) {
-                        $related->galleries()->forceDelete();
+    
+                        $product->accessory()->forceDelete();
                     });
-
-                    $product->accessory()->forceDelete();
+    
+                    $couponMul->category()->forceDelete();
+                }
+                $couponMul->products()->each(function ($related) {
+                    $related->galleries()->forceDelete();
+                    $related->orderDetails()->forceDelete();
+                    $related->reviews()->forceDelete();
                 });
-
-                $couponMul->category()->forceDelete();
-            }
-            $couponMul->products()->each(function ($related) {
-                $related->galleries()->forceDelete();
-                $related->orderDetails()->forceDelete();
-                $related->reviews()->forceDelete();
+    
+                $couponMul->accessory()->each(function ($related) {
+                    $related->galleries()->forceDelete();
+                });
+                $couponMul->accessory()->forceDelete();
+                $couponMul->products()->forceDelete();
+                $couponMul->couponUsage()->forceDelete();
             });
-
-            $couponMul->accessory()->each(function ($related) {
-                $related->galleries()->forceDelete();
+            $coupon->forceDelete();
+    
+            $user->breeds()->forceDelete();
+            $user->blogs()->forceDelete();
+            $user->coupon_usage()->forceDelete();
+            $accessories = $user->accessories();
+            $accessories->each(function ($accessory) {
+                $accessory->galleries()->forceDelete();
             });
-            $couponMul->accessory()->forceDelete();
-            $couponMul->products()->forceDelete();
-            $couponMul->couponUsage()->forceDelete();
-        });
-        $coupon->forceDelete();
-
-        $user->breeds()->forceDelete();
-        $user->blogs()->forceDelete();
-        $user->coupon_usage()->forceDelete();
-        $accessories = $user->accessories();
-        $accessories->each(function ($accessory) {
-            $accessory->galleries()->forceDelete();
-        });
-        $accessories->forceDelete();
-        $user->forceDelete();
-
-        return response()->json(['success' => 'Xóa người dùng thành công !']);
+            $accessories->forceDelete();
+            $user->forceDelete();
+    
+            return response()->json(['success' => 'Xóa người dùng thành công !']);
+        }else{
+            return response()->json(['danger' => 'Bạn không có quyền hạn để xóa tài khoản !']);
+        }
     }
 
     public function removeMultiple(Request $request)

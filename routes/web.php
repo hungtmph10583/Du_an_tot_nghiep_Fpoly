@@ -44,13 +44,17 @@ Route::get('/cache-permission', function () {
     Artisan::call('cache:forget spatie.permission.cache');
     return redirect(route('role.index'))->with('success', "Cập nhật Vai trò thành công");
 })->name('cache-permission');
+
 // Route::get('/clear-cache', function() {
+//     $exitCode = Artisan::call('route:clear');
+//     $exitCode = Artisan::call('route:cache');
 //     $exitCode = Artisan::call('cache:clear');
 //     $exitCode = Artisan::call('config:cache');
 //     return 'DONE'; //Return anything
 // });
 
 Route::get('/', [HomeController::class, 'home'])->name('client.home');
+
 Route::get('/trang-chu', [HomeController::class, 'home']);
 Route::get('search/result', [HomeController::class, 'search'])->name('client.search');
 
@@ -152,8 +156,8 @@ Route::post('change-password', [AuthController::class, 'saveChangePassword']);
     Route::get('forgot-password', [ForgotPasswordController::class, 'getEmail'])->middleware('guest')->name('password.request');
     Route::post('forgot-password', [ForgotPasswordController::class, 'postEmail'])->middleware('guest');
 
-Route::get('reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('resetPassword');
-Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);
+    Route::get('reset-password/{token}', [ResetPasswordController::class, 'getPassword'])->name('resetPassword');
+    Route::post('reset-password', [ResetPasswordController::class, 'updatePassword']);
 
 //Send mail
     Route::get('send-mail', [SearchController::class, 'send_mail'])->name('sendMail');

@@ -96,6 +96,8 @@ class StatisticalController extends Controller
             array_push($count, $prod);
         }
 
+        // dd($data);
+
         return view('admin.statistical.comment', compact('data', 'count', 'slug'));
     }
 

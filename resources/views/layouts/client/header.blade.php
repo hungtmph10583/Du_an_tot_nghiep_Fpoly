@@ -33,39 +33,39 @@
                 <div class="header-item none"></div>
                 <ul class="header-item">
                     @if(Auth::check())
-                    @hasanyrole('Admin|Manage|Employee')
-                    <li>
-                        <a href="{{route('dashboard.index')}}">
-                            <i class="fas fa-cogs"></i>
-                            <span>Đăng nhập quản trị</span>
-                        </a>
-                    </li>
-                    @endhasanyrole
-                    <li>
-                        <a href="{{route('client.customer.info')}}">
-                            <i class="fas fa-user"></i>
-                            <span>{{Auth::user()->name}}</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('logout')}}">
-                            <i class="fas fa-sign-out-alt"></i>
-                            <span>Logout</span>
-                        </a>
-                    </li>
+                        @if(Auth::user()->hasPermissionTo('login_admin'))
+                        <li>
+                            <a href="{{route('dashboard.index')}}">
+                                <i class="fas fa-cogs"></i>
+                                <span>Đăng nhập quản trị</span>
+                            </a>
+                        </li>
+                        @endif
+                        <li>
+                            <a href="{{route('client.customer.info')}}">
+                                <span>Xin chào: </span>
+                                <span>{{Auth::user()->name}}</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('logout')}}">
+                                <i class="fas fa-sign-out-alt"></i>
+                                <span>Logout</span>
+                            </a>
+                        </li>
                     @else
-                    <li>
-                        <a href="{{route('login')}}">
-                            <i class="fas fa-user"></i>
-                            <span>Tài khoản</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{route('login')}}">
-                            <i class="fas fa-sign-in-alt"></i>
-                            <span>Login</span>
-                        </a>
-                    </li>
+                        <li>
+                            <a href="{{route('login')}}">
+                                <i class="fas fa-user"></i>
+                                <span>Tài khoản</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{route('login')}}">
+                                <i class="fas fa-sign-in-alt"></i>
+                                <span>Login</span>
+                            </a>
+                        </li>
                     @endif
                 </ul>
             </div>

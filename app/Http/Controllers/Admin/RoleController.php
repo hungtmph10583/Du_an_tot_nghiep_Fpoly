@@ -72,10 +72,12 @@ class RoleController extends Controller
     public function editRoleUser($id)
     {
         $roles = Role::all();
+        $model_h_r = ModelHasRole::all();
         $user = User::where('id', $id)->first();
 
         return view('admin.role.edit_role_user', [
             'roles' => $roles,
+            'model_h_r' => $model_h_r,
             'user' => $user
         ]);
     }
@@ -103,19 +105,19 @@ class RoleController extends Controller
             return redirect()->back();
         }
         $model_has_roles = ModelHasRole::where('model_id', $id)->get();
-        foreach($model_has_roles as $check_role){
-            if ($check_role->model_id && $user->id) {
-                return redirect()->back()->with('danger_user', "Không thể tự xóa vai trò của mình!");
-            }
-        }
+        // foreach($model_has_roles as $check_role){
+        //     if ($check_role->model_id && $user->id) {
+        //         return redirect()->back()->with('danger_user', "Không thể tự xóa vai trò của mình!");
+        //     }
+        // }
         if (!empty($model_has_roles)) {
-            // $user->roles()->detach();
-            dd('ss');
+            $user->roles()->detach();
+            return redirect(route('role.index'))->with('success_user', "Xóa Vai trò của Tài khoản thành công!");
         } else {
             // return redirect(route('role.index'))->with('danger_user', "Tài khoản này không tồn tại Vai trò!");
             dd('er');
         }
-        // return redirect(route('role.index'))->with('success_user', "Xóa Vai trò của Tài khoản thành công!");
+        return redirect(route('role.index'))->with('success_user', "Xóa Vai trò của Tài khoản thành công!");
     }
 
     public function addRolePermission()

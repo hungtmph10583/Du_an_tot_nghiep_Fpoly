@@ -14,14 +14,12 @@ use Illuminate\Support\Facades\Mail;
 
 class ForgotPasswordController extends Controller
 {
-    public function getEmail()
-    {
+    public function getEmail(){
         return view('auth.password.email');
         //    return view('auth.forgot-password');
     }
 
-    public function postEmail(Request $request)
-    {
+    public function postEmail(Request $request){
         $request->validate(
             [
                 'email' => 'required|email|exists:users',
